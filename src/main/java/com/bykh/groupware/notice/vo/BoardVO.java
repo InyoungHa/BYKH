@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BoardVO extends BoardMenuVO{
+public class BoardVO {
 	private String boardNum;
 	private String boardTitle;
 	private String boardContent;
@@ -20,5 +20,8 @@ public class BoardVO extends BoardMenuVO{
 	private String boardPw;
 	private int boardLike;
 	
+	private BoardMenuVO boardMenuVO;
 	private BoardCategoryVO boardCategoryVO;
+	
+	private String ename;
 }
