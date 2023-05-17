@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"	>
 
 <th:block th:fragment="adminSideFragment">
-<<<<<<< HEAD
+
 <style>
 /*===== VARIABLES CSS =====*/
 :root{
@@ -106,8 +106,14 @@ a{
   font-size: var(--small-font-size);
 }
 /*Expander menu*/
-.expander{
+.expander {
   width: calc(var(--nav-width) + 9.25rem);
+}
+
+.expander .nav__link:hover .collapse {
+  display: block;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /*Add padding body*/
@@ -161,11 +167,7 @@ margin-bottom: 20px;
 li:last-child {
 	margin-bottom: 0px;
 }
-  .nav__link:hover .collapse {
-        display: block;
-        opacity: 1;
-        pointer-events: auto;
-    }
+
 </style>
 
 
@@ -200,12 +202,12 @@ li:last-child {
 						<div class="collapse" id="collapseExample1">
 	   						<ul>
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
-			    				<li class="nav-item"><div  aria-current="page" href="#">미결함</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">진행함</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">완료함</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">반려함</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">임시함</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">참조함</div></li>
+			    				<li class="nav-item"><a  aria-current="page" href="#">미결함</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">진행함</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">완료함</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">반려함</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">임시함</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">참조함</a></li>
 	 						</ul>
 						</div>             	
  					</div>
@@ -217,9 +219,9 @@ li:last-child {
 						<div class="collapse" id="collapseExample2">
 	   						<ul>
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
-			    				<li class="nav-item"><div  aria-current="page" href="#">출퇴근 기록</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">휴가 관리</div></li>
-			    				<li class="nav-item"><div aria-current="page" href="#">연장근무</div></li>
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/admin/commute}">출퇴근 기록</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/admin/vacation}">휴가 관리</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/admin/overTime}">연장근무</a></li>
 	 						</ul>
 						</div>             	
  					</div>       

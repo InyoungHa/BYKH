@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="empMapper">
+	<!--사원 테이블 -->
+	<resultMap type="com.bykh.groupware.emp.vo.EmpVO" id="emp">
+		<id column="EMPNO" 					property="empno"/>
+		<result column="DEPTNO" 				property="deptno"/>
+		<result column="ENAME"					property="ename"/>
+		<result column="EPW"					property="epw"/>
+		<result column="E_JOB" 					property="eJob"/>
+		<result column="AGE" 					property="age"/>
+		<result column="GENDER" 				property="gender"/>
+		<result column="E_EMAIL" 				property="eEmail"/>
+		<result column="PHONE_TEL" 				property="phoneTel"/>
+		<result column="OFFICE_TEL" 			property="officeTel"/>
+		<result column="E_ROLE" 				property="eRole"/>
+		<result column="E_STATUS" 				property="eStatus"/>
+		<result column="JOIN_DATE" 				property="joinDate"/>
+	</resultMap>
+	
+	<!--사원 이미지 테이블  -->
+	<resultMap type="com.bykh.groupware.emp.vo.EImgVO" id="eImg">
+		<id column="IMG_CODE" 				property="imgCode"/>
+		<result column="EMPNO" 					property="empno"/>
+		<result column="ORIGIN_FILE_NAME" 		property="originFileName"/>
+		<result column="ATTACHED_FILE_NAME" 	property="attachedFileName"/>
+		
+	</resultMap>
+	
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
