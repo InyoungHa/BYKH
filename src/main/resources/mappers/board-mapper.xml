@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="boardMapper">
+	<resultMap type="com.bykh.groupware.notice.vo.BoardMenuVO" id="boardMenu">
+		<id column="BOARD_MENU_CODE" 		property="boardMenuCode"/>
+		<result column="BOARD_MENU_NAME" 	property="boardMenuName"/>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.notice.vo.BoardCategoryVO" id="boardCategory">
+		<id column="BOARD_CATE_CODE" 		property="boardCateCode"/>
+		<result column="BOARD_CATE_NAME" 	property="boardCateName"/>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.notice.vo.BoardVO" id="board">
+		<id column="BOARD_NUM" 			property="boardNum"/>
+		<result column="BOARD_TITLE" 	property="boardTitle"/>
+		<result column="BOARD_CONTENT" 	property="boardContent"/>
+		<result column="BOARD_WRITER" 	property="boardWriter"/>
+		<result column="BOARD_DATE" 	property="boardDate"/>
+		<result column="BOARD_VIEW" 	property="boardView"/>
+		<result column="BOARD_STATUS" 	property="boardStatus"/>
+		<result column="IS_IMPORTANT" 	property="isImportant"/>
+		<result column="IS_PRIVATE" 	property="isPrivate"/>
+		<result column="BOARD_PW" 		property="boardPw"/>
+		<result column="BOARD_LIKE" 	property="boardLike"/>
+		<association property="boardCategoryVO" resultMap="boardCategory"></association>
+		<association property="boardMenuVO" resultMap="boardMenu"></association>
+	</resultMap>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

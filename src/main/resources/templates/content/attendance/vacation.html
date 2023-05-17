@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{fragment/admin_layout}">
+
+
+<th:block layout:fragment="content">
+<style>
+	body {
+	  background-color: #f6f8fa;
+	  margin-top: 60px;
+	  margin-left: 150px;
+	}
+	
+	.commute {
+	  font-size: 20px;
+	  margin-bottom: 20px;
+	  font-weight: bold;
+	}
+	
+	.headVacation {
+	  width: 1600px;
+	  height: 225px;
+	  background-color: #fffeff;
+	  border: solid #ebeaed;
+	  text-align: center;
+	  padding-top: 50px;
+	}
+	
+	.bottomTitle {
+	  margin-top: 10px;
+	  margin-bottom: 20px;
+	  margin-left: 10px;
+	  font-size: 20px;
+	  font-weight: bold;
+	}
+	
+	.bottomTable {
+	  margin: 0 auto;
+	}
+	
+	.bottomThead {
+	  margin-left: 10px;
+	  margin-right: 10px;
+	  border: solid #ebeaed;
+	}
+	
+	.bottomBox {
+	  margin-top: 15px;
+	  width: 1600px;
+	  height: 570px;
+	  background-color: #fffeff;
+	  border: solid #ebeaed;
+	}
+	
+	.bottomTable tr td {
+	  height: 50px;
+	  width: 310px;
+	  text-align: center;
+	}
+	
+	.imageContainer {
+		
+	  display: inline-block;
+	}
+	
+	.vacationBox {
+		margin-left:100px;
+	  width: 100px;
+	  height: 100px;
+	  text-align: center;
+	  display: inline-block;
+	  vertical-align: middle; /* Align the text vertically */
+	}
+	.vacationBox tr:nth-child(1) td {
+	font-weight: bold;
+	font-size: 22px;
+	}
+	.vacationBox tr:nth-child(2) td {
+		padding-top: 20px;
+		font-size: 30px;
+		
+	}
+	.btn{
+	margin-left:10px;
+	height: 40px;
+	}
+	
+
+</style>
+
+
+	<div class="commute">김정운님의 2023년 휴가</div>
+	<!-- 출퇴근 -->
+	<div class="headVacation">
+		<div class="imageContainer">
+			<img src="/img/icons8-gift-100.png">
+			<table class="vacationBox">
+				<tr>
+					<td>총 휴가</td>
+				</tr>
+				<tr>
+					<td>13일</td>
+				</tr>
+			</table>
+			<span style="padding-left: 150px;"> <img src="/img/icons8-check-100.png" style="padding-left: 80px; border-left: 3px solid #d1d1d1;">
+			</span>
+			<table class="vacationBox">
+				<tr>
+					<td>사용 휴가</td>
+				</tr>
+				<tr>
+					<td>8일</td>
+				</tr>
+			</table>
+
+			<span style="padding-left: 150px;"> <img src="/img/icons8-vacation-100.png" style="padding-left: 80px; border-left: 3px solid #d1d1d1;"></span>
+			<table class="vacationBox">
+				<tr>
+					<td>잔여 휴가</td>
+				</tr>
+				<tr>
+					<td>5일</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+
+
+
+	<!--출퇴근기록 테이블 box -->
+	<div class="bottomBox">
+		<div class="bottomTitle">
+			2023년 김정운님의 휴가사용내역
+			<button type="button" class="btn btn-primary">휴가 신청</button>
+		</div>
+
+		<table class="bottomTable">
+			<thead class="bottomThead">
+				<tr>
+					<td>휴가신청일자</td>
+					<td>휴가종류</td>
+					<td>사유</td>
+					<td>휴가사용기간</td>
+					<td>차감일수</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				<tr>
+			</tbody>
+		</table>
+	</div>
+
+</th:block>
+
+<th:block layout:fragment="content_js">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	
+	<!--연결해야하는 외부 js  -->
+	<script type="text/javascript" src="/js/content/admin/cate_manage.js"></script>
+</th:block>
+</html>

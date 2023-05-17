@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"	>
+
+<th:block th:fragment="adminSideFragment">
+<<<<<<< HEAD
+<style>
+/*===== VARIABLES CSS =====*/
+:root{
+  --nav-width: 92px;
+  /*===== Colores =====*/
+  --first-color: #957777;
+  --bg-color: #5F264A;
+  --sub-color: #B6CEFC;
+  --white-color: #FFF;
+  
+  /*===== Fuente y tipografia =====*/
+  --body-font: 'Poppins', sans-serif;
+  --normal-font-size: 1rem;
+  --small-font-size: .875rem;
+  
+  /*===== z index =====*/
+  --z-fixed: 100;
+}
+/*===== BASE =====*/
+*,::before,::after{
+  box-sizing: border-box;
+}
+body{
+  position: relative;
+  margin: 0;
+  padding: 2rem 0 0 6.75rem;
+  font-family: var(--body-font);
+  font-size: var(--normal-font-size);
+  transition: .5s;
+}
+h1{
+  margin: 0;
+}
+ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+a{
+  text-decoration: none;
+}
+/*===== l NAV =====*/
+.l-navbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--nav-width);
+  height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--white-color);
+  padding: 1.5rem 1.5rem 2rem;
+  transition: .5s;
+  z-index: var(--z-fixed);
+}
+/*===== NAV =====*/
+.nav{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.nav__brand{
+  display: grid;
+  grid-template-columns: max-content max-content;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.nav__toggle{
+  font-size: 1.25rem;
+  padding: .75rem;
+  cursor: pointer;
+}
+.nav__logo{
+  color: var(--white-color);
+  font-weight: 600;
+  font-size: 30px;
+}
+.nav__link{
+  display: grid;
+  grid-template-columns: 85px max-content;
+  align-items: center;
+  column-gap: .75rem;
+  padding: .75rem;
+  color: var(--white-color);
+  border-radius: .5rem;
+  margin-bottom: 1rem;
+  transition: .3s;
+  cursor: pointer;
+   position: relative;
+}
+.nav__link:hover{
+  background-color: var(--first-color);
+}
+.nav__icon{
+  font-size: 1.25rem;
+}
+.nav__name{
+  font-size: var(--small-font-size);
+}
+/*Expander menu*/
+.expander{
+  width: calc(var(--nav-width) + 9.25rem);
+}
+
+/*Add padding body*/
+.body-pd{
+  padding: 2rem 0 0 16rem;
+}
+/*Active links menu*/
+.active{
+  background-color: var(--first-color);
+}
+/*===== COLLAPSE =====*/
+.collapse{
+ 		 grid-template-columns: 20px max-content 1fr;
+        right: 0;
+        top: 100%;
+        z-index: 1;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.8s ease;
+}
+.collapse__link{
+  justify-self: flex-end;
+  transition: .5s;
+}
+.collapse__menu{
+  display: none;
+  padding: .75rem 2.25rem;
+}
+.collapse__sublink{
+  color: var(--sub-color);
+  font-size: var(--small-font-size);
+}
+.collapse__sublink:hover{
+  color: var(--white-color);
+}
+/*Show collapse*/
+.showCollapse{
+  display: block;
+}
+/*Rotate icon*/
+.rotate{
+  transform: rotate(180deg);
+}
+.nav-link{
+color: white;
+}    
+li{
+margin-top:15px;
+margin-bottom: 20px;
+}
+li:last-child {
+	margin-bottom: 0px;
+}
+  .nav__link:hover .collapse {
+        display: block;
+        opacity: 1;
+        pointer-events: auto;
+    }
+</style>
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body id="body-pd">
+    <div class="l-navbar" id="navbar">
+        <nav class="nav">
+            <div>
+            
+                <div class="nav__brand">
+                    <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                    <a href="#" class="nav__logo">BYKH</a>
+                </div>
+                
+                <div class="nav__list">
+                    <a href="#" class="nav__link active">
+                        <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                        <span class="nav_name">메인화면</span>
+                    </a>
+                    
+                     <a href="#" class="nav__link">
+                        <ion-icon name="log-out-outline"></ion-icon>
+                        <span class="nav_name">전자결재</span>
+                    </a>
+                     
+                    <div href="#" class="nav__link">
+                        <ion-icon name="walk-outline"></ion-icon>
+                       		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">근태관리</span>
+						<div class="collapse" id="collapseExample1">
+	   						<ul>
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><div  aria-current="page" href="#">미결함</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">진행함</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">완료함</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">반려함</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">임시함</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">참조함</div></li>
+	 						</ul>
+						</div>             	
+ 					</div>
+ 
+
+                       <div href="#" class="nav__link">
+                        <ion-icon name="walk-outline"></ion-icon>
+                       		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">인사관리</span>
+						<div class="collapse" id="collapseExample2">
+	   						<ul>
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><div  aria-current="page" href="#">출퇴근 기록</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">휴가 관리</div></li>
+			    				<li class="nav-item"><div aria-current="page" href="#">연장근무</div></li>
+	 						</ul>
+						</div>             	
+ 					</div>       
+ 					
+	                <a href="#" class="nav__link">
+	                     <ion-icon name="people-outline"></ion-icon>
+	                     <span class="nav_name">조직도</span>
+	                </a>   
+	                     
+	                <a href="#" class="nav__link">
+	                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
+	                    <span class="nav_name">자원관리</span>
+	                </a>
+	                
+	                  <a href="#" class="nav__link">
+	                    <ion-icon name="clipboard-outline"></ion-icon>
+	                    <span class="nav_name">게시판</span>
+	                </a>
+	                
+	                   <a href="#" class="nav__link">
+	                    <ion-icon name="briefcase-outline"></ion-icon>
+	                    <span class="nav_name">자료실</span>
+	                </a>
+	                
+                  </div>
+            </div>
+        </nav>
+    </div>
+    
+    
+    
+    
+    
+    
+    <!-- IONICONS -->
+    <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+	<script type="text/javascript">
+	/*===== EXPANDER MENU  =====*/ 
+	const showMenu = (toggleId, navbarId, bodyId)=>{
+	  const toggle = document.getElementById(toggleId),
+	  navbar = document.getElementById(navbarId),
+	  bodypadding = document.getElementById(bodyId)
+
+	  if(toggle && navbar){
+	    toggle.addEventListener('click', ()=>{
+	      navbar.classList.toggle('expander')
+
+	      bodypadding.classList.toggle('body-pd')
+	    })
+	  }
+	}
+	showMenu('nav-toggle','navbar','body-pd')
+
+	/*===== LINK ACTIVE  =====*/ 
+	const linkColor = document.querySelectorAll('.nav__link')
+	function colorLink(){
+	  linkColor.forEach(l=> l.classList.remove('active'))
+	  this.classList.add('active')
+	}
+	linkColor.forEach(l=> l.addEventListener('click', colorLink))
+	
+	  // JavaScript 코드를 사용하여 메뉴의 활성/비활성 상태를 관리합니다.
+    document.addEventListener('DOMContentLoaded', function() {
+        var navLinks = document.querySelectorAll('.nav__link');
+
+        navLinks.forEach(function(link) {
+            link.addEventListener('mouseenter', function() {
+                this.classList.add('active');
+            });
+
+            link.addEventListener('mouseleave', function() {
+                this.classList.remove('active');
+            });
+        });
+    });
+	</script>
+</th:block>
+
+</html>

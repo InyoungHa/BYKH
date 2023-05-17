@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{fragment/admin_layout}">
+
+
+<th:block layout:fragment="content">
+
+<style>
+	body{
+	background-color:#f6f8fa;
+	margin-top:60px;
+	margin-left: 150px;
+	}
+	
+	.commute{
+	font-size:20px;
+	margin-bottom: 20px;
+	font-weight: bold;
+	}
+	
+	.time{
+	width:180px; 
+	height:225px;
+	background-color:#fffeff; 
+	float:left;
+	border: solid #ebeaed;
+	text-align: center;
+	padding-top: 50px;
+	
+	}
+	.timeDetail1{
+	 color: #1a78cc;
+	 margin-bottom: 20px;
+	 display:inline-block;
+	 font-weight: bold;
+	}
+	.timeDetail2{
+		font-size: 25px;
+	
+	}
+	.timeDetail3{
+	 color: #868686;
+	}
+	
+	.workStatus{
+	display:inline-block;
+	margin-left:20px;
+	height:225px;
+	background-color: #fffeff;
+	border: solid #ebeaed;
+	
+	}
+	
+	.workStatusTitle{
+	text-align:center;
+	width:370px;
+	height:65px;
+	border-bottom: solid #ebeaed;
+	font-weight: bold;
+	font-size: 18px;
+	}
+	
+	tbody{
+	height: 140px;
+	}
+	
+	tbody tr td:nth-child(1){
+	text-align:center;
+	font-weight: bold;
+	width:200px;
+	font-size: 18px;
+	}
+	
+	tbody tr td:nth-child(2){
+	text-align:center;
+	
+	}
+	
+	.submitButton{
+	width:200px; 
+	height:225px;
+	background-color:#fffeff; 
+	float:right;
+	border: solid #ebeaed;
+	text-align: center;
+	padding-top: 30px;
+	margin-right: 170px;
+	
+	}
+	.btn{
+	color: #1D267D;
+	height:45px;
+	width: 150px;
+	margin-bottom: 15px;
+	}
+	
+	.bottomBox{
+	margin-top:15px;
+	width: 1600px;
+	height: 570px;
+	background-color:#fffeff;
+	border: solid #ebeaed;
+	}
+	.bottomTitle{
+	margin-top:10px;
+	margin-bottom:20px;
+	margin-left:10px;
+	font-size:20px;
+	font-weight: bold;
+	}
+	
+	.bottomTable{
+	margin: 0 auto;
+	
+	}
+	
+	.bottomThead{
+	margin-left:10px;
+	margin-right:10px;
+	border: solid #ebeaed;
+	
+	}
+	
+	.bottomTable tr td{ 
+	height: 50px;
+	width: 310px;
+	text-align: center;
+	}
+	img{
+	width: 30px;
+	margin-right: 10px;
+	}
+</style>
+
+
+	<!-- 출퇴근 -->
+	<div class="commute">김정운님의 출퇴근기록</div>
+
+	<!-- 출퇴근시간box -->
+	<span class="time"> 
+	<span class="timeDetail1">2023/05/15(월)<br>
+			<span class="timeDetail2">11:09</span><br>
+	</span><br>
+			 출근시간 : <span class="timeDetail3">00:00</span><br> 
+			 퇴근시간 : <span class="timeDetail3">00:00</span>
+	</span>
+
+	<!-- 이번달 근무현황 box -->
+	<table class="workStatus">
+		<thead>
+			<tr>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-clock-50.png">이번달 근무 현황</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>근무일수</td>
+				<td>13일</td>
+			</tr>
+			<tr>
+				<td>연장근무시간</td>
+				<td>7시간</td>
+			</tr>
+			<tr>
+				<td>총 근무시간</td>
+				<td>103시간</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- 이번달 근태현황 -->
+	<table class="workStatus">
+		<thead>
+			<tr>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-attendance-50.png">이번달 근태 현황</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>지각</td>
+				<td>1회</td>
+			</tr>
+			<tr>
+				<td>결근</td>
+				<td>0회</td>
+			</tr>
+			<tr>
+				<td>연차</td>
+				<td>3회</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- 휴가 현황 -->
+	<table class="workStatus">
+		<thead>
+			<tr>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-gift-50.png">휴가 현황</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>잔여휴가</td>
+				<td>5일</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<!-- 신청 버튼 box -->
+	<span class="submitButton">
+		<button type="button" class="btn btn-outline-primary">휴가 신청</button>
+		<button type="button" class="btn btn-outline-primary">연장근무 신청</button>
+		<button type="button" class="btn btn-outline-danger">결근사유서 신청</button>
+	</span>
+
+	<!--출퇴근기록 테이블 box -->
+	<div class="bottomBox">
+		<div class="bottomTitle">2023년 김정운님의 출퇴근 기록</div>
+
+		<table class="bottomTable">
+			<thead class="bottomThead">
+				<tr>
+					<td>근무일자</td>
+					<td>요일</td>
+					<td>출근시간</td>
+					<td>퇴근시간</td>
+					<td>근무상태</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				<tr>
+			</tbody>
+		</table>
+	</div>
+</th:block>
+
+
+<th:block layout:fragment="content_js">
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<!--연결해야하는 외부 js  -->
+	<script type="text/javascript" src="/js/content/admin/cate_manage.js"></script>
+</th:block>
+</html>

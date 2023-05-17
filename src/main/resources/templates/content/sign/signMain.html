@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragment/admin_layout}">
+
+<!-- 연결해야할 외부 css 파일 -->
+<th:block layout:fragment="content_css">
+   	<!-- <link rel="stylesheet" href="/"> -->
+</th:block>
+
+<th:block layout:fragment="content">
+   <div class="row">
+		<div class="col">
+			<h2>결재현황</h2>
+			<div class="row mt-3 mb-3">
+				<div class="col-10">
+					진행중인 결재건
+				</div>
+				<div class="col-2 d-grid">
+					<input type="button" value="+ 새 결제" class="btn btn-primary" th:onclick="|location.href='@{/sign/signWriteForm}'|">
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-12">
+					<table class="table table-bordered text-center">
+						<colgroup>
+							<col width="5%">
+							<col width="*">
+							<col width="20%">
+							<col width="15%">
+							<col width="15%">
+						</colgroup>
+						<thead class="table-head">
+							<tr>
+								<td>번호</td>
+								<td>제목</td>
+								<td>작성일</td>
+								<td>작성자</td>
+								<td>상태</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td><a>임시기안</a></td>
+								<td>2023-05-16</td>
+								<td>양동근</td>
+								<td>임시저장</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row mt-3 mb-3">
+				<div class="col-10">
+					결재 목록
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col">
+					<table class="table table-bordered text-center">
+						<colgroup>
+							<col width="5%">
+							<col width="*">
+							<col width="20%">
+							<col width="15%">
+							<col width="15%">
+						</colgroup>
+						<thead class="table-head">
+							<tr>
+								<td>번호</td>
+								<td>제목</td>
+								<td>작성일</td>
+								<td>작성자</td>
+								<td>상태</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>임시기안</td>
+								<td>2023-05-16</td>
+								<td>양동근</td>
+								<td>임시저장</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+<!-- 연결해야할 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<!-- <script type="text/javascript" src="/"></script> -->
+</th:block>
+
+</html>

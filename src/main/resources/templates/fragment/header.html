@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"	>
+
+<th:block th:fragment="headerFragment">
+	<div class="row">
+		<div class="col text-end">
+			<span>000님 반갑습니다 |</span> <!--아이콘 또는 프로필 사진 (페이지 이동) -->
+			<span>
+				<button type="button" class="btn btn-primary position-relative">알림  <!--종모양 아이콘  -->
+					<span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+							<span class="visually-hidden">New alerts</span>
+					</span>
+				</button>
+			</span> 
+			<a>내 정보 확인하기 |</a> 
+			<a>LOGOUT</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			BYKH
+		</div>
+	</div>
+</th:block>
+
+</html>

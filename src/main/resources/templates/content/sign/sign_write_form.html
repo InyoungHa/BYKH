@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragment/admin_layout}">
+
+<!-- 연결해야할 외부 css 파일 -->
+<th:block layout:fragment="content_css">
+   	<!-- <link rel="stylesheet" href="/"> -->
+</th:block>
+
+<th:block layout:fragment="content">
+	<div class="row">
+		<div class="col-8">
+			<div class="row mb-3">
+				<div class="col text-center">
+					<h2>연차신청서</h2>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-4">
+					<table class="table table-bordered text-center">
+							<tr>
+								<td>기안자</td>
+								<td>임시기안자</td>
+							</tr>
+							<tr>
+								<td>기안부서</td>
+								<td>영업부</td>
+							</tr>
+							<tr>
+								<td>기안일</td>
+								<td>2020-12-09</td>
+							</tr>
+					</table>
+				</div>
+				<div class="offset-4 col-4">
+					<table class="table table-bordered text-center">
+						<tr>
+							<td>담당</td>
+						</tr>
+						<tr>
+							<td style="height: 50px;"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-4"></div>
+	</div>
+</th:block>
+
+<!-- 연결해야할 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<!-- <script type="text/javascript" src="/"></script> -->
+</th:block>
+
+</html>
