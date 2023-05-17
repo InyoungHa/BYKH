@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="attendanceMapper">
+	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
+		<id column="WORK_STATUS" 		property="workStatus"/>
+		<result column="REG_DAYS" 		property="regDays"/>
+		<result column="WORKING_TIME" 	property="workingTime"/>
+		<result column="QUITTING_TIME" 	property="quittingTime"/>
+	</resultMap>
+	
+		
+	<!--출퇴근 시간 저장 -->
+	<insert id="storeTime">
+	INSERT INTO ATTENDANCE (REG_DAYS) VALUES (CURRENT_TIMESTAMP)
+    WHERE EMPNO = #{empNo}
+	</insert>
+    
+	
+	<!-- 근무일수 조회 -->
+	<select id="check">
+	SELECT COUNT(*) AS 근무일수 FROM ATTENDANCE WHERE EMPNO = #{empNo}
+	</select>
+	
+	
+	<!-- 연장근무시간 조회 -->
+	<select id="findOverTime">
+	SELECT
+	SEC_TO_TIME(
+		SUM(
+		CASE
+		WHEN TIME_TO_SEC(QUITTING_TIME) - TIME_TO_SEC(WORKING_TIME) > 28800 THEN TIME_TO_SEC(QUITTING_TIME) -
+		TIME_TO_SEC(WORKING_TIME) - 28800
+		ELSE 0
+		END
+		)
+	) AS 연장근무시간
+	FROM ATTENDANCE
+	WHERE EMPNO = #{empNo}
+	</select>
+	
+	
+	<!-- 총근무시간 조회 -->
+	<select id="totalWorkingTime">
+	SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(QUITTING_TIME) - TIME_TO_SEC(WORKING_TIME))) AS 총근무시간 FROM ATTENDANCE WHERE EMPNO = #{empNo}
+	</select>
+
+	
+	<!-- 지각 횟수 조회 -->
+	<select id="findLateTime">
+	SELECT COUNT(*) AS 지각 FROM ATTENDANCE WHERE EMPNO = #{empNo}  AND WORKING_TIME > '09:00:00'
+	</select>
+	
+	
+	<!-- 결근 횟수 조회 -->
+	<select id="findAbsent">
+	SELECT COUNT(*) AS 결근 FROM ATTENDANCE WHERE EMPNO  = #{empNo}  AND 출근시간 IS NULL;
+	</select>
+
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
