@@ -6,54 +6,240 @@
 
 <!-- 연결해야할 외부 css 파일 -->
 <th:block layout:fragment="content_css">
-   	<!-- <link rel="stylesheet" href="/"> -->
+	<!-- <link rel="stylesheet" href="/"> -->
+	<style type="text/css">
+		.table{
+			--bs-table-border-color: black;
+		}
+		.sgn-info-table{
+			width: 300px;
+		}
+		.sgn-info-table > tbody > tr > td:first-child{
+			width: 100px; /* td의 너비를 원하는 크기로 설정 */
+			height: 1rem; /* td의 높이를 원하는 크기로 설정 */
+			background-color: #dddddd;
+		}
+		.sgn-info-table > tbody > tr > td:last-child{
+			width: 200px; /* td의 너비를 원하는 크기로 설정 */
+			height: 1rem; /* td의 높이를 원하는 크기로 설정 */
+		}
+	
+		.full-width-input {
+			width: 100%; /* 너비를 100%로 설정 */
+			height: 100%; /* 높이를 100%로 설정 */
+			box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
+			border: none;
+			
+		}
+		.full-width-input:focus {
+		  outline: none; /* 클릭 효과인 테두리 선을 없앰 */
+		}
+		.full-width-textarea {
+			width: 100%; /* 너비를 100%로 설정 */
+			height: 200px; /* 높이를 100%로 설정 */
+			box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
+			border: none;
+			
+		}
+		.full-width-textarea:focus {
+		  outline: none; /* 클릭 효과인 테두리 선을 없앰 */
+		}
+
+		.stamp-table{
+			width: 150px;
+		}
+		.stamp-table > tbody > tr:first-child > td{
+			background-color: #dddddd;
+		}
+		.stamp-table > tbody > tr:last-child > td, .stamp-table > tbody > tr:first-child > td{
+			height: 1rem;
+		}
+		.stamp-table > tbody > tr:last-child > td{
+			font-size: 0.8rem;
+		}
+
+		.content-table > tbody > tr:nth-child(4) > td{
+			vertical-align: middle;
+		}
+		.content-table > tbody > tr:nth-child(4){
+			 height: 200px;
+		}
+		.content-table > tbody > tr:last-child > td{
+			text-align: left;
+		}
+		.content-table > tbody > tr > td:first-child{
+			background-color: #dddddd;
+		}
+		
+		
+</style>
 </th:block>
 
 <th:block layout:fragment="content">
 	<div class="row">
-		<div class="col-8">
-			<div class="row mb-3">
+		<div class="col-8" style="border: 1px solid #dee2e6;">
+			<div class="row mt-3 mb-3">
 				<div class="col text-center">
 					<h2>연차신청서</h2>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col-4">
-					<table class="table table-bordered text-center">
+					<table class="table table-bordered text-center sgn-info-table">
+						<tbody>
 							<tr>
 								<td>기안자</td>
-								<td>임시기안자</td>
+								<td>
+									<input type="text" class="full-width-input"><!-- 자동입력 -->
+								</td>
 							</tr>
 							<tr>
 								<td>기안부서</td>
-								<td>영업부</td>
+								<td>
+									<input type="text" class="full-width-input"><!-- 자동입력 -->
+								</td>
 							</tr>
 							<tr>
 								<td>기안일</td>
-								<td>2020-12-09</td>
+								<td>
+									<input type="text" class="full-width-input"><!-- 자동입력 -->
+								</td>
 							</tr>
+						</tbody>
 					</table>
 				</div>
 				<div class="offset-4 col-4">
-					<table class="table table-bordered text-center">
-						<tr>
-							<td>담당</td>
-						</tr>
-						<tr>
-							<td style="height: 50px;"></td>
-						</tr>
+					<table class="table table-bordered text-center stamp-table">
+						<tbody>
+							<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
+							<tr>
+								<td>담당</td><!-- 직책 -->
+							</tr>
+							<tr>
+								<td style="height: 80px;"></td><!-- 이름 -->
+							</tr>
+							<tr>
+								<td>2023-05-17 13:57</td><!-- 시간 -->
+							</tr>
+							<!-- 결재자 추가시 추가되어야 하는 코드 끝 -->
+						</tbody>
 					</table>
 				</div>
 			</div>
-			
+			<div class="row">
+				<div class="col">
+					<table class="table table-bordered text-center content-table">
+						<tbody>
+							<colgroup>
+								<col width="20%">
+								<col width="*">
+							</colgroup>
+							<tr>
+								<td>휴가 종류</td>
+								<td>
+									<input type="text" class="full-width-input annualType" placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate(this);">
+								</td>
+							</tr>
+						<tr>
+							<td>기간 및 일시</td>
+							<td>
+								<div class="row">
+									<div class="col-6">
+										<div class="input-group">
+											<input type="date" class="form-control" >
+											<span class="input-group-text">-</span>
+											<input type="date" class="form-control" >
+										</div>
+									</div>
+									<div class="col-6">
+										<div class="input-group">
+											<select class="form-select start-time" disabled>
+												<option disabled selected>시작시간</option>
+												<th:block th:each="startTime : ${#numbers.sequence(9, 18)}">
+													<option>[[${startTime}]]</option>
+												</th:block>
+											</select>
+											 
+											<span class="input-group-text">-</span>
+											<select class="form-select end-time" disabled>
+												<option disabled selected>종료시간</option>
+												<th:block th:each="endTime : ${#numbers.sequence(9, 18)}">
+													<option>[[${endTime}]]</option>
+												</th:block>
+											</select>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+								<td>연차일수</td>
+								<td>
+								<!-- 잔여연차 자동입력 -->
+									<input type="text" class="full-width-input" value="잔여연차 : 1   신청연차 : 0.5">
+								</td>
+							</tr>
+							<tr>
+								<td>휴가 사유</td>
+								<td>
+									<textarea class="full-width-textarea"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									1. 연차의 사용은 근로기준법에 따라 전년도에 발생한 개인별 잔여 연차에 한하여 사용합을 원칙으로 한다. 단, 최초입사시에는 근로기준법에 따라 발생 예정된 연차를 차용하여 월 1회 사용 할 수 있다.<br>
+									2. 경조사 휴가는 행사일을 증명할 수 있는 가족 관계 증명서 또는 등본, 청첩장 등 제출<br>
+									3. 공가(예비군/민방위)는 사전에 통지서를, 사후에 참석증을 반드시 제출
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>			
 		</div>
-		<div class="col-4"></div>
+		<div class="col-4">
+			<div class="row" style="min-height: 400px;">
+				<div class="col-12">
+					<div class="row">
+						<div class="col-12">
+							<h3>결재자 지정</h3>
+						</div>
+						<div class="col-8">
+							<input type="text" class="form-control">
+						</div>
+						<div class="col-4 d-grid">
+							<input type="button" class="btn btn-primary" value="찾기">
+						</div>
+						<!-- 결제자 츠기될 때마다 생성(신청서의 html도 같이 생성되어야 함) -->
+						<div class="col-12">~~ 팀장</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="row" style="min-height: 400px;">
+				<div class="col-12">
+					<div class="row">
+						<div class="col-12">
+							<h3>파일 첨부</h3>
+						</div>
+					</div>
+				</div>
+				<div class="col-12">
+					<div class="row">
+						<div class="col text-end">
+							<button type="button" class="btn">임시저장</button>
+							<button type="button" class="btn btn-primary" >기안</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </th:block>
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<!-- <script type="text/javascript" src="/"></script> -->
+	<script type="text/javascript" src="/js/content/sign/sign_write_form.js"></script>
 </th:block>
 
 </html>
