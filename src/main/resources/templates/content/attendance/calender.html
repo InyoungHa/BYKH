@@ -11,7 +11,363 @@
 
 
 <th:block layout:fragment="content">
-캘린더페이지입니다.
+<style>
+/* ================
+   Assign Variables */
+:root {
+ 
+  --calendar-bg-color: hsl(130, 20%, 100%);
+  --shade-color: #ffd0c9;
+  --text-color: hsl(280, 30%, 20%);
+  --headline-color: hsl(0, 0%, 100%);
+  --rule-color: hsla(0, 0%, 50%, 0);
+  --primary-color: #e19194;
+  --secondary-color: #e1b2b4;
+}
+
+/* ===========================
+   Setup Mixins/Helper Classes */
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/* ==========
+   Setup Page */
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f6f8fa;
+  color: var(--text-color);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ================
+   Calendar Styling */
+.calendar {
+  position: relative;
+  margin: 3rem;
+  overflow: hidden;
+  max-width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  background: var(--calendar-bg-color);
+  box-shadow: 0.25rem 0.25rem 2rem var(--shade-color), -1rem -1rem 2rem var(--bg-color);
+}
+.calendar ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.calendar ol li {
+  width: calc(100% / 7);
+  padding: 1rem;
+  background: linear-gradient(-145deg, transparent, rgba(0, 0, 0, 0.025));
+}
+.calendar .days {
+  flex-grow: 1;
+}
+.calendar .day-names {
+  background: linear-gradient(70deg, var(--primary-color), var(--secondary-color));
+  color: var(--headline-color);
+  flex-shrink: 0;
+  flex-grow: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+  line-height: 1;
+}
+.calendar .date {
+  margin-bottom: 0.25em;
+  font-size: 0.875em;
+  font-weight: bold;
+}
+.calendar .outside .date {
+  opacity: 0.5;
+}
+.calendar .event {
+  --dot-color: var(--primary-color);
+  box-shadow: 0.25em 0.25em 1em 0 rgba(0, 0, 0, 0.05) inset;
+  font-size: 0.75rem;
+  padding: 0 0.75em;
+  line-height: 2em;
+  white-space: nowrap;
+  overflow: hidden;
+  border-radius: 1em;
+  display: flex;
+  align-items: center;
+}
+.calendar .event::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.5em;
+  background: var(--dot-color);
+  border-radius: 100%;
+  flex-shrink: 0;
+}
+.calendar .event.span-2 {
+  width: calc(200% + 2rem);
+}
+.calendar .event.begin {
+  border-radius: 1em 0 0 1em;
+}
+.calendar .event.end {
+  border-radius: 0 1em 1em 0;
+}
+.calendar .event.all-day {
+  background: var(--shade-color);
+}
+.calendar .event.clear {
+  visibility: hidden;
+}
+</style>
+ <h4 class="display-4 mb-4 text-center">2023-05</h4>
+<div class="calendar">
+  <ol class="day-names">
+    <li>
+      Sunday
+    </li>
+    <li>
+      Monday
+    </li>
+    <li>
+      Tuesday
+    </li>
+    <li>
+      Wednesday
+    </li>
+    <li>
+      Thursday
+    </li>
+    <li>
+      Friday
+    </li>
+    <li>
+      Saturday
+    </li>
+  </ol>
+  <ol class="days">
+    <li>
+      <div class="date">
+        1
+      </div>
+      <div class="event">
+        Event with Long Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        2
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        3
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        4
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        5
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        6
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        7
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        8
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        9
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        10
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        11
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        12
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        13
+      </div>
+      <div class="event all-day begin span-2">
+        Event Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        14
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        15
+      </div>
+      <div class="event all-day end">
+        Event Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        16
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        17
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        18
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        19
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        20
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        21
+      </div>
+      <div class="event">
+        Event Name
+      </div>
+      <div class="event">
+        Event Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        22
+      </div>
+      <div class="event span-2">
+        Event with Longer Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        23
+      </div>
+      <div class="event clear">
+        &nbsp;
+      </div>
+      <div class="event">
+        Event Name
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        24
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        25
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        26
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        27
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        28
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        29
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        30
+      </div>
+    </li>
+    <li>
+      <div class="date">
+        31
+      </div>
+    </li>
+    <li class="outside">
+      <div class="date">
+        1
+      </div>
+    </li>
+    <li class="outside">
+      <div class="date">
+        2
+      </div>
+    </li>
+    <li class="outside">
+      <div class="date">
+        3
+      </div>
+    </li>
+    <li class="outside">
+      <div class="date">
+        4
+      </div>
+    </li>
+  </ol>
+</div>
 </th:block>
 
 <!-- 연결해야 할 외부 js 파일 -->
