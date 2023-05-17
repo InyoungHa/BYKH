@@ -197,7 +197,7 @@ li:last-child {
                     </a>
                      
                     <div href="#" class="nav__link">
-                        <ion-icon name="walk-outline"></ion-icon>
+                        <a><ion-icon name="walk-outline"></ion-icon></a>
                        		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">근태관리</span>
 						<div class="collapse" id="collapseExample1">
 	   						<ul>
@@ -214,7 +214,7 @@ li:last-child {
  
 
                        <div href="#" class="nav__link">
-                        <ion-icon name="walk-outline"></ion-icon>
+                        <a th:href="@{/attendance/commute}"><ion-icon name="person-add-outline"></ion-icon></a>
                        		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">인사관리</span>
 						<div class="collapse" id="collapseExample2">
 	   						<ul>
@@ -259,45 +259,38 @@ li:last-child {
     
     <!-- IONICONS -->
     <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
-	<script type="text/javascript">
-	/*===== EXPANDER MENU  =====*/ 
-	const showMenu = (toggleId, navbarId, bodyId)=>{
-	  const toggle = document.getElementById(toggleId),
-	  navbar = document.getElementById(navbarId),
-	  bodypadding = document.getElementById(bodyId)
-
-	  if(toggle && navbar){
-	    toggle.addEventListener('click', ()=>{
-	      navbar.classList.toggle('expander')
-
-	      bodypadding.classList.toggle('body-pd')
-	    })
-	  }
-	}
-	showMenu('nav-toggle','navbar','body-pd')
-
-	/*===== LINK ACTIVE  =====*/ 
-	const linkColor = document.querySelectorAll('.nav__link')
-	function colorLink(){
-	  linkColor.forEach(l=> l.classList.remove('active'))
-	  this.classList.add('active')
-	}
-	linkColor.forEach(l=> l.addEventListener('click', colorLink))
 	
-	  // JavaScript 코드를 사용하여 메뉴의 활성/비활성 상태를 관리합니다.
-    document.addEventListener('DOMContentLoaded', function() {
-        var navLinks = document.querySelectorAll('.nav__link');
+	<script type="text/javascript">
+	  /*===== EXPANDER MENU  =====*/ 
+	  const showMenu = (toggleId, navbarId, bodyId) => {
+	    const toggle = document.getElementById(toggleId);
+	    const navbar = document.getElementById(navbarId);
+	    const bodypadding = document.getElementById(bodyId);
 
-        navLinks.forEach(function(link) {
-            link.addEventListener('mouseenter', function() {
-                this.classList.add('active');
-            });
+	    if (toggle && navbar) {
+	      toggle.addEventListener('click', () => {
+	        navbar.classList.toggle('expander');
+	        bodypadding.classList.toggle('body-pd');
+	      });
+	    }
+	  }
+	  
+	  showMenu('nav-toggle', 'navbar', 'body-pd');
 
-            link.addEventListener('mouseleave', function() {
-                this.classList.remove('active');
-            });
-        });
-    });
+	  /*===== AUTO-CLOSE MENU ON MOUSE LEAVE  =====*/ 
+	  const navbar = document.getElementById('navbar');
+	  const navLinks = document.querySelectorAll('.nav__link');
+
+	  navbar.addEventListener('mouseleave', () => {
+	    navbar.classList.remove('expander');
+	    document.getElementById('body-pd').classList.remove('body-pd');
+
+	    navLinks.forEach(link => {
+	      link.classList.remove('active');
+	    });
+	  });
+	</script>
+
 	</script>
 </th:block>
 
