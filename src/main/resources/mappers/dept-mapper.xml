@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="deptMapper">
+	<!--부서 테이블 -->
+	<resultMap type="com.bykh.groupware.dept.vo.DeptVO" id="dept">
+		<id column="DEPTNO" 					property="deptno"/>
+		<result column="DENAME" 				property="dename"/>
+		<result column="LOC"					property="loc"/>
+		<result column="IS_USE"					property="isUse"/>
+
+	</resultMap>
+	
+
+	<!--부서 목록 조회  -->
+	<select id="selectDeptList" resultMap="dept">
+		SELECT DEPTNO
+			, DENAME
+			, LOC
+			, IS_USE
+		FROM DEPT	
+	</select>
+	
+
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
