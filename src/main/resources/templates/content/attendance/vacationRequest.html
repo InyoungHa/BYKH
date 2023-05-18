@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{fragment/admin_layout}">
+
+<!-- 연결해야 할 외부 css 파일 -->
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href="/css/board_list.css"> -->
+</th:block>
+
+<th:block layout:fragment="content">
+<style>
+.inputName{
+width: 100px;
+margin-bottom: 15px;
+text-align: center; 
+}
+.start{
+margin-bottom: 15px;
+}
+.end{
+margin-bottom: 15px;
+}
+form{
+margin: 0 auto;
+padding-top: 30px;
+width: 300px;
+
+}
+h2{
+margin-bottom: 30px;
+margin-left: 80px;
+}
+.btn-lg{
+color:white;
+background-color:#5f264a;
+width:200px;
+margin-top:20px;
+margin-left: 49px;
+border-radius:5px;
+}
+ textarea {
+ margin-top:10px;
+  resize: none;
+  }
+.vacationType{
+text-align: center;
+margin-left: 6px;
+height: 32px;
+}
+.vacationPerson{
+margin-bottom: 15px;
+}
+
+</style>
+
+<form action="/attendance/vacationRequest" method="POST">
+<div>
+<h2>휴가신청</h2>
+  <label class="name" for="memName">이름:</label>
+  <input class="inputName" type="text" id="memName" name="memName" required style="margin-left: 42px; width: 150px;"><br>
+  <label class="start" for="start-date">시작 날짜:</label>
+  <input type="date" id="start-date" name="start-date" required style="text-align: center;"><br>
+
+  <label class="end" for="end-date">종료 날짜:</label>
+  <input type="date" id="end-date" name="end-date" required style="text-align: center;"><br>
+  <label class="end" for="end-date">휴가종류:</label>
+	<select class="vacationType">
+		<option>연차 휴가</option>
+		<option>반차 휴가</option>
+		<option>출산 휴가</option>
+		<option>생리 휴가</option>
+		<option>배우자 출산 휴가</option>
+	</select><br>
+	<label class="vacationPerson" >휴가승인자:</label>
+	<input type="button" class="btn" value="승인자 선택" style="margin-left: 20px;" required>
+	<br>
+	<label class="vacationPerson" >휴가참조자:</label>
+	<input type="button" class="btn" value="참조자 선택" style="margin-left: 17px;" required>
+	<br>
+	<label class="place" >근무지:</label>
+	<input type="radio"	name="place" style="margin-left: 10px;">울산<input type="radio" name="place" style="margin-left: 5px;">부산<input type="radio" name="place" style="margin-left: 5px;">서울
+	<br>
+  <label for="reason">사유:</label><br>
+  <textarea id="reason" name="reason" rows="4" cols="30" required ></textarea><br>
+
+  <input  class="btn-lg" type="submit" value="휴가 신청">
+ </div>
+</form>
+
+
+</th:block>
+
+<!-- 연결해야 할 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+<!-- <script type="text/javascript" src="/js/test.js"></script> -->
+</th:block>
+
+</html>

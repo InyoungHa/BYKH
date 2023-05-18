@@ -8,11 +8,19 @@
 		<result column="REG_DAYS" 		property="regDays"/>
 		<result column="WORKING_TIME" 	property="workingTime"/>
 		<result column="QUITTING_TIME" 	property="quittingTime"/>
+		<result column="CUR_DATE" 	property="curDate"/>
 	</resultMap>
+	
+	<!-- 현재시간  -->
+	<select id="currentTime" resultMap="att">
+	SELECT 
+	TO_CHAR(CUR_DATE, 'YYYY-MM-DD(DY)-HH:MI')
+	FROM ATTENDANCE
+	</select>
 	
 		
 	<!--출퇴근 시간 저장 -->
-	<insert id="storeTime">
+	<insert id="regTime">
 	INSERT INTO ATTENDANCE (REG_DAYS) VALUES (CURRENT_TIMESTAMP)
     WHERE EMPNO = #{empNo}
 	</insert>

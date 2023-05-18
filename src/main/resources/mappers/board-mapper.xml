@@ -25,7 +25,11 @@
 		<result column="IS_PRIVATE" 	property="isPrivate"/>
 		<result column="BOARD_PW" 		property="boardPw"/>
 		<result column="BOARD_LIKE" 	property="boardLike"/>
-		<result column="ENAME" 	property="ename"/>
+		<result column="ENAME" 			property="ename"/>
+		<result column="BOARD_PREV_NUM" 	property="boardPrevNum"/>
+		<result column="BOARD_PREV_TITLE" 	property="boardPrevTitle"/>
+		<result column="BOARD_NEXT_NUM" 	property="boardNextNum"/>
+		<result column="BOARD_NEXT_TITLE" 	property="boardNextTitle"/>
 		<association property="boardMenuVO" resultMap="boardMenu"></association>
 		<association property="boardCategoryVO" resultMap="boardCategory"></association>
 	</resultMap>
@@ -60,24 +64,23 @@
 	<select id="getNoticeList" resultMap="board">
 		SELECT BOARD_NUM
 		    , BOARD_TITLE
-		    , BOARD_CONTENT
 		    , BOARD_WRITER
-		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
+		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
 		    , BOARD_VIEW
 		    , ENAME
 		FROM BOARD, EMP
 		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
+		ORDER BY BOARD_NUM DESC
 	</select>
 	
 	<!-- 공지사항 중요글 목록 조회 -->
 	<select id="getNoticeImportantList" resultMap="board">
 		SELECT BOARD_NUM
 			, BOARD_TITLE
-			, BOARD_CONTENT
 			, BOARD_WRITER
-			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
+			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
 			, BOARD_VIEW
 		    , ENAME
 		FROM BOARD, EMP
@@ -85,9 +88,55 @@
 		AND IS_IMPORTANT = 'Y'
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
+		ORDER BY BOARD_NUM DESC
 	</select>
 	
+	<!-- 글 상세 조회 -->
+	<select id="getNoticeDetail" resultMap="board">
+		SELECT *
+		FROM 
+			(SELECT BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_CONTENT
+				, BOARD_WRITER
+				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+				, BOARD_VIEW
+				, IS_IMPORTANT
+				, ENAME
+				, BOARD_MENU_CODE
+	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
+	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
+	            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
+	            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
+			FROM BOARD, EMP
+			WHERE BOARD_WRITER = EMPNO)
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
 	
+	<!-- 조회수 증가 -->
+	<update id="updateBoardView">
+		UPDATE BOARD
+		SET BOARD_VIEW = BOARD_VIEW + 1
+		WHERE BOARD_NUM = #{boardNum}
+		AND BOARD_MENU_CODE = 'BOARD_MENU_001'
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard">
+		DELETE BOARD
+		WHERE BOARD_NUM = #{boardNum}
+		AND BOARD_MENU_CODE = 'BOARD_MENU_001'
+	</delete>
+	
+	<!-- 글 수정  -->
+	<update id="updateBoard">
+		UPDATE BOARD
+		SET BOARD_TITLE = #{boardTitle}
+			, BOARD_CONTENT = #{boardContent}
+			, IS_IMPORTANT = #{isImportant}
+		WHERE BOARD_NUM = #{boardNum}
+		AND BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
+	</update>
 	
 </mapper>
 
