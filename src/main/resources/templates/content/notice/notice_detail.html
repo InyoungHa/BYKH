@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+		
+			<div class="row mb-2">
+				<div class="col d-grid gap-1 d-md-flex justify-content-md-end">
+					<input type="button" class="btn btn-primary me-md-1" th:onclick="|location.href='@{/notice/update(boardNum=${notice.boardNum})}'|"  value="수정">
+					<input type="button" class="btn btn-primary me-md-1" th:onclick="deleteBoard([[${notice.boardNum}]]);" value="삭제">
+					<input type="button" class="btn btn-primary" th:onclick="|location.href='@{/notice/list}'|" value="목록">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<table class="table text-center align-middle table-group-divider">
+						<colgroup>
+							<col width="10%">
+							<col width="*">
+							<col width="10%">
+							<col width="10%">
+						</colgroup>
+						<tr>
+							<td class="table-light">제목</td>
+							<td class="text-start">[[${notice.boardTitle}]]</td>
+							<td class="table-light">작성자</td>
+							<td>[[${notice.ename}]]</td>
+						</tr>
+						<tr>
+							<td class="table-light">작성일</td>
+							<td class="text-start">[[${notice.boardDate}]]</td>
+							<td class="table-light">조회수</td>
+							<td>[[${notice.boardView}]]</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-start align-baseline">
+								<div style="min-height: 20rem">[[${notice.boardContent}]]</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<table class="table text-center align-middle border-top">
+						<colgroup>
+							<col width="10%">
+							<col width="*">
+						</colgroup>
+						<tr>
+							<td class="table-light">이전글</td>
+							<td class="text-start">
+								<th:block th:if="${notice.boardPrevNum != 'BOARD_000'}">
+									<a th:href="@{/notice/detail(boardNum=${notice.boardPrevNum})}" style="color : black">
+									[[${notice.boardPrevTitle}]]
+									</a>
+								</th:block>
+								<th:block th:unless="${notice.boardPrevNum != 'BOARD_000'}">
+									[[${notice.boardPrevTitle}]]
+								</th:block>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light">다음글</td>
+							<td class="text-start">
+								<th:block th:if="${notice.boardNextNum != 'BOARD_000'}">
+									<a th:if="${boardNextNum} != 'BOARD_000'" th:href="@{/notice/detail(boardNum=${notice.boardNextNum})}" style="color : black">
+									[[${notice.boardNextTitle}]]
+									</a>
+								</th:block>
+								<th:block th:unless="${notice.boardNextNum != 'BOARD_000'}">
+									[[${notice.boardNextTitle}]]
+								</th:block>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		</div>
+	</div>
+	
+	
+	
+	
+	
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src="/js/content/notice/notice_detail.js"></script>
+</th:block>
+
+</html>

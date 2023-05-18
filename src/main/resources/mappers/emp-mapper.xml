@@ -18,17 +18,9 @@
 		<result column="E_ROLE" 				property="eRole"/>
 		<result column="E_STATUS" 				property="eStatus"/>
 		<result column="JOIN_DATE" 				property="joinDate"/>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		<collection property="deptVO" resultMap="deptMapper.dept"></collection>
-		
+	
+		<association property="deptVO" resultMap="deptMapper.dept"></association>
+
 	</resultMap>
 	
 	<!--사원 이미지 테이블  -->

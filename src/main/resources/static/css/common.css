@@ -19,7 +19,7 @@
 
 .table-head{
 	color: white;
-	background-color: #0d6efd;
+	background-color: #5f264a;
 	font-weight: bold;
 }
 
@@ -28,11 +28,13 @@ a{
 }
 
 .btn{
+	color:white;
 	background-color: #5f264a;
 	border: 0.3px solid #5f264a;
 	
 }
 .btn:hover{
+	color:white;
 	background-color: #957777;
 	border: 0.3px solid #5f264a;
 	

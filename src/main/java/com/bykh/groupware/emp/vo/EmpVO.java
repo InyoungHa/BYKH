@@ -1,7 +1,9 @@
 package com.bykh.groupware.emp.vo;
 
 import com.bykh.groupware.dept.vo.DeptVO;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -37,6 +39,7 @@ public class EmpVO {
 	
 	@JsonProperty("join_date")
 	private String joinDate;
+
 	
 	private DeptVO deptVO;
 }

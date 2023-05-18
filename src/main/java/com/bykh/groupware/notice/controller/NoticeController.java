@@ -46,6 +46,43 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 	
+	//글 상세 조회
+	@GetMapping("/detail")
+	public String noticeDetail(BoardVO boardVO, Model model) {
+		//상세 조회 + 조회수 증가
+		model.addAttribute("notice", noticeService.getNoticeDetail(boardVO));
+		
+		return "content/notice/notice_detail";
+	}
+	
+	//글 삭제
+	@GetMapping("/delete")
+	public String deleteNotice(BoardVO boardVO) {
+		noticeService.deleteBoard(boardVO);
+		
+		return "redirect:/notice/list";
+	}
+	
+	//글 수정 페이지로 이동
+	@GetMapping("/update")
+	public String noticeForm(BoardVO boardVO, Model model) {
+		model.addAttribute("notice", noticeService.getNoticeDetail(boardVO));
+		
+		return "content/notice/notice_update";
+	}
+	
+	//글 수정
+	@PostMapping("/update")
+	public String noticeUpdate(BoardVO boardVO) {
+		//중요글 체크 해제 시 null값 체크
+		if(boardVO.getIsImportant() == null) {
+			boardVO.setIsImportant("N");
+		}
+		
+		noticeService.updateBoard(boardVO);
+		
+		return "redirect:/notice/detail?boardNum=" + boardVO.getBoardNum();
+	}
 	
 	
 }
