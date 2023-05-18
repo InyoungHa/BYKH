@@ -45,9 +45,14 @@
 		  outline: none; /* 클릭 효과인 테두리 선을 없앰 */
 		}
 
-		.stamp-table{
-			width: 150px;
-		}
+		.stamp-table {
+  display: flex;
+  width: max-content; /* 테이블의 가로 길이를 자식 요소에 맞추기 위해 설정 */
+}
+
+.stamp-table td {
+  flex: 1; /* 각 td 요소들을 균등하게 너비를 분배하기 위해 설정 */
+}
 		.stamp-table > tbody > tr:first-child > td{
 			background-color: #dddddd;
 		}
@@ -57,6 +62,10 @@
 		.stamp-table > tbody > tr:last-child > td{
 			font-size: 0.8rem;
 		}
+		.stamp-table > tbody > tr:nth-child(2) > td{
+			height: 80px;
+			vertical-align: middle;
+		}
 
 		.content-table > tbody > tr:nth-child(4) > td{
 			vertical-align: middle;
@@ -64,11 +73,14 @@
 		.content-table > tbody > tr:nth-child(4){
 			 height: 200px;
 		}
-		.content-table > tbody > tr:last-child > td{
+		.content-table > tbody > tr > td:last-child{
 			text-align: left;
 		}
 		.content-table > tbody > tr > td:first-child{
 			background-color: #dddddd;
+		}
+		.rounded-image {
+            border-radius: 100%;
 		}
 		
 		
@@ -84,46 +96,56 @@
 				</div>
 			</div>
 			<div class="row mb-3">
-				<div class="col-4">
+				<div class="col-7">
 					<table class="table table-bordered text-center sgn-info-table">
 						<tbody>
 							<tr>
 								<td>기안자</td>
 								<td>
-									<input type="text" class="full-width-input"><!-- 자동입력 -->
+									[[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.empVO.ename}]]<!-- 자동입력 -->
 								</td>
 							</tr>
 							<tr>
 								<td>기안부서</td>
 								<td>
-									<input type="text" class="full-width-input"><!-- 자동입력 -->
+									[[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.empVO.deptVO.dename}]]<!-- 자동입력 -->
 								</td>
 							</tr>
 							<tr>
 								<td>기안일</td>
 								<td>
-									<input type="text" class="full-width-input"><!-- 자동입력 -->
+									[[${nowDate}]]<!-- 자동입력 -->
 								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div class="offset-4 col-4">
-					<table class="table table-bordered text-center stamp-table">
-						<tbody>
-							<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
-							<tr>
-								<td>담당</td><!-- 직책 -->
-							</tr>
-							<tr>
-								<td style="height: 80px;"></td><!-- 이름 -->
-							</tr>
-							<tr>
-								<td>2023-05-17 13:57</td><!-- 시간 -->
-							</tr>
-							<!-- 결재자 추가시 추가되어야 하는 코드 끝 -->
-						</tbody>
-					</table>
+				<div class=" col-5">
+					<div class="float-end">
+						<table class="table table-bordered text-center stamp-table">
+							<tbody>
+								<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
+								<tr class="eJobTr">
+									<td>담당</td><!-- 직책 -->
+									<td>
+										[[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.signVOList[0].approverJob}]]
+									</td>
+								</tr>
+								<tr class="enameTr">
+									<td>
+										[[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.empVO.ename}]]
+									</td><!-- 도장 이미지 -->
+									<td>
+									</td>
+								</tr>
+								<tr class="nowDateTr">
+									<td>[[${nowDate}]]</td><!-- 시간 -->
+									<td></td>
+								</tr>
+								<!-- 결재자 추가시 추가되어야 하는 코드 끝 -->
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 			<div class="row">
@@ -146,9 +168,9 @@
 								<div class="row">
 									<div class="col-6">
 										<div class="input-group">
-											<input type="date" class="form-control" >
+											<input type="date" class="form-control start-date" onchange="setLeaveDays();">
 											<span class="input-group-text">-</span>
-											<input type="date" class="form-control" >
+											<input type="date" class="form-control end-date"  onchange="setLeaveDays();">
 										</div>
 									</div>
 									<div class="col-6">
@@ -174,9 +196,9 @@
 						</tr>
 						<tr>
 								<td>연차일수</td>
-								<td>
+								<td class="leave-days-td">
 								<!-- 잔여연차 자동입력 -->
-									<input type="text" class="full-width-input" value="잔여연차 : 1   신청연차 : 0.5">
+									
 								</td>
 							</tr>
 							<tr>
@@ -205,13 +227,31 @@
 							<h3>결재자 지정</h3>
 						</div>
 						<div class="col-8">
-							<input type="text" class="form-control">
+							<input type="text" class="form-control search-name">
 						</div>
 						<div class="col-4 d-grid">
-							<input type="button" class="btn btn-primary" value="찾기">
+							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal">
 						</div>
 						<!-- 결제자 츠기될 때마다 생성(신청서의 html도 같이 생성되어야 함) -->
-						<div class="col-12">~~ 팀장</div>
+						<div class="col-12  approver-list-div">
+							<div
+								class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div">
+								<div class="col-3">
+									<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+										class="rounded-image">
+								</div>
+								<div class="col-7">
+								[[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.signVOList[0].approverName}]]
+								 [[${signWriteInfo.docAnnualLeaveVOList[0].signDocVO.signVOList[0].approverJob}]]
+								</div>
+								<div class="col-2 d-grid">
+									<input type="button" class="btn btn-primary" value="삭제"
+										onclick="delApproverHTML(this);">
+								</div>
+							</div>
+
+
+						</div>
 						
 					</div>
 				</div>
@@ -235,6 +275,25 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 결재자 찾기 모달 -->
+	<div class="modal fade" id="searchApproverModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">결재자 추가</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body d-flex align-items-center">
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
 </th:block>
 
 <!-- 연결해야할 외부 js 파일 -->

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="signMapper">
+	<!--결재 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.SignVO" id="sign">
+		<id column="SGN_CODE" 				property="sgnCode"/>
+		<result column="DOC_NO" 			property="docNo"/>
+		<result column="SGN_STATUS"			property="sgnStatus"/>
+		<result column="SGN_RESULT"			property="sgnResult"/>
+		<result column="APPROVER_NO" 		property="approverNo"/>
+		<result column="APPROVER_NAME" 		property="approverName"/>
+		<result column="APPROVER_JOB" 		property="approverJob"/>
+		<result column="SGN_COMENT" 		property="sgnComent"/>
+		<result column="SGN_DATE" 			property="sgnDate"/>
+	</resultMap>
+	
+	<!--결재문서 테이블  -->
+	<resultMap type="com.bykh.groupware.sign.vo.SignDocVO" id="signDoc">
+		<id column="DOC_NO" 				property="docNo"/>
+		<result column="DT_NO" 				property="dtNo"/>
+		<result column="WRITER_NO" 			property="writerNo"/>
+		<result column="DOC_TITLE" 			property="docTitle"/>
+		<result column="SGN_STATUS" 		property="sgnStatus"/>
+		<result column="DOC_STATUS" 		property="docStatus"/>
+		<result column="INSERT_DATE" 		property="insertDate"/>
+		<association property="empVO" 		resultMap="empMapper.emp"></association>
+		<collection property="signVOList" resultMap="signMapper.sign"></collection>
+	</resultMap>
+	<!--문서양식 테이블  -->
+	<resultMap type="com.bykh.groupware.sign.vo.DocTypeVO" id="docType">
+		<id column="DT_NO" 					property="dtNo"/>
+		<result column="DT_TITLE" 			property="dtTitle"/>
+		<collection property="docAnnualLeaveVOList" resultMap="signMapper.docAnnualLeave"></collection>
+	</resultMap>
+	<!--연차신청서 테이블  -->
+	<resultMap type="com.bykh.groupware.sign.vo.DocAnnualLeaveVO" id="docAnnualLeave">
+		<id column="DAL_NO" 				property="dalNo"/>
+		<result column="DOC_NO" 			property="docNo"/>
+		<result column="DT_NO" 				property="dtNo"/>
+		<result column="DAL_TYPE" 			property="dalType"/>
+		<result column="START_DATE" 		property="startDate"/>
+		<result column="END_DATE" 			property="endDate"/>
+		<result column="START_TIME" 		property="startTime"/>
+		<result column="END_TIME" 			property="endTime"/>
+		<result column="LEAVE_DAYS" 		property="leaveDays"/>
+		<result column="LEAVE_REASON" 		property="leaveReason"/>
+		
+		<association property="signDocVO" resultMap="signDoc"></association>
+	</resultMap>
+	
+	<select id="getInProgressSignDocList" resultMap="signDoc">
+		SELECT 
+		    DOC_NO
+		    , DOC_TITLE
+		    , ENAME
+		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
+		    , DECODE(SGN_STATUS, 0, '임시저장', 1, '결재중')
+		FROM SGN_DOC SD,EMP
+		WHERE SD.EMP_NO = EMP.EMPNO
+		AND SGN_STATUS IN (0, 1)
+		ORDER BY INSERT_DATE
+	</select>
+	<select id="getEndSignDocList" resultMap="signDoc">
+		SELECT 
+		    DOC_NO
+		    , DOC_TITLE
+		    , ENAME
+		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
+		    , DECODE(SGN_STATUS, 2, '결재완료', 3, '반려')
+		FROM SGN_DOC SD,EMP
+		WHERE SD.EMP_NO = EMP.EMPNO
+		AND SGN_STATUS IN (2, 3)
+		ORDER BY INSERT_DATE
+	</select>
+	<!-- 기안 작성 페이지 이동 시 회원정보 가져가기 -->
+	<select id="getSingWriteInfo" resultMap="signMapper.docType">
+		SELECT 
+			ENAME
+			, DENAME 
+			, EMPNO
+			, D.DEPTNO
+            , (SELECT ENAME FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '부장') AS APPROVER_NAME
+            , (SELECT EMPNO FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '부장') AS APPROVER_NO
+            , (SELECT E_JOB FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '부장') AS APPROVER_JOB
+		FROM EMP E, DEPT D
+		WHERE E.DEPTNO = D.DEPTNO
+		AND EMPNO = ${empno}
+	</select>
+	
+	<!-- 결재자 지정 - 전체 사원 조회 -->
+	<select id="getEmpList" resultMap="empMapper.emp">
+		SELECT 
+			EMPNO
+			, ENAME
+			, E_JOB
+		FROM EMP
+		WHERE ENAME LIKE '%'||#{ename}||'%'
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

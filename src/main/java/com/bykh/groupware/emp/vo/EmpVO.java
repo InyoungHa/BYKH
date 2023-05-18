@@ -1,5 +1,7 @@
 package com.bykh.groupware.emp.vo;
 
+import com.bykh.groupware.dept.vo.DeptVO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,4 +24,5 @@ public class EmpVO {
 	private String eRole;
 	private int eStatus;
 	private String joinDate;
+	private DeptVO deptVO;
 }

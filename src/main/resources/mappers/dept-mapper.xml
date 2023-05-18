@@ -19,7 +19,7 @@
 			, DENAME
 			, LOC
 			, IS_USE
-		FROM DEPT	
+		FROM DEPT
 	</select>
 	
 

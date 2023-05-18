@@ -15,7 +15,7 @@
 			<h2>결재현황</h2>
 			<div class="row mt-3 mb-3">
 				<div class="col-10">
-					진행중인 결재건111111
+					진행중인 결재건
 				</div>
 				<div class="col-2 d-grid">
 					<input type="button" value="+ 새 결제" class="btn btn-primary" th:onclick="|location.href='@{/sign/signWriteForm}'|">
@@ -41,15 +41,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th:block th:if="">
+								<th:block th:if="${#lists.size(inProgressSignDocList) != 0}">
+									<th:block th:each="signDoc, status : ${inProgressSignDocList}">
+										<tr>
+											<td>[[${status.size - status.index}]]</td>
+											<td><a>[[${signDoc.docTitle}]]</a></td>
+											<td>[[${signDoc.insertDate}]]</td>
+											<td>[[${signDoc.empVO.ename}]]</td>
+											<td>[[${signDoc.sgnStatus}]]</td>
+										</tr>
+									</th:block>
 								</th:block>
-								<td>1</td>
-								<td><a>임시기안</a></td>
-								<td>2023-05-16</td>
-								<td>양동근</td>
-								<td>임시저장</td>
-							</tr>
+								<th:block th:if="${#lists.size(inProgressSignDocList) == 0}">
+									<tr><td colspan="5">진행 중인 기안이 없습니다.</td></tr>
+								</th:block>
 						</tbody>
 					</table>
 				</div>
@@ -79,13 +84,20 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td>1</td>
-								<td>임시기안</td>
-								<td>2023-05-16</td>
-								<td>양동근</td>
-								<td>임시저장</td>
-							</tr>
+								<th:block th:if="${#lists.size(endSignDocList) == 0}">
+									<th:block th:each="signDoc, status : ${endSignDocList}">
+										<tr>
+											<td>[[${status.size - status.index}]]</td>
+											<td><a>[[${signDoc.docTitle}]]</a></td>
+											<td>[[${signDoc.insertDate}]]</td>
+											<td>[[${signDoc.empVO.ename}]]</td>
+											<td>[[${signDoc.sgnStatus}]]</td>
+										</tr>
+									</th:block>
+								</th:block>
+								<th:block th:if="${#lists.size(endSignDocList) == 0}">
+									<tr><td colspan="5">완료된 기안이 없습니다.</td></tr>
+								</th:block>
 						</tbody>
 					</table>
 				</div>
