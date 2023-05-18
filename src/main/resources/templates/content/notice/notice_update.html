@@ -18,7 +18,7 @@
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
-		<form th:action="@{/notice/regNotice}" method="post">
+		<form th:action="@{/notice/update}" method="post">
 		
 			<div class="row">
 				<div class="col">
@@ -32,23 +32,25 @@
 							<td class="table-light">제목</td>
 							<td>
 								<div class="form-check d-flex justify-content-evenly">
-								  	<input class="form-check-input" type="checkbox" name="isImportant" id="isImportant" value="Y">
+								  	<input class="form-check-input" type="checkbox" name="isImportant" id="isImportant" th:checked="${notice.isImportant == 'Y'}">
 								  	<label class="form-check-label" for="isImportant">
 									    중요글
 									</label>
 								</div>
 							</td>
 							<td>
-								<input type="text" class="form-control" name="boardTitle">
+								<input type="text" class="form-control" name="boardTitle" th:value="${notice.boardTitle}">
 							</td>
 						</tr>
 						<tr>
 							<td class="align-baseline table-light">내용</td>
 							<td colspan="2">
-								<textarea class="form-control" rows="20" style="resize: none" name="boardContent"></textarea>
+								<textarea class="form-control" rows="20" style="resize: none" name="boardContent">[[${notice.boardContent}]]</textarea>
 							</td>
 						</tr>
 					</table>
+					<input type="hidden" name="boardNum" th:value="${notice.boardNum}">
+					<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${notice.boardMenuVO.boardMenuCode}">
 				</div>
 			</div>
 			<div class="row px-2">
@@ -65,8 +67,6 @@
 		</form>
 		</div>
 	</div>
-	
-	
 </th:block>
 
 <!-- 외부 js 파일 -->

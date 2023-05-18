@@ -24,4 +24,8 @@ public class BoardVO {
 	private BoardCategoryVO boardCategoryVO;
 	
 	private String ename;
+	private String boardPrevNum;
+	private String boardPrevTitle;
+	private String boardNextNum;
+	private String boardNextTitle;
 }
