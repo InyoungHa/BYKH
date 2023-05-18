@@ -1,5 +1,6 @@
 package com.bykh.groupware.attendance.controller;
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import jakarta.annotation.Resource;
 public class AttendanceController {
 	@Resource(name = "attendanceService")
 	private  AttendanceService attendanceService;
-	
+
 	
 	// 근태관리 출퇴근기록 페이지(메인)
 	@GetMapping("/commute")
@@ -35,11 +36,21 @@ public class AttendanceController {
 		return "content/attendance/overTime";
 	}
 		
-	// 캘린더 페이지
+	// 캘린더 페이지 이동
 	@GetMapping("/calender")
 	public String calender() {
 
 		return "content/attendance/calender";
 	}
+	
+
+	// 휴가신청 페이지 이동
+	@GetMapping("/vacationRequest")
+	public String vacationRequest() {
+
+	return "content/attendance/vacationRequest";
+	}
+	
+	
 		
 }
