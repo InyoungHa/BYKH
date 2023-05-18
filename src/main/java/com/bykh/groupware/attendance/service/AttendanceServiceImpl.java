@@ -8,6 +8,13 @@ import org.springframework.stereotype.Service;
 public class AttendanceServiceImpl implements AttendanceService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+
+	
+	//출퇴근시간 저장
+	@Override
+	public void regTime(String empNo) {
+		sqlSession.insert("attendanceMapper.regTime", empNo);
+	}
 	
 
 
