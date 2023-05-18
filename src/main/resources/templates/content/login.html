@@ -17,7 +17,7 @@
 	    </div>
         <div class="row justify-content-center mt-5">
             <div class="col-md-4">
-                <form class="px-4 py-3 login_form" th:action="@{/login}" method="POST">
+                <form class="px-4 py-3" th:action="@{/admin/login}" method="POST" id="loginForm">
                     <div class="mb-3">
                         <label class="form-label">사번</label>
                         <input type="text" class="form-control" id="empno" placeholder="2020010101">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="d-grid gap-2 col-12 mx-auto">                    
-	                    <input type="submit" value="로그인" class="btn btn-primary">
+	                    <input type="button" value="로그인" class="btn btn-primary" onclick="">
                     </div>
                 </form>              
                 <a class="dropdown-item" href="#">사번 찾기</a>
@@ -43,5 +43,7 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript" src="/js/login.js"></script>
 </body>
 </html>

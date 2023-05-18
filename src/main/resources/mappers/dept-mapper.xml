@@ -12,6 +12,18 @@
 
 	</resultMap>
 	
+	<!--부서 등록 쿼리  -->
+	<insert id="insertDept">
+		INSERT INTO DEPT (DEPTNO
+						, DENAME
+						, LOC)
+				VALUES ((SELECT TO_NUMBER(DECODE(#{loc}, '서울', '10', '인천', '20', '부산', '30', '여수', '40') || NVL(MAX(TO_NUMBER(SUBSTR(DEPTNO, 3))), 0) + 1) 
+						FROM DEPT WHERE LOC = #{loc})
+						, #{dename}
+						, #{loc}
+		)
+	</insert>
+	
 
 	<!--부서 목록 조회  -->
 	<select id="selectDeptList" resultMap="dept">
@@ -20,8 +32,22 @@
 			, LOC
 			, IS_USE
 		FROM DEPT	
+		ORDER BY DEPTNO DESC
 	</select>
 	
+	<!--부서 등록 중복검사  -->
+	<select id="isDulicateDept" resultType="int">
+		SELECT COUNT(DENAME)			
+		FROM DEPT
+		WHERE LOC =#{loc}
+		AND DENAME =#{dename}
+	</select>
+	
+	<!--부서 삭제  -->
+	<delete id="deleteDept">
+		DELETE DEPT
+		WHERE DEPTNO =#{deptno}
+	</delete>
 
 	
 </mapper>

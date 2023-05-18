@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+
+.button {
+  background-color: white;
+  color: red;
+  border: 1px solid red;
+  padding: 10px 20px;
+  border-radius: 4px;
+  width: 5rem;
+  height: 2rem;
+  padding-left: 0.5rem;
+  padding-top: 0.15rem;
+  font-size: 18px; 
+}
+
+.button:hover {
+  background-color: red;
+  color: white;
+}
+

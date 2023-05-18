@@ -18,6 +18,17 @@
 		<result column="E_ROLE" 				property="eRole"/>
 		<result column="E_STATUS" 				property="eStatus"/>
 		<result column="JOIN_DATE" 				property="joinDate"/>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<collection property="deptVO" resultMap="deptMapper.dept"></collection>
+		
 	</resultMap>
 	
 	<!--사원 이미지 테이블  -->
@@ -29,7 +40,50 @@
 		
 	</resultMap>
 	
-
+	<!--사원 등록  -->
+	<insert id="insertEmp">
+		INSERT INTO EMP(EMPNO
+						, ENAME
+						, EPW
+						, JOIN_DATE
+						, DEPTNO
+						, E_JOB
+						, E_STATUS)
+				VALUES((SELECT TO_CHAR(SYSDATE, 'YY') || #{deptno}|| 
+						LPAD(NVL(MAX(TO_NUMBER(SUBSTR(EMPNO, 3))), 0) + 1, 2, '0') 
+						FROM EMP WHERE DEPTNO = #{deptno})
+						, ename
+						, epw
+						, joinDate
+						, deptno
+						, eJob
+						, eStatus
+						)
+	</insert>
+	
+	<!--사원 조회  -->
+	<select id="selectEmpList" resultMap="emp">
+		SELECT EMPNO
+			, ENAME	
+			, EPW
+			, JOIN_DATE
+			, (SELECT DNAME FROM DEPT WHERE EMPNO=#{empno})
+			, E_JOB
+			, E_STATUS		
+		FROM EMP
+		ORDER BY EMPNO DESC
+	</select>
+	
+	<!--로그인 쿼리  -->
+<!-- 	<select id="login" resultMap="emp">
+		SELECT EMPNO
+			, EPW
+			, E_STATUS
+		FROM EMP
+		WHERE EMPNO = #{empno}
+		AND EPW =#{epw}
+	</select>
+ -->
 	
 </mapper>
 

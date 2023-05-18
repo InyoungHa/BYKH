@@ -1,5 +1,8 @@
 package com.bykh.groupware.emp.vo;
 
+import com.bykh.groupware.dept.vo.DeptVO;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -8,11 +11,19 @@ import lombok.ToString;
 @Setter
 @ToString
 public class EmpVO {
-
+	
 	private int empno;
+	
+	@JsonProperty("deptno")
 	private int deptno;
+	
+	@JsonProperty("ename")
 	private String ename;
+	
+	@JsonProperty("epw")
 	private String epw;
+	
+	@JsonProperty("e_job")
 	private String eJob;
 	private int age;
 	private String gender;
@@ -20,6 +31,12 @@ public class EmpVO {
 	private String phoneTel;
 	private String officeTel;
 	private String eRole;
+	
+	@JsonProperty("e_status")
 	private int eStatus;
+	
+	@JsonProperty("join_date")
 	private String joinDate;
+	
+	private DeptVO deptVO;
 }
