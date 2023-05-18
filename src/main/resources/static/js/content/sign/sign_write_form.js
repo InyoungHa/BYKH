@@ -87,6 +87,8 @@ function delApproverHTML(this_tag){
 	this_tag.parentElement.parentElement.remove();
 }
 
+	
+
 //테이블 Td 삭제
 function delStampTableTd(this_tag) {
 	const approver = this_tag.parentElement.parentElement
@@ -95,9 +97,12 @@ function delStampTableTd(this_tag) {
 	console.log(str);
 	var table = document.querySelector('.stamp-table');
 	var tdList = table.querySelectorAll('td');
+	console.log(tdList);
 
 	tdList.forEach(function(td) {
 		if (str.includes(td.textContent)) {
+			console.log('textContent = ' + td.textContent);
+			console.log(td.parentElement)
 			td.parentElement.removeChild(td);
 		}
 	});

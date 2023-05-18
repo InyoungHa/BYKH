@@ -49,7 +49,7 @@
 		
 		<association property="signDocVO" resultMap="signDoc"></association>
 	</resultMap>
-	
+	<!-- 기안 조회 페이지 -->
 	<select id="getInProgressSignDocList" resultMap="signDoc">
 		SELECT 
 		    DOC_NO
@@ -58,7 +58,7 @@
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
 		    , DECODE(SGN_STATUS, 0, '임시저장', 1, '결재중')
 		FROM SGN_DOC SD,EMP
-		WHERE SD.EMP_NO = EMP.EMPNO
+		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (0, 1)
 		ORDER BY INSERT_DATE
 	</select>
@@ -70,7 +70,7 @@
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
 		    , DECODE(SGN_STATUS, 2, '결재완료', 3, '반려')
 		FROM SGN_DOC SD,EMP
-		WHERE SD.EMP_NO = EMP.EMPNO
+		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (2, 3)
 		ORDER BY INSERT_DATE
 	</select>
