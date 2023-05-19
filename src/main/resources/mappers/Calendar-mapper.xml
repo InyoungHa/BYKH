@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="calendarMapper">
+	<resultMap type="com.bykh.groupware.calendar.vo.CalendarVO" id="cal">
+		<id column="SCHEDULE_CODE" 		property="scheduleCode"/>
+		<result column="EVENT_NAME" 		property="eventName"/>
+		<result column="START_DATE" 	property="startDate"/>
+		<result column="END_DATE" 	property="endDate"/>
+		<result column="ALLDAY" 	property="allDay"/>
+	</resultMap>
+	
+	
+<!-- 일정추가 -->
+<insert id="insertSchedule">
+INSERT INTO SCHEDUL_FOR_GROUPWARE (EVENT_NAME, START_DATE, END_DATE, ALLDAY)
+VALUES (#{eventName}, #{startDate}, #{endDate}, #{allDay})
+</insert>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

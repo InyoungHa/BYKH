@@ -39,23 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-	 events: [
-    {
-      title: '일정추가가능',
-   		 start : "2023-05-18"
-	 , end : "2023-05-20"
-    , backgroundColor : "#9775fa"
-    , borderColor : "#9775fa"
-    }
-  ],
+  calendar = new FullCalendar.Calendar(calendarEl, {
+	// events: [
+  //  {
+     
+   // }
+ // ],
 	
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
-    initialDate: '2023-05-18', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
+     // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
     
     locale: 'ko', // 한국어 설정
     editable: true,
@@ -116,6 +112,83 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+var calendar;
+
+document.getElementById("saveButton").addEventListener("click", allSave);
+
+
+
+function allSave() {
+  var allEvent = calendar.getEvents();
+  var events = [];
+
+  for (var i = 0; i < allEvent.length; i++) {
+    var obj = {
+      title: allEvent[i]._def.title,
+      allday: allEvent[i]._def.allDay,
+      start: allEvent[i]._instance.range.start,
+      end: allEvent[i]._instance.range.end
+    };
+
+    events.push(obj);
+  }
+
+  var jsondata = JSON.stringify(events);
+  jsonEvent = JSON.parse(jsondata);
+  console.log(jsonEvent);
+
+  var myDate1 = jsonEvent[0]['start'];
+  const date_and_time = myDate1.split('T');
+  const date = date_and_time[0];
+  const time = date_and_time[1].split('.')[0];
+  const formattedTime = time.slice(0, -3);
+  const startChange = `${date}-${formattedTime}`;
+
+
+  var myDate2 = jsonEvent[0]['end'];
+  const date_and_time2 = myDate2.split('T');
+  const date2 = date_and_time2[0];
+  const time2 = date_and_time2[1].split('.')[0];
+  const formattedTime2 = time2.slice(0, -3);
+  const endChange = `${date2}-${formattedTime2}`;
+
+
+  var updatedEvents = jsonEvent.map(function(event) {
+    event.start = startChange;
+    event.end = endChange;
+    return event;
+  });
+
+  var jsondata = JSON.stringify(updatedEvents);
+
+  console.log(jsondata);
+  savedata(jsondata);
+  alert(jsondata);
+}
+
+
+function savedata(jsondata)  {
+
+	//ajax start
+	$.ajax({
+		url: '/calendar/calendarSave', //요청경로
+		type: 'post',
+		async: false,
+		contentType: 'application/json; charset=UTF-8',
+		data: JSON.stringify([jsondata]),
+		dataType: 'text',
+		success: function(result) {
+			alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
+		},
+		error: function() {
+			alert('에러 발생');
+		}
+	});
+
+	
+}
 
 
 
