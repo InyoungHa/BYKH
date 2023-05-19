@@ -12,10 +12,10 @@
 	</resultMap>
 	
 	<!-- 현재시간  -->
-	<select id="currentTime" resultMap="att">
+	<select id="currentTime">
 	SELECT 
-	TO_CHAR(CUR_DATE, 'YYYY-MM-DD(DY)-HH:MI')
-	FROM ATTENDANCE
+	TO_CHAR(SYSDATE, 'YYYY-MM-DD(DY)-HH:MI') AS CUR_DATE
+	FROM DUAL
 	</select>
 	
 		

@@ -85,11 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
 
-
-
-
-
-
   calendar.render();
   
   
@@ -118,18 +113,16 @@ var calendar;
 
 document.getElementById("saveButton").addEventListener("click", allSave);
 
-
-
 function allSave() {
   var allEvent = calendar.getEvents();
   var events = [];
 
   for (var i = 0; i < allEvent.length; i++) {
     var obj = {
-      title: allEvent[i]._def.title,
+      eventName: allEvent[i]._def.title,
       allday: allEvent[i]._def.allDay,
-      start: allEvent[i]._instance.range.start,
-      end: allEvent[i]._instance.range.end
+      startDate: allEvent[i]._instance.range.start,
+      endDate: allEvent[i]._instance.range.end
     };
 
     events.push(obj);
@@ -139,56 +132,72 @@ function allSave() {
   jsonEvent = JSON.parse(jsondata);
   console.log(jsonEvent);
 
-  var myDate1 = jsonEvent[0]['start'];
-  const date_and_time = myDate1.split('T');
-  const date = date_and_time[0];
-  const time = date_and_time[1].split('.')[0];
-  const formattedTime = time.slice(0, -3);
-  const startChange = `${date}-${formattedTime}`;
-
-
-  var myDate2 = jsonEvent[0]['end'];
-  const date_and_time2 = myDate2.split('T');
-  const date2 = date_and_time2[0];
-  const time2 = date_and_time2[1].split('.')[0];
-  const formattedTime2 = time2.slice(0, -3);
-  const endChange = `${date2}-${formattedTime2}`;
-
-
+ 
   var updatedEvents = jsonEvent.map(function(event) {
-    event.start = startChange;
-    event.end = endChange;
+  
     return event;
   });
 
-  var jsondata = JSON.stringify(updatedEvents);
+  var jsondataUpdated = JSON.stringify(updatedEvents);
 
-  console.log(jsondata);
-  savedata(jsondata);
-  alert(jsondata);
+  console.log(jsondataUpdated);
+  savedata(jsondataUpdated);
+  alert(jsondataUpdated);
 }
 
+function savedata(jsondata) {
+  //ajax start
+  $.ajax({
+    url: '/calendar/calendarSave', //요청경로
+    type: 'post',
+    async: false,
+    contentType: 'application/json; charset=UTF-8',
+    data: jsondata,
+    dataType: 'text',
+    success: function(result) {
+      alert(result); //컨트롤러 결과값이 RESULT에담김
+    },
+    error: function() {
+      alert(result);
+    }
+  });
+}
 
-function savedata(jsondata)  {
+///////////////////////////////////////////////////////////////////////////////
+//캘린더 조회
+var all_events = null;
 
+loadingEvents();
+
+function loadingEvents() {
 	//ajax start
 	$.ajax({
-		url: '/calendar/calendarSave', //요청경로
-		type: 'post',
+		url: '/calendar/calendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
+		type: 'GET', // GET 요청
 		async: false,
-		contentType: 'application/json; charset=UTF-8',
-		data: JSON.stringify([jsondata]),
-		dataType: 'text',
+		dataType: 'json',
 		success: function(result) {
-			alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
+			all_events = result; // 서버에서 받아온 데이터를 all_events 변수에 할당
+			initializeCalendar(); // 캘린더를 초기화하는 함수 호출
 		},
 		error: function() {
 			alert('에러 발생');
 		}
 	});
-
-	
+	//ajax end
 }
+
+function initializeCalendar() {
+	// 캘린더 객체를 초기화하고 events 속성에 가져온 데이터를 할당
+	calendar = new Calendar({
+		events: all_events
+	});
+
+	// 이후 코드 계속...
+}
+
+// 이벤트 데이터를 이용하여 HTML에서 일정을 조회하고 표시하는 함수 등을 추가로 작성하시면 됩니다.
+
 
 
 

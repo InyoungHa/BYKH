@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bykh.groupware.attendance.service.AttendanceService;
+import com.bykh.groupware.calendar.service.CalendarService;
 
 import jakarta.annotation.Resource;
 
@@ -14,7 +15,8 @@ import jakarta.annotation.Resource;
 public class AttendanceController {
 	@Resource(name = "attendanceService")
 	private  AttendanceService attendanceService;
-
+	@Resource(name = "calendarService")
+	private  CalendarService calendarService;
 	
 	// 근태관리 출퇴근기록 페이지(메인)
 	@GetMapping("/commute")
