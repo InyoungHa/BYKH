@@ -5,7 +5,12 @@ function isDuplicate(){
 	const loc=document.querySelector('select[name="loc"]').value;
 	const dename = document.querySelector('#dename').value;
 
-	if(dename.value == ''){
+	if(dename.trim() === ''){
+		alert('띄어쓰기 없이 부서명을 입력해주세요.');
+		return;
+	}
+	
+	if(dename == ''){
 		alert('부서명 입력은 필수입니다 \n부서명을 입력해주세요');
 		return;
 	}
@@ -58,7 +63,7 @@ function regDept(){
 			drawDeptList(result);
 		},
 		error: function() {
-			alert('실패');
+			alert('부서 등록 실패');
 		}
 	});
 	
