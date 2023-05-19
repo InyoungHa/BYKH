@@ -37,6 +37,7 @@ function setLeaveDays(){
 //결재자 리스트 div에 추가
 function addApproverHTML(approverNo, approverName, approverJob){
 	//html에 추가
+	console.log(approverJob);
 	const approver_list_div = document.querySelector('.approver-list-div');
 	let str = '';
 	str += `
@@ -73,7 +74,6 @@ function addStampTableTd(approverNo, approverName, approverJob) {
 	});
 
 	//ejobtr 태그 마지막 자식 td에 직업 추가
-	const tdList = document.querySelector('');
 	const str = `${approverJob}
 				<input type="hidden" value="" name="">`;
 	const e_job_tr = document.querySelector('.eJobTr');
@@ -166,7 +166,9 @@ searchApproverModal.addEventListener('show.bs.modal', function() {
 								</td>
 								<td>
 									<div class="d-grid">
-										<button type="button" class="btn btn-primary add-approver-btn" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}, ${emp.level}');">추가</button>
+										<button type="button" class="btn btn-primary add-approver-btn" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}');" >
+											추가
+										</button>
 									</div>
 								</td>
 							</tr>`;
