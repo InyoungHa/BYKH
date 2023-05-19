@@ -19,7 +19,9 @@
 		<result column="E_STATUS" 				property="eStatus"/>
 		<result column="JOIN_DATE" 				property="joinDate"/>
 	
-		<association property="deptVO" resultMap="deptMapper.dept"></association>
+		<result column="E_STATUS_STR" 				property="eStatusStr"/>
+		
+		<association property="deptVO" resultMap="deptMapper.dept"/>
 
 	</resultMap>
 	
@@ -30,7 +32,8 @@
 		<result column="ORIGIN_FILE_NAME" 		property="originFileName"/>
 		<result column="ATTACHED_FILE_NAME" 	property="attachedFileName"/>
 		
-	</resultMap>
+	</resultMap>	
+	
 	
 	<!--사원 등록  -->
 	<insert id="insertEmp">
@@ -41,15 +44,14 @@
 						, DEPTNO
 						, E_JOB
 						, E_STATUS)
-				VALUES((SELECT TO_CHAR(SYSDATE, 'YY') || #{deptno}|| 
-						LPAD(NVL(MAX(TO_NUMBER(SUBSTR(EMPNO, 3))), 0) + 1, 2, '0') 
-						FROM EMP WHERE DEPTNO = #{deptno})
-						, ename
-						, epw
-						, joinDate
-						, deptno
-						, eJob
-						, eStatus
+				VALUES(TO_CHAR(SYSDATE, 'YY') || #{deptno} || 
+						LPAD((SELECT COUNT(*) + 1 FROM EMP WHERE DEPTNO = #{deptno}), 2, '0')
+						, #{ename}
+						, #{epw}
+						, #{joinDate}
+						, #{deptno}
+						, #{eJob}
+						, #{eStatus}
 						)
 	</insert>
 	
@@ -58,11 +60,17 @@
 		SELECT EMPNO
 			, ENAME	
 			, EPW
-			, JOIN_DATE
-			, (SELECT DNAME FROM DEPT WHERE EMPNO=#{empno})
+			, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE
+			, (SELECT DENAME FROM DEPT WHERE DEPTNO=EMP.DEPTNO) AS DENAME
 			, E_JOB
-			, E_STATUS		
-		FROM EMP
+			, CASE E_STATUS
+				WHEN 1 THEN '재직중'
+				WHEN 2 THEN '휴직'
+				WHEN 3 THEN '퇴직'
+				ELSE '알 수 없음'
+			  END AS E_STATUS_STR	
+			, DECODE(E_ROLE, 'USER', '사원','ADMIN','관리자','SUPER_ADMIN','최종 관리자') AS E_ROLE
+		FROM EMP	
 		ORDER BY EMPNO DESC
 	</select>
 	

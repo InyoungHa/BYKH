@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import com.bykh.groupware.emp.vo.EmpVO;
 
 @Service("empService")
@@ -19,8 +20,9 @@ public class EmpServiceImpl implements EmpService {
 		return sqlSession.selectOne("empMapper.login", empVO);
 	}
 
+	
 	@Override //사원 등록_간편
-	public void insertEmp(EmpVO empVO) {
+	public void insertEmp(EmpVO empVO) {		
 		sqlSession.insert("empMapper.insertEmp",empVO);
 		
 	}

@@ -41,6 +41,7 @@
 			</div>
 			<div class="row mb-3">
 				<div class="col">
+					<form id="regEmpForm">	
 					<table class="table align-middle text-center">
 						<colgroup>
 							<col width="5%">
@@ -71,10 +72,10 @@
 							</tr>
 						</thead>
 						<tbody>	
-							<form id="regEmpForm">						
+												
 							<tr>							
-								<td colspan="2">
-									<input type="button" value="간편 등록" class="button">
+								<td colspan="2">									
+									<button type="button" class="button">간편등록</button>
 								</td>
 								<td colspan="2">
 									<input type="text" name="ename" id="ename" class="form-control">
@@ -106,38 +107,53 @@
 										<option value="3">퇴사</option>
 									</select>
 								</td>
-								<td colspan="2">
-									<button type="button" class="btn btn-primary" onclick="regEmp();">저장</button>
-									<button type="button" class="btn btn-secondary">취소</button>
+								<td colspan="2">									
+									<button type="button" class="btn btn-primary" onclick="regEmp()">저장</button>
+									<button type="button" class="btn btn-secondary" onclick="clearForm()">취소</button>
 								</td>								
 							</tr>
-							</form>
 						</tbody>
 					</table>					
+				</form>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col">
-					<table id="empListTable">
-						<tbody>						
-							<th:block th:if="#lists(empList)==0">
-								<tr>
-									<td colspan="11">등록된 사원이 없습니다.</td>
-								</tr>
-							</th:block>
-							<th:block th:unless="#lists(empList)==0">						
-								<tr th:each="emp,state:${empList}">
-									<td>[[${state.count}]]</td>
-									<td>[[${emp.empno}]]</td>
-									<td>[[${emp.ename}]]</td>
-									<td>****</td>
-									<td>[[${emp.joinDate}]]</td>
-									<td>[[${emp.deptVO.dename}]]</td>
-									<td>[[${emp.eJob}]]</td>
-									<td>[[${emp.eStatus}]]</td>
-								</tr>
-							</th:block>
-						</tbody>
+					<table id="empListTable" class="table align-middle text-center">
+						<colgroup>
+								<col width="5%">
+								<col width="10%">
+								<col width="10%">
+								<col width="10%">
+								<col width="10%">
+								<col width="10%">
+								<col width="8%">
+								<col width="8%">
+								<col width="8%">
+								<col width="8%">
+								<col width="8%">
+							</colgroup>
+							<tbody>						
+								<th:block th:if="${#lists.size(empList)==0}">
+									<tr>
+										<td colspan="11">등록된 사원이 없습니다.</td>
+									</tr>
+								</th:block>
+								<th:block th:unless="${#lists.size(empList)==0}">						
+									<tr th:each="emp,state:${empList}">
+										<td>[[${state.count}]]</td>
+										<td>[[${emp.empno}]]</td>
+										<td>[[${emp.ename}]]</td>
+										<td>[[${emp.empno}]]</td>
+										<td>****</td>
+										<td>[[${emp.joinDate}]]</td>
+										<td>[[${emp.deptVO.dename}]]</td>
+										<td>[[${emp.eJob}]]</td>
+										<td>[[${emp.eStatusStr}]]</td>
+										<td>[[${emp.eRole}]]</td>
+									</tr>
+								</th:block>
+							</tbody>
 					</table>
 				</div>
 			</div>

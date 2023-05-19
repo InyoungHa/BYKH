@@ -14,4 +14,6 @@ public interface EmpService {
 	
 	//사원 조회
 	List<EmpVO> selectEmpList();
+	
+	
 }
