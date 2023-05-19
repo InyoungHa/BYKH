@@ -48,4 +48,9 @@ public class EmpVO {
 	@JsonProperty("deptVO")
 	private DeptVO deptVO;
 	
+
+	//테스트용 추가-희수
+	private int level;
+	
+
 }

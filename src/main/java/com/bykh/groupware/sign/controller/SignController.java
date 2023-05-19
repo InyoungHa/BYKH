@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.service.SignService;
+import com.bykh.groupware.sign.vo.DocTypeVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.util.DateUtil;
 
@@ -56,7 +57,14 @@ public class SignController {
 		return data;
 	}
 	
-	
+	//연차신청서 작성
+	@PostMapping("/insertSign")
+	public String insertSign(DocTypeVO docTypeVO) {
+		
+		signService.insertDocAnnualLeave(docTypeVO);
+		
+		return "redirect: /sign/signMain";
+	}
 	
 	
 	

@@ -182,26 +182,25 @@ li:last-child {
             
                 <div class="nav__brand">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <a href="#" class="nav__logo">BYKH</a>
+                    <a th:href="@{/admin/main}" class="nav__logo">BYKH</a>
                 </div>
                 
                 <div class="nav__list">
-                    <a href="#" class="nav__link active">
+                    <a th:href="@{/admin/main}" class="nav__link active">
                         <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name">메인화면</span>
                     </a>
                     
-                     <a href="#" class="nav__link">
-                        <ion-icon name="log-out-outline"></ion-icon>
-                        <span class="nav_name">전자결재</span>
-                    </a>
                      
-                    <div href="#" class="nav__link">
-                        <a><ion-icon name="walk-outline"></ion-icon></a>
-                       		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">근태관리</span>
+                      <div href="#" class="nav__link">
+                       <a th:href="@{/sign/signMain}"><ion-icon name="log-out-outline"></ion-icon></a>
+                      
+                        
+                       		 <a th:href="@{/sign/signMain}"><span  class="nav_name" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">전자결재</span></a>
 						<div class="collapse" id="collapseExample1">
 	   						<ul>
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/sign/signMain}">결재현황</a></li>
 			    				<li class="nav-item"><a  aria-current="page" href="#">미결함</a></li>
 			    				<li class="nav-item"><a aria-current="page" href="#">진행함</a></li>
 			    				<li class="nav-item"><a aria-current="page" href="#">완료함</a></li>
@@ -211,21 +210,38 @@ li:last-child {
 	 						</ul>
 						</div>             	
  					</div>
- 
-
-                       <div href="#" class="nav__link">
-                        <a th:href="@{/attendance/commute}" class="ap"><ion-icon name="person-add-outline"></ion-icon></a>
-                       		 <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">인사관리</span>
+ 					
+ 					<div href="#" class="nav__link">
+                        <a th:href="@{/attendance/commute}" class="ap">  <ion-icon name="walk-outline"></ion-icon></a>
+                       		<a th:href="@{/attendance/commute}"> <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">근태관리</span></a>
 						<div class="collapse" id="collapseExample2">
 	   						<ul>
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
 			    				<li class="nav-item"><a  aria-current="page" th:href="@{/attendance/commute}">출퇴근 기록</a></li>
-			    				<li class="nav-item"><a aria-current="page" th:href="@{/attendance/vacation}">휴가 관리</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/attendance/vacation}">휴가관리</a></li>
 			    				<li class="nav-item"><a aria-current="page" th:href="@{/attendance/overTime}">연장근무</a></li>
 			    				<li class="nav-item"><a aria-current="page" th:href="@{/attendance/calender}">캘린더</a></li>
 	 						</ul>
 						</div>             	
  					</div>       
+          
+          
+          
+          		<div href="#" class="nav__link">
+                        <a href="#" class="ap">   <ion-icon name="person-add-outline"></ion-icon></a>
+                       		<a href="#"> <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">인사관리</span></a>
+						<div class="collapse" id="collapseExample2">
+	   						<ul>
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><a  aria-current="page" href="#">사원관리</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">부서관리</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">조직도</a></li>
+	 						</ul>
+						</div>             	
+ 					</div>      
+          
+                   
+	
  					
 	                <a href="#" class="nav__link">
 	                     <ion-icon name="people-outline"></ion-icon>
@@ -237,10 +253,21 @@ li:last-child {
 	                    <span class="nav_name">자원관리</span>
 	                </a>
 	                
-	                  <a href="#" class="nav__link">
-	                    <ion-icon name="clipboard-outline"></ion-icon>
-	                    <span class="nav_name">게시판</span>
-	                </a>
+	                
+	                <div href="#" class="nav__link">
+                        <a th:href="@{/notice/list}" class="ap">    <ion-icon name="clipboard-outline"></ion-icon></a>
+                       		<a th:href="@{/notice/list}"> <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">게시판</span></a>
+						<div class="collapse" id="collapseExample2">
+	   						<ul>
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/notice/list}">공지사항</a></li>
+			    				<li class="nav-item"><a aria-current="page" href="#">커뮤니티</a></li>
+	 						</ul>
+						</div>             	
+ 					</div>      
+	                
+	                
+	                            
 	                
 	                   <a href="#" class="nav__link">
 	                    <ion-icon name="briefcase-outline"></ion-icon>

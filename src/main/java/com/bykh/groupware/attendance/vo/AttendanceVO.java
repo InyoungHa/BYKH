@@ -13,5 +13,5 @@ public class AttendanceVO {
 	String regDays; //등록날짜
 	String workingTime; //출근시간
 	String quittingTime; //퇴근시간
-	
+	String curDate; //현재시간
 }

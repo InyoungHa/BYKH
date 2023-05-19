@@ -4,36 +4,51 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="boardMapper">
 	<resultMap type="com.bykh.groupware.notice.vo.BoardMenuVO" id="boardMenu">
-		<id column="BOARD_MENU_CODE" 		property="boardMenuCode"/>
+		<id 	column="BOARD_MENU_CODE" 	property="boardMenuCode"/>
 		<result column="BOARD_MENU_NAME" 	property="boardMenuName"/>
 	</resultMap>
 	
 	<resultMap type="com.bykh.groupware.notice.vo.BoardCategoryVO" id="boardCategory">
-		<id column="BOARD_CATE_CODE" 		property="boardCateCode"/>
+		<id 	column="BOARD_CATE_CODE" 	property="boardCateCode"/>
 		<result column="BOARD_CATE_NAME" 	property="boardCateName"/>
 	</resultMap>
 	
+	<resultMap type="com.bykh.groupware.notice.vo.BoardFileVO" id="boardFile">
+		<id column="FILE_NUM" 				property="fileNum"/>
+		<result column="ORIGIN_FILE_NAME" 	property="originFileName"/>
+		<result column="ATTACHED_FILE_NAME" property="attachedFileName"/>
+		<result column="FILE_SIZE" 			property="fileSize"/>
+		<result column="BOARD_NUM" 			property="boardNum"/>
+	</resultMap>
+	
 	<resultMap type="com.bykh.groupware.notice.vo.BoardVO" id="board">
-		<id column="BOARD_NUM" 			property="boardNum"/>
-		<result column="BOARD_TITLE" 	property="boardTitle"/>
-		<result column="BOARD_CONTENT" 	property="boardContent"/>
-		<result column="BOARD_WRITER" 	property="boardWriter"/>
-		<result column="BOARD_DATE" 	property="boardDate"/>
-		<result column="BOARD_VIEW" 	property="boardView"/>
-		<result column="BOARD_STATUS" 	property="boardStatus"/>
-		<result column="IS_IMPORTANT" 	property="isImportant"/>
-		<result column="IS_PRIVATE" 	property="isPrivate"/>
-		<result column="BOARD_PW" 		property="boardPw"/>
-		<result column="BOARD_LIKE" 	property="boardLike"/>
-		<result column="ENAME" 			property="ename"/>
+		<id 	column="BOARD_NUM" 			property="boardNum"/>
+		<result column="BOARD_TITLE" 		property="boardTitle"/>
+		<result column="BOARD_CONTENT" 		property="boardContent"/>
+		<result column="BOARD_WRITER" 		property="boardWriter"/>
+		<result column="BOARD_DATE" 		property="boardDate"/>
+		<result column="BOARD_VIEW" 		property="boardView"/>
+		<result column="BOARD_STATUS" 		property="boardStatus"/>
+		<result column="IS_IMPORTANT" 		property="isImportant"/>
+		<result column="IS_PRIVATE" 		property="isPrivate"/>
+		<result column="BOARD_PW" 			property="boardPw"/>
+		<result column="BOARD_LIKE" 		property="boardLike"/>
+		<result column="ENAME" 				property="ename"/>
 		<result column="BOARD_PREV_NUM" 	property="boardPrevNum"/>
 		<result column="BOARD_PREV_TITLE" 	property="boardPrevTitle"/>
 		<result column="BOARD_NEXT_NUM" 	property="boardNextNum"/>
 		<result column="BOARD_NEXT_TITLE" 	property="boardNextTitle"/>
-		<association property="boardMenuVO" resultMap="boardMenu"></association>
+		<association property="boardMenuVO" 	resultMap="boardMenu"></association>
 		<association property="boardCategoryVO" resultMap="boardCategory"></association>
+		<collection property="boardFileList" 	resultMap="boardFile"></collection>
 	</resultMap>
 	
+	
+	<!-- 다음으로 들어갈 글 번호 조회 -->
+	<select id="getNextBoardNum" resultType="String">
+		SELECT 'BOARD_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BOARD_NUM, 7))), 0) + 1, 3, '0')
+		FROM BOARD
+	</select>
 	
 	<!-- 공지사항 글 등록 -->
 	<insert id="regNotice">
@@ -47,8 +62,7 @@
 			, IS_IMPORTANT
 			</if>
 		) VALUES (
-			(SELECT 'BOARD_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(BOARD_NUM, 7))), 0) + 1, 3, '0')
-		    FROM BOARD)
+			#{boardNum}
 			, #{boardTitle}
 			, #{boardContent}
 			, 20230517
@@ -58,6 +72,28 @@
 			</if>
 		)
 	</insert>
+	
+	<!-- 글 첨부파일 정보 등록 -->
+	<insert id="regFiles">
+		INSERT INTO BOARD_FILE (
+			FILE_NUM
+			, ORIGIN_FILE_NAME
+			, ATTACHED_FILE_NAME
+			, FILE_SIZE
+			, BOARD_NUM
+		) 
+		<foreach collection="boardFileList" item="boardFile" index="i" separator="UNION ALL">
+			SELECT
+				(SELECT 'FILE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(FILE_NUM, 6))), 0) + 1 + #{i}, 3, '0')
+					FROM BOARD_FILE)
+				, #{boardFile.originFileName}
+				, #{boardFile.attachedFileName}
+				, #{boardFile.fileSize}
+				, #{boardFile.boardNum}
+			FROM DUAL
+		</foreach>
+	</insert>
+	
 	
 	<!-- 공지사항 글 목록 조회 -->
 	<!-- 상태값 1(등록) --> 
@@ -93,24 +129,34 @@
 	
 	<!-- 글 상세 조회 -->
 	<select id="getNoticeDetail" resultMap="board">
-		SELECT *
-		FROM 
-			(SELECT BOARD_NUM
-				, BOARD_TITLE
-				, BOARD_CONTENT
-				, BOARD_WRITER
-				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
-				, BOARD_VIEW
-				, IS_IMPORTANT
-				, ENAME
-				, BOARD_MENU_CODE
-	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
-	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
-	            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
-	            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
-			FROM BOARD, EMP
-			WHERE BOARD_WRITER = EMPNO)
+	SELECT * FROM
+		(SELECT BOARD_NUM
+			, BOARD_TITLE
+			, BOARD_CONTENT
+			, BOARD_WRITER
+			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+			, BOARD_VIEW
+			, IS_IMPORTANT
+			, ENAME
+			, BOARD_MENU_CODE
+            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
+            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
+            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
+            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
+		FROM BOARD, EMP
+		WHERE BOARD_WRITER = EMPNO)
 		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<!-- (상세 조회) + 첨부파일 조회 -->
+	<select id="getBoardFile" resultMap="boardFile">
+	 	SELECT FILE_NUM
+            , ORIGIN_FILE_NAME
+            , ATTACHED_FILE_NAME
+            , FILE_SIZE
+        FROM BOARD, BOARD_FILE
+        WHERE BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM
+        AND BOARD.BOARD_NUM = #{boardNum}
 	</select>
 	
 	<!-- 조회수 증가 -->

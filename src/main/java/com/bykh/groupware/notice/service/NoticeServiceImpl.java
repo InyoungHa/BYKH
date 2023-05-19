@@ -7,17 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
 
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	//다음으로 들어갈 글 번호 조회
+	@Override
+	public String getNextBoardNum() {
+		return sqlSession.selectOne("boardMapper.getNextBoardNum");
+	}
 
 	//글 등록
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void regNotice(BoardVO boardVO) {
+		//글 등록
 		sqlSession.insert("boardMapper.regNotice", boardVO);
+		
+		//첨부파일 등록
+		if(boardVO.getBoardFileList() != null) {
+			sqlSession.insert("boardMapper.regFiles", boardVO);
+		}
 	}
 
 	//공지 게시판 목록 조회
@@ -39,8 +53,15 @@ public class NoticeServiceImpl implements NoticeService {
 		//조회수 증가
 		sqlSession.update("boardMapper.updateBoardView", boardVO);
 		
+		//첨부파일 조회
+		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
+		
+		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
+		
+		selectedBoard.setBoardFileList(selectedFileList);
+		
 		//글 상세 조회 정보 반환
-		return sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
+		return selectedBoard;
 	}
 
 	//글 삭제
@@ -55,6 +76,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public void updateBoard(BoardVO boardVO) {
 		sqlSession.update("boardMapper.updateBoard", boardVO);
 	}
+
 
 	
 

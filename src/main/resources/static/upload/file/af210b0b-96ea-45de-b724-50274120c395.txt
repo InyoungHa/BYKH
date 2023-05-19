@@ -1,0 +1,77 @@
+
+branch
+1.
+	git branch : 현재 브랜치 목록을 보여준다.
+	현재 사용중인 브랜치 앞에 *로 표시함
+
+2. 
+	새로운 브랜치 생성
+	git branch 브랜치명
+
+3. 
+	브랜치 이동
+	git checkout 이동할 브랜치명
+
+4.
+	브랜치 삭제
+	git branch -d 삭제할 브랜치명
+
++)
+	브랜치 생성과 동시에 이동
+	git branch -b 생성할 브랜치명
+
+
+git branch test1
+git checkout test1
+//소스 작업
+git add .
+git commit -m ""
+git checkout dev
+git merge test1
+git push origin dev
+(git checkout master
+git merge dev
+git push origin master)
+git branch -d test1
+
+
+
+
+
+
+merge
+git merge ~
+
+
+
+
+
+==작업 사이클 정리==
+
+git branch su
+
+git checkoout su
+
+su에서 작업
+
+git add .
+
+git commit -m “커밋메시지”
+
+git checkout dev
+
+git merge su
+
+git pull origin dev 
+
+정상                                                                        충돌
+
+git push origin dev                                                  충돌해결
+
+git checkout master  >>> 한 명만                            git add .
+
+git merge dev >>> 한 명만                                      git commit
+
+git push origin master >>> 한 명만                         정상대로.
+
+git branch -d su (개별 브랜치 삭제)

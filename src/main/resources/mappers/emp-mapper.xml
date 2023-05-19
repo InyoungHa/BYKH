@@ -18,10 +18,14 @@
 		<result column="E_ROLE" 				property="eRole"/>
 		<result column="E_STATUS" 				property="eStatus"/>
 		<result column="JOIN_DATE" 				property="joinDate"/>
+
 	
 		<result column="E_STATUS_STR" 				property="eStatusStr"/>
 		
-		<association property="deptVO" resultMap="deptMapper.dept"/>
+		<!-- 테스트용 임시 추가 - 희수 -->
+		<result column="LEVEL" 				property="level"/>
+		<association property="deptVO" resultMap="deptMapper.dept"></association>
+
 
 	</resultMap>
 	
