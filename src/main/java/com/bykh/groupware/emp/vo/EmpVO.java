@@ -42,4 +42,8 @@ public class EmpVO {
 
 	
 	private DeptVO deptVO;
+	
+	//테스트용 추가-희수
+	private int level;
+	
 }

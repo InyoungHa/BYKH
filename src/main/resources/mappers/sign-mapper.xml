@@ -95,9 +95,80 @@
 			EMPNO
 			, ENAME
 			, E_JOB
+			, LEVEL
 		FROM EMP
 		WHERE ENAME LIKE '%'||#{ename}||'%'
+		START WITH MGR IS NULL
+		CONNECT BY PRIOR EMPNO = MGR
 	</select>
+	
+	<!-- 다음에 문서번호 조회(결재문서 테이블) -->
+	<select id="getNextDocNo" resultType="int">
+		SELECT NVL(MAX(DOC_NO), 0) + 1 FROM SGN_DOC
+	</select>
+	
+	<!-- 기안 INSERT -->
+	<insert id="insertSignDoc">
+		INSERT INTO SGN_DOC (
+		    DOC_NO
+		    , DT_NO
+		    , WRITER_NO
+		    , DOC_TITLE
+		    , DOC_STATUS
+		) VALUES (
+		    (SELECT NVL(MAX(DOC_NO), 0) + 1 FROM SGN_DOC)
+		    , #{docAnnualLeaveVOList[0].signDocVO.dtNo}
+		    , #{docAnnualLeaveVOList[0].signDocVO.writerNo}
+		    , #{docAnnualLeaveVOList[0].signDocVO.docTitle}
+		    , #{docAnnualLeaveVOList[0].signDocVO.docStatus}
+		) 
+	</insert>
+	<!-- 연차신청서 insert -->
+	<insert id="insertDocAnnualLeave">
+		INSERT INTO DOC_ANNUAL_LEAVE (
+		    DAL_NO
+		    , DOC_NO
+		    , DT_NO
+		    , DAL_TYPE
+		    , START_DATE
+		    , END_DATE
+		    , START_TIME
+		    , END_TIME
+		    , LEAVE_DAYS
+		    , LEAVE_REASON
+		) VALUES(
+		    (SELECT NVL(MAX(DAL_NO), 0) + 1 FROM DOC_ANNUAL_LEAVE)
+		    <foreach collection="docAnnualLeaveVOList" item="doc">
+		    , #{doc.docNo}
+		    , #{doc.dtNo}
+		    , #{doc.dalType}
+		    , #{doc.startDate}
+		    , #{doc.endDate}
+		    , #{doc.startTime}
+		    , #{doc.endTime}
+		    , #{doc.leaveDays}
+		    , #{doc.leaveReason}
+		    </foreach>
+		)
+	</insert>
+	<!-- 결재리스트 추가 -->
+	<insert id="insertSignList">
+		INSERT ALL
+		<foreach collection="docAnnualLeaveVOList[0].signDocVO.signVOList" item="docAnnualLeave" index="i">
+			INTO SGN (
+			    SGN_CODE
+			    , DOC_NO
+			    , SGN_STATUS
+			    , APPROVER_NO
+			) VALUES(
+			    #{sgnCode}
+			    , #{docNo}
+			    , #{i}
+			    , #{approverNo}
+			)
+		</foreach>
+		SELECT 1 FROM DUAL
+	</insert>
 </mapper>
 
 
