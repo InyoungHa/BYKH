@@ -1,5 +1,4 @@
 
-
 //사번 생성(사원 등록)
 function regEmp(){
 	const ename_tag = document.querySelector('#ename');
@@ -8,11 +7,23 @@ function regEmp(){
 	const deptno_tag = document.querySelector('[name ="deptno"]');
 	const e_job_tag = document.querySelector('[name ="eJob"]');
 	const e_status_tag = document.querySelector('[name ="eStatus"]');
+	
+	//erroMessage
+	const error_message = document.querySelector('#errorMessage');
 
+	ename_tag.addEventListener('keyup', function(){
+	//이름에 공백 확인 		
+	if(ename_tag.value.trim() !== ''){
+		error_message.textContent = '';
+	} else{
+		error_message.textContent ='사원명에 공백을 입력할 수 없습니다.';
+		
+	}
+	});
 	
 	//이름이 빈 값인지 확인
 	if(ename_tag.value ==''){
-		alert('사원명 입력은 필수입니다. \n사원명을 입력해주세요')
+		alert('사원명 입력은 필수입니다. \n사원명을 입력해주세요');
 		return;
 	}
 		
@@ -26,7 +37,7 @@ function regEmp(){
 		'e_status' : e_status_tag.value,		
 	}
 	
-	console.log(`paramData =${paramData}`);
+	console.log('paramData =' + JSON.stringify(paramData));
 	
 	$.ajax({
 		url: '/emp/regEmpAjax', //요청경로
@@ -42,7 +53,7 @@ function regEmp(){
 			}
 		},
 		error: function() {
-			alert('실패');
+			alert('등록 실패');
 		}
 	});	
 }
@@ -56,21 +67,49 @@ function drawEmpTable(empList){
 	
 	let str ='';
 	
+	console.log('empList =' + JSON.stringify(empList));
 	
 	empList.forEach(function(emp, indx){
 		
 		str += `<tr>`;
-		str += `<td>${state.count}</td>`;
+		str += `<td>${indx+1}</td>`;
 		str += `<td>${emp.empno}</td>`;
 		str += `<td>${emp.ename}</td>`;
+		str += `<td>${emp.empno}</td>`;
 		str += `<td>****</td>`;
-		str += `<td>${emp.joinDate}</td>`;
+		str += `<td>${emp.join_date}</td>`;
 		str += `<td>${emp.deptVO.dename}</td>`;
-		str += `<td>${emp.eJob}</td>`;
-		str += `<td>${emp.eStatus}</td>`;
+		str += `<td>${emp.e_job}</td>`;
+		str += `<td>${emp.e_status_str}</td>`;
+		str += `<td>${emp.e_role}</td>`;
 		str += `</tr>`;
 		
 	});
-	emp_table_tage.insertAdjacentHTML('afterbegin',str);
+	emp_table_tage.insertAdjacentHTML('afterbegin',str);	
+	
+	
+	//등록 완료 후 form 초기화
+	const reg_emp_form = document.querySelector('#regEmpForm');
+	reg_emp_form.reset();
+	
+}
+
+//regForm 초기화_취소버튼
+function clearForm(){
+	const reg_emp_form = document.querySelector('#regEmpForm');
+	const input_tags=reg_emp_form.querySelectorAll('input');
+	const select_tags=reg_emp_form.querySelectorAll('select');
+	
+	input_tags.forEach(function(input_tag){
+		input_tag.value = '';		
+		
+	});
+	
+	select_tags.forEach(function(select_tag){
+		select_tag.selectedIndex  =0;		
+		
+	});
+	
+
 	
 }

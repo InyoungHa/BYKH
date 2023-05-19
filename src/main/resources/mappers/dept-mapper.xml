@@ -28,7 +28,7 @@
 	<!--부서 목록 조회  -->
 	<select id="selectDeptList" resultMap="dept">
 		SELECT DEPTNO
-			, DENAME
+			, (REPLACE(TRIM(DENAME), ' ', '')) AS DENAME
 			, LOC
 			, IS_USE
 		FROM DEPT	

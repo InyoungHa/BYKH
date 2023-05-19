@@ -32,6 +32,8 @@ public class EmpVO {
 	private String eEmail;
 	private String phoneTel;
 	private String officeTel;
+	
+	@JsonProperty("e_role")
 	private String eRole;
 	
 	@JsonProperty("e_status")
@@ -40,10 +42,15 @@ public class EmpVO {
 	@JsonProperty("join_date")
 	private String joinDate;
 
+	@JsonProperty("e_status_str")
+	private String eStatusStr;
 	
+	@JsonProperty("deptVO")
 	private DeptVO deptVO;
 	
+
 	//테스트용 추가-희수
 	private int level;
 	
+
 }

@@ -46,6 +46,7 @@ public class EmpController {
 	@PostMapping("/regEmpAjax")
 	public List<EmpVO> regEmpAjax(@RequestBody EmpVO empVO) {
 		
+		System.out.println(empVO);
 		//사원 번호 생성_간편
 		empService.insertEmp(empVO);
 		

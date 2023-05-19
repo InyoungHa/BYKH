@@ -2,8 +2,8 @@
 
 
 @font-face {
-    font-family: 'Dovemayo_gothic';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -12,7 +12,7 @@
 
 /*모든 css는 admin_layout.html의 container class에 적용하겠다.*/
 .container{
-	font-family: 'Dovemayo_gothic';
+	font-family: 'NanumSquareNeo-Variable';
 	font-size: 20px;
 	margin-top: 20px;
 }
