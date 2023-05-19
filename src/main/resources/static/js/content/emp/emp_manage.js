@@ -7,21 +7,23 @@ function regEmp(){
 	const deptno_tag = document.querySelector('[name ="deptno"]');
 	const e_job_tag = document.querySelector('[name ="eJob"]');
 	const e_status_tag = document.querySelector('[name ="eStatus"]');
+	
+	//erroMessage
+	const error_message = document.querySelector('#errorMessage');
 
-	//이름에 공백 확인 _ 이거 지금 안됨...
-	if(ename_tag.value.trim() ==' '){				
-		let str ='';
-		str += '<div id="ename" style="color: red; font-size: 0.9rem;">';
-		str += '공백 없이 이름을 입력하세요';					
-		str += '</div>';			
-		ename_tag.insertAdjacentHTML('beforebegin', str);
+	ename_tag.addEventListener('keyup', function(){
+	//이름에 공백 확인 		
+	if(ename_tag.value.trim() !== ''){
+		error_message.textContent = '';
+	} else{
+		error_message.textContent ='사원명에 공백을 입력할 수 없습니다.';
 		
 	}
-	
+	});
 	
 	//이름이 빈 값인지 확인
 	if(ename_tag.value ==''){
-		alert('사원명 입력은 필수입니다. \n사원명을 입력해주세요')
+		alert('사원명 입력은 필수입니다. \n사원명을 입력해주세요');
 		return;
 	}
 		
