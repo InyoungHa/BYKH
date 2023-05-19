@@ -5,6 +5,9 @@ import java.util.List;
 import com.bykh.groupware.notice.vo.BoardVO;
 
 public interface NoticeService {
+	
+	//다음으로 들어갈 글 번호 조회
+	String getNextBoardNum();
 
 	//글 등록
 	void regNotice(BoardVO boardVO);

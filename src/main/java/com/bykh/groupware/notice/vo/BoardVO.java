@@ -1,5 +1,7 @@
 package com.bykh.groupware.notice.vo;
 
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +24,8 @@ public class BoardVO {
 	
 	private BoardMenuVO boardMenuVO;
 	private BoardCategoryVO boardCategoryVO;
+	
+	private List<BoardFileVO> boardFileList;
 	
 	private String ename;
 	private String boardPrevNum;

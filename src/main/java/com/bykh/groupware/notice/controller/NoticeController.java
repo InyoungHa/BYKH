@@ -1,13 +1,18 @@
 package com.bykh.groupware.notice.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.notice.service.NoticeService;
+import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.util.UploadUtil;
 
 import jakarta.annotation.Resource;
 
@@ -40,7 +45,24 @@ public class NoticeController {
 	
 	//글 등록
 	@PostMapping("/regNotice")
-	public String regNotice(BoardVO boardVO) {
+	public String regNotice(BoardVO boardVO, MultipartFile[] files) {
+		// 글 등록
+		String boardNum = noticeService.getNextBoardNum();
+		boardVO.setBoardNum(boardNum);
+		
+		// 첨부파일
+		if(files != null) {
+			List<BoardFileVO> attachedBoardFileList = UploadUtil.multiFileUpload(files);
+			
+			// 첨부파일 등록 쿼리 실행 시 빈 값을 채워줄 데이터를 저장할 리스트에 boardNum 데이터 추가
+			for(BoardFileVO boardfile : attachedBoardFileList) {
+				boardfile.setBoardNum(boardNum);
+			}
+			
+			// boardVO에 리스트 set
+			boardVO.setBoardFileList(attachedBoardFileList);
+		}
+
 		noticeService.regNotice(boardVO);
 		
 		return "redirect:/notice/list";
