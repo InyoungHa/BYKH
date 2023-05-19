@@ -99,11 +99,13 @@ function delStampTableTd(this_tag) {
 	var tdList = table.querySelectorAll('td');
 	console.log(tdList);
 
-	tdList.forEach(function(td) {
+	tdList.forEach(function(td, index) {
 		if (str.includes(td.textContent)) {
-			console.log('textContent = ' + td.textContent);
-			console.log(td.parentElement)
-			td.parentElement.removeChild(td);
+			addNum = (tdList.length() + 1) / 3
+			//console.log('textContent = ' + td.textContent);
+			tdList[index].remove();
+			tdList[index + addNum].remove();
+			tdList[index + addNum].remove();
 		}
 	});
 
