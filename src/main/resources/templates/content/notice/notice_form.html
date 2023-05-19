@@ -18,7 +18,7 @@
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
-		<form th:action="@{/notice/regNotice}" method="post">
+		<form th:action="@{/notice/regNotice}" method="post" id="noticeForm" enctype="multipart/form-data">
 		
 			<div class="row">
 				<div class="col">
@@ -39,13 +39,20 @@
 								</div>
 							</td>
 							<td>
-								<input type="text" class="form-control" name="boardTitle">
+								<input type="text" class="form-control" name="boardTitle" id="boardTitle">
 							</td>
 						</tr>
 						<tr>
 							<td class="align-baseline table-light">내용</td>
 							<td colspan="2">
-								<textarea class="form-control" rows="20" style="resize: none" name="boardContent"></textarea>
+								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light">첨부파일</td>
+							<td colspan="2" class="text-start">
+								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
+								<!-- 첨부파일 -->
 							</td>
 						</tr>
 					</table>
@@ -53,7 +60,7 @@
 			</div>
 			<div class="row px-2">
 				<div class="col d-grid d-md-flex justify-content-md-end">
-					<button class="btn btn-primary" type="submit">등록</button>
+					<button class="btn btn-primary" type="button" onclick="noticeFormCheck();">등록</button>
 				</div>
 			</div>
 			<div class="row">
@@ -71,7 +78,7 @@
 
 <!-- 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<!-- <script type="text/javascript" src=""></script> -->
+	<script type="text/javascript" src="/js/content/notice/notice_form.js"></script>
 </th:block>
 
 </html>

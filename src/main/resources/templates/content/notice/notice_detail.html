@@ -43,6 +43,18 @@
 							<td>[[${notice.boardView}]]</td>
 						</tr>
 						<tr>
+							<td class="table-light">첨부파일</td>
+							<td class="text-start" colspan="3">
+								<div th:if="${#lists.size(notice.boardFileList) == 0}">
+									첨부된 파일이 없습니다.
+								</div>
+								<div th:unless="${#lists.size(notice.boardFileList) == 0}"
+											th:each="file : ${notice.boardFileList}">
+									[[${file.originFileName}]] ([[${file.fileSize}]])
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<td colspan="4" class="text-start align-baseline">
 								<div style="min-height: 20rem">[[${notice.boardContent}]]</div>
 							</td>
