@@ -15,7 +15,10 @@
 .icon-inner{
 color: white;
 }
-a{
+.fc-daygrid-day-number{
+color: black;
+}
+.fc-col-header-cell-cushion {
 color: black;
 }
   body {
@@ -211,7 +214,7 @@ color: white;
 
 
 
-
+<button id="saveButton" style=" margin-left: 1186px;  width:100px;  height: 38px; border-radius: 6px; background-color: #32485d; color: #ffffff;">일정저장</button>
   <!-- calendar 태그 -->
   <div id='calendar-container'>
   	
@@ -295,6 +298,8 @@ color: white;
 
 
 </script>
+<script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
 <script type="text/javascript" src="/js/content/attendance/calendar.js"></script>
 </th:block>
 

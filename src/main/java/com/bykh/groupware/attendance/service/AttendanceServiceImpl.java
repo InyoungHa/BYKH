@@ -15,6 +15,13 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public void regTime(String empNo) {
 		sqlSession.insert("attendanceMapper.regTime", empNo);
 	}
+
+
+	//현재시간
+	@Override
+	public void curTime() {
+		sqlSession.selectOne("attendanceMapper.currentTime");
+	}
 	
 
 
