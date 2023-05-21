@@ -4,12 +4,13 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="calendarMapper">
 	<resultMap type="com.bykh.groupware.calendar.vo.CalendarVO" id="cal">
-		<id column="SCHEDULE_CODE" 		property="scheduleCode"/>
-		<result column="EVENT_NAME" 		property="eventName"/>
-		<result column="START_DATE" 	property="startDate"/>
-		<result column="END_DATE" 	property="endDate"/>
-		<result column="ALLDAY" 	property="allDay"/>
-	</resultMap>
+	<id column="SCHEDULE_CODE" property="scheduleCode"/>
+	<result column="EVENT_NAME" property="eventName"/>
+	<result column="START_DATE" property="startDate" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+	<result column="END_DATE" property="endDate" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" typeHandler="org.apache.ibatis.type.LocalDateTimeTypeHandler"/>
+	<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
+</resultMap>
+
 	
 	
 <!-- 일정추가 -->
@@ -18,6 +19,11 @@ INSERT INTO SCHEDUL_FOR_GROUPWARE (EVENT_NAME, START_DATE, END_DATE, ALLDAY)
 VALUES (#{eventName}, #{startDate}, #{endDate}, #{allDay})
 </insert>
 
+<!-- 일정조회 -->
+<select id="getAllSchedules" resultMap="cal">
+    SELECT SCHEDULE_CODE, EVENT_NAME, START_DATE, END_DATE, ALLDAY
+    FROM SCHEDUL_FOR_GROUPWARE
+</select>
 
 
 </mapper>
