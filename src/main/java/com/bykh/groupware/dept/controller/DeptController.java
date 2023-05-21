@@ -44,13 +44,7 @@ public class DeptController {
 		deptVO.setLoc(loc);
 		deptVO.setDename(dename);
 		
-		int count =deptService.isDulicateDept(deptVO);
-		
-		if(count == 0) {
-			return true;
-		} else {
-			return false;
-		}				
+		return deptService.isDulicateDept(deptVO);				
 	}
 	
 	@ResponseBody //부서 등록 ajax

@@ -11,7 +11,7 @@ function regEmp(){
 	//erroMessage
 	const error_message = document.querySelector('#errorMessage');
 
-	ename_tag.addEventListener('keyup', function(){
+	ename_tag.addEventListener('keyup', function(e){
 	//이름에 공백 확인 		
 	if(ename_tag.value.trim() !== ''){
 		error_message.textContent = '';

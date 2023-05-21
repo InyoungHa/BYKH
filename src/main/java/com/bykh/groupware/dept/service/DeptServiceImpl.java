@@ -16,8 +16,8 @@ public class DeptServiceImpl implements DeptService{
 	
 
 	@Override//부서 등록 쿼리
-	public int insertDept(DeptVO deptVO) {		
-		return sqlSession.insert("deptMapper.insertDept",deptVO);
+	public void insertDept(DeptVO deptVO) {		
+		sqlSession.insert("deptMapper.insertDept",deptVO);
 	}
 
 
@@ -30,8 +30,10 @@ public class DeptServiceImpl implements DeptService{
 
 
 	@Override//부서 중복확인
-	public int isDulicateDept(DeptVO deptVO) {
-		return sqlSession.selectOne("deptMapper.isDulicateDept", deptVO);
+	public boolean isDulicateDept(DeptVO deptVO) {
+		
+		int result = sqlSession.selectOne("deptMapper.isDulicateDept", deptVO);
+		return result != 0 ? true : false;
 	}
 
 	@Override//부서 삭제

@@ -62,7 +62,7 @@
 	<!--사원 조회  -->
 	<select id="selectEmpList" resultMap="emp">
 		SELECT EMPNO
-			, ENAME	
+			, (REPLACE(TRIM(ENAME),' ', '')) AS ENAME	
 			, EPW
 			, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE
 			, (SELECT DENAME FROM DEPT WHERE DEPTNO=EMP.DEPTNO) AS DENAME
