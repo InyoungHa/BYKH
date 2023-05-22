@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Store data so the calendar knows to render an event upon drop
     eventElement.dataset.event = JSON.stringify({
       title: eventElement.textContent.trim(), // use the element's text as the event title
-      stick: true // maintain when user navigates (see docs on the renderEvent method)
+      stick: true, // maintain when user navigates (see docs on the renderEvent method)
+      //color:'#555555'
     });
 
     // Make the event draggable using native HTML5 drag and drop API
@@ -56,8 +57,43 @@ document.addEventListener('DOMContentLoaded', function() {
     locale: 'ko', // 한국어 설정
     editable: true,
     droppable: true,  // 드래그 가능
+    timeZone: 'UTC',
+    events: return_value,
     dragRevertDuration: 0,
-    drop: function(info) {
+    eventReceive: function(info) {
+	info.event._def.ui.backgroundColor= '#eeeeee';
+	info.event._def.ui.borderColor= '#eeeeee';
+	info.event._def.ui.textColor= '#eeeeee';
+	info.event._def.title= '#eeeeee';
+	console.log(info.event._def.ui.backgroundColor);
+	console.log(info.event);
+	//console.log(info.jsEvent);
+	//console.log(info.jsEvent.target);
+	
+	
+	//for(let i = 0; i < info.length; i++){
+  	
+ //   if(title === '연차') {
+  //    color = '#025464'; // 연차인 경우
+   //	 } else if(title === '반차') {
+   //   color = '#1B9C85'; // 반차인 경우
+   //   } else if(title === '조퇴') {
+   //   color = '#1D267D'; // 조퇴인 경우 
+   //     } else if(title === '병가') {
+   //   color = '#E76161'; // 병가인 경우 
+    //    } else if(title === '외출') {
+    //  color = '#19A7CE'; // 외출인 경우 
+    //    } else if(title === '출장') {
+    //  color = '#643A6B'; // 출장인 경우 
+    //    } else if(title === '교육') {
+    //  color = '#9E6F21'; // 교육인 경우 
+    //} else {
+    //  color = '#C92C6D'; // 휴일근무
+   // }
+
+//    info[i].color = color;
+ // }	
+	
       // Is the "remove after drop" checkbox checked?
       if (dropRemoveCheckbox.checked) {
         // If so, remove the element from the "Draggable Events" list
@@ -119,10 +155,10 @@ function allSave() {
 
   for (var i = 0; i < allEvent.length; i++) {
     var obj = {
-      eventName: allEvent[i]._def.title,
-      allday: allEvent[i]._def.allDay,
-      startDate: allEvent[i]._instance.range.start,
-      endDate: allEvent[i]._instance.range.end
+      title: allEvent[i]._def.title,
+      allDay: allEvent[i]._def.allDay,
+      start: allEvent[i]._instance.range.start,
+      end: allEvent[i]._instance.range.end
     };
 
     events.push(obj);
@@ -130,7 +166,6 @@ function allSave() {
 
   var jsondata = JSON.stringify(events);
   jsonEvent = JSON.parse(jsondata);
-  console.log(jsonEvent);
 
  
   var updatedEvents = jsonEvent.map(function(event) {
@@ -140,9 +175,7 @@ function allSave() {
 
   var jsondataUpdated = JSON.stringify(updatedEvents);
 
-  console.log(jsondataUpdated);
   savedata(jsondataUpdated);
-  alert(jsondataUpdated);
 }
 
 function savedata(jsondata) {
@@ -155,17 +188,16 @@ function savedata(jsondata) {
     data: jsondata,
     dataType: 'text',
     success: function(result) {
-      alert(result); //컨트롤러 결과값이 RESULT에담김
+	alert("일정이 저장되었습니다.");
+	location.reload();
     },
     error: function() {
-      alert(result);
     }
   });
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//캘린더 조회
-var all_events = null;
+///////////////////////////////////////////////////////////////////////////////캘린더 조회
+var return_value = null;
 
 loadingEvents();
 
@@ -173,30 +205,51 @@ function loadingEvents() {
 	//ajax start
 	$.ajax({
 		url: '/calendar/calendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
-		type: 'GET', // GET 요청
+		type: 'POST', 
 		async: false,
 		dataType: 'json',
+		
 		success: function(result) {
-			all_events = result; // 서버에서 받아온 데이터를 all_events 변수에 할당
-			initializeCalendar(); // 캘린더를 초기화하는 함수 호출
+		  for(let i = 0; i < result.length; i++){
+  		  const title = result[i].title;
+   	 let color;
+
+    if(title === '연차') {
+      color = '#025464'; // 연차인 경우
+   	 } else if(title === '반차') {
+      color = '#1B9C85'; // 반차인 경우
+      } else if(title === '조퇴') {
+      color = '#1D267D'; // 조퇴인 경우 
+        } else if(title === '병가') {
+      color = '#E76161'; // 병가인 경우 
+        } else if(title === '외출') {
+      color = '#19A7CE'; // 외출인 경우 
+        } else if(title === '출장') {
+      color = '#643A6B'; // 출장인 경우 
+        } else if(title === '교육') {
+      color = '#9E6F21'; // 교육인 경우 
+    } else {
+      color = '#C92C6D'; // 휴일근무
+    }
+
+    result[i].color = color;
+  }	
+			console.log(result);
+			 var jsonResult = JSON.stringify(result);
+  			return_value = JSON.parse(jsonResult);
 		},
 		error: function() {
 			alert('에러 발생');
 		}
 	});
+	return return_value;
 	//ajax end
 }
 
-function initializeCalendar() {
-	// 캘린더 객체를 초기화하고 events 속성에 가져온 데이터를 할당
-	calendar = new Calendar({
-		events: all_events
-	});
 
-	// 이후 코드 계속...
-}
 
-// 이벤트 데이터를 이용하여 HTML에서 일정을 조회하고 표시하는 함수 등을 추가로 작성하시면 됩니다.
+
+
 
 
 

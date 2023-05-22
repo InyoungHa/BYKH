@@ -17,10 +17,11 @@ public class CalendarController {
     @Resource(name = "calendarService")
     private CalendarService calendarService;
 
-    //캘린더 인서트
+    //캘린더 일정추가
     @ResponseBody
     @RequestMapping("/calendarSave")
     public void calendarSaveAjax(@RequestBody List<CalendarVO> calendarVOs) {
+    		calendarService.deleteSchedule();
     	
         for (CalendarVO calendarVO : calendarVOs) {
             calendarService.insertSchedule(calendarVO);
@@ -32,8 +33,12 @@ public class CalendarController {
     @ResponseBody
     @RequestMapping("/calendarLoad")
     public List<CalendarVO> calendarLoadAjax() {
+    	
         return calendarService.getAllSchedules();
     }
+    
+
+
 
 }
     
