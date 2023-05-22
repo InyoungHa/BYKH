@@ -50,7 +50,10 @@
 								</div>
 								<div th:unless="${#lists.size(notice.boardFileList) == 0}"
 											th:each="file : ${notice.boardFileList}">
-									[[${file.originFileName}]] ([[${file.fileSize}]])
+									<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
+									[[${file.originFileName}]]
+									</a>
+									 ([[${file.fileSize}]])
 								</div>
 							</td>
 						</tr>

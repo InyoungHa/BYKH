@@ -46,3 +46,6 @@ function deleteFileInputDiv(deleteBtn) {
 	
 	fileInputDiv.remove();
 };
+
+
+

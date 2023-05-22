@@ -1,5 +1,9 @@
 package com.bykh.groupware.notice.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -12,9 +16,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.util.ConstVariable;
 import com.bykh.groupware.util.UploadUtil;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 //공지사항 게시판
@@ -95,15 +101,57 @@ public class NoticeController {
 	
 	//글 수정
 	@PostMapping("/update")
-	public String noticeUpdate(BoardVO boardVO) {
+	public String noticeUpdate(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+		//새로 추가된 첨부파일 처리
+		if(files != null) {
+			List<BoardFileVO> attachedBoardFileList = UploadUtil.multiFileUpload(files);
+			
+			// 첨부파일 등록 쿼리 실행 시 빈 값을 채워줄 데이터를 저장할 리스트에 boardNum 데이터 추가
+			for(BoardFileVO boardfile : attachedBoardFileList) {
+				boardfile.setBoardNum(boardVO.getBoardNum());
+			}
+			
+			// boardVO에 리스트 set
+			boardVO.setBoardFileList(attachedBoardFileList);
+		}
+		
 		//중요글 체크 해제 시 null값 체크
 		if(boardVO.getIsImportant() == null) {
 			boardVO.setIsImportant("N");
 		}
 		
-		noticeService.updateBoard(boardVO);
+		noticeService.updateBoard(boardVO, deleteFileNum);
 		
 		return "redirect:/notice/detail?boardNum=" + boardVO.getBoardNum();
+	}
+	
+	
+	//첨부파일 다운로드
+	@GetMapping("/download")
+	public void fileDownload(String fileNum, HttpServletResponse response) {
+		BoardFileVO downloadFile =  noticeService.getDownloadFileVO(fileNum);
+		String attachedFileName = downloadFile.getAttachedFileName();
+		String originFileName =  downloadFile.getOriginFileName();
+
+		try {
+			File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+			
+			byte[] fileByte = Files.readAllBytes(file.toPath());
+			
+			response.setContentType("application/octet-stream");
+            response.setContentLength(fileByte.length);
+            
+            response.setHeader("Content-Disposition",
+            		"attachment; fileName=\"" + URLEncoder.encode(originFileName, "UTF-8") + "\";");
+            response.setHeader("Content-Transfer-Encoding", "binary");
+			
+			response.getOutputStream().write(fileByte);
+			response.getOutputStream().flush();
+			response.getOutputStream().close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
