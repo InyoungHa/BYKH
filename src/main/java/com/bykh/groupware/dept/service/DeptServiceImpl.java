@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.dept.vo.DeptVO;
 
+
 @Service("deptService")
 public class DeptServiceImpl implements DeptService{
 	@Autowired
@@ -40,6 +41,12 @@ public class DeptServiceImpl implements DeptService{
 	public void deleteDept(int deptno) {
 		sqlSession.delete("deptMapper.deleteDept",deptno);
 		
+	}
+
+	@Override //부서 사용 여부 변경
+	public int updateIsUse(int deptno) {
+		
+		return sqlSession.update("deptMapper.updateIsUse",deptno);
 	}
 	
 	

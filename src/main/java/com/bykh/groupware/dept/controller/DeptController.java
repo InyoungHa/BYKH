@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.dept.vo.DeptVO;
 
+
 import jakarta.annotation.Resource;
 
 @Controller
@@ -23,6 +24,10 @@ public class DeptController {
 	//부서 관리 페이지
 	@GetMapping("/deptManage")
 	public String deptManage(Model model, DeptVO deptVO) {
+		
+		
+		
+		//부서 목록 조회
 		model.addAttribute("deptList", deptService.selectDeptList());
 		return "content/dept/dept_manage";
 	}
@@ -53,6 +58,8 @@ public class DeptController {
 				
 		//부서 등록 쿼리
 		deptService.insertDept(deptVO);
+		
+		
 		return deptService.selectDeptList();
 		
 	}
@@ -62,6 +69,14 @@ public class DeptController {
 	public void deleteDeptAjax(int deptno) {
 		//부서 삭제 쿼리
 		deptService.deleteDept(deptno);
+	}
+	
+	@ResponseBody // 사용여부 변경 ajax
+	@PostMapping("/changIsUseAjax")
+	public int changIsUseAjax(int deptno) {
+		
+		//부서 사용여부 변경 쿼리
+		return deptService.updateIsUse(deptno);
 	}
 
 }

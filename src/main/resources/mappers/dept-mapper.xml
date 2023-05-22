@@ -34,6 +34,7 @@
 		FROM DEPT	
 		ORDER BY DEPTNO DESC
 	</select>
+<!-- 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY -->
 	
 	<!--부서 등록 중복검사  -->
 	<select id="isDulicateDept" resultType="int">
@@ -48,6 +49,13 @@
 		DELETE DEPT
 		WHERE DEPTNO =#{deptno}
 	</delete>
+	
+	<!--부서 사용 여부 변경  -->
+	<update id="updateIsUse">
+		UPDATE DEPT
+		SET IS_USE = DECODE(IS_USE, 'Y','N','N','Y')
+		WHERE DEPTNO = #{deptno}
+	</update>
 
 	
 </mapper>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bykh.groupware.dept.vo.DeptVO;
 
+
 public interface DeptService {
 	
 	//부서 등록 쿼리
@@ -18,4 +19,7 @@ public interface DeptService {
 	
 	//부서 삭제
 	void deleteDept(int deptno);
+	
+	//부서 사용 여부 변경
+	int updateIsUse(int deptno);
 }
