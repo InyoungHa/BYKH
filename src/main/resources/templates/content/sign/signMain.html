@@ -45,10 +45,15 @@
 									<th:block th:each="signDoc, status : ${inProgressSignDocList}">
 										<tr>
 											<td>[[${status.size - status.index}]]</td>
-											<td><a>[[${signDoc.docTitle}]]</a></td>
+											<td  style="cursor: pointer;" th:onclick="showSignDocModal(this);" 
+											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
+												<span>
+													[[${signDoc.docTitle}]]
+												</span>
+											</td>
 											<td>[[${signDoc.insertDate}]]</td>
 											<td>[[${signDoc.empVO.ename}]]</td>
-											<td>[[${signDoc.sgnStatus}]]</td>
+											<td>[[${signDoc.sgnStatusStr}]]</td>
 										</tr>
 									</th:block>
 								</th:block>
@@ -61,7 +66,7 @@
 			</div>
 			<div class="row mt-3 mb-3">
 				<div class="col-10">
-					결재 목록
+					완료된 결재건
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -84,14 +89,18 @@
 							</tr>
 						</thead>
 						<tbody>
-								<th:block th:if="${#lists.size(endSignDocList) == 0}">
+								<th:block th:if="${#lists.size(endSignDocList) != 0}">
 									<th:block th:each="signDoc, status : ${endSignDocList}">
 										<tr>
 											<td>[[${status.size - status.index}]]</td>
-											<td><a>[[${signDoc.docTitle}]]</a></td>
+											<td>
+												<span>
+													[[${signDoc.docTitle}]]
+												</span>											
+											</td>
 											<td>[[${signDoc.insertDate}]]</td>
 											<td>[[${signDoc.empVO.ename}]]</td>
-											<td>[[${signDoc.sgnStatus}]]</td>
+											<td>[[${signDoc.sgnStatusStr}]]</td>
 										</tr>
 									</th:block>
 								</th:block>
@@ -104,11 +113,37 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- 기안 조회 모달 -->
+	<!-- 임시저장일 경우 모달 띄우고 아닐 경우 작성 페이지로 이동 -->
+	<div class="modal fade" id="showSignDoc" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="staticBackdropLabel">Modal
+						title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">...</div>
+				<!-- 결재자만 조회되도록 수정 -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">반려</button>
+					<button type="button" class="btn btn-primary">결재</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </th:block>
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<!-- <script type="text/javascript" src="/"></script> -->
+	<script type="text/javascript" src="/js/content/sign/sign_main.js"></script>
 </th:block>
 
 </html>
