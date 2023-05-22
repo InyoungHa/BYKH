@@ -167,54 +167,69 @@ color: white;
   color: blue;
   text-decoration: none;
 }
+.fc-h-event .fc-event-main{
+height: 30px;
+padding-top: 3.5px;
+}
+.fc-toolbar-title{
+color: #334865;
+}
 
 
+.but{
+margin-left: 1186px;  width:100px;  height: 38px; border-radius: 6px; background-color: #1e2b37; color: #ffffff;
+}
+.but:hover{
+	background-color: #466583;
+	border: 0.3px solid #466583;
+}
 </style>
 </head>
 <body style="padding:30px; bottom: 35px;">
 
 
-
+<div style="margin-left:645px; font-size: 45px; font-weight: bold; color: #4d6d99;">근태 일정 캘린더</div>
   <div id='external-events'>
     <p>
       <strong class="subtitle">일정추가</strong>
     </p>
 
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>연차</div>
+      <div class='fc-event-main' style="background-color: #025464; border: 1px solid #025464;">연차</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>반차</div>
+      <div class='fc-event-main' style="background-color: #1B9C85; border: 1px solid #1B9C85; ">반차</div>
     </div>
      <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>조퇴</div>
+      <div class='fc-event-main' style="background-color: #1D267D; border: 1px solid #1D267D;">조퇴</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>병가</div>
+      <div class='fc-event-main' style="background-color: #E76161; border: 1px solid #E76161;">병가</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>외출</div>
+      <div class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE;">외출</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>출장</div>
+      <div class='fc-event-main' style="background-color: #643A6B;  border: 1px solid #643A6B;">출장</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>교육</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main'>휴일근무</div>
+      <div class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21;">교육</div>
     </div>
     
-
-    <p>
+    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+      <div class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D;">휴일근무</div>
+    </div>
+      <p style="visibility: hidden;">
       <input type='checkbox' id='drop-remove' />
-      <label for='drop-remove'>드롭다운 제거</label>
+      <label for='drop-remove'></label>
     </p>
+
+  
   </div>
 
 
 
-<button id="saveButton" style=" margin-left: 1186px;  width:100px;  height: 38px; border-radius: 6px; background-color: #32485d; color: #ffffff;">일정저장</button>
+<button id="saveButton" class="but">일정저장</button>
   <!-- calendar 태그 -->
   <div id='calendar-container'>
   	

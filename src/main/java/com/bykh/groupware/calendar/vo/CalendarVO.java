@@ -1,6 +1,7 @@
 package com.bykh.groupware.calendar.vo;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,10 +10,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class CalendarVO {
-    private int scheduleCode;
-    private String eventName;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private int id;
+    private String title;
+    private Date start;
+    private Date end;
     private boolean allDay;
 }
 

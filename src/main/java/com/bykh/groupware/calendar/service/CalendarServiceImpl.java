@@ -14,6 +14,13 @@ import com.bykh.groupware.calendar.vo.CalendarVO;
 public class CalendarServiceImpl implements CalendarService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	//일정제거
+	@Override
+	public void deleteSchedule() {
+		sqlSession.delete("calendarMapper.deleteSchedule");
+	}
+
 
 	//일정추가
 	@Override
@@ -26,6 +33,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<CalendarVO> getAllSchedules() {
 		return sqlSession.selectList("calendarMapper.getAllSchedules");
 	}
+
 
 
 }
