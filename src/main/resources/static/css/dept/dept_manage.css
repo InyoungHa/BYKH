@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.btn:disabled{
+  color: #fff;
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+
+/*스크롤 적용  */
+.my-scroll{
+	/*overflow:scroll; 지정해둔 영역보다 넘칠 때 스크롤을 적용할거라는 설정
+						영역 크기 지정 -> 해당 영역이 넘어가면 스크롤 작업을 적용한다는 설정
+						오른쪽 , 아래에 스크롤 생김  */
+	
+	max-height : 20.4rem;/* 크기가 최대 설정, 그만큼 양이 없을 때는 크기가 줄어든다 */
+	overflow-y: auto; /*오른쪽에만 스크롤 생김 / auto는 내용이 없으면 스크롤 안생김 */
+	
+	
+}
+/* 스크롤 디자인을 추가함 */
+.my-scroll::-webkit-scrollbar {
+        width: 8px;  /* 스크롤바의 너비 */
+}
+.my-scroll::-webkit-scrollbar-thumb {
+        height: 30%; /* 스크롤바의 길이 */
+        background: #b7b7b7; /* 스크롤바의 색상 */
+        border-radius: 10px;
+}
+      
+.my-scroll::-webkit-scrollbar-track {
+        background: #84848447;  /*스크롤바 뒷 배경 색상*/
+}

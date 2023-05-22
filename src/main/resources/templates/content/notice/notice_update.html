@@ -18,7 +18,7 @@
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
-		<form th:action="@{/notice/update}" method="post" id="noticeUpdateForm">
+		<form th:action="@{/notice/update}" method="post" id="noticeUpdateForm" enctype="multipart/form-data">
 		
 			<div class="row">
 				<div class="col">
@@ -32,7 +32,7 @@
 							<td class="table-light">제목</td>
 							<td>
 								<div class="form-check d-flex justify-content-evenly">
-								  	<input class="form-check-input" type="checkbox" name="isImportant" id="isImportant" th:checked="${notice.isImportant == 'Y'}">
+								  	<input class="form-check-input" type="checkbox" name="isImportant" id="isImportant" value="Y" th:checked="${notice.isImportant == 'Y'}">
 								  	<label class="form-check-label" for="isImportant">
 									    중요글
 									</label>
@@ -48,9 +48,26 @@
 								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent">[[${notice.boardContent}]]</textarea>
 							</td>
 						</tr>
+						<tr>
+							<td class="table-light">첨부파일</td>
+							<td colspan="2" class="text-start">
+								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
+								<div class="mb-1" th:if="${#lists.size(notice.boardFileList) != 0}"
+											th:each="file : ${notice.boardFileList}">
+									<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
+									[[${file.originFileName}]]
+									</a>
+									 ([[${file.fileSize}]])
+									<button class="btn btn-primary btn-sm" type="button" th:onclick="deleteAttachedFile([[${file.fileNum}]], this);">삭제</button>
+								</div>
+								<!-- 첨부파일 -->
+							</td>
+						</tr>
 					</table>
-					<input type="hidden" name="boardNum" th:value="${notice.boardNum}">
-					<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${notice.boardMenuVO.boardMenuCode}">
+					<div id="hiddenDiv">
+						<input type="hidden" name="boardNum" th:value="${notice.boardNum}">
+						<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${notice.boardMenuVO.boardMenuCode}">					
+					</div>
 				</div>
 			</div>
 			<div class="row px-2">

@@ -32,4 +32,5 @@ public class BoardVO {
 	private String boardPrevTitle;
 	private String boardNextNum;
 	private String boardNextTitle;
+	private int fileCnt;
 }

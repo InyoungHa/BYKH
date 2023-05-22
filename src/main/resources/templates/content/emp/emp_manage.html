@@ -16,10 +16,10 @@
 		<div class="col">
 			<div class="row">
 				<div class="col">
-					<label>사용자 조회 * 수정</label>
+					<label class="page_title">사용자 조회 | 수정</label>
 				</div>
 			</div>
-			<div class="row g-3">
+			<div class="row g-3" style="margin-bottom: 1rem;">
 				<div class="col-auto">
 					<select class="form-select form-select-sm">
 						<option>10명</option>
@@ -42,14 +42,14 @@
 			<div class="row mb-3">
 				<div class="col">
 					<form id="regEmpForm">	
-					<table class="table align-middle text-center">
+					<table class="table align-middle text-center" style="margin-bottom: 0; padding-bottom: 0;">
 						<colgroup>
 							<col width="5%">
 							<col width="10%">
 							<col width="10%">
 							<col width="10%">
 							<col width="10%">
-							<col width="5%">
+							<col width="8%">
 							<col width="8%">
 							<col width="8%">
 							<col width="8%">
@@ -128,11 +128,11 @@
 								<col width="10%">
 								<col width="10%">
 								<col width="10%">
-								<col width="10%">
+								<col width="11%">
 								<col width="8%">
 								<col width="8%">
 								<col width="8%">
-								<col width="8%">
+								<col width="8.7%">
 								<col width="8%">
 							</colgroup>
 							<tbody>						
@@ -153,6 +153,9 @@
 										<td>[[${emp.eJob}]]</td>
 										<td>[[${emp.eStatusStr}]]</td>
 										<td>[[${emp.eRole}]]</td>
+										<td>
+											<button th:onchange="changAccount([[${emp.empno}]]);" type="button" class="button">변경</button>
+										</td>
 									</tr>
 								</th:block>
 							</tbody>

@@ -11,7 +11,7 @@ function regEmp(){
 	//erroMessage
 	const error_message = document.querySelector('#errorMessage');
 
-	ename_tag.addEventListener('keyup', function(){
+	ename_tag.addEventListener('keyup', function(e){
 	//이름에 공백 확인 		
 	if(ename_tag.value.trim() !== ''){
 		error_message.textContent = '';
@@ -101,15 +101,20 @@ function clearForm(){
 	const select_tags=reg_emp_form.querySelectorAll('select');
 	
 	input_tags.forEach(function(input_tag){
-		input_tag.value = '';		
-		
+		input_tag.value = '';				
 	});
 	
 	select_tags.forEach(function(select_tag){
-		select_tag.selectedIndex  =0;		
+		select_tag.selectedIndex  =0;	
 		
 	});
-	
+}
 
+//계정 상태 변경
+// 변경을 누르면 휴먼 계정으로 변경, 사원 세부 정보에서 퇴직일때는 삭제 버튼으로 변경 가능
+// 휴먼 계정으로 바뀌면 계정은 휴직으로 변경된다...?
+function changAccount(empno){
 	
 }
+
+

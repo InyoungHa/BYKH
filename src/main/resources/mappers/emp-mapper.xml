@@ -62,7 +62,7 @@
 	<!--사원 조회  -->
 	<select id="selectEmpList" resultMap="emp">
 		SELECT EMPNO
-			, ENAME	
+			, (REPLACE(TRIM(ENAME),' ', '')) AS ENAME	
 			, EPW
 			, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE
 			, (SELECT DENAME FROM DEPT WHERE DEPTNO=EMP.DEPTNO) AS DENAME
@@ -73,10 +73,21 @@
 				WHEN 3 THEN '퇴직'
 				ELSE '알 수 없음'
 			  END AS E_STATUS_STR	
-			, DECODE(E_ROLE, 'USER', '사원','ADMIN','관리자','SUPER_ADMIN','최종 관리자') AS E_ROLE
+			, DECODE(E_ROLE, 'USER', '직원','ADMIN','관리자','SUPER_ADMIN','최종 관리자') AS E_ROLE
 		FROM EMP	
 		ORDER BY EMPNO DESC
 	</select>
+	
+	<!--계정 상태 변경  -->
+	<!--E_STATUS=1 재직중일때 사용가능/ E_STATUS=2 휴직일때 사용 일시 중지/ E_STATUS=3 퇴사는 사용 중지 -->
+<!-- 	<update id="">
+		UPDATE EMP
+		SET E_STATUS =(
+	
+	</update> -->
+	
+	
+	
 	
 	<!--로그인 쿼리  -->
 <!-- 	<select id="login" resultMap="emp">

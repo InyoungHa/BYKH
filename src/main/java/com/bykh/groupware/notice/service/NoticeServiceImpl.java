@@ -1,5 +1,6 @@
 package com.bykh.groupware.notice.service;
 
+import java.io.File;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -9,11 +10,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.util.ConstVariable;
 
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	//공지 게시판 목록 조회
+	@Override
+	public List<BoardVO> getNoticeList() {
+		return sqlSession.selectList("boardMapper.getNoticeList");
+	}
+	
+	//공지 게시판 중요글 목록 조회
+	@Override
+	public List<BoardVO> getNoticeImportantList() {
+		return sqlSession.selectList("boardMapper.getNoticeImportantList");
+	}
 	
 	//다음으로 들어갈 글 번호 조회
 	@Override
@@ -34,18 +48,6 @@ public class NoticeServiceImpl implements NoticeService {
 		}
 	}
 
-	//공지 게시판 목록 조회
-	@Override
-	public List<BoardVO> getNoticeList() {
-		return sqlSession.selectList("boardMapper.getNoticeList");
-	}
-
-	//공지 게시판 중요글 목록 조회
-	@Override
-	public List<BoardVO> getNoticeImportantList() {
-		return sqlSession.selectList("boardMapper.getNoticeImportantList");
-	}
-
 	//공지글 상세 조회
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -56,8 +58,10 @@ public class NoticeServiceImpl implements NoticeService {
 		//첨부파일 조회
 		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
 		
+		//상세 조회하는 글
 		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
 		
+		//첨부파일 변수에 담아줌
 		selectedBoard.setBoardFileList(selectedFileList);
 		
 		//글 상세 조회 정보 반환
@@ -66,16 +70,61 @@ public class NoticeServiceImpl implements NoticeService {
 
 	//글 삭제
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void deleteBoard(BoardVO boardVO) {
+		//해당 글의 첨부파일 있는지 조회
+		List<String> deleteFileNumList = sqlSession.selectList("boardMapper.getFileNumByBoardNum", boardVO);
+		
+		//첨부파일이 있으면 삭제
+		if(deleteFileNumList != null) {
+			for(String deleteFileNum : deleteFileNumList) {
+				BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
+				String attachedFileName = fileVO.getAttachedFileName();
+				
+				File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+				file.delete();
+				
+				sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
+			}
+		}
+		
+		//글 삭제
 		sqlSession.delete("boardMapper.deleteBoard", boardVO);
 	}
 
 	
 	//글 수정
 	@Override
-	public void updateBoard(BoardVO boardVO) {
+	@Transactional(rollbackFor = Exception.class)
+	public void updateBoard(BoardVO boardVO, String[] deleteFileNumArr) {
+		//삭제된 파일 처리
+		if(deleteFileNumArr != null) {
+			for(String deleteFileNum : deleteFileNumArr) {
+				BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
+				String attachedFileName = fileVO.getAttachedFileName();
+				
+				File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+				file.delete();
+				
+				sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
+			}
+		}
+		
+		//새로운 첨부파일 등록
+		if(boardVO.getBoardFileList() != null) {
+			sqlSession.insert("boardMapper.regFiles", boardVO);
+		}
+		
+		//글 수정
 		sqlSession.update("boardMapper.updateBoard", boardVO);
 	}
+	
+	//첨부파일 정보 조회
+	@Override
+	public BoardFileVO getDownloadFileVO(String fileNum) {
+		return sqlSession.selectOne("boardMapper.getDownloadFileVO", fileNum);
+	}
+
 
 
 	
