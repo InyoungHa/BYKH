@@ -71,19 +71,18 @@
 								<th>계정관리</th>
 							</tr>
 						</thead>
-						<tbody>	
-												
+						<tbody>													
 							<tr>							
 								<td colspan="2">									
 									<button type="button" class="button">간편등록</button>
 								</td>
 								<td colspan="2">
-									<input type="text" name="ename" id="ename" class="form-control">
-									<span id="errorMessage"></span>
+									<input type="text" name="ename" id="ename" oninput="reg_emp_validate();" class="form-control">
+							
 								</td>								
 								<td>
-									<input type="password" name="epw" id="epw" class="form-control">
-									<span id="errorMessage"></span>
+									<input type="password" name="epw" id="epw" oninput="reg_emp_validate();" class="form-control">
+									
 								</td>
 								<td>
 									<input type="date" name="joinDate"  class="form-control">
