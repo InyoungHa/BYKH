@@ -61,10 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
     events: return_value,
     dragRevertDuration: 0,
     eventReceive: function(info) {
-	info.event._def.ui.backgroundColor= '#eeeeee';
-	info.event._def.ui.borderColor= '#eeeeee';
-	info.event._def.ui.textColor= '#eeeeee';
-	info.event._def.title= '#eeeeee';
 	console.log(info.event._def.ui.backgroundColor);
 	console.log(info.event);
 	//console.log(info.jsEvent);
