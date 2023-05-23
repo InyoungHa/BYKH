@@ -1,6 +1,91 @@
 
+//오류 메세지 div 전체 제거
+function delete_error_div(){
+	const error_divs= document.querySelectorAll('div[class="my-invalid"]');
+	
+	for(const error_div of error_divs){
+		error_div.remove();
+	}
+
+}
+
+
+//사원 등록 유효성 검사
+function reg_emp_validate(){
+	
+	//기존 오류 메세지 전부 삭제
+	delete_error_div();
+	
+	//reg_emp_validate()함수의 리턴 결과를 저장하는 변수
+	let result_ename = true;
+	let result_epw = true;
+	
+	//오류 메세지
+	let str_ename ='';
+	let str_epw ='';
+	
+	//사원 등록 form 태그의 자식 tbody 선택
+	const tbody = document.querySelector('#regEmpForm');
+	const tbody_tr=tbody.querySelectorAll('tbody > tr > td');
+	
+	//validation 처리
+	const reg_empExp = /\s/;
+	
+	
+	
+	
+	const ename = document.querySelector('#regEmpForm #ename').value;
+	
+	if(ename ==''){
+		str_ename ='사원명은 필수 입력입니다.';
+		result_ename =false;
+	}else if(reg_empExp.test(ename)){
+		str_ename ='사원명을 공백 없이 입력해주세요';
+		result_ename = false;
+	}
+	
+	const epw = document.querySelector('#regEmpForm #epw').value;
+	
+	if(epw ==''){
+		str_epw = '비밀번호는 필수 입력입니다.';
+		result_epw = false;
+	}else if(reg_empExp.test(epw)){
+		str_epw ='비밀번호를 공백 없이 입력해주세요';
+		result_epw = false;
+	}else if(emp.lenght <4){
+		str_epw ='비밀번호는 4자리 이상 입력해주세요';
+		result_epw = false;
+	}
+	
+	//유효성 검사 실패시 오류 메세지 출력(false일때)
+	if(!result_ename){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_ename}</div>`;
+		tbody_tr[1].insertAdjacentHTML('beforeend', errorHTML);
+	}
+	if(!result_epw){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_epw}</div>`;
+		tbody_tr[2].insertAdjacentHTML('beforeend', errorHTML);
+		
+	}	
+	//모든 유효성이 확인될 때
+	return result_ename && result_epw;	
+}
+
+
+
 //사번 생성(사원 등록)
 function regEmp(){
+	
+	//유효성 검사 진행
+	const isValidate = reg_emp_validate();
+	
+	if(!isValidate){
+		return;
+	}
+	
+	
+	
+	
 	const ename_tag = document.querySelector('#ename');
 	const epw_tag = document.querySelector('#epw');
 	const join_date_tag = document.querySelector('[name ="joinDate"]');
@@ -8,25 +93,6 @@ function regEmp(){
 	const e_job_tag = document.querySelector('[name ="eJob"]');
 	const e_status_tag = document.querySelector('[name ="eStatus"]');
 	
-	//erroMessage
-	const error_message = document.querySelector('#errorMessage');
-
-	ename_tag.addEventListener('keyup', function(e){
-	//이름에 공백 확인 		
-	if(ename_tag.value.trim() !== ''){
-		error_message.textContent = '';
-	} else{
-		error_message.textContent ='사원명에 공백을 입력할 수 없습니다.';
-		
-	}
-	});
-	
-	//이름이 빈 값인지 확인
-	if(ename_tag.value ==''){
-		alert('사원명 입력은 필수입니다. \n사원명을 입력해주세요');
-		return;
-	}
-		
 	
 	paramData={
 		'ename' : ename_tag.value,
