@@ -13,7 +13,7 @@ public interface EmpService {
 	void insertEmp(EmpVO empVO);
 	
 	//사원 조회
-	List<EmpVO> selectEmpList();
+	List<EmpVO> selectEmpList(EmpVO empVO);
 	
 	
 }

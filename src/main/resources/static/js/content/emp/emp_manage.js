@@ -24,15 +24,13 @@ function reg_emp_validate(){
 	let str_ename ='';
 	let str_epw ='';
 	
-	//사원 등록 form 태그의 자식 tbody 선택
-	const tbody = document.querySelector('#regEmpForm');
-	const tbody_tr=tbody.querySelectorAll('tbody > tr > td');
+
+	//사원 등록 form 태그의 자식 td 선택
+	const ename_td = document.querySelector('#ename').closest('td');
+	const epw_td = document.querySelector('#epw').closest('td');
 	
-	//validation 처리
+	//validation 빈 값 처리
 	const reg_empExp = /\s/;
-	
-	
-	
 	
 	const ename = document.querySelector('#regEmpForm #ename').value;
 	
@@ -52,7 +50,7 @@ function reg_emp_validate(){
 	}else if(reg_empExp.test(epw)){
 		str_epw ='비밀번호를 공백 없이 입력해주세요';
 		result_epw = false;
-	}else if(emp.lenght <4){
+	}else if(epw.lenght <3){
 		str_epw ='비밀번호는 4자리 이상 입력해주세요';
 		result_epw = false;
 	}
@@ -60,11 +58,11 @@ function reg_emp_validate(){
 	//유효성 검사 실패시 오류 메세지 출력(false일때)
 	if(!result_ename){
 		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_ename}</div>`;
-		tbody_tr[1].insertAdjacentHTML('beforeend', errorHTML);
+		ename_td.insertAdjacentHTML('beforeend', errorHTML);
 	}
 	if(!result_epw){
 		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_epw}</div>`;
-		tbody_tr[2].insertAdjacentHTML('beforeend', errorHTML);
+		epw_td.insertAdjacentHTML('beforeend', errorHTML);
 		
 	}	
 	//모든 유효성이 확인될 때
@@ -81,10 +79,7 @@ function regEmp(){
 	
 	if(!isValidate){
 		return;
-	}
-	
-	
-	
+	}	
 	
 	const ename_tag = document.querySelector('#ename');
 	const epw_tag = document.querySelector('#epw');
@@ -148,6 +143,9 @@ function drawEmpTable(empList){
 		str += `<td>${emp.e_job}</td>`;
 		str += `<td>${emp.e_status_str}</td>`;
 		str += `<td>${emp.e_role}</td>`;
+		str += `<td>`;
+		str += `<button onchange="changAccount(${emp.empno});" type="button" class="button">변경</button>`;
+		str += `</td>`;
 		str += `</tr>`;
 		
 	});
@@ -175,6 +173,17 @@ function clearForm(){
 		
 	});
 }
+
+/*
+//페이지 이동
+function getEmpListPaging(pageNum){
+	//hidden으로 받아온 nowPage의 value 값을 가져온다.
+	document.querySelector('#nowPage').value = pageNum;
+	
+}*/
+
+
+
 
 //계정 상태 변경
 // 변경을 누르면 휴먼 계정으로 변경, 사원 세부 정보에서 퇴직일때는 삭제 버튼으로 변경 가능

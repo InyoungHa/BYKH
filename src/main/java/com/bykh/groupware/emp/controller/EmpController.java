@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.util.PageVO;
 
 import jakarta.annotation.Resource;
 
@@ -30,13 +31,16 @@ public class EmpController {
 	
 	//사번 관리 페이지
 	@GetMapping("/empManage")
-	public String empManage(Model model) {
+	public String empManage(Model model, EmpVO empVO) {
+		
+
+		empVO.setPageInfo();
 		
 		//사번 조회 쿼리
 		model.addAttribute("deptList", deptService.selectDeptList());
 		
 		//사원 조회 쿼리
-		model.addAttribute("empList", empService.selectEmpList());
+		model.addAttribute("empList", empService.selectEmpList(empVO));
 		return "content/emp/emp_manage";
 	}
 	
@@ -51,6 +55,6 @@ public class EmpController {
 		empService.insertEmp(empVO);
 		
 		//사원 조회 쿼리
-		return empService.selectEmpList();
+		return empService.selectEmpList(empVO);
 	}
 }
