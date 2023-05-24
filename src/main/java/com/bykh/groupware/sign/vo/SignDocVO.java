@@ -4,22 +4,25 @@ import java.util.List;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 
-import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
 public class SignDocVO {
 	private int docNo;
-	private int dtNo;
+	private int docType;
 	private int writerNo;
 	private String docTitle;
-	private String sgnStatus;
+	private int sgnStatus;
+	private String sgnStatusStr;
 	private int docStatus;
 	private String insertDate;
 	
-	private EmpVO empVO;
+	private DocAnnualLeaveVO docAnnualLeaveVO;
 	private List<SignVO> signVOList;
+	private EmpVO empVO;
+	 
 }

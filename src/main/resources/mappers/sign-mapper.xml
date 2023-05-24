@@ -3,42 +3,12 @@
 
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="signMapper">
-	<!--결재 테이블 -->
-	<resultMap type="com.bykh.groupware.sign.vo.SignVO" id="sign">
-		<id column="SGN_CODE" 				property="sgnCode"/>
-		<result column="DOC_NO" 			property="docNo"/>
-		<result column="SGN_STATUS"			property="sgnStatus"/>
-		<result column="SGN_RESULT"			property="sgnResult"/>
-		<result column="APPROVER_NO" 		property="approverNo"/>
-		<result column="APPROVER_NAME" 		property="approverName"/>
-		<result column="APPROVER_JOB" 		property="approverJob"/>
-		<result column="SGN_COMENT" 		property="sgnComent"/>
-		<result column="SGN_DATE" 			property="sgnDate"/>
-	</resultMap>
+
 	
-	<!--결재문서 테이블  -->
-	<resultMap type="com.bykh.groupware.sign.vo.SignDocVO" id="signDoc">
-		<id column="DOC_NO" 				property="docNo"/>
-		<result column="DT_NO" 				property="dtNo"/>
-		<result column="WRITER_NO" 			property="writerNo"/>
-		<result column="DOC_TITLE" 			property="docTitle"/>
-		<result column="SGN_STATUS" 		property="sgnStatus"/>
-		<result column="DOC_STATUS" 		property="docStatus"/>
-		<result column="INSERT_DATE" 		property="insertDate"/>
-		<association property="empVO" 		resultMap="empMapper.emp"></association>
-		<collection property="signVOList" resultMap="signMapper.sign"></collection>
-	</resultMap>
-	<!--문서양식 테이블  -->
-	<resultMap type="com.bykh.groupware.sign.vo.DocTypeVO" id="docType">
-		<id column="DT_NO" 					property="dtNo"/>
-		<result column="DT_TITLE" 			property="dtTitle"/>
-		<collection property="docAnnualLeaveVOList" resultMap="signMapper.docAnnualLeave"></collection>
-	</resultMap>
 	<!--연차신청서 테이블  -->
 	<resultMap type="com.bykh.groupware.sign.vo.DocAnnualLeaveVO" id="docAnnualLeave">
 		<id column="DAL_NO" 				property="dalNo"/>
 		<result column="DOC_NO" 			property="docNo"/>
-		<result column="DT_NO" 				property="dtNo"/>
 		<result column="DAL_TYPE" 			property="dalType"/>
 		<result column="START_DATE" 		property="startDate"/>
 		<result column="END_DATE" 			property="endDate"/>
@@ -46,17 +16,47 @@
 		<result column="END_TIME" 			property="endTime"/>
 		<result column="LEAVE_DAYS" 		property="leaveDays"/>
 		<result column="LEAVE_REASON" 		property="leaveReason"/>
-		
-		<association property="signDocVO" resultMap="signDoc"></association>
 	</resultMap>
+	
+	<!--결재문서 테이블  -->
+	<resultMap type="com.bykh.groupware.sign.vo.SignDocVO" id="signDoc">
+		<id column="DOC_NO" 				property="docNo"/>
+		<result column="DOC_TYPE" 				property="docType"/>
+		<result column="WRITER_NO" 			property="writerNo"/>
+		<result column="DOC_TITLE" 			property="docTitle"/>
+		<result column="SGN_STATUS" 		property="sgnStatus"/>
+		<result column="SGN_STATUS_STR" 	property="sgnStatusStr"/>
+		<result column="DOC_STATUS" 		property="docStatus"/>
+		<result column="INSERT_DATE" 		property="insertDate"/>
+		<association property="empVO" 		resultMap="empMapper.emp"></association>
+		<association property="docAnnualLeaveVO" 		resultMap="signMapper.docAnnualLeave"></association>
+		<collection property="signVOList" resultMap="sign" column="DOC_NO"></collection>
+	</resultMap>
+	
+	
+	<!--결재 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.SignVO" id="sign">
+		<id column="DOC_NO" 			property="docNo"/>
+		<id column="SGN_ORDER"			property="sgnOrder"/>
+		<result column="SGN_RESULT"			property="sgnResult"/>
+		<result column="SGN_RESULT_STR"			property="sgnResultStr"/>
+		<result column="APPROVER_NO" 		property="approverNo"/>
+		<result column="APPROVER_NAME" 		property="approverName"/>
+		<result column="APPROVER_JOB" 		property="approverJob"/>
+		<result column="SGN_COMENT" 		property="sgnComent"/>
+		<result column="SGN_DATE" 			property="sgnDate"/>
+	</resultMap>
+	
+	
 	<!-- 기안 조회 페이지 -->
 	<select id="getInProgressSignDocList" resultMap="signDoc">
 		SELECT 
 		    DOC_NO
+		    , DOC_TYPE
 		    , DOC_TITLE
 		    , ENAME
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
-		    , DECODE(SGN_STATUS, 0, '임시저장', 1, '결재중')
+		    , DECODE(SGN_STATUS, 0, '임시저장', 1, '결재중') AS SGN_STATUS_STR
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (0, 1)
@@ -65,17 +65,18 @@
 	<select id="getEndSignDocList" resultMap="signDoc">
 		SELECT 
 		    DOC_NO
+		    , DOC_TYPE
 		    , DOC_TITLE
 		    , ENAME
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
-		    , DECODE(SGN_STATUS, 2, '결재완료', 3, '반려')
+		    , DECODE(SGN_STATUS, 2, '결재완료', 3, '반려') AS SGN_STATUS_STR
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (2, 3)
 		ORDER BY INSERT_DATE
 	</select>
 	<!-- 기안 작성 페이지 이동 시 회원정보 가져가기 -->
-	<select id="getSingWriteInfo" resultMap="signMapper.docType">
+	<select id="getSingWriteInfo" resultMap="signDoc">
 		SELECT 
 			ENAME
 			, DENAME 
@@ -111,16 +112,16 @@
 	<insert id="insertSignDoc">
 		INSERT INTO SGN_DOC (
 		    DOC_NO
-		    , DT_NO
+		    , DOC_TYPE
 		    , WRITER_NO
 		    , DOC_TITLE
 		    , DOC_STATUS
 		) VALUES (
 		    (SELECT NVL(MAX(DOC_NO), 0) + 1 FROM SGN_DOC)
-		    , #{docAnnualLeaveVOList[0].signDocVO.dtNo}
-		    , #{docAnnualLeaveVOList[0].signDocVO.writerNo}
-		    , #{docAnnualLeaveVOList[0].signDocVO.docTitle}
-		    , #{docAnnualLeaveVOList[0].signDocVO.docStatus}
+		    , ${docType}
+		    , ${writerNo}
+		    , #{docTitle}
+		    , ${docStatus}
 		) 
 	</insert>
 	<!-- 연차신청서 insert -->
@@ -128,47 +129,88 @@
 		INSERT INTO DOC_ANNUAL_LEAVE (
 		    DAL_NO
 		    , DOC_NO
-		    , DT_NO
 		    , DAL_TYPE
 		    , START_DATE
 		    , END_DATE
+		<if test="docAnnualLeaveVO.startTime != null and docAnnualLeaveVO.endTime != null">
 		    , START_TIME
 		    , END_TIME
+		</if>
 		    , LEAVE_DAYS
 		    , LEAVE_REASON
 		) VALUES(
 		    (SELECT NVL(MAX(DAL_NO), 0) + 1 FROM DOC_ANNUAL_LEAVE)
-		    <foreach collection="docAnnualLeaveVOList" item="doc">
-		    , #{doc.docNo}
-		    , #{doc.dtNo}
-		    , #{doc.dalType}
-		    , #{doc.startDate}
-		    , #{doc.endDate}
-		    , #{doc.startTime}
-		    , #{doc.endTime}
-		    , #{doc.leaveDays}
-		    , #{doc.leaveReason}
-		    </foreach>
+		    , ${docAnnualLeaveVO.docNo}
+		    , #{docAnnualLeaveVO.dalType}
+		    , #{docAnnualLeaveVO.startDate}
+		    , #{docAnnualLeaveVO.endDate}
+		<if test="docAnnualLeaveVO.startTime != null and docAnnualLeaveVO.endTime != null">
+		    , ${docAnnualLeaveVO.startTime}
+		    , ${docAnnualLeaveVO.endTime}		
+		</if>
+		    , ${docAnnualLeaveVO.leaveDays}
+		    , #{docAnnualLeaveVO.leaveReason}
 		)
 	</insert>
 	<!-- 결재리스트 추가 -->
 	<insert id="insertSignList">
 		INSERT ALL
-		<foreach collection="docAnnualLeaveVOList[0].signDocVO.signVOList" item="docAnnualLeave" index="i">
+		<foreach collection="signVOList" item="sign" index="i">
 			INTO SGN (
-			    SGN_CODE
-			    , DOC_NO
+			    DOC_NO
 			    , SGN_STATUS
 			    , APPROVER_NO
 			) VALUES(
-			    #{sgnCode}
-			    , #{docNo}
-			    , #{i}
-			    , #{approverNo}
+			    ${sign.docNo}
+			    , ${i+1}
+			    , ${sign.approverNo}
 			)
 		</foreach>
 		SELECT 1 FROM DUAL
 	</insert>
+	
+	<!-- 결재문서 상세조회 - 연차신청서 -->
+	<select id="getDetailDocAnnualLeave" resultMap="signDoc">
+		SELECT 
+		    DOC.DOC_NO
+		    , WRITER_NO
+		    , DOC_TITLE
+            , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD') INSERT_DATE
+		    , DAL_NO
+		    , DAL_TYPE
+		    , TO_CHAR(START_DATE, 'YYYY-MM-DD') START_DATE
+		    , TO_CHAR(END_DATE, 'YYYY-MM-DD') END_DATE
+		    , START_TIME
+		    , END_TIME
+		    , LEAVE_DAYS
+		    , LEAVE_REASON
+            , ENAME
+            , DENAME
+            , APPROVER_NO
+            , (SELECT ENAME FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_NAME
+            , (SELECT E_JOB FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_JOB
+            , SGN_ORDER
+            , DECODE(SGN_RESULT, '0', '미결재', '1', '결재') SGN_RESULT_STR
+            , SGN_COMENT
+            , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
+		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT
+		WHERE DOC.DOC_NO = DAL.DOC_NO
+        AND SGN.DOC_NO = DOC.DOC_NO
+        AND DOC.WRITER_NO = EMP.EMPNO
+        AND EMP.DEPTNO = DEPT.DEPTNO
+		AND DOC.DOC_NO = ${docNo}
+	</select>
+	<!-- '결재' / '반려' 버튼 클릭 시 실행 -->
+	<update id="updateSignResult">
+		UPDATE SGN
+		SET SGN_RESULT = ${sgnResult}
+		<if test='sgnComent != null and !sgnComent.equals("")'>
+		    , SGN_COMENT = #{sgnComent}
+		</if>
+		    , SGN_DATE = SYSDATE
+		WHERE DOC_NO = 1
+		AND APPROVER_NO = ${approverNo}
+	</update>
 </mapper>
 
 

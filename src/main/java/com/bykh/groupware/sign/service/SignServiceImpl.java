@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
-import com.bykh.groupware.sign.vo.DocTypeVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
@@ -24,10 +23,10 @@ public class SignServiceImpl implements SignService{
 	}
 	@Override
 	public List<SignDocVO> getEndSignDocList() {
-		return sqlsession.selectList("signMapper.getInEndSignDocList");
+		return sqlsession.selectList("signMapper.getEndSignDocList");
 	}
 	@Override
-	public DocTypeVO getSingWriteInfo(int empno) {
+	public SignDocVO getSingWriteInfo(int empno) {
 		return sqlsession.selectOne("signMapper.getSingWriteInfo", empno);
 	}
 	@Override
@@ -38,13 +37,21 @@ public class SignServiceImpl implements SignService{
 	// 결재문서 추가 + 연차신청서 추가 + 결재자 추가
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void insertDocAnnualLeave(DocTypeVO docTypeVO) {
-		sqlsession.insert("signMapper.insertSignDoc", docTypeVO);
-		sqlsession.insert("signMapper.insertDocAnnualLeave", docTypeVO);
-		sqlsession.insert("signMapper.insertSignList", docTypeVO);
+	public void insertDocAnnualLeave(SignDocVO signDocVO) {
+		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
+		sqlsession.insert("signMapper.insertDocAnnualLeave", signDocVO);
+		sqlsession.insert("signMapper.insertSignList", signDocVO);
 	}
 	@Override
 	public int getNextDocNo() {
 		return sqlsession.selectOne("signMapper.getNextDocNo");
+	}
+	@Override
+	public SignDocVO getDetailDocAnnualLeave(int docNo) {
+		return sqlsession.selectOne("signMapper.getDetailDocAnnualLeave", docNo);
+	}
+	@Override
+	public int updateSignResult(SignVO signVO) {
+		return sqlsession.update("signMapper.updateSignResult", signVO);
 	}
 }

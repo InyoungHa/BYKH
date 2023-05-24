@@ -99,7 +99,7 @@
 					<input type="hidden" th:value="연차신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
 					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo">
-					<h2>연차신청서</h2>
+					<h2>구매신청서</h2>
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -133,7 +133,7 @@
 							<tbody>
 								<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
 								<tr class="eJobTr">
-									<td>담당</td><!-- 직책 -->
+									<td>사원</td><!-- 직책 -->
 									<td>
 										[[${signWriteInfo.signVOList[0].approverJob}]]
 									</td>
@@ -210,18 +210,12 @@
 								</td>
 							</tr>
 							<tr>
-								<td>휴가 사유</td>
+								<td>기타</td>
 								<td>
 									<textarea class="full-width-textarea" name="docAnnualLeaveVO.leaveReason"></textarea>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2">
-									1. 연차의 사용은 근로기준법에 따라 전년도에 발생한 개인별 잔여 연차에 한하여 사용합을 원칙으로 한다. 단, 최초입사시에는 근로기준법에 따라 발생 예정된 연차를 차용하여 월 1회 사용 할 수 있다.<br>
-									2. 경조사 휴가는 행사일을 증명할 수 있는 가족 관계 증명서 또는 등본, 청첩장 등 제출<br>
-									3. 공가(예비군/민방위)는 사전에 통지서를, 사후에 참석증을 반드시 제출
-								</td>
-							</tr>
+							
 						</tbody>
 					</table>
 				</div>
@@ -306,7 +300,7 @@
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/sign/sign_write_form.js"></script>
+	<script type="text/javascript" src="/js/content/sign/purchase_order_form.js"></script>
 </th:block>
 
 </html>

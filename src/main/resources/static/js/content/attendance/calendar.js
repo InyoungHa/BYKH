@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   calendar = new FullCalendar.Calendar(calendarEl, {
+	
+
+
+
 	// events: [
   //  {
      
@@ -60,6 +64,21 @@ document.addEventListener('DOMContentLoaded', function() {
     timeZone: 'UTC',
     events: return_value,
     dragRevertDuration: 0,
+    
+    
+    
+    googleCalendarApiKey : "AIzaSyBzz_NTdjVWRldBZ7kEZq-5zDGsNqK2ZzI",
+    eventSources : [
+        {
+            googleCalendarId : 'ko.south_korea#holiday@group.v.calendar.google.com'
+            , className : "koHolidays"
+            , color: '#f9f5f6'   // an option!
+            , textColor: 'red' // an option!
+           // , type:1
+        } 
+    ],
+
+    
     eventReceive: function(info) {
 	console.log(info.event._def.ui.backgroundColor);
 	console.log(info.event);
@@ -67,28 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	//console.log(info.jsEvent.target);
 	
 	
-	//for(let i = 0; i < info.length; i++){
-  	
- //   if(title === '연차') {
-  //    color = '#025464'; // 연차인 경우
-   //	 } else if(title === '반차') {
-   //   color = '#1B9C85'; // 반차인 경우
-   //   } else if(title === '조퇴') {
-   //   color = '#1D267D'; // 조퇴인 경우 
-   //     } else if(title === '병가') {
-   //   color = '#E76161'; // 병가인 경우 
-    //    } else if(title === '외출') {
-    //  color = '#19A7CE'; // 외출인 경우 
-    //    } else if(title === '출장') {
-    //  color = '#643A6B'; // 출장인 경우 
-    //    } else if(title === '교육') {
-    //  color = '#9E6F21'; // 교육인 경우 
-    //} else {
-    //  color = '#C92C6D'; // 휴일근무
-   // }
-
-//    info[i].color = color;
- // }	
 	
       // Is the "remove after drop" checkbox checked?
       if (dropRemoveCheckbox.checked) {
@@ -119,7 +116,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   calendar.render();
   
+ 
   
+  //document.querySelectorAll('.koHolidays').forEach(function(e, index){
+	
+  //});
 
   var isEventOverDiv = function(x, y) {
     var externalEventsRect = externalEventsEl.getBoundingClientRect();
@@ -146,32 +147,39 @@ var calendar;
 document.getElementById("saveButton").addEventListener("click", allSave);
 
 function allSave() {
-  var allEvent = calendar.getEvents();
-  var events = [];
+	var allEvent = calendar.getEvents();
+	var events = [];
 
-  for (var i = 0; i < allEvent.length; i++) {
-    var obj = {
-      title: allEvent[i]._def.title,
-      allDay: allEvent[i]._def.allDay,
-      start: allEvent[i]._instance.range.start,
-      end: allEvent[i]._instance.range.end
-    };
+	holy_title_list = [];
+	document.querySelectorAll('.koHolidays').forEach(function(e, index) {
+		holy_title_list[index] = e.querySelector('.fc-event-title').textContent;
+	});
 
-    events.push(obj);
-  }
+	for (var i = 0; i < allEvent.length; i++) {
+		const is_holy = holy_title_list.includes(allEvent[i]._def.title) ? true : false;
 
-  var jsondata = JSON.stringify(events);
-  jsonEvent = JSON.parse(jsondata);
+		if (!is_holy) {
+			var obj = {
+				title: allEvent[i]._def.title,
+				allDay: allEvent[i]._def.allDay,
+				start: allEvent[i]._instance.range.start,
+				end: allEvent[i]._instance.range.end
+			};
 
- 
-  var updatedEvents = jsonEvent.map(function(event) {
-  
-    return event;
-  });
+			events.push(obj);
+		}
+	}
+	
+	var jsondata = JSON.stringify(events);
+	jsonEvent = JSON.parse(jsondata);
 
-  var jsondataUpdated = JSON.stringify(updatedEvents);
+	var updatedEvents = jsonEvent.map(function(event) {
+		return event;
+	});
+	
+	var jsondataUpdated = JSON.stringify(updatedEvents);
 
-  savedata(jsondataUpdated);
+	savedata(jsondataUpdated);
 }
 
 function savedata(jsondata) {
@@ -184,8 +192,8 @@ function savedata(jsondata) {
     data: jsondata,
     dataType: 'text',
     success: function(result) {
-	alert("일정이 저장되었습니다.");
-	location.reload();
+		alert("일정이 저장되었습니다.");
+		location.reload();
     },
     error: function() {
     }
@@ -206,6 +214,7 @@ function loadingEvents() {
 		dataType: 'json',
 		
 		success: function(result) {
+			
 		  for(let i = 0; i < result.length; i++){
   		  const title = result[i].title;
    	 let color;
@@ -230,7 +239,7 @@ function loadingEvents() {
 
     result[i].color = color;
   }	
-			console.log(result);
+			//console.log(result);
 			 var jsonResult = JSON.stringify(result);
   			return_value = JSON.parse(jsonResult);
 		},
@@ -238,11 +247,11 @@ function loadingEvents() {
 			alert('에러 발생');
 		}
 	});
+	
+	 
 	return return_value;
 	//ajax end
 }
-
-
 
 
 
