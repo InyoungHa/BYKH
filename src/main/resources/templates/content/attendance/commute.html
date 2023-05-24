@@ -38,6 +38,7 @@
 	 margin-bottom: 20px;
 	 display:inline-block;
 	 font-weight: bold;
+	 font-size: 23px;
 	}
 	.timeDetail2{
 		font-size: 25px;
@@ -57,11 +58,12 @@
 	}
 	
 	.workStatusTitle{
-	width:280px;
+	width:289px;
 	height:65px;
 	border-bottom: solid #ebeaed;
 	font-weight: bold;
 	font-size: 18px;
+	margin-right: 20px;
 	}
 	
 	tbody{
@@ -103,7 +105,7 @@
 	
 	.bottomBox{
 	margin-top:15px;
-	height: 570px;
+	height: 390px;
 	background-color:#fffeff;
 	border: solid #ebeaed;
 	}
@@ -151,8 +153,7 @@
 
 	<!-- 출퇴근시간box -->
 	<span class="time"> 
-	<span class="timeDetail1">2023/05/15(월)<br>
-			<span class="timeDetail2">11:09</span><br>
+	<span class="timeDetail1">[[${attendanceVO.curDate}]]<br>
 	</span><br>
 			 출근시간 : <span class="timeDetail3">00:00</span><br> 
 			 퇴근시간 : <span class="timeDetail3">00:00</span>

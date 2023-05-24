@@ -21,6 +21,11 @@ public class CalendarController {
     @ResponseBody
     @RequestMapping("/calendarSave")
     public void calendarSaveAjax(@RequestBody List<CalendarVO> calendarVOs) {
+    		for(CalendarVO c: calendarVOs) {
+    			System.out.println(c);
+    		}
+    	
+    	
     		calendarService.deleteSchedule();
     	
         for (CalendarVO calendarVO : calendarVOs) {

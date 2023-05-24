@@ -8,8 +8,131 @@
 	<!--<link rel="stylesheet" href=""> -->
 </th:block>
 
+
 <th:block layout:fragment="content">
-메인 페이지 입니다.
+<style>
+body{
+background-color: #f6f8fa;
+}
+.mypage{
+border:2px solid #ebe9ed;
+background-color: white;
+height: 220px;
+width: 350px;
+position: absolute; 
+}
+.attendance{
+height: 140px;
+width: 350px;
+position: absolute; top:370px;
+border:2px solid #ebe9ed;
+background-color: #ffffff;
+}
+.board{
+background-color: green;
+height: 180px;
+width: 350px;
+position: absolute; top:540px;
+}
+.quickMenu{
+background-color: red;
+height: 100px;
+width: 350px;
+position: absolute; top:750px;
+}
+.notice{
+height: 222px;
+width: 700px;
+background-color: #5C8984;
+position: absolute; right:500px;
+
+}
+.sign{
+height: 222px;
+width: 700px;
+background-color: #4C4C6D;
+position: absolute; top:372px; right:500px;
+}
+.mail{
+height: 225px;
+width: 700px;
+background-color: #A0D8B3;
+position: absolute; top:624px; right:500px;
+}
+.toDoList{
+background-color: #B0DAFF;
+height: 225px;
+width: 300px;
+position: absolute; right:150px; top:120px;
+}
+.data{
+background-color: #FF6969;
+height: 225px;
+width: 300px;
+position: absolute; right:150px; top:370px;
+}
+.calendar{
+background-color: #FFD95A;
+height: 225px;
+width: 300px;
+position: absolute; right:150px; top:620px;
+}
+
+.profile {
+   position: absolute;
+   width: 140px;
+    height: 140px; 
+    border-radius: 70%;
+    overflow: hidden;
+	top:20px;
+	right: 185px;
+}
+.time{
+display:inline-block;
+margin-top:15px;
+margin-left: 30px;
+font-size: 25px;
+color: #146C94;
+font-weight: bold;
+
+}
+</style>
+<!--내정보 -->
+<span class="mypage">
+<span style="margin-top: 55px; display: inline-block;">
+<span> <img class="profile" src="/img/content/emp/YangDongGun.jpg"></span>
+<span style="font-size: 32px; padding-left: 212px; font-weight: bold;">양동근</span><br>
+<span style="padding-left: 200px;">인사부 / 대리</span><br>
+<a><span style="width: 348px; height:30px;  display: inline-block; margin-top: 35px; text-align: center; border-top:2px solid #ebe9ed; padding-top: 10px;">내 정보 관리</span></a>
+</span>
+
+</span> 
+
+<span class="notice">게시판</span>
+<span class="attendance">
+<span class="time">[[${attendanceVO.curDate}]]</span>
+<span style="margin-top: 15px; margin-left:20px; display: inline-block;">
+
+<button type="button" class="btn" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 150px; height: 50px; background-color: #5d96ca;  font-weight: bold; border: 0px; font-size: 20px;">출근</button>
+<button type="button" class="btn" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 150px; height: 50px; background-color: #E06469;  font-weight: bold; border: 0px; font-size: 20px;">퇴근</button>
+</span>
+</span> 
+<span class="sign">전자결재</span>
+<span class="board">데시보드</span>
+<!-- 데시보드  예)  -->
+<!-- 메일/받은편지함      8 /16 건 -->
+<!-- 결재/결재할문서      3건-->
+<!-- 결재/결재완료        0건-->
+<span class="mail">메일</span>
+<span class="quickMenu">퀵메뉴</span>
+<span class="toDoList">toDo리스트</span>
+<span class="data">자료실</span>
+<span class="calendar">캘린더</span>
+<!-- 퀵메뉴 예)  -->
+<!-- 메일쓰기 버튼 -->
+<!-- 회의실예약 버튼 -->
+<!-- 결재/결재완료 -->
+<div></div>
 </th:block>
 
 <th:block layout:fragment="content_js">

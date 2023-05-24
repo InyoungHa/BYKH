@@ -15,6 +15,7 @@ public class CalendarVO {
     private Date start;
     private Date end;
     private boolean allDay;
+    private int type;
 }
 
 
