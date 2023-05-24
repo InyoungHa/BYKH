@@ -1,40 +1,3 @@
-//let playaddApproverHTML = 0;
-
-
-init();
-
-function init(){
-	setLeaveDays();
-}
-
-//연차/반차 여부에 따라 시간 선택 select 활성화
-function setDateTimeActivate(annualTypeTag){
-	if(annualTypeTag.value=='반차'){
-		document.querySelector('.start-time').disabled = false;
-		document.querySelector('.end-time').disabled = false;
-	}else{
-		document.querySelector('.start-time').disabled = true;
-		document.querySelector('.end-time').disabled = true;
-	}
-}
-
-//연차일수 계산
-function setLeaveDays(){
-	const start_date = new Date(document.querySelector('.start-date').value);
-	const end_date = new Date(document.querySelector('.end-date').value);
-	if(start_date != 'Invalid Date' && end_date != 'Invalid Date'){
-		// 날짜의 차이를 계산 (밀리초 단위)
-        const differenceInMilliseconds = Math.abs(end_date - start_date);
-
-        // 밀리초를 일 단위로 변환
-        const leaveDaysStr = (differenceInMilliseconds / (1000 * 60 * 60 * 24) + 1);
-		
-		document.querySelector('.leave-days').value = leaveDaysStr;
-		document.querySelector('.show-leave-days').value = leaveDaysStr + '일';
-		
-	}
-	//start_date가 end_date보다 작다면 알림 띄우기(부가기능)
-}
 //결재자 리스트 div에 추가
 function addApproverHTML(approverNo, approverName, approverJob){
 	//html에 추가
@@ -139,6 +102,20 @@ function insertSignDoc(){
 	document.querySelector('.sgnStatus').value = 1;
 };
 
+//'추가' 버튼 클릭 시 실행
+//모달에 추가할 아이템 클릭시 선택
+function addItem(){
+	const content_tr_list = document.querySelectorAll('.content-table > tbody > tr')
+	//content_tr_list.forEach();
+	
+	
+	
+}
+//'삭제' 버튼 클릭 시 실행
+function delItem(){
+	
+}
+
 
 //========이벤트=========
 //모달이 열릴 때 emp 리스트 조회해오기
@@ -200,10 +177,6 @@ searchApproverModal.addEventListener('show.bs.modal', function() {
 	//ajax end
 
 });
-
-//document.querySelector('.add-approver-btn').addEventListener('click', function(){
-//	alert('asafasfasfas');
-//});
 
 
 

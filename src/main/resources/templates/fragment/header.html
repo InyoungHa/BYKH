@@ -4,51 +4,42 @@
 
 <th:block th:fragment="headerFragment">
 <style>
-
-
-
-.text-end{
- display: inline-block;
-  font-size: 18px;
-  height: 100px;
-  line-height: 150px; 
-  margin-right: 10px;
-}
-img{
-margin-left: 80px;
-}
-
-.position-absolute {
-  position: absolute;
-  /* 이동할 위치 지정 */
-  top: 65px;
-  left: 1690px;
-}
-
+	#profileDiv {
+		display: inline-block;
+		font-size: 18px;
+		height: 100px;
+		line-height: 150px; 
+		margin-right: 10px;
+	}
+	
+	#logoImg {
+		margin-left: 80px;
+	}
+	
+	.position-absolute {
+		position: absolute;
+		/* 이동할 위치 지정 */
+		top: 65px;
+		left: 1670px;
+	}
 </style>
 
 	<div class="row head">
-		<img src="/img/content/header/BYKHlogo.png" style="width: 150px; height:276px; padding-bottom: 170px; ">
-		<div class="col text-end">
+		<img src="/img/content/header/BYKHlogo.png" style="width: 150px; height:276px; padding-bottom: 170px;" id="logoImg">
+		<div class="col text-end" id="profileDiv">
 	
-		
 			<span>
 				<img class="alram" src="/img/alarm_alert_bell_notification_ring_icon-removebg-preview.png" style="width: 33px;" > <!--종모양 아이콘  -->
 					<span class="position-absolute  translate-middle p-2 bg-danger border border-light rounded-circle">
-    <span class="visually-hidden">새로운 알림</span>
-</span>
-
-				
+					    <span class="visually-hidden">새로운 알림</span>
+					</span>
 			</span> 
 			<a style="color: white; margin-right: 40px; ">내 정보  |</a><!-- 프로필 아이콘으로 대체 아이콘 누르면 드롭다운메뉴 실행 예정 -->
 			<a style=" color: white; margin-right: 40px;">LOGOUT</a><!-- 로그아웃 실행시 로그인페이지이동 예정 -->
+		
 		</div>
 	</div>
-	<div class="row">
-		<div class="col">
-			BYKH
-		</div>
-	</div>
+
 </th:block>
 
 </html>

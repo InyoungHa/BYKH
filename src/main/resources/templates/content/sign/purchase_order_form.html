@@ -46,13 +46,13 @@
 		}
 
 		.stamp-table {
-  display: flex;
-  width: max-content; /* 테이블의 가로 길이를 자식 요소에 맞추기 위해 설정 */
-}
-
-.stamp-table td {
-  flex: 1; /* 각 td 요소들을 균등하게 너비를 분배하기 위해 설정 */
-}
+		  display: flex;
+		  width: max-content; /* 테이블의 가로 길이를 자식 요소에 맞추기 위해 설정 */
+		}
+		
+		.stamp-table td {
+		  flex: 1; /* 각 td 요소들을 균등하게 너비를 분배하기 위해 설정 */
+		}
 		.stamp-table > tbody > tr:first-child > td{
 			background-color: #dddddd;
 		}
@@ -66,21 +66,42 @@
 			height: 80px;
 			vertical-align: middle;
 		}
-
-		.content-table > tbody > tr:nth-child(4) > td{
+		
+		.content-table{
 			vertical-align: middle;
 		}
-		.content-table > tbody > tr:nth-child(4){
-			 height: 200px;
-		}
-		.content-table > tbody > tr > td:last-child{
-			text-align: left;
-		}
-		.content-table > tbody > tr > td:first-child{
+		.content-table > thead, .content-table > tbody > tr:last-child > td:first-child, .content-table > tbody > tr:nth-last-child(2) > td:first-child{
 			background-color: #dddddd;
 		}
+		.itemListDiv, .addItemDiv{
+			height: 400px;
+		}
+		
+		
 		.rounded-image {
             border-radius: 100%;
+		}
+		
+		.my-scroll{
+			/* overflow : 내가 지정한 영역을 넘었을 경우 */
+			max-height: 15rem;
+			/*overflow-y: scroll;*/
+			overflow-y: auto; /* auto : 범위가 벗어날 경우에만 스크롤 생성 */
+		    /* 기본 속성 : visible(영역 밖으로 튀어나와서 보임) */
+		}
+		
+		.my-scroll::-webkit-scrollbar {
+			width: 8px; /* 스크롤바의 너비 */
+		}
+		
+		.my-scroll::-webkit-scrollbar-thumb {
+			height: 30%; /* 스크롤바의 길이 */
+			background: #b7b7b7; /* 스크롤바의 색상 */
+			border-radius: 10px;
+		}
+		
+		.my-scroll::-webkit-scrollbar-track {
+			background: #84848447; /*스크롤바 뒷 배경 색상*/
 		}
 		
 		
@@ -96,10 +117,10 @@
 					<input type="hidden" value="1" name="docAnnualLeaveVO.dtNo" class="dtNo">
 					<input type="hidden" value="1" name="sgnStatus" class="sgnStatus">
 					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
-					<input type="hidden" th:value="연차신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
+					<input type="hidden" th:value="구매신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
 					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo">
-					<h2>연차신청서</h2>
+					<h2>구매신청서</h2>
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -133,7 +154,7 @@
 							<tbody>
 								<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
 								<tr class="eJobTr">
-									<td>담당</td><!-- 직책 -->
+									<td>사원</td><!-- 직책 -->
 									<td>
 										[[${signWriteInfo.signVOList[0].approverJob}]]
 									</td>
@@ -156,72 +177,42 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col">
+				<div class="offset-11 col-1 d-grid">
+					<input type="button" value="추가" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
+				</div>
+				
+				<div class="col-12 mt-3">
 					<table class="table table-bordered text-center content-table">
+						<colgroup>
+							<col width="40%">
+							<col width="20%">
+							<col width="20%">
+							<col width="20%">
+						</colgroup>
+						<thead>
+							<tr>
+								<td>품 명</td>
+								<td>수 량</td>
+								<td>단 가</td>
+								<td>금 액</td>
+							</tr>
+						</thead>
 						<tbody>
-							<colgroup>
-								<col width="20%">
-								<col width="*">
-							</colgroup>
 							<tr>
-								<td>휴가 종류</td>
+								<td>합 계</td>
 								<td>
-									<input type="text" class="full-width-input annualType" placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate(this);" name="docAnnualLeaveVO.dalType">
+									
 								</td>
-							</tr>
-						<tr>
-							<td>기간 및 일시</td>
-							<td>
-								<div class="row">
-									<div class="col-6">
-										<div class="input-group">
-											<input type="date" class="form-control start-date" onchange="setLeaveDays();" name="docAnnualLeaveVO.startDate">
-											<span class="input-group-text">-</span>
-											<input type="date" class="form-control end-date"  onchange="setLeaveDays();" name="docAnnualLeaveVO.endDate">
-										</div>
-									</div>
-									<div class="col-6">
-										<div class="input-group">
-											<select class="form-select start-time" disabled name="docAnnualLeaveVO.startTime">
-												<option disabled selected>시작시간</option>
-												<th:block th:each="startTime : ${#numbers.sequence(9, 18)}">
-													<option>[[${startTime}]]</option>
-												</th:block>
-											</select>
-											 
-											<span class="input-group-text">-</span>
-											<select class="form-select end-time" disabled name="docAnnualLeaveVO.endTime">
-												<option disabled selected>종료시간</option>
-												<th:block th:each="endTime : ${#numbers.sequence(9, 18)}">
-													<option>[[${endTime}]]</option>
-												</th:block>
-											</select>
-										</div>
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-								<td>연차일수</td>
-								<td>
-								<!-- 잔여연차 자동입력 -->
-									<input type="text" class="full-width-input show-leave-days" disabled>
-									<input type="hidden" class="leave-days" name="docAnnualLeaveVO.leaveDays" value="0">
-								</td>
+								<td></td>
+								<td></td>
 							</tr>
 							<tr>
-								<td>휴가 사유</td>
-								<td>
-									<textarea class="full-width-textarea" name="docAnnualLeaveVO.leaveReason"></textarea>
+								<td>기 타</td>
+								<td colspan="3">
+									<textarea class="full-width-textarea" name="docPurchaseOrder.dpoComment"></textarea>
 								</td>
 							</tr>
-							<tr>
-								<td colspan="2">
-									1. 연차의 사용은 근로기준법에 따라 전년도에 발생한 개인별 잔여 연차에 한하여 사용합을 원칙으로 한다. 단, 최초입사시에는 근로기준법에 따라 발생 예정된 연차를 차용하여 월 1회 사용 할 수 있다.<br>
-									2. 경조사 휴가는 행사일을 증명할 수 있는 가족 관계 증명서 또는 등본, 청첩장 등 제출<br>
-									3. 공가(예비군/민방위)는 사전에 통지서를, 사후에 참석증을 반드시 제출
-								</td>
-							</tr>
+							
 						</tbody>
 					</table>
 				</div>
@@ -284,6 +275,59 @@
 		</div>
 	</div>
 	</form>
+	<!-- 아이템 추가 모달 -->
+	<div class="modal fade" id="addItemModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">품목 추가</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+				<div class="row addItemDiv">
+						<div class="col">
+							<!-- itemList 영역 -->
+							<div class="row itemListDiv my-scroll">
+								<table class="table table-hover text-center">
+									<colgroup>
+										<col width="50%">
+										<col width="*">
+									</colgroup>
+									<thead>
+										<tr class="table-head">
+											<td>품 명</td>
+											<td>가 격</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item : ${itemList}">
+											<td>[[${item.itemName}]]</td>
+											<td>[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- 추가/삭제 버튼 영역 -->
+							<div>
+								
+							</div>
+							<!-- 추가할 item 영역 -->
+							<div class="row addItemDiv"></div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-bs-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- 결재자 찾기 모달 -->
 	<div class="modal fade" id="searchApproverModal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -306,7 +350,7 @@
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/sign/sign_write_form.js"></script>
+	<script type="text/javascript" src="/js/content/sign/purchase_order_form.js"></script>
 </th:block>
 
 </html>
