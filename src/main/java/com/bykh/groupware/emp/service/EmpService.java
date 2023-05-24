@@ -15,5 +15,8 @@ public interface EmpService {
 	//사원 조회
 	List<EmpVO> selectEmpList(EmpVO empVO);
 	
+	//전체 사원 수 조회
+	int getEmpListCnt(EmpVO empVO);
+	
 	
 }

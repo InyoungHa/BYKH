@@ -31,6 +31,13 @@ public class EmpServiceImpl implements EmpService {
 	public List<EmpVO> selectEmpList(EmpVO empVO) {
 		return sqlSession.selectList("empMapper.selectEmpList", empVO);
 	}
+
+
+	@Override //전체 사원 수 조회
+	public int getEmpListCnt(EmpVO empVO) {
+		return sqlSession.selectOne("empMapper.getEmpListCnt",empVO);
+	}
+	
 	
 	
 }

@@ -14,6 +14,9 @@ public interface DeptService {
 	//부서 목록 조회
 	List<DeptVO> selectDeptList();
 	
+	//사용 중인 부서 목록 조회
+	List<DeptVO> selectDeptListIsUse();
+	
 	//부서 중복확인
 	boolean isDulicateDept(DeptVO deptVO);
 	

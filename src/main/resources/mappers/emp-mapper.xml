@@ -65,7 +65,7 @@
 			, (REPLACE(TRIM(ENAME),' ', '')) AS ENAME	
 			, EPW
 			, TO_CHAR(JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE
-			, (SELECT DENAME FROM DEPT WHERE DEPTNO=EMP.DEPTNO) AS DENAME
+			, DENAME
 			, E_JOB
 			, CASE E_STATUS
 				WHEN 1 THEN '재직중'
@@ -74,9 +74,24 @@
 				ELSE '알 수 없음'
 			  END AS E_STATUS_STR	
 			, DECODE(E_ROLE, 'USER', '직원','ADMIN','관리자','SUPER_ADMIN','최종 관리자') AS E_ROLE
-		FROM EMP	
+		FROM EMP EMP, DEPT DEPT
+		WHERE EMP.DEPTNO = DEPT.DEPTNO		
+		<if test='searchValue !=null and !searchValue.equals("")'>
+		AND UPPER(${searchKeyword}) LIKE '%'||UPPER(#{searchValue})||'%'
+		</if>	
+		
 		ORDER BY EMPNO DESC
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
+	</select>
+	
+	<!--검색 조회 쿼리 -->
+	<select id="getEmpListCnt" resultType="int">
+		SELECT COUNT(EMPNO)
+		FROM EMP EMP, DEPT DEPT
+		WHERE EMP.DEPTNO = DEPT.DEPTNO			
+		<if test='searchValue !=null and !searchValue.equals("")'>
+		AND UPPER(${searchKeyword}) LIKE '%'||UPPER(#{searchValue})||'%'
+		</if>	
 	</select>
 	
 	<!--계정 상태 변경  -->

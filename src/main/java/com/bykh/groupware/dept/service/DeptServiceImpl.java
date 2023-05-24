@@ -29,6 +29,11 @@ public class DeptServiceImpl implements DeptService{
 		return sqlSession.selectList("deptMapper.selectDeptList");
 	}
 
+	@Override //사용 중인 부서 목록 조회
+	public List<DeptVO> selectDeptListIsUse() {
+		
+		return sqlSession.selectList("deptMapper.selectDeptListIsUse");
+	}
 
 	@Override//부서 중복확인
 	public boolean isDulicateDept(DeptVO deptVO) {
@@ -48,6 +53,10 @@ public class DeptServiceImpl implements DeptService{
 		
 		return sqlSession.update("deptMapper.updateIsUse",deptno);
 	}
+
+
+
+	
 	
 	
 	

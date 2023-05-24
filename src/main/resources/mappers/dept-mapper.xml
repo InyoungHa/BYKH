@@ -34,6 +34,16 @@
 		FROM DEPT	
 		ORDER BY DEPTNO DESC
 	</select>
+	
+	<select id="selectDeptListIsUse" resultMap="dept">
+		SELECT DEPTNO
+			, (REPLACE(TRIM(DENAME), ' ', '')) AS DENAME
+			, LOC
+			, IS_USE
+		FROM DEPT	
+		WHERE IS_USE = 'Y'
+		ORDER BY DENAME DESC
+	</select>
 <!-- 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY -->
 	
 	<!--부서 등록 중복검사  -->

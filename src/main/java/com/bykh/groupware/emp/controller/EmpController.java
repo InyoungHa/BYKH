@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EmpVO;
-import com.bykh.groupware.util.PageVO;
 
 import jakarta.annotation.Resource;
 
@@ -29,32 +30,52 @@ public class EmpController {
 	
 
 	
-	//사번 관리 페이지
-	@GetMapping("/empManage")
+	//사원 관리 페이지
+	@RequestMapping("/empManage")
 	public String empManage(Model model, EmpVO empVO) {
 		
-
+		//전체 데이터 수 세팅
+		int totalDataCnt = empService.getEmpListCnt(empVO);
+		empVO.setTotalDataCnt(totalDataCnt);
+		
+		//페이징 정보 세팅
 		empVO.setPageInfo();
 		
-		//사번 조회 쿼리
-		model.addAttribute("deptList", deptService.selectDeptList());
+		//사용중인 부서 조회쿼리
+		model.addAttribute("deptListIsUse", deptService.selectDeptListIsUse());
 		
 		//사원 조회 쿼리
 		model.addAttribute("empList", empService.selectEmpList(empVO));
 		return "content/emp/emp_manage";
 	}
 	
-	
-	
-	@ResponseBody
-	@PostMapping("/regEmpAjax")
-	public List<EmpVO> regEmpAjax(@RequestBody EmpVO empVO) {
+	@PostMapping("/regEmpForm")//사원 등록_간편
+	public String regEmpAjax(EmpVO empVO) {
 		
-		System.out.println(empVO);
-		//사원 번호 생성_간편
+		//사원등록
 		empService.insertEmp(empVO);
 		
-		//사원 조회 쿼리
-		return empService.selectEmpList(empVO);
+		return "redirect:/emp/empManage";
 	}
+	
+	/*
+	 * @ResponseBody // 키워드로 사원 조회
+	 * 
+	 * @PostMapping("/getSearchAjax") public List<EmpVO>
+	 * getSearchAjax(@RequestParam("type") String type,
+	 * 
+	 * @RequestParam("keyword") String keyword, EmpVO empVO) {
+	 * 
+	 * 
+	 * 
+	 * int totalCnt=empService.getEmpListCnt(); empVO.setTotalDataCnt(totalCnt);
+	 * System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+totalCnt);
+	 * 
+	 * List<EmpVO> empList = empService.selectEmpList(empVO);
+	 * 
+	 * return empList;
+	 * 
+	 * }
+	 */
+	
 }

@@ -13,6 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class EmpVO extends PageVO {
+
 	
 	private int empno;
 	
@@ -43,10 +44,16 @@ public class EmpVO extends PageVO {
 	private String joinDate;
 
 	@JsonProperty("e_status_str")
-	private String eStatusStr;
+	private String eStatusStr; //재직상태 이름
 	
 	@JsonProperty("deptVO")
 	private DeptVO deptVO;
+	
+	private String searchKeyword;
+	private String searchValue;
+	
+	//검색 vo 추가
+	//private SearchEmpVO searchEmpVO;
 	
 
 	//테스트용 추가-희수
