@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="replyMapper">
+	<resultMap type="com.bykh.groupware.reply.vo.ReplyVO" id="reply">
+		<id 	column="REPLY_NUM" 			property="replyNum"/>
+		<result column="REPLY_WRITER" 		property="replyWriter"/>
+		<result column="REPLY_CONTENT" 		property="replyContent"/>
+		<result column="REPLY_DATE" 		property="replyDate"/>
+		<result column="BOARD_NUM" 			property="boardNum"/>
+		<result column="ENAME" 				property="ename"/>
+	</resultMap>
+	
+	<!-- 다음으로 들어갈 댓글 번호 조회 -->
+	<select id="getNextReplyNum" resultType="String">
+		SELECT 'REPLY_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(REPLY_NUM, 7))), 0) + 1, 3, '0')
+		FROM BOARD_REPLY
+	</select>
+	
+	<!-- 댓글 등록 -->
+	<insert id="regReply">
+		INSERT INTO BOARD_REPLY (
+			REPLY_NUM
+			, REPLY_WRITER
+			, REPLY_CONTENT
+			, BOARD_NUM
+		) VALUES (
+			#{replyNum}
+			, 20230517
+			, #{replyContent}
+			, #{boardNum}
+		)
+	</insert>
+	
+	<!-- 댓글 번호로 조회 -->
+	<select id="getReplyByReplyNum" resultMap="reply">
+		SELECT REPLY_NUM
+			, ENAME
+			, REPLY_CONTENT
+			, TO_CHAR(REPLY_DATE, 'YYYY-MM-DD HH24:MI') REPLY_DATE
+		FROM BOARD_REPLY, EMP
+		WHERE REPLY_NUM = #{replyNum}
+		AND REPLY_WRITER = EMPNO
+	</select>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply">
+		DELETE BOARD_REPLY
+		WHERE REPLY_NUM = #{replyNum}
+	</delete>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateReply">
+		UPDATE BOARD_REPLY
+		SET REPLY_CONTENT = #{replyContent}
+			, REPLY_DATE = SYSDATE
+		WHERE REPLY_NUM = #{replyNum}
+	</update>
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -9,18 +9,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 
-	
-	//출퇴근시간 저장
+
+	//출근시간등록
 	@Override
-	public void regTime(String empNo) {
-		sqlSession.insert("attendanceMapper.regTime", empNo);
+	public void goWork(String empNo) {
+		sqlSession.insert("attendanceMapper.goToWork", empNo);
+		
 	}
 
-
-	//현재시간
+	//출근시간등록
 	@Override
-	public void curTime() {
-		sqlSession.selectOne("attendanceMapper.currentTime");
+	public void outWork(String empNo) {
+		sqlSession.insert("attendanceMapper.outWork", empNo);
 	}
 	
 

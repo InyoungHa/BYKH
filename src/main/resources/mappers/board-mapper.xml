@@ -39,12 +39,18 @@
 		<result column="BOARD_NEXT_NUM" 	property="boardNextNum"/>
 		<result column="BOARD_NEXT_TITLE" 	property="boardNextTitle"/>
 		<result column="FILE_CNT" 			property="fileCnt"/>
+		<result column="REPLY_CNT" 			property="replyCnt"/>
 		<association property="boardMenuVO" 	resultMap="boardMenu"></association>
 		<association property="boardCategoryVO" resultMap="boardCategory"></association>
 		<collection property="boardFileList" 	resultMap="boardFile"></collection>
+		<collection property="replyList" 		resultMap="replyMapper.reply"></collection>
 	</resultMap>
 	
-	
+	<!-- 글 개수 조회 -->
+	<select id="getBoardCnt" resultType="int">
+		SELECT COUNT(BOARD_NUM)
+		FROM BOARD
+	</select>
 	
 	<!-- 공지사항 글 목록 조회 -->
 	<!-- 상태값 1(등록) --> 
@@ -58,6 +64,9 @@
 		    , (SELECT COUNT(FILE_NUM) 
 				FROM BOARD_FILE
 				WHERE BOARD_NUM = BOARD.BOARD_NUM) FILE_CNT
+			, (SELECT COUNT(REPLY_NUM)
+                FROM BOARD_REPLY
+                WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
 		FROM BOARD, EMP
 		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
 		AND BOARD_STATUS = 1
@@ -137,22 +146,25 @@
 	
 	<!-- 글 상세 조회 -->
 	<select id="getNoticeDetail" resultMap="board">
-	SELECT * FROM
-		(SELECT BOARD_NUM
-			, BOARD_TITLE
-			, BOARD_CONTENT
-			, BOARD_WRITER
-			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
-			, BOARD_VIEW
-			, IS_IMPORTANT
-			, ENAME
-			, BOARD_MENU_CODE
-            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
-            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
-            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
-            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
-		FROM BOARD, EMP
-		WHERE BOARD_WRITER = EMPNO)
+		SELECT * FROM
+			(SELECT BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_CONTENT
+				, BOARD_WRITER
+				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+				, BOARD_VIEW
+				, IS_IMPORTANT
+				, ENAME
+				, BOARD_MENU_CODE
+				, (SELECT COUNT(REPLY_NUM)
+                    FROM BOARD_REPLY
+                    WHERE BOARD_NUM = #{boardNum}) REPLY_CNT
+	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
+	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
+	            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
+	            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
+			FROM BOARD, EMP
+			WHERE BOARD_WRITER = EMPNO)
 		WHERE BOARD_NUM = #{boardNum}
 	</select>
 	
@@ -166,6 +178,20 @@
         WHERE BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM
         AND BOARD.BOARD_NUM = #{boardNum}
 	</select>
+	
+	<!-- (상세 조회) + 댓글 리스트 조회 -->
+	<select id="getReplyList" resultMap="replyMapper.reply">
+		SELECT REPLY_NUM
+            , REPLY_WRITER
+            , ENAME
+			, REPLY_CONTENT
+            , TO_CHAR(REPLY_DATE, 'YYYY-MM-DD HH24:MI') REPLY_DATE
+        FROM BOARD_REPLY, EMP
+        WHERE BOARD_NUM = #{boardNum}
+        AND REPLY_WRITER = EMPNO
+        ORDER BY REPLY_NUM
+	</select>
+	
 	
 	<!-- 조회수 증가 -->
 	<update id="updateBoardView">

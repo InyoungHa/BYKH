@@ -10,12 +10,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.reply.vo.ReplyVO;
 import com.bykh.groupware.util.ConstVariable;
 
 @Service("noticeService")
 public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
+	
+	//글 개수 조회
+	@Override
+	public int getBoardCnt() {
+		return sqlSession.selectOne("boardMapper.getBoardCnt");
+	}
 	
 	//공지 게시판 목록 조회
 	@Override
@@ -58,11 +65,17 @@ public class NoticeServiceImpl implements NoticeService {
 		//첨부파일 조회
 		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
 		
+		//댓글 조회
+		List<ReplyVO> replyList = sqlSession.selectList("boardMapper.getReplyList", boardVO);
+		
 		//상세 조회하는 글
 		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
 		
 		//첨부파일 변수에 담아줌
 		selectedBoard.setBoardFileList(selectedFileList);
+		
+		//댓글 변수에 담아줌
+		selectedBoard.setReplyList(replyList);
 		
 		//글 상세 조회 정보 반환
 		return selectedBoard;
@@ -124,6 +137,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public BoardFileVO getDownloadFileVO(String fileNum) {
 		return sqlSession.selectOne("boardMapper.getDownloadFileVO", fileNum);
 	}
+
 
 
 

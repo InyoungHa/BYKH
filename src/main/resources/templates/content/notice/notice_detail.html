@@ -45,7 +45,7 @@
 						<tr>
 							<td class="table-light">첨부파일</td>
 							<td class="text-start" colspan="3">
-								<div th:if="${#lists.size(notice.boardFileList) == 0}">
+								<div th:if="${#lists.size(notice.boardFileList) == 0}" class="text-secondary">
 									첨부된 파일이 없습니다.
 								</div>
 								<div th:unless="${#lists.size(notice.boardFileList) == 0}"
@@ -71,7 +71,7 @@
 									</a>
 								</th:block>
 								<th:block th:unless="${notice.boardPrevNum != 'BOARD_000'}">
-									[[${notice.boardPrevTitle}]]
+									<div class="text-secondary">[[${notice.boardPrevTitle}]]</div>
 								</th:block>
 							</td>
 						</tr>
@@ -84,7 +84,7 @@
 									</a>
 								</th:block>
 								<th:block th:unless="${notice.boardNextNum != 'BOARD_000'}">
-									[[${notice.boardNextTitle}]]
+									<div class="text-secondary">[[${notice.boardNextTitle}]]</div>
 								</th:block>
 							</td>
 						</tr>
@@ -95,41 +95,47 @@
 			
 			<div class="row">
 				<div class="col-12 mb-1">
-					1개의 댓글
+					<span id="replyCntSpan">[[${notice.replyCnt}]]</span>개의 댓글
 				</div>
 				<div class="col-12">
-					<table class="table table-borderless border-top border-bottom">
+					<table class="table table-borderless border-top border-bottom" id="replyTable">
 						<colgroup>
-							<col width="10%">
+							<col width="5%">
 							<col width="*">
-							<col width="20%">
 						</colgroup>
-						<tr>
-							<td colspan="3">
+
+						<th:block th:if="${#lists.size(notice.replyList) == 0}">
+							<tr class="border-top" id="noReplyTr">
+								<td class="text-secondary text-center align-middle" colspan="2" height="120px">
+									등록된 댓글이 없습니다.
+								</td>
+							</tr>
+						</th:block>
+						<th:block th:if="${#lists.size(notice.replyList) != 0}"
+									th:each="reply : ${notice.replyList}">
+							<tr class="border-top">
+								<td class="text-center">
+									<img src="/img/content/board/testProfile.png" width="100%" class="mx-0">
+								</td>
+								<td>
+									<div class="d-flex justify-content-between">
+										<div class="fw-semibold mb-1">[[${reply.ename}]]</div>
+										<div class="text-secondary fs-6">[[${reply.replyDate}]]</div>
+									</div>
+									<div th:utext="${reply.replyContent}"></div>
+									<div class="d-grid gap-1 d-md-flex justify-content-md-end">
+										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정">
+										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제">
+									</div>
+								</td>
+							</tr>
+						</th:block>
+						
+						<tr class="border-top" id="regReplyTr">
+							<td colspan="2">
 								<div class="input-group">
-									<textarea class="form-control" rows="5px" style="resize: none"></textarea>
-									<input type="button" class="btn" value="등록">
-								</div>
-							</td>
-						</tr>
-						<tr class="border-top">
-							<td class="table-light text-center">
-								<img src="/img/content/board/testProfile.png" width="30%">
-								<div class="mt-1">김사원</div>
-							</td>
-							<td>
-								확인했습니다! 어쩌구저쩌구
-								<div>더 길게 말하면 어쩌구블라블라</div>
-								<div>더 길게 말하면 어쩌구블라블라</div>
-								<div>더 길게 말하면 어쩌구블라블라</div>
-							</td>
-							<td class="d-flex align-items-end flex-column" height="150px;">
-								<div class="d-grid gap-1 d-md-flex justify-content-md-end">
-									<input type="button" class="btn" value="수정">
-									<input type="button" class="btn" value="삭제">
-								</div>
-								<div class="mt-auto text-secondary fs-6">
-									2023-05-23 18:47
+									<textarea class="form-control" rows="5px" style="resize: none" id="replyTextarea"></textarea>
+									<input type="button" class="btn" th:onclick="regReply([[${notice.boardNum}]]);" value="등록">
 								</div>
 							</td>
 						</tr>

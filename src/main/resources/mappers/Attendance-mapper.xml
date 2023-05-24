@@ -5,23 +5,23 @@
 <mapper namespace="attendanceMapper">
 	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
 		<id column="WORK_STATUS" 		property="workStatus"/>
-		<result column="REG_DAYS" 		property="regDays"/>
-		<result column="WORKING_TIME" 	property="workingTime"/>
-		<result column="QUITTING_TIME" 	property="quittingTime"/>
-		<result column="CUR_DATE" 	property="curDate"/>
+		<result column="GO_WORK" 		property="regDays"/>
+		<result column="OUT_WORK" 		property="outWork"/>
+		<result column="CUR_DATE" 		property="curDate"/>
+		<association property="empVO" 	resultMap="empMapper.emp"></association>
 	</resultMap>
 	
-	<!-- 현재시간  -->
-	<select id="currentTime">
-	SELECT 
-	TO_CHAR(SYSDATE, 'YYYY-MM-DD(DY)-HH:MI') AS CUR_DATE
-	FROM DUAL
-	</select>
 	
 		
-	<!--출퇴근 시간 저장 -->
-	<insert id="regTime">
-	INSERT INTO ATTENDANCE (REG_DAYS) VALUES (CURRENT_TIMESTAMP)
+	<!--출근시간 저장 -->
+	<insert id="goWork">
+	INSERT INTO ATTENDANCE (GO_WORK) VALUES (CURRENT_TIMESTAMP)
+    WHERE EMPNO = #{empNo}
+	</insert>
+	
+	<!--퇴근시간 저장 -->
+	<insert id="outWork">
+	INSERT INTO ATTENDANCE (GO_WORK) VALUES (CURRENT_TIMESTAMP)
     WHERE EMPNO = #{empNo}
 	</insert>
     

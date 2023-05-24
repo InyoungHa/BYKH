@@ -11,11 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.reply.vo.ReplyVO;
 import com.bykh.groupware.util.ConstVariable;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -31,8 +33,14 @@ public class NoticeController {
 	private NoticeService noticeService;
 	
 	//게시판 목록
-	@GetMapping("/list")
-	public String noticeList(Model model) {
+	@RequestMapping("/list")
+	public String noticeList(Model model, BoardVO boardVO) {
+		//전체 데이터 수
+		boardVO.setTotalDataCnt(noticeService.getBoardCnt());
+		
+		//페이지 정보 세팅
+		boardVO.setPageInfo();
+		
 		//전체 글 목록 조회
 		model.addAttribute("noticeList", noticeService.getNoticeList());
 		
@@ -77,7 +85,7 @@ public class NoticeController {
 	//글 상세 조회
 	@GetMapping("/detail")
 	public String noticeDetail(BoardVO boardVO, Model model) {
-		//상세 조회 + 조회수 증가
+		//상세 조회 + 조회수 증가 (글 + 첨부파일 + 댓글)
 		model.addAttribute("notice", noticeService.getNoticeDetail(boardVO));
 		
 		return "content/notice/notice_detail";
@@ -153,6 +161,9 @@ public class NoticeController {
 			e.printStackTrace();
 		}
 	}
+	
+
+	
 	
 	
 }

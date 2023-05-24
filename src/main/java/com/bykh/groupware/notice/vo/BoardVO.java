@@ -2,6 +2,9 @@ package com.bykh.groupware.notice.vo;
 
 import java.util.List;
 
+import com.bykh.groupware.reply.vo.ReplyVO;
+import com.bykh.groupware.util.PageVO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class BoardVO {
+public class BoardVO extends PageVO {
 	private String boardNum;
 	private String boardTitle;
 	private String boardContent;
@@ -26,6 +29,7 @@ public class BoardVO {
 	private BoardCategoryVO boardCategoryVO;
 	
 	private List<BoardFileVO> boardFileList;
+	private List<ReplyVO> replyList;
 	
 	private String ename;
 	private String boardPrevNum;
@@ -33,4 +37,7 @@ public class BoardVO {
 	private String boardNextNum;
 	private String boardNextTitle;
 	private int fileCnt;
+	private int replyCnt;
+	
+	PageVO pageVO = new PageVO(10, 10);
 }
