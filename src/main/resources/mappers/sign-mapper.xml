@@ -18,6 +18,15 @@
 		<result column="LEAVE_REASON" 		property="leaveReason"/>
 	</resultMap>
 	
+	<!-- 구매신청서 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.DocPurchaseOrderVO" id="docPurchaseOrder">
+		<id column="DPO_NO" 				property="dpoNo" />
+		<result column="DOC_NO" 			property="docNo" />
+		<result column="DPO_COMMENT" 		property="dpoComment" />
+		<result column="BUY_NO" 			property="buyNo" />
+		<association property="buyVO" resultMap="buy"></association>
+	</resultMap>
+	
 	<!--결재문서 테이블  -->
 	<resultMap type="com.bykh.groupware.sign.vo.SignDocVO" id="signDoc">
 		<id column="DOC_NO" 				property="docNo"/>
@@ -29,22 +38,50 @@
 		<result column="DOC_STATUS" 		property="docStatus"/>
 		<result column="INSERT_DATE" 		property="insertDate"/>
 		<association property="empVO" 		resultMap="empMapper.emp"></association>
-		<association property="docAnnualLeaveVO" 		resultMap="signMapper.docAnnualLeave"></association>
+		<association property="docAnnualLeaveVO" 		resultMap="docAnnualLeave"></association>
+		<association property="docPurchaseOrderVO" 		resultMap="docPurchaseOrder"></association>
 		<collection property="signVOList" resultMap="sign" column="DOC_NO"></collection>
 	</resultMap>
 	
 	
 	<!--결재 테이블 -->
 	<resultMap type="com.bykh.groupware.sign.vo.SignVO" id="sign">
-		<id column="DOC_NO" 			property="docNo"/>
-		<id column="SGN_ORDER"			property="sgnOrder"/>
+		<id column="DOC_NO" 				property="docNo"/>
+		<id column="SGN_ORDER"				property="sgnOrder"/>
 		<result column="SGN_RESULT"			property="sgnResult"/>
-		<result column="SGN_RESULT_STR"			property="sgnResultStr"/>
+		<result column="SGN_RESULT_STR"		property="sgnResultStr"/>
 		<result column="APPROVER_NO" 		property="approverNo"/>
 		<result column="APPROVER_NAME" 		property="approverName"/>
 		<result column="APPROVER_JOB" 		property="approverJob"/>
 		<result column="SGN_COMENT" 		property="sgnComent"/>
 		<result column="SGN_DATE" 			property="sgnDate"/>
+	</resultMap>
+	
+	<!-- 아이템 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.ItemVO" id="item">
+		<id column="ITEM_NO"				property="itemNo"/>
+		<result column="ITEM_NAME"			property="itemName"/>
+		<result column="ITEM_PRICE"			property="itemPrice"/>
+		<result column="REG_DATE" 			property="regDate"/>
+	</resultMap>
+	
+	<!-- 구매 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.BuyVO" id="buy">
+		<id column="BUY_NO"					property="buyNo"/>
+		<result column="BUY_DEPTNO"			property="buyDeptNo"/>
+		<result column="BUY_PRICE"			property="buyPrice"/>
+		<result column="BUY_APPROVAL" 		property="buyApproval"/>
+		<collection property="buyDetailList" resultMap="buyDetail"></collection>
+	</resultMap>
+	
+	<!-- 구매상세 테이블 -->
+	<resultMap type="com.bykh.groupware.sign.vo.BuyDetailVO" id="buyDetail">
+		<id column="BUY_DETAIL_NO"			property="buyDetailNo"/>
+		<result column="BUY_NO"				property="buyNo"/>
+		<result column="ITEM_NO"			property="itemNo"/>
+		<result column="BUY_CNT" 			property="buyCnt"/>
+		<result column="BUY_DETAIL_PRICE" 	property="buyDetailPrice"/>
+		<association property="itemVO" resultMap="item"></association>
 	</resultMap>
 	
 	
@@ -211,6 +248,14 @@
 		WHERE DOC_NO = 1
 		AND APPROVER_NO = ${approverNo}
 	</update>
+	<select id="getItemList" resultMap="item">
+		SELECT 
+			ITEM_NO
+			, ITEM_NAME
+			, ITEM_PRICE
+		FROM ITEM
+		ORDER BY ITEM_NO
+	</select>
 </mapper>
 
 

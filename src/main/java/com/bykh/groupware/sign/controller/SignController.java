@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
+import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 import com.bykh.groupware.util.DateUtil;
@@ -54,7 +55,7 @@ public class SignController {
 		//시큐리티 설정 완료 후 바꾸기
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(2023050301));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString());
-		
+		model.addAttribute("itemList", signService.getItemList());
 		return "content/sign/purchase_order_form";
 	}
 	
@@ -120,11 +121,10 @@ public class SignController {
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
 	public int updateSignResultAjax(SignVO signVO) {
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!1");
-		System.out.println(signVO);
 		return signService.updateSignResult(signVO);
 	}
 	
+
 	
 	
 	

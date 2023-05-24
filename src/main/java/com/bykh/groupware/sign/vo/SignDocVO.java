@@ -22,6 +22,7 @@ public class SignDocVO {
 	private String insertDate;
 	
 	private DocAnnualLeaveVO docAnnualLeaveVO;
+	private DocPurchaseOrderVO docPurchaseOrderVO;
 	private List<SignVO> signVOList;
 	private EmpVO empVO;
 	 

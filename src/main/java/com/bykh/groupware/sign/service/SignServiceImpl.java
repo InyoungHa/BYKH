@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
+import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
@@ -53,5 +54,9 @@ public class SignServiceImpl implements SignService{
 	@Override
 	public int updateSignResult(SignVO signVO) {
 		return sqlsession.update("signMapper.updateSignResult", signVO);
+	}
+	@Override
+	public List<ItemVO> getItemList() {
+		return sqlsession.selectList("signMapper.getItemList");
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
+import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
@@ -24,5 +25,8 @@ public interface SignService {
 	
 	//결재/반려 버튼 클릭 시 실행
 	int updateSignResult(SignVO signVO);
+	
+	//구매신청서 - 모든 아이템 리스트 조회
+	List<ItemVO> getItemList();
 	
 }
