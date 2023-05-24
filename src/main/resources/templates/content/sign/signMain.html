@@ -7,10 +7,112 @@
 <!-- 연결해야할 외부 css 파일 -->
 <th:block layout:fragment="content_css">
    	<!-- <link rel="stylesheet" href="/"> -->
+   		<style type="text/css">
+		.sgn-info-table, .stamp-table, .content-table{
+			--bs-table-border-color: black;
+		}
+		.sgn-info-table{
+			width: 300px;
+		}
+		.sgn-info-table > tbody > tr > td:first-child{
+			width: 100px; /* td의 너비를 원하는 크기로 설정 */
+			height: 1rem; /* td의 높이를 원하는 크기로 설정 */
+			background-color: #dddddd;
+		}
+		.sgn-info-table > tbody > tr > td:last-child{
+			width: 200px; /* td의 너비를 원하는 크기로 설정 */
+			height: 1rem; /* td의 높이를 원하는 크기로 설정 */
+		}
+	
+		.full-width-input {
+			width: 100%; /* 너비를 100%로 설정 */
+			height: 100%; /* 높이를 100%로 설정 */
+			box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
+			border: none;
+			
+		}
+		.full-width-input:focus {
+		  outline: none; /* 클릭 효과인 테두리 선을 없앰 */
+		}
+		.full-width-textarea {
+			width: 100%; /* 너비를 100%로 설정 */
+			height: 200px; /* 높이를 100%로 설정 */
+			box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
+			border: none;
+			
+		}
+		.full-width-textarea:focus {
+		  outline: none; /* 클릭 효과인 테두리 선을 없앰 */
+		}
+
+		.stamp-table {
+		  display: flex;
+		  width: max-content; /* 테이블의 가로 길이를 자식 요소에 맞추기 위해 설정 */
+		}
+
+		.stamp-table td {
+		  flex: 1; /* 각 td 요소들을 균등하게 너비를 분배하기 위해 설정 */
+		}
+		.stamp-table > tbody > tr:first-child > td{
+			background-color: #dddddd;
+		}
+		.stamp-table > tbody > tr:last-child > td, .stamp-table > tbody > tr:first-child > td{
+			height: 1rem;
+		}
+		.stamp-table > tbody > tr:last-child > td{
+			font-size: 0.8rem;
+		}
+		.stamp-table > tbody > tr:nth-child(2) > td{
+			height: 80px;
+			vertical-align: middle;
+		}
+
+		.content-table > tbody > tr:nth-child(4) > td{
+			vertical-align: middle;
+		}
+		.content-table > tbody > tr:nth-child(4){
+			 height: 200px;
+		}
+		.content-table > tbody > tr > td:last-child{
+			text-align: left;
+		}
+		.content-table > tbody > tr > td:first-child{
+			background-color: #dddddd;
+		}
+		.rounded-image {
+            border-radius: 15px;
+		}
+		.outer-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 800px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-box {
+    width: 300px;
+    text-align: center;
+    border-radius: 50px;
+    margin-right: 10px;
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+.image-title {
+    margin-top: 10px;
+}
+		
+	</style>
 </th:block>
 
 <th:block layout:fragment="content">
    <div class="row">
+   	
 		<div class="col">
 			<h2>결재현황</h2>
 			<div class="row mt-3 mb-3">
@@ -18,7 +120,7 @@
 					진행중인 결재건
 				</div>
 				<div class="col-2 d-grid">
-					<input type="button" value="+ 새 결제" class="btn btn-primary" th:onclick="|location.href='@{/sign/signWriteForm}'|">
+					<input type="button" value="+ 새 결제" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showSignType">
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -113,6 +215,47 @@
 			</div>
 		</div>
 	</div>
+	<!-- 결재양식선택 모달 -->
+	<div class="modal fade" id="showSignType" data-bs-backdrop="static"
+		data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="staticBackdropLabel">양식 선택</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body text-center outer-div" >
+					<div class="row image-container">
+						<div class="col-3 pt-3 pb-3 pr-5 image-box" th:onclick="|location.href='@{/sign/signWriteForm}'|">
+							<img src="/img/content/sign/annual-leave.svg" width="250px;">
+							<h4 class="mt-3 image-title">[ 연차신청서 ]</h4>
+						</div>
+						<div class="col-3 pt-3 pb-3 pr-5 image-box">
+							<img src="/img/content/sign/purchase-order.svg" width="250px;" th:onclick="|location.href='@{/sign/purchaseOrderForm}'|">
+							<h4 class="mt-3 image-title">[ 구매신청서 ]</h4>
+						</div>
+						<div class="col-3 pt-3 pb-3 pr-5 image-box">
+							<img src="/img/content/sign/sales-report.svg" width="250px;">
+							<h4 class="mt-3 image-title">[ 매출보고서 ]</h4>
+						</div>
+					</div>
+				<figure>
+					
+					
+				</figure>
+				<figure>
+					
+				</figure>
+				<figure>
+					
+				</figure>
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<!-- 기안 조회 모달 -->
 	<!-- 임시저장일 경우 모달 띄우고 아닐 경우 작성 페이지로 이동 -->
@@ -122,7 +265,7 @@
 		<div class="modal-dialog modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+					<h1 class="modal-title fs-5" id="staticBackdropLabel">기안 조회</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
@@ -130,11 +273,7 @@
 					
 				</div>
 				<!-- 결재자만 조회되도록 수정 -->
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">반려</button>
-					<button type="button" class="btn btn-primary">결재</button>
-				</div>
+				
 			</div>
 		</div>
 	</div>

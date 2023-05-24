@@ -1,8 +1,8 @@
 package com.bykh.groupware.sign.vo;
 
-import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -10,7 +10,6 @@ import lombok.Setter;
 public class DocAnnualLeaveVO {
 	private int dalNo;
 	private int docNo;
-	private int dtNo;
 	private String dalType;
 	private String startDate;
 	private String endDate;
@@ -19,5 +18,4 @@ public class DocAnnualLeaveVO {
 	private int leaveDays;
 	private String leaveReason;
 	
-	private SignDocVO signDocVO;
 }

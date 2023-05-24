@@ -27,9 +27,10 @@ function setLeaveDays(){
         const differenceInMilliseconds = Math.abs(end_date - start_date);
 
         // 밀리초를 일 단위로 변환
-        const leaveDaysStr = (differenceInMilliseconds / (1000 * 60 * 60 * 24) + 1) + '일';
+        const leaveDaysStr = (differenceInMilliseconds / (1000 * 60 * 60 * 24) + 1);
 		
 		document.querySelector('.leave-days').value = leaveDaysStr;
+		document.querySelector('.show-leave-days').value = leaveDaysStr + '일';
 		
 	}
 	//start_date가 end_date보다 작다면 알림 띄우기(부가기능)
@@ -47,6 +48,7 @@ function addApproverHTML(approverNo, approverName, approverJob){
 			</div>
 			<div class="col-7">
 				${approverName} ${approverJob}
+				<input type="hidden" value="${approverNo}" class="approverNo">
 			</div>
 			<div class="col-2 d-grid">
 				<input type="button" class="btn btn-primary" value="삭제" onclick="delApproverHTML(this);">
@@ -117,11 +119,24 @@ function delStampTableTd(this_tag) {
 }
 //임시저장
 function saveSignDoc(){
-	alert();
+	
+	//sgnStatus 값 세팅(임시저장/등록 여부)
+	document.querySelector('.sgnStatus').value = 0;
+	//approverNo값 세팅
+	let approverNoStr = '';
+	const approver_no_list = document.querySelectorAll('.approverNo');
+	approver_no_list.forEach(function(approver_no){
+		approverNoStr += approver_no.value + ','
+	});
+	document.querySelector('.approverNoStr').value = approverNoStr;
+	
+	signDocForm.submit();
+	
+	
 };
 //기안올리기
 function insertSignDoc(){
-	alert();
+	document.querySelector('.sgnStatus').value = 1;
 };
 
 

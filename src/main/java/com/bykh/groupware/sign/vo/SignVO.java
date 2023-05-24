@@ -1,16 +1,16 @@
 package com.bykh.groupware.sign.vo;
 
-import groovy.transform.ToString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
 public class SignVO {
-	private String sgnCode;
 	private int docNo;
-	private int sgnStatus;
+	private int sgnOrder;
+	private String sgnResultStr;
 	private int sgnResult;
 	private int approverNo;
 	private String approverName;
