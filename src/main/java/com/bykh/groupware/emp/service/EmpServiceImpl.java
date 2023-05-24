@@ -28,8 +28,8 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 	@Override //사원 조회
-	public List<EmpVO> selectEmpList() {
-		return sqlSession.selectList("empMapper.selectEmpList");
+	public List<EmpVO> selectEmpList(EmpVO empVO) {
+		return sqlSession.selectList("empMapper.selectEmpList", empVO);
 	}
 	
 	

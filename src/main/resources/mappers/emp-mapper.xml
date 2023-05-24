@@ -76,6 +76,7 @@
 			, DECODE(E_ROLE, 'USER', '직원','ADMIN','관리자','SUPER_ADMIN','최종 관리자') AS E_ROLE
 		FROM EMP	
 		ORDER BY EMPNO DESC
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
 	<!--계정 상태 변경  -->

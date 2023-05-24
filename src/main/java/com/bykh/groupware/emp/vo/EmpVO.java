@@ -1,7 +1,7 @@
 package com.bykh.groupware.emp.vo;
 
 import com.bykh.groupware.dept.vo.DeptVO;
-
+import com.bykh.groupware.util.PageVO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class EmpVO {
+public class EmpVO extends PageVO {
 	
 	private int empno;
 	

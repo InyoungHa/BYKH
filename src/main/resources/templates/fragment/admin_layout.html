@@ -16,15 +16,16 @@
 <th:block layout:fragment="content_css">
 	
 </th:block>
+<style>
+
+</style>
 </head>
 
 <body>
+<div style="background-color:#1e2b37; height: 100px;  width: 100%; position: relative;">
+ <th:block th:replace="~{fragment/header::headerFragment}"></th:block>
+</div>
 <div class="container"> 
-	<div class="row" style="margin-bottom: 16px;">
-		<div class="col">
-			<th:block th:replace="~{fragment/header::headerFragment}"></th:block>
-		</div>
-	</div>
 	<div class="row">
 		<div>
 			<th:block th:replace="~{fragment/admin_side::adminSideFragment}"></th:block>
