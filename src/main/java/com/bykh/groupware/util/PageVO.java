@@ -1,5 +1,12 @@
 package com.bykh.groupware.util;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class PageVO {
 	private int nowPage; // 현재 선택된 페이지 번호
 	private int totalDataCnt; // 전체 데이터 수
@@ -22,12 +29,17 @@ public class PageVO {
 	// startNum~ endNum까지 시작~마지막으로 ROWNUM을 WHERE 절 조건에 넣어줌
 	
 	
-	//생성자 선언
+	//기본 생성자 선언
 	public PageVO() {
-		nowPage =1; // 생성과 동시에 첫 페이지는 1 / 현재페이지
-		displayCnt =5; // 한 페이지에 5개 씩 보여주겠다.
-		displayPageCnt = 3; //한 번에 보여지는 페이지 수는 3 (1 2 3 4 5)
-		
+		this(5, 3);
+		nowPage = 1; // 생성과 동시에 첫 페이지는 1 / 현재페이지
+	}
+	
+	//게시판용 생성자
+	public PageVO(int displayCnt, int displayPageCnt) {
+		nowPage = 1;
+		this.displayCnt = displayCnt; // 한 페이지에 보여줄 개수
+		this.displayPageCnt = displayPageCnt; // 한 번에 보여지는 페이지 수
 	}
 	
 	//이 메서드가 실행되면 page 처리를 위한 모든 변수 값을 세팅
@@ -39,14 +51,14 @@ public class PageVO {
 		
 		
 		//처음에 보이는 페이지 번호
-		beginPage = endPage - displayPageCnt +1;
+		beginPage = endPage - displayPageCnt + 1;
 		
 		
 		//전체 페이지수
 		// 전체데이터 / 한번에 보여지는 페이지 수 -> 올림
 		// 155 / (실수)10 ~> 올림
 		// totalPageCnt 자료형이 int라 형 일치 시키기
-		int totalPageCnt = (int)Math.ceil(totalDataCnt / (double)displayCnt);
+		int totalPageCnt = (int) Math.ceil(totalDataCnt / (double)displayCnt);
 		
 		
 		//next 버튼 유무
@@ -56,7 +68,7 @@ public class PageVO {
 			next = true;
 		}
 		else {
-			next= false;
+			next = false;
 			endPage = totalPageCnt;
 		}
 
@@ -64,91 +76,18 @@ public class PageVO {
 		//prev 버튼 유무 (이전 버튼)
 		//begin 페이지가 1일 때를 제외하고 prev 버튼 생성
 		// 삼항연산자 : prev가 1이면 버튼 생성 안함 : 1이 아니면 버튼 생성
-		prev = beginPage == 1? false : true;
+		prev = beginPage == 1 ? false : true;
 		
 		//조회된 페이지 수가 0 일때 endPage를 1로 설정
-		if(totalPageCnt ==0) {
-			endPage =1;
+		if(totalPageCnt == 0) {
+			endPage = 1;
 		}
 		
 		
 		//현재 페이지-1 * 한 페이지에 몇 개씩 출력할 지 설정해 offsetCnt를 찾아낸다.
-		offsetCnt=(nowPage-1) *displayCnt;
+		offsetCnt = (nowPage - 1) * displayCnt;
 		
 		
 		
 	}
-	// getter, setter 생성
-	public int getNowPage() {
-		return nowPage;
-	}
-
-	public void setNowPage(int nowPage) {
-		this.nowPage = nowPage;
-	}
-
-	public int getTotalDataCnt() {
-		return totalDataCnt;
-	}
-
-	public void setTotalDataCnt(int totalDataCnt) {
-		this.totalDataCnt = totalDataCnt;
-	}
-
-	public int getBeginPage() {
-		return beginPage;
-	}
-
-	public void setBeginPage(int beginPage) {
-		this.beginPage = beginPage;
-	}
-
-	public int getEndPage() {
-		return endPage;
-	}
-
-	public void setEndPage(int endPage) {
-		this.endPage = endPage;
-	}
-
-	public int getDisplayCnt() {
-		return displayCnt;
-	}
-
-	public void setDisplayCnt(int displayCnt) {
-		this.displayCnt = displayCnt;
-	}
-
-	public int getDisplayPageCnt() {
-		return displayPageCnt;
-	}
-
-	public void setDisplayPageCnt(int displayPageCnt) {
-		this.displayPageCnt = displayPageCnt;
-	}
-
-	public boolean isPrev() {
-		return prev;
-	}
-
-	public void setPrev(boolean prev) {
-		this.prev = prev;
-	}
-
-	public boolean isNext() {
-		return next;
-	}
-
-	public void setNext(boolean next) {
-		this.next = next;
-	}
-
-	public void setOffsetCnt(int offsetCnt) {
-		this.offsetCnt = offsetCnt;
-	}
-	
-	public int getOffsetCnt() {
-		return offsetCnt;
-	}
-	
 }
