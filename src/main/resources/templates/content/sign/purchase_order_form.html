@@ -73,7 +73,7 @@
 		.content-table > thead, .content-table > tbody > tr:last-child > td:first-child, .content-table > tbody > tr:nth-last-child(2) > td:first-child{
 			background-color: #dddddd;
 		}
-		.itemListDiv, .addItemDiv{
+		.itemListDiv{
 			height: 400px;
 		}
 		
@@ -289,40 +289,61 @@
 				<div class="row addItemDiv">
 						<div class="col">
 							<!-- itemList 영역 -->
-							<div class="row itemListDiv my-scroll">
-								<table class="table table-hover text-center">
+							<div class="row itemListDiv my-scroll ">
+								<table class="table table-hover text-center table-bordered itemTable">
 									<colgroup>
 										<col width="50%">
 										<col width="*">
 									</colgroup>
-									<thead>
+									<!-- <thead>
 										<tr class="table-head">
 											<td>품 명</td>
 											<td>가 격</td>
 										</tr>
-									</thead>
+									</thead> -->
 									<tbody>
 										<tr th:each="item : ${itemList}">
-											<td>[[${item.itemName}]]</td>
+											<td class="itemNo" th:data-item-no="${item.itemNo}">[[${item.itemName}]]</td>
 											<td>[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 										</tr>
 									</tbody>
 								</table>
 							</div>
 							<!-- 추가/삭제 버튼 영역 -->
-							<div>
-								
+							<div class="row">
+								<div class="col text-center ">
+									<span onclick="addBuyList();">
+										<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-caret-down-square-fill" viewBox="0 0 16 16">
+										  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 4a.5.5 0 0 0-.374.832l4 4.5a.5.5 0 0 0 .748 0l4-4.5A.5.5 0 0 0 12 6H4z"/>
+										</svg>
+									</span>
+									<span onclick="delBuyList();">
+										<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-caret-up-square-fill" viewBox="0 0 16 16">
+										  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm4 9h8a.5.5 0 0 0 .374-.832l-4-4.5a.5.5 0 0 0-.748 0l-4 4.5A.5.5 0 0 0 4 11z"/>
+										</svg>
+									</span>
+								</div>
 							</div>
 							<!-- 추가할 item 영역 -->
-							<div class="row addItemDiv"></div>
+							<div class="row addItemDiv border">
+								<table class="table table-hover text-center table-bordered addItemTable">
+									<colgroup>
+										<col width="50%">
+										<col width="*">
+									</colgroup>
+									<tbody>
+									</tbody>
+								</table>
+							
+							</div>
 						</div>
 					</div>
 				
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
+						data-bs-dismiss="modal">취소</button>
+					<button type="button" class="btn btn-primary" onclick="addItem();">추가</button>
 				</div>
 			</div>
 		</div>
@@ -338,7 +359,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body align-items-center pt-3">
+				<div class="modal-body align-items-center pt-3" >
 					
 				</div>
 				

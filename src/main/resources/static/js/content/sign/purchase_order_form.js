@@ -104,16 +104,39 @@ function insertSignDoc(){
 
 //'추가' 버튼 클릭 시 실행
 //모달에 추가할 아이템 클릭시 선택
-function addItem(){
-	const content_tr_list = document.querySelectorAll('.content-table > tbody > tr')
-	//content_tr_list.forEach();
+function addBuyList(){
+	//itemTable에서 선택된 tr 태그 가져오기
+	const item_table_row_list = document.querySelectorAll('.itemTable tr')
+	item_table_row_list.forEach(function(row){
+		const bgColor = window.getComputedStyle(row).getPropertyValue("background-color");
+		if(bgColor == 'rgb(204, 204, 204)'){
+			//tr의 background color 제거
+			row.style.backgroundColor = '';
+			
+			//추가될 테이블에 추가
+			const add_item_table_tbody = document.querySelector('.addItemTable tbody');
+			add_item_table_tbody.insertAdjacentHTML('beforeend', row.outerHTML);
+		}
+	});
 	
-	
-	
+	//추가된 tr들을 선택할 수 있도록 이벤트 발생시키기
+	const event = new Event('addItemFinished');
+	document.dispatchEvent(event);
 }
 //'삭제' 버튼 클릭 시 실행
-function delItem(){
-	
+function delBuyList(){
+	//addItemTable에서 선택된 tr 태그 가져오기
+	const add_item_table_row_list = document.querySelectorAll('.addItemTable tr')
+	add_item_table_row_list.forEach(function(row){
+		const bgColor = window.getComputedStyle(row).getPropertyValue("background-color");
+		if(bgColor == 'rgb(204, 204, 204)'){
+			//tr의 background color 제거
+			row.style.backgroundColor = '';
+			
+			//추가될 테이블에 추가
+			row.remove();
+		}
+	});
 }
 
 
@@ -178,7 +201,29 @@ searchApproverModal.addEventListener('show.bs.modal', function() {
 
 });
 
+//--------이벤트----------
 
+//모달이 열리면 itemList 테이블의 tr을 선택할 수 있도록 하는 코드
+const addItemModal = document.querySelector('#addItemModal');
+addItemModal.addEventListener('show.bs.modal', function() {
+	const row_list = document.querySelectorAll('.itemTable tr');
+	for(let i = 0; i < row_list.length; i++){
+		row_list[i].addEventListener('click', function(){
+			this.style.backgroundColor = this.style.backgroundColor ===  'rgb(204, 204, 204)' ? '' : 'rgb(204, 204, 204)';
+		});
+	}
+});
+
+//addItem 함수가 실행된 후 addItem 테이블의 tr을 선택할 수 있도록 하는 코드
+document.addEventListener('addItemFinished', function (e) {
+  console.log('addItem 함수 실행이 완료되었습니다.');
+  const row_list = document.querySelectorAll('.addItemTable tr');
+	for(let i = 0; i < row_list.length; i++){
+		row_list[i].addEventListener('click', function(){
+			this.style.backgroundColor = this.style.backgroundColor ===  'rgb(204, 204, 204)' ? '' : 'rgb(204, 204, 204)';
+		});
+	}
+});
 
 
 
