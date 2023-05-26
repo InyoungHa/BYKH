@@ -200,11 +200,8 @@
 						<tbody>
 							<tr>
 								<td>합 계</td>
-								<td>
-									
-								</td>
-								<td></td>
-								<td></td>
+								<td colspan="2"></td>
+								<td  class="buyPriceTd"></td>
 							</tr>
 							<tr>
 								<td>기 타</td>
@@ -263,6 +260,8 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div>
 				<div class="col-12">
 					<div class="row">
 						<div class="col text-end">
@@ -276,20 +275,20 @@
 	</div>
 	</form>
 	<!-- 아이템 추가 모달 -->
-	<div class="modal fade" id="addItemModal" tabindex="-1"
+	<div class="modal" id="addItemModal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h1 class="modal-title fs-5" id="exampleModalLabel">품목 추가</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
+						 aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-				<div class="row addItemDiv">
+					<div class="row addItemDiv">
 						<div class="col">
 							<!-- itemList 영역 -->
-							<div class="row itemListDiv my-scroll ">
+							<div class="row itemListDiv my-scroll border">
 								<table class="table table-hover text-center table-bordered itemTable">
 									<colgroup>
 										<col width="50%">
@@ -302,9 +301,9 @@
 										</tr>
 									</thead> -->
 									<tbody>
-										<tr th:each="item : ${itemList}">
-											<td class="itemNo" th:data-item-no="${item.itemNo}">[[${item.itemName}]]</td>
-											<td>[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
+										<tr th:each="item : ${itemList}" th:data-item-no="${item.itemNo}">
+											<td>[[${item.itemName}]]</td>
+											<td th:data-item-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 										</tr>
 									</tbody>
 								</table>
@@ -329,9 +328,11 @@
 								<table class="table table-hover text-center table-bordered addItemTable">
 									<colgroup>
 										<col width="50%">
-										<col width="*">
+										<col width="20%">
+										<col width="30%">
 									</colgroup>
 									<tbody>
+										
 									</tbody>
 								</table>
 							
@@ -343,7 +344,7 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-bs-dismiss="modal">취소</button>
-					<button type="button" class="btn btn-primary" onclick="addItem();">추가</button>
+					<button type="button" class="btn btn-primary" onclick="addItemTr();">추가</button>
 				</div>
 			</div>
 		</div>
