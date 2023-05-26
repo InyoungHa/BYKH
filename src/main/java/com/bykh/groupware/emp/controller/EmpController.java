@@ -11,13 +11,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.emp.service.EmpService;
+import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.util.UploadUtil;
 
 import jakarta.annotation.Resource;
+import oracle.sql.Mutable;
 
 @Controller
 @RequestMapping("/emp")
@@ -39,13 +42,14 @@ public class EmpController {
 		empVO.setTotalDataCnt(totalDataCnt);
 		
 		//페이징 정보 세팅
-		empVO.setPageInfo();
+		empVO.setPageInfo();		
 		
 		//사용중인 부서 조회쿼리
 		model.addAttribute("deptListIsUse", deptService.selectDeptListIsUse());
 		
 		//사원 조회 쿼리
 		model.addAttribute("empList", empService.selectEmpList(empVO));
+		
 		return "content/emp/emp_manage";
 	}
 	
@@ -58,24 +62,35 @@ public class EmpController {
 		return "redirect:/emp/empManage";
 	}
 	
-	/*
-	 * @ResponseBody // 키워드로 사원 조회
-	 * 
-	 * @PostMapping("/getSearchAjax") public List<EmpVO>
-	 * getSearchAjax(@RequestParam("type") String type,
-	 * 
-	 * @RequestParam("keyword") String keyword, EmpVO empVO) {
-	 * 
-	 * 
-	 * 
-	 * int totalCnt=empService.getEmpListCnt(); empVO.setTotalDataCnt(totalCnt);
-	 * System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+totalCnt);
-	 * 
-	 * List<EmpVO> empList = empService.selectEmpList(empVO);
-	 * 
-	 * return empList;
-	 * 
-	 * }
-	 */
+	@ResponseBody //사원 상세 정보 모달 띄우기
+	@PostMapping("/getEmpDetailAjax")
+	public EmpVO getEmpDetailAjax(int empno) {
+		
+		System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
+		
+		//사원 상세정보 조회
+		return empService.selectEmpDetail(empno);
+	}
+	
+	//사원 사진 등록
+	@ResponseBody
+	@PostMapping("/regEmpImgAjax")
+	public void regEmpImgAjax(MultipartFile empImg, EImgVO eImgVO, int empno, String attachedFileName) {
+		
+		EImgVO attachedFiEImgVO = UploadUtil.uploadFile(empImg);
+		
+		//사진 등록
+		eImgVO.setAttachedFileName(attachedFileName);
+		eImgVO.setEmpno(empno);
+		
+		attachedFiEImgVO.setAttachedFileName(attachedFileName);
+		attachedFiEImgVO.setEmpno(empno);
+		
+		empService.insertEmpImg(attachedFiEImgVO);
+		
+
+		
+	}
+	
 	
 }

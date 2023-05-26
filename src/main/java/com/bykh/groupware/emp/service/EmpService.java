@@ -2,6 +2,7 @@ package com.bykh.groupware.emp.service;
 
 import java.util.List;
 
+import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 
 public interface EmpService {
@@ -18,5 +19,13 @@ public interface EmpService {
 	//전체 사원 수 조회
 	int getEmpListCnt(EmpVO empVO);
 	
+	//사원의 사원 상세 정보 조회
+	EmpVO selectEmpDetail(int empno);
+	
+	//사원 이미지 등록
+	void insertEmpImg(EImgVO eImgVO);
+	
+	//사원 상세 정보 수정
+	void updateEmpDetail(EmpVO empVO);
 	
 }

@@ -146,23 +146,10 @@ function getSearchList(){
 	
 	//form 태그 선택
 	const searchForm = document.querySelector('#searchForm');
-	const search_value=document.querySelector('#searchValue');
 
-/*
-	if(search_value.value==''){
-		alert('키워드를 입력해주세요')
-		
-		return;
-	}
-	else{
-		searchForm.submit();
-	}*/
-	
-		searchForm.submit();
+	searchForm.submit();
 	
 }
-
-
 //페이지 이동
 function getEmpListPaging(pageNum) {
   document.querySelector('#nowPage').value = pageNum;
@@ -171,6 +158,199 @@ function getEmpListPaging(pageNum) {
   
 }
 
+
+//사원 상세정보
+function getEmpDetail(empno){
+	//자료형 int로 변경
+	const empNum = parseInt(empno);
+	
+$.ajax({
+	url: '/emp/getEmpDetailAjax', //요청경로
+	type: 'post',
+	async: true, // 동기 방식으로 설정
+	//contentType: 'application/json; charset=UTF-8', //Json 타입
+	contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+	data: {'empno':empNum}, //필요한 데이터
+	success: function(result) {
+		//모달 태그 선택
+		const modal_tag = document.querySelector('#empDtailModal');
+		
+		//모달 내용 그리기
+		drawEmpDatail(result);
+
+		//bootstrap 모달 불러오기
+		const modal = new bootstrap.Modal(modal_tag);
+		modal.show();
+	},
+	error: function() {
+		alert('실패');
+	}
+});
+
+
+}
+
+//모달 사원 상세정보 그리기
+function drawEmpDatail(empDetail){
+	
+	const modal_body=document.querySelector('.modal-body');
+	modal_body.replaceChildren();
+	
+	let str ='';
+	
+	str += `<label class="page_title">사원 개인 페이지</label>`;
+	str += `<form class="row" id="" >`;
+	str += 	`<div class="col-6">`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col card" style="width: 18rem;">`;
+
+	str += 				`<img src="/upload/empImg/가장 빨리 만나는 자바_메인.jpg" id="empImgPreview" class="card-img-top">`;
+	str += 				`<input type="file" class="form-control" id="empImgInput">`;		
+	str += 				`<input type="button" value="저장" onclick="regEmpImg()">`;		
+	str += 			`<div class="card-body">`;
+	str += 				`<p class="card-text">${empDetail.ename}</p>`;
+	str += 				`<p class="card-text">${empDetail.deptVO.dename+'(' +empDetail.deptVO.loc+')'}</p>`;
+	str += 			`</div>`;
+	str += 			`</div>`;
+	str += 		`</div>`;
+	str += 	`</div>`;
+	str +=	`<div class="col-6 mb-3">`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col card" style="width: 25rem;">`;
+	str += 			`<ul class="list-group list-group-flush">`;
+	str += 			`<li class="list-group-item">기본 정보</li>`;		
+	str += 			'<table>';
+	str += 				'<tr>';
+	str += 					'<td>이름</td>';
+	str += 					`<td>`;
+	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.ename}">`;
+	str += 					`</td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>사번</td>';
+	str += 					`<td> ${empDetail.empno} </td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>아이디</td>';
+	str += 					`<td> ${empDetail.empno} </td>`;
+	str += 				'</tr>';
+	str += 			'</table>';	
+	str += 			`</ul>`;
+	str += 		`</div>`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col card" style="width: 25rem;">`;
+	str += 			`<ul class="list-group list-group-flush">`;
+	str += 			`<li class="list-group-item">인사 정보</li>`;		
+	str += 			'<table>';
+	str += 				'<tr>';
+	str += 					'<td>부서</td>';
+	str += 					`<td>`;
+	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.deptVO.dename+'('+empDetail.deptVO.loc+')'}">`;
+	str += 					`</td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>직급</td>';
+	str += 					`<td>`;
+	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.eJob}">`;
+	str += 					`</td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>입사일</td>';
+	str += 					`<td> ${empDetail.joinDate} </td>`;
+	str += 				'</tr>';
+	str += 			'</table>';	
+	str += 			`</ul>`;
+	str += 		`</div>`;
+	str += 		`<div class="row mb-4">`;
+	str += 			`<div class="col card" style="width: 25rem;">`;
+	str += 			`<ul class="list-group list-group-flush">`;
+	str += 			`<li class="list-group-item">연락처 정보</li>`;		
+	str += 			'<table>';
+	str += 				'<tr>';
+	str += 					'<td>이메일</td>';
+	str += 					`<td> ${empDetail.empno}@bykh.com </td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>내선번호</td>';
+	str += 					`<td>`;
+	str += 						`<input type="number" name="officeTel" placeholder="${empDetail.officeTel}" min="0">`;
+	str += 					`</td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>휴대전화</td>';
+	str += 					`<td>`;	
+	str += 						`<input type="number" name="phoneTel" placeholder="${empDetail.phoneTel}" min="0">`;
+	str += 					`</td>`;
+	str += 				'</tr>';
+	str += 			'</table>';	
+	str += 			`</ul>`;
+	str += 		`</div>`;
+	str += 	`</div>`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col text-right">`;
+	str += 				`<input type="submit" value="저장"  class="btn">`;
+	str += 			`</div>`;
+	str += 			`<div class="col text-right">`;
+	str += 				`<input type="button" value="취소" class="btn">`;
+	str += 			`</div>`;
+	str += 			`</div>`;
+	str += `</form>`;
+
+	
+	modal_body.insertAdjacentHTML('afterbegin', str);
+	
+	//사진 등록
+	  const empImgPreview = document.getElementById('empImgPreview');
+	  const empImgInput = document.getElementById('empImgInput');
+	
+	
+	  empImgPreview.addEventListener('click', () => {
+	   
+	    empImgInput.click();
+	  });
+	
+	
+	  empImgInput.addEventListener('change', () => {
+	
+	    const file = empImgInput.files[0];
+	
+	    if (file) {
+	
+	      const reader = new FileReader();
+	
+	      reader.onload = () => {
+	
+	        empImgPreview.src = reader.result;
+	      };
+	
+	      reader.readAsDataURL(file);
+	    }
+	  });
+}
+
+//사진 등록
+
+function regEmpImg() {
+	const empno = document.querySelector('#empno');
+	const attachedFileName = document.querySelector('#attachedFileName');
+
+	$.ajax({
+		url: '/emp/regEmpImgAjax', //요청경로
+		type: 'post',
+		async: true, // 동기 방식으로 설정
+		contentType: 'application/json; charset=UTF-8', //Json 타입
+		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: {'empno':empno,
+				'attachedFileName' : attachedFileName}, //필요한 데이터
+		success: function(result) {
+			
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+
+}
 
 //계정 상태 변경
 // 변경을 누르면 휴먼 계정으로 변경, 사원 세부 정보에서 퇴직일때는 삭제 버튼으로 변경 가능
