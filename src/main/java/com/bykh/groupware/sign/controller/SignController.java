@@ -101,6 +101,14 @@ public class SignController {
 		
 		return "redirect:/sign/signMain";
 	}
+	
+	//구매신청서 작성
+	@ResponseBody
+	@PostMapping("/insertPurchaseorder")
+	public void insertPurchaseorder(SignDocVO signDocVO) {
+		//쿼리 실행
+	}
+	
 	//결재문서 상세조회
 	@ResponseBody
 	@PostMapping("/getSignDocDetailAjax")

@@ -11,169 +11,204 @@
 </th:block>
 
 
-<th:block layout:fragment="content">
-	<div class="row">
-		<div class="col">
-			<div class="row">
-				<div class="col">
-					<label class="page_title">사원 등록 | 조회</label>
-				</div>
-			</div>
-			<div class="row g-3" style="margin-bottom: 1rem;">				
-				<div class="col-auto ms-auto">					
-					<div class="d-flex align-items-center">
-						<form th:action="@{/emp/empManage}" th:method="post" id="searchForm">
-						<input type="hidden" name="nowPage" id="nowPage" th:value=${empVO.nowPage}>
-						<select class="form-select" name="searchKeyword" id="searchKeyword">
-							<option selected value = "">검색 내용 선택</option>				
+<th:block layout:fragment="content">	
+	<label class="page_title">사원 등록 | 조회</label>	
+	<div class="row mb-4">				
+		<form th:action="@{/emp/empManage}" th:method="post" id="searchForm">
+			<div class="col d-grid gap-7 d-md-flex justify-content-md-end">
+				<div class="row">
+					<input type="hidden" name="nowPage" id="nowPage" th:value=${empVO.nowPage}>
+					<div class="col-3">
+						<select class="form-select" name="searchKeyword"
+							id="searchKeyword">
+							<option selected value="">검색 내용 선택</option>
 							<option value="EMP.EMPNO"
-									th:selected="${empVO.searchKeyword=='BUY.BUY_CODE'}">사번</option>
+								th:selected="${empVO.searchKeyword=='BUY.BUY_CODE'}">사번</option>
 							<option value="EMP.ENAME"
-									th:selected="${empVO.searchKeyword=='EMP.ENAME'}">사원 이름</option>
+								th:selected="${empVO.searchKeyword=='EMP.ENAME'}">사원 이름</option>
 							<option value="DEPT.DENAME"
-									th:selected="${empVO.searchKeyword=='DEPT.DENAME'}">부서</option>												
-						</select> 
-					<div class="col">
-						<input id="searchValue" name="searchValue" th:value="${empVO.searchValue}" type="text" class="form-control ms-2">
-					
-					</div>	
+								th:selected="${empVO.searchKeyword=='DEPT.DENAME'}">부서</option>
+						</select>
+					</div>
+					<div class="col-3">
+						<input id="searchValue" name="searchValue" th:value="${empVO.searchValue}" type="text" class="form-control">
+					</div>
+					<div class="col-auto">
 						<input th:onclick="getSearchList();" type="button" value="검색" class="btn">
-					</form>
 					</div>
 				</div>
 			</div>
-			<div class="row mb-3">
-				<div class="col">
-					<form th:action="@{/emp/regEmpForm}" th:method="post" id="regEmpForm">
-						<input type="hidden" name="nowPage" id="nowPage" th:value=${empVO.nowPage}>
-						<table class="table align-middle text-center"
-							style="margin-bottom: 0; padding-bottom: 0;">
-							<colgroup>
-								<col width="5%">
-								<col width="10%">
-								<col width="10%">
-								<col width="10%">
-								<col width="10%">
-								<col width="8%">
-								<col width="8%">
-								<col width="8%">
-								<col width="8%">
-								<col width="8%">
-								<col width="8%">
-							</colgroup>
-							<thead>
-								<tr>
-									<th>No.</th>
-									<th>사번</th>
-									<th>이름</th>
-									<th>아이디</th>
-									<th>비밀번호</th>
-									<th>입사일</th>
-									<th>부서</th>
-									<th>직급</th>
-									<th>재직상태</th>
-									<th>계정상태</th>
-									<th>계정관리</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="2">
-										<button type="button" class="button">간편등록</button>
-									</td>
-									<td colspan="2"><input type="text" name="ename" id="ename"	oninput="reg_emp_validate();" class="form-control"></td>
-									<td><input type="password" name="epw" id="epw" oninput="reg_emp_validate();" class="form-control"></td>
-									<td><input type="date" name="joinDate"	class="form-control"></td>
-									<td>
-										<select name="deptno" class="form-control">
-											<option th:each="dept:${deptListIsUse}" th:text="${dept.dename+'(' +dept.loc+')'}"	th:value="${dept.deptno}"></option>
-										</select></td>
-									<td><select name="eJob" class="form-select">
-											<option value="사장">사장</option>
-											<option value="과장">과장</option>
-											<option value="대리">대리</option>
-											<option value="주임">주임</option>
-											<option value="사원">사원</option>
-									</select></td>
-									<td><select name="eStatus" class="form-select">
-											<option value="1">재직중</option>
-											<option value="2">휴직</option>
-											<option value="3">퇴사</option>
-									</select></td>
-									<td colspan="2">
-										<button type="button" class="btn btn-primary"
-											onclick="regEmp();">저장</button>
-										<button type="button" class="btn btn-secondary"
-											onclick="clearForm();">취소</button>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</form>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col">
-					<table id="empListTable" class="table align-middle text-center">
-						<colgroup>
-							<col width="5%">
-							<col width="10%">
-							<col width="10%">
-							<col width="10%">
-							<col width="10%">
-							<col width="11%">
-							<col width="8%">
-							<col width="8%">
-							<col width="8%">
-							<col width="8.7%">
-							<col width="8%">
-						</colgroup>
-						<tbody>
-							<th:block th:if="${#lists.size(empList)==0}">
-								<tr>
-									<td colspan="11">등록된 사원이 없습니다.</td>
-								</tr>
-							</th:block>
-							<th:block th:unless="${#lists.size(empList)==0}">
-								<tr th:each="emp,state:${empList}">
-									<td>[[${state.count}]]</td>
-									<td>[[${emp.empno}]]</td>
-									<td>[[${emp.ename}]]</td>
-									<td>[[${emp.empno}]]</td>
-									<td>****</td>
-									<td>[[${emp.joinDate}]]</td>
-									<td>[[${emp.deptVO.dename}]]</td>
-									<td>[[${emp.eJob}]]</td>
-									<td>[[${emp.eStatusStr}]]</td>
-									<td>[[${emp.eRole}]]</td>
-									<td>
-										<button th:onchange="changAccount([[${emp.empno}]]);"
-											type="button" class="button">변경</button>
-									</td>
-								</tr>
-							</th:block>
-						</tbody>
-					</table>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-3">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item" th:classappend="${empVO.prev ? '':'disabled'}">
-								<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.beginPage -1}]])" aria-label="Previous"> 
-								<span aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li class="page-item" th:each="pageNum : ${#numbers.sequence(empVO.beginPage, empVO.endPage)}">
-								<a th:classappend="${empVO.nowPage==pageNum ? 'active':''}" class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${pageNum}]])">[[${pageNum}]]</a>
-							</li>
-							
-							<li class="page-item" th:classappend="${empVO.next ? '':'disabled'}">
-								<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.endPage +1}]])" aria-label="Next"> 
-								<span aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col">
+			<form th:action="@{/emp/regEmpForm}" th:method="post" id="regEmpForm">
+				<input type="hidden" name="nowPage" id="nowPage" th:value=${empVO.nowPage}>
+				<table class="table align-middle text-center"
+					style="margin-bottom: 0; padding-bottom: 0;">
+					<colgroup>
+						<col width="5%">
+						<col width="10%">
+						<col width="8%">
+						<col width="8%">
+						<col width="8%">
+						<col width="8%">
+						<col width="9%">
+						<col width="8%">
+						<col width="8%">
+						<col width="8%">
+						<col width="8%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>No.</th>
+							<th>사번</th>
+							<th>이름</th>
+							<th>아이디</th>
+							<th>비밀번호</th>
+							<th>입사일</th>
+							<th>부서</th>
+							<th>직급</th>
+							<th>재직상태</th>
+							<th>계정상태</th>
+							<th>계정관리</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td colspan="2">
+								<button type="button" class="button">간편등록</button>
+							</td>
+							<td colspan="2"><input type="text" name="ename" id="ename"	oninput="reg_emp_validate();" class="form-control"></td>
+							<td><input type="password" name="epw" id="epw" oninput="reg_emp_validate();" class="form-control"></td>
+							<td><input type="date" name="joinDate"	class="form-control"></td>
+							<td>
+								<select name="deptno" class="form-control">
+									<option th:each="dept:${deptListIsUse}" th:text="${dept.dename+'(' +dept.loc+')'}"	th:value="${dept.deptno}"></option>
+								</select></td>
+							<td><select name="eJob" class="form-select">
+									<option value="사장">사장</option>
+									<option value="과장">과장</option>
+									<option value="대리">대리</option>
+									<option value="주임">주임</option>
+									<option value="사원">사원</option>
+							</select></td>
+							<td><select name="eStatus" class="form-select">
+									<option value="1">재직중</option>
+									<option value="2">휴직</option>
+									<option value="3">퇴사</option>
+							</select></td>
+							<td colspan="2">
+								<button type="button" class="btn btn-primary"
+									onclick="regEmp();">저장</button>
+								<button type="button" class="btn btn-secondary"
+									onclick="clearForm();">취소</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<table id="empListTable" class="table align-middle text-center">
+				<colgroup>
+					<col width="6%">
+					<col width="10%">
+					<col width="10%">
+					<col width="9%">
+					<col width="9%">
+					<col width="*">
+					<col width="10%">
+					<col width="8%">
+					<col width="8%">
+					<col width="8.7%">
+					<col width="8%">
+				</colgroup>
+				<tbody>
+					<th:block th:if="${#lists.size(empList)==0}">
+						<tr >
+							<td colspan="11">등록된 사원이 없습니다.</td>
+						</tr>						
+					</th:block>
+					<th:block th:unless="${#lists.size(empList)==0}">
+						<tr th:each="emp,state:${empList}">
+							<td>[[${state.count}]]</td>
+							<td>[[${emp.empno}]]</td>
+							<td>
+								<span th:onclick="getEmpDetail([[${emp.empno}]]);" style="cursor: pointer;">
+								[[${emp.ename}]]
+								</span>
+							</td>
+							<td>[[${emp.empno}]]</td>
+							<td>****</td>
+							<td>[[${emp.joinDate}]]</td>							
+							<td>[[${emp.deptVO.dename+'(' +emp.deptVO.loc+')'}]]</td>
+							<td>[[${emp.eJob}]]</td>
+							<td>[[${emp.eStatusStr}]]</td>
+							<td>[[${emp.eAccountStr}]]</td>
+							<td>
+								<button th:onchange="changAccount([[${emp.empno}]]);"
+									type="button" class="button">변경</button>
+							</td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<div class="col-3">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li class="page-item" th:classappend="${empVO.prev ? '':'disabled'}">
+						<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.beginPage -1}]])" aria-label="Previous"> 
+						<span aria-hidden="true">&laquo;</span>
+					</a></li>
+					<li class="page-item" th:each="pageNum : ${#numbers.sequence(empVO.beginPage, empVO.endPage)}">
+						<a th:classappend="${empVO.nowPage==pageNum ? 'active':''}" class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${pageNum}]])">[[${pageNum}]]</a>
+					</li>
+					
+					<li class="page-item" th:classappend="${empVO.next ? '':'disabled'}">
+						<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.endPage +1}]])" aria-label="Next"> 
+						<span aria-hidden="true">&raquo;</span>
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+	
+	
+	<!-- empDtail Modal -->
+	<div class="modal fade modal-xl" id="empDtailModal" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">					
+					<!-- <label class="page_title">사원 개인 페이지</label>
+					<form class="row" id="" >
+						<div class="col">
+							<div class="row" >
+								<div class="card" style="width: 18rem;">
+									<img src="..." class="card-img-top" alt="...">
+									<div class="card-body">
+										<p class="card-text"></p>
+										<p class="card-text"></p>
+									</div>
+								</div>
+							</div>						
+						</div>
+						<div class="col">
+							<div class="row">
+								dfadf
+							</div>
+							<div class="row">
+								dfadf
+							</div>
+						</div>
+						
+					</form> -->
 				</div>
 			</div>
 		</div>

@@ -6,7 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 
 @Service("empService")
@@ -36,6 +36,24 @@ public class EmpServiceImpl implements EmpService {
 	@Override //전체 사원 수 조회
 	public int getEmpListCnt(EmpVO empVO) {
 		return sqlSession.selectOne("empMapper.getEmpListCnt",empVO);
+	}
+
+
+	@Override //사원의 사원 상세 정보 조회
+	public EmpVO selectEmpDetail(int empno) {		
+		return sqlSession.selectOne("empMapper.selectEmpDetail",empno);
+	}
+
+
+	@Override //사원 이미지 등록
+	public void insertEmpImg(EImgVO eImgVO) {
+		sqlSession.insert("empMapper.insertEmpImg", eImgVO);
+		
+	}
+	@Override //사원 상세 정보 수정
+	public void updateEmpDetail(EmpVO empVO) {
+	
+		sqlSession.update("empMapper.updateEmpDetail", empVO);
 	}
 	
 	

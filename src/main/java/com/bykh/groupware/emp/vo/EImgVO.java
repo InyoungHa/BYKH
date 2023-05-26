@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class EImgVO {
 	private String imgCode;
-	private String empno;
+	private int empno;
 	private String originFileName;
 	private String attachedFileName;
 }

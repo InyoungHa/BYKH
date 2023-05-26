@@ -16,44 +16,32 @@ public class EmpVO extends PageVO {
 
 	
 	private int empno;
-	
-	@JsonProperty("deptno")
 	private int deptno;
-	
-	@JsonProperty("ename")
 	private String ename;
-	
-	@JsonProperty("epw")
 	private String epw;
-	
-	@JsonProperty("e_job")
 	private String eJob;
 	private int age;
 	private String gender;
 	private String eEmail;
 	private String phoneTel;
 	private String officeTel;
-	
-	@JsonProperty("e_role")
 	private String eRole;
-	
-	@JsonProperty("e_status")
 	private int eStatus;
-	
-	@JsonProperty("join_date")
 	private String joinDate;
-
-	@JsonProperty("e_status_str")
-	private String eStatusStr; //재직상태 이름
 	
-	@JsonProperty("deptVO")
+	private String eStatusStr; //재직상태 이름
+
 	private DeptVO deptVO;
 	
-	private String searchKeyword;
-	private String searchValue;
+	private int eAccount; //계정 상태
+	private String eAccountStr; //계정 상태 이름
 	
-	//검색 vo 추가
-	//private SearchEmpVO searchEmpVO;
+	
+	private String searchKeyword;//검색 키워드
+	private String searchValue; //검색 
+	
+	private EImgVO eImgVO; // 사원 이미지 등록
+	
 	
 
 	//테스트용 추가-희수

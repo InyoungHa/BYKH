@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 
 public class UploadUtil {
@@ -84,5 +85,32 @@ public class UploadUtil {
 	
 	
 	
+	public static EImgVO uploadFile(MultipartFile empImg) {
+		
+		EImgVO eImgVO = null;
+		
+		if(!empImg.isEmpty()) {
+			eImgVO = new EImgVO();
+			
+			String originFileName = empImg.getOriginalFilename();
+			String uuid = UUID.randomUUID().toString();
+			String extension = originFileName.substring(originFileName.lastIndexOf("."));
+			String attachedFileName = uuid + extension;
+			
+			
+			try {
+				File file = new File(ConstVariable.UPLOAD_PATH + attachedFileName);
+				empImg.transferTo(file);
+				
+				eImgVO.setOriginFileName(originFileName);
+				eImgVO.setAttachedFileName(attachedFileName);
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+						
+		}
+		return eImgVO;
+	}
 	
 }
