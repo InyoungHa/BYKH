@@ -10,10 +10,22 @@
 </th:block>
 
 <th:block layout:fragment="content">
+<style>
+.myBtn {
+color:black;
+background-color: #f8f9fa;
+border: 0.3px solid #466583;
+}
+.numberBtn {
+	color: #466583;
+}
+
+</style>
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
 		<form th:action="@{/notice/regNotice}" method="post" id="noticeForm" enctype="multipart/form-data">
+		
 		
 			<div class="row">
 				<div class="col">
@@ -54,13 +66,19 @@
 				</div>
 			</div>
 			<div class="row px-2">
-				<div class="col d-grid d-md-flex justify-content-md-end">
-					<button class="btn btn-primary" type="button" onclick="noticeFormCheck();">등록</button>
+				<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+					<div class="btn-group" role="group">
+					  <button type="button" class="btn myBtn" onclick="tempRegNotice();">임시저장</button>
+					  <button type="button" class="btn myBtn numberBtn" data-bs-toggle="modal" data-bs-target="#tempRegModal">1</button>
+					</div>
+					<button class="btn" type="button" onclick="regNotice();">등록</button>
 				</div>
 			</div>
+			
+			
 			<div class="row">
 				<div class="col">
-				
+					<input type="hidden" name="boardStatus" id="boardStatus">
 				</div>
 			</div>
 			
@@ -69,6 +87,66 @@
 	</div>
 	
 	
+	
+<!-- 임시 저장 모달 -->
+<div class="modal fade" id="tempRegModal" tabindex="-1" aria-labelledby="tempRegModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 50rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="tempRegModal">임시 저장함</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mt-3 mb-3">
+        <div class="row">
+        	<div class="col">
+				<table class="table text-center align-middle">
+					<colgroup>
+						<col width="*">
+						<col width="25%">
+						<col width="5%">
+					</colgroup>
+					
+					<tbody>
+						<tr>
+							<td class="text-start">
+								<a style="color: black;">
+									임시저장글
+								</a>
+							</td>
+							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
+							<td class="text-danger">
+								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+								</svg>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-start">임시저장글</td>
+							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
+							<td class="text-danger">
+								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+								</svg>
+							</td>
+						</tr>
+						<tr>
+							<td class="text-start">임시저장글</td>
+							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
+							<td class="text-danger">
+								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+								</svg>
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </th:block>
 
 <!-- 외부 js 파일 -->

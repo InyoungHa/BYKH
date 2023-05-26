@@ -13,6 +13,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class BoardVO extends PageVO {
+	public BoardVO() {
+		super(10, 10);
+	}
+	
 	private String boardNum;
 	private String boardTitle;
 	private String boardContent;
@@ -39,5 +43,6 @@ public class BoardVO extends PageVO {
 	private int fileCnt;
 	private int replyCnt;
 	
-	PageVO pageVO = new PageVO(10, 10);
+	private SearchBoardVO searchBoardVO;
+	
 }

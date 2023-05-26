@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,16 +34,16 @@ public class NoticeController {
 	private NoticeService noticeService;
 	
 	//게시판 목록
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	public String noticeList(Model model, BoardVO boardVO) {
 		//전체 데이터 수
-		boardVO.setTotalDataCnt(noticeService.getBoardCnt());
+		boardVO.setTotalDataCnt(noticeService.getBoardCnt(boardVO));
 		
 		//페이지 정보 세팅
 		boardVO.setPageInfo();
 		
 		//전체 글 목록 조회
-		model.addAttribute("noticeList", noticeService.getNoticeList());
+		model.addAttribute("noticeList", noticeService.getNoticeList(boardVO));
 		
 		//중요글 목록 조회
 		model.addAttribute("noticeImportantList", noticeService.getNoticeImportantList());
@@ -57,9 +58,58 @@ public class NoticeController {
 		return "content/notice/notice_form";
 	}
 	
-	//글 등록
+	//글 신규 등록
 	@PostMapping("/regNotice")
 	public String regNotice(BoardVO boardVO, MultipartFile[] files) {
+		
+		noticeService.regNotice(regBoard(boardVO, files));
+		
+		return "redirect:/notice/list";
+	}
+	
+	
+	//글 임시 등록
+	@ResponseBody
+	@PostMapping("/tempRegNotice")
+	public void tempRegNotice(BoardVO boardVO, MultipartFile[] files) {
+		
+		//가져온 정보에서 글 번호가 없을 때
+		if (boardVO.getBoardNum() == null) { //새로운 임시 글 등록
+			//글 등록 쿼리
+			noticeService.regNotice(regBoard(boardVO, files));
+		}
+		else { //같은 임시글 저장
+			
+			//여기 다 안됨!!!!!!!!!!!!!!!!수정해야됨!!!!!!!!!!!
+			noticeUpdate(boardVO, null, files);
+		}
+		
+		
+	}
+
+//	@PostMapping("/tempRegNotice1")
+//	public String tempRegNotice1(BoardVO boardVO, MultipartFile[] files) {
+//		test(boardVO, files);
+//		
+//		return "";
+//	}
+//	
+//	
+//	//게시글 임시 저장 or 업데이트
+//	public void test(BoardVO boardVO, MultipartFile[] files) {
+//		if (boardVO.getBoardNum() == null) { //새로운 임시 글 등록
+//			//글 등록 쿼리
+//			noticeService.regNotice(regBoard(boardVO, files));
+//		}
+//		else { //같은 임시글 저장
+//			
+//			//여기 다 안됨!!!!!!!!!!!!!!!!수정해야됨!!!!!!!!!!!
+//			noticeUpdate(boardVO, null, files);
+//		}
+//	}
+	
+	//글 등록 메소드
+	public BoardVO regBoard(BoardVO boardVO, MultipartFile[] files) {
 		// 글 등록
 		String boardNum = noticeService.getNextBoardNum();
 		boardVO.setBoardNum(boardNum);
@@ -76,11 +126,11 @@ public class NoticeController {
 			// boardVO에 리스트 set
 			boardVO.setBoardFileList(attachedBoardFileList);
 		}
-
-		noticeService.regNotice(boardVO);
 		
-		return "redirect:/notice/list";
+		return boardVO;
 	}
+	
+	
 	
 	//글 상세 조회
 	@GetMapping("/detail")

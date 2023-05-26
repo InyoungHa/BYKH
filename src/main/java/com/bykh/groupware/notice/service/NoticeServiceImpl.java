@@ -20,14 +20,14 @@ public class NoticeServiceImpl implements NoticeService {
 	
 	//글 개수 조회
 	@Override
-	public int getBoardCnt() {
-		return sqlSession.selectOne("boardMapper.getBoardCnt");
+	public int getBoardCnt(BoardVO boardVO) {
+		return sqlSession.selectOne("boardMapper.getBoardCnt", boardVO);
 	}
 	
 	//공지 게시판 목록 조회
 	@Override
-	public List<BoardVO> getNoticeList() {
-		return sqlSession.selectList("boardMapper.getNoticeList");
+	public List<BoardVO> getNoticeList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getNoticeList", boardVO);
 	}
 	
 	//공지 게시판 중요글 목록 조회

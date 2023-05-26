@@ -8,10 +8,10 @@ import com.bykh.groupware.notice.vo.BoardVO;
 public interface NoticeService {
 	
 	//글 개수 조회
-	int getBoardCnt();
+	int getBoardCnt(BoardVO boardVO);
 	
 	//공지 게시판 목록 조회
-	List<BoardVO> getNoticeList();
+	List<BoardVO> getNoticeList(BoardVO boardVO);
 	
 	//공지 중요글 목록 조회
 	List<BoardVO> getNoticeImportantList();

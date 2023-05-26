@@ -18,6 +18,8 @@ public class PageVO {
 	private boolean next; // '다음' 버튼의 유무 - 마지막 페이지 뒤에는 다음 버튼이 없도록
 	private int offsetCnt; // 건너뛸 개수
 	
+	private int totalPageCnt;
+	
 	
 	
 	//이전 1 2 3 4 5 다음
@@ -58,7 +60,7 @@ public class PageVO {
 		// 전체데이터 / 한번에 보여지는 페이지 수 -> 올림
 		// 155 / (실수)10 ~> 올림
 		// totalPageCnt 자료형이 int라 형 일치 시키기
-		int totalPageCnt = (int) Math.ceil(totalDataCnt / (double)displayCnt);
+		totalPageCnt = (int) Math.ceil(totalDataCnt / (double)displayCnt);
 		
 		
 		//next 버튼 유무

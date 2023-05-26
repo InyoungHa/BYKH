@@ -49,7 +49,13 @@
 	<!-- 글 개수 조회 -->
 	<select id="getBoardCnt" resultType="int">
 		SELECT COUNT(BOARD_NUM)
-		FROM BOARD
+		FROM BOARD, EMP
+		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
+		AND BOARD_STATUS = 1
+		AND BOARD_WRITER = EMPNO
+		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
+		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
+		</if>
 	</select>
 	
 	<!-- 공지사항 글 목록 조회 -->
@@ -58,7 +64,7 @@
 		SELECT BOARD_NUM
 		    , BOARD_TITLE
 		    , BOARD_WRITER
-		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
 		    , BOARD_VIEW
 		    , ENAME
 		    , (SELECT COUNT(FILE_NUM) 
@@ -71,7 +77,11 @@
 		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
+		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
+		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
+		</if>
 		ORDER BY BOARD_NUM DESC
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
 	<!-- 공지사항 중요글 목록 조회 -->
@@ -79,12 +89,15 @@
 		SELECT BOARD_NUM
 			, BOARD_TITLE
 			, BOARD_WRITER
-			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
 			, BOARD_VIEW
 		    , ENAME
 		    , (SELECT COUNT(FILE_NUM) 
 				FROM BOARD_FILE
 				WHERE BOARD_NUM = BOARD.BOARD_NUM) FILE_CNT
+			, (SELECT COUNT(REPLY_NUM)
+                FROM BOARD_REPLY
+                WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
 		FROM BOARD, EMP
 		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
 		AND IS_IMPORTANT = 'Y'
@@ -107,6 +120,7 @@
 			, BOARD_CONTENT
 			, BOARD_WRITER
 			, BOARD_MENU_CODE
+			, BOARD_STATUS
 			<if test="isImportant != null">
 			, IS_IMPORTANT
 			</if>
@@ -116,6 +130,7 @@
 			, #{boardContent}
 			, 20230517
 			, 'BOARD_MENU_001'
+			, #{boardStatus}
 			<if test="isImportant != null">
 			, #{isImportant}
 			</if>

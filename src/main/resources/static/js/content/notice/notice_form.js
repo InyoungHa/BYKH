@@ -1,4 +1,35 @@
-//제목, 내용, 파일 첨부 유효성 체크
+
+
+
+//정상 글 등록
+function regNotice() {
+	const boardStatus = document.querySelector('#boardStatus');
+	boardStatus.value = 1;
+	
+	if(!noticeFormCheck()) {
+		return false;
+	}
+	else {
+		document.querySelector('#noticeForm').submit();
+	}
+}
+
+
+//임시 저장 글 등록
+function tempRegNotice() {
+	const boardStatus = document.querySelector('#boardStatus');
+	boardStatus.value = 2;
+	
+	if(!noticeFormCheck()) {
+		return false;
+	}
+	else {
+		
+	}
+}
+
+
+//제목, 내용, 파일 첨부 유효성 체크 + 글 등록
 function noticeFormCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
@@ -24,8 +55,10 @@ function noticeFormCheck() {
 		}
 	}
 	
-	document.querySelector('#noticeForm').submit();
+	return true;
 }
+
+
 
 //파일 추가 버튼
 function addFileInputDiv(buttonTag) {
