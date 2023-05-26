@@ -53,8 +53,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	
     headerToolbar: {
       left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      center: 'title' ,
+      right: 'addEventButton,dayGridMonth,timeGridWeek,timeGridDay'
     },
      // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보인다.)
     
@@ -63,8 +63,69 @@ document.addEventListener('DOMContentLoaded', function() {
     droppable: true,  // 드래그 가능
     timeZone: 'UTC',
     events: return_value,
-    dragRevertDuration: 0,
+    dragRevertDuration: 0
     
+    //
+,
+customButtons: {
+addEventButton: { // 추가한 버튼 설정
+text: "일정 추가",  // 버튼 내용
+click: function() {
+	$("#sprintSettingModalClose").click(function() {
+  $("#calendarModal").modal("hide");
+});
+
+	 // 버튼 클릭 시 이벤트 추가
+    $("#calendarModal").modal("show"); // modal 나타내기
+    $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
+    var title = document.getElementById("calendar_content").value;
+    var start = document.getElementById("calendar_start_date").value;
+    var end = document.getElementById("calendar_end_date").value;
+
+   // 내용 입력 여부 확인
+    if (title == null || title == "") {
+      alert("내용을 입력하세요.");
+    } else if (start == "" || end == "") {
+      alert("날짜를 입력하세요.");
+    } else if (new Date(end) - new Date(start) < 0) { // 날짜 타입으로 변환 후 확인
+      alert("종료일이 시작일보다 먼저입니다.");
+    } else { // 정상적인 입력 시
+      var obj = {
+        "title": title,
+        "start": start,
+        "allDay": true,
+        "end": end
+      }; // 전송할 객체 생성
+
+     console.log(obj); // 해당 객체를 서버로 전달하여 DB 연동 가능
+  // AJAX를 사용하여 서버로 데이터 전송 및 DB 연동 처리
+    $.ajax({
+      url: "/calendar/calendarSave", // 서버의 API 엔드포인트 주소
+      type: "POST",
+      data: JSON.stringify(obj),
+      dataType: 'text',
+      contentType: 'application/json; charset=UTF-8',
+      success: function(response) {
+        // 일정 추가 성공 후 캘린더에 이벤트 표시
+        calendar.addEvent(obj);
+
+        // 모달 숨기기
+        $("#calendarModal").modal("hide");
+      },
+      error: function(error) {
+        alert("일정 추가에 실패했습니다.");
+      }
+    });
+  }
+});
+
+}
+
+}
+},     
+
+
+//
     
     
     googleCalendarApiKey : "AIzaSyBzz_NTdjVWRldBZ7kEZq-5zDGsNqK2ZzI",
@@ -252,8 +313,6 @@ function loadingEvents() {
 	return return_value;
 	//ajax end
 }
-
-
 
 
 
