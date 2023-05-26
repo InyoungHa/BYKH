@@ -286,7 +286,32 @@ function setFinalPrice(){
 	buy_price_td.textContent = final_price;
 	
 };
-
+//임시저장
+function saveSignDoc(){
+	
+	//sgnStatus 값 세팅(임시저장/등록 여부)
+	document.querySelector('.sgnStatus').value = 0;
+	//approverNo값 세팅
+	let approverNoStr = '';
+	const approver_no_list = document.querySelectorAll('.approverNo');
+	approver_no_list.forEach(function(approver_no){
+		approverNoStr += approver_no.value + ','
+	});
+	document.querySelector('.approverNoStr').value = approverNoStr;
+	
+	//==========추가==============
+	
+	
+	
+	
+	signDocForm.submit();
+	
+	
+};
+//기안올리기
+function insertSignDoc(){
+	document.querySelector('.sgnStatus').value = 1;
+};
 
 
 //========이벤트=========

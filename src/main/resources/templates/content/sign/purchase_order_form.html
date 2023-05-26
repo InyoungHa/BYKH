@@ -70,7 +70,7 @@
 		.content-table{
 			vertical-align: middle;
 		}
-		.content-table > thead, .content-table > tbody > tr:last-child > td:first-child, .content-table > tbody > tr:nth-last-child(2) > td:first-child{
+		.content-table > thead, .content-table > tbody > tr:last-child > td:first-child, .content-table > tbody > tr:nth-last-child(2){
 			background-color: #dddddd;
 		}
 		.itemListDiv{
@@ -109,7 +109,7 @@
 </th:block>
 
 <th:block layout:fragment="content">
-	<form action="/sign/insertSign" method="post" id="signDocForm">
+	<form action="/sign/insertPurchaseorder" method="post" id="signDocForm">
 	<div class="row">
 		<div class="col-8" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
