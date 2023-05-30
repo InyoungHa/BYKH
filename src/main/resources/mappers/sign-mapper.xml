@@ -195,7 +195,7 @@
 		<foreach collection="signVOList" item="sign" index="i">
 			INTO SGN (
 			    DOC_NO
-			    , SGN_STATUS
+			    , SGN_ORDER
 			    , APPROVER_NO
 			) VALUES(
 			    ${sign.docNo}
@@ -256,6 +256,10 @@
 		FROM ITEM
 		ORDER BY ITEM_NO
 	</select>
+	
+	
+	
+	
 </mapper>
 
 

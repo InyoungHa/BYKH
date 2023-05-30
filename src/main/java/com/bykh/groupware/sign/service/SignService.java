@@ -28,5 +28,7 @@ public interface SignService {
 	
 	//구매신청서 - 모든 아이템 리스트 조회
 	List<ItemVO> getItemList();
+	//구매신청서 - INSERT
+	void insertDocPurchaseOrder(SignDocVO signDocVO);
 	
 }
