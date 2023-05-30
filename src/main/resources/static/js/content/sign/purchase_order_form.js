@@ -259,7 +259,12 @@ function addItemTr(){
 	
 	// 5.모달 닫기
 	const addItemModal = document.querySelector('#addItemModal');
-	console.log(addItemModal);
+	closeModal(addItemModal);
+	
+}
+
+//모달 닫기
+function closeModal(addItemModal){
 	addItemModal.classList.remove('show');
 	// 모달의 opacity와 display를 초기화하여 닫힌 상태를 표현
 	addItemModal.style.opacity = 0;
@@ -269,8 +274,8 @@ function addItemTr(){
 	if (backdrop) {
 		backdrop.parentElement.removeChild(backdrop);
 	}
-	
 }
+
 
 //합계 계산(모달창에서 '추가' 클릭시 실행)
 function setFinalPrice(){
