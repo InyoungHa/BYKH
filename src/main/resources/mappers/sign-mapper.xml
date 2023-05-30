@@ -71,7 +71,7 @@
 		<result column="BUY_DEPTNO"			property="buyDeptNo"/>
 		<result column="BUY_PRICE"			property="buyPrice"/>
 		<result column="BUY_APPROVAL" 		property="buyApproval"/>
-		<collection property="buyDetailList" resultMap="buyDetail"></collection>
+		<collection property="buyDetailVOList" resultMap="buyDetail"></collection>
 	</resultMap>
 	
 	<!-- 구매상세 테이블 -->

@@ -1,3 +1,5 @@
+const addItemModal = new bootstrap.Modal(document.querySelector('#addItemModal'));
+
 //결재자 리스트 div에 추가
 function addApproverHTML(approverNo, approverName, approverJob){
 	//html에 추가
@@ -212,7 +214,7 @@ function setTotalPrice(changeTag){
 //'추가' 버튼 클릭 시 addItem 테이블에 있는 목록 기안문서 테이블에 추가
 function addItemTr(){
 	// 1.필요한 데이터 가져오기(item_no, item_name, item_price, total_price)
-	//테이블의 tr들 전체 선택
+	//addItem테이블의 tr들 전체 선택
 	const tr_list = document.querySelectorAll('.addItemTable tr');
 	let item_no_list = [];
 	let item_name_list = [];
@@ -220,13 +222,11 @@ function addItemTr(){
 	let item_price_list = [];
 	let total_price_list = [];
 	tr_list.forEach(function(tr){
-		//데이터 가져오기
 		const item_name_value = tr.querySelector('td:first-child').textContent;
 		const item_price_value = tr.querySelector('td:last-child').dataset.itemPrice;
 		const item_cnt_value = tr.querySelector('td:nth-child(2) input[type="number"]').value;
 		const total_price_value_str = tr.querySelector('td:last-child').textContent.replace(/[₩,]/g, '');
 		const total_price_value = parseInt(total_price_value_str);
-		console.log(total_price_value);
 		item_no_list.push(tr.dataset.itemNo);
 		item_name_list.push(item_name_value);
 		item_cnt_list.push(item_cnt_value);
@@ -236,50 +236,115 @@ function addItemTr(){
 	
 	// 2.삽입할 str 코드 작성
 	let str = ``;
-	for(let i = 0; i < item_no_list.length; i++){
-		str += 
-		`
-		<tr class="itemTr">
-			<td>${item_name_list[i]}</td>
-			<td>${item_cnt_list[i]}</td>
-			<td>${item_price_list[i]}</td>
-			<td>${total_price_list[i]}</td>
-		</tr>
-		`;
+	const content_tr_list = document.querySelectorAll('.content-table tr');
+	// 추가할 테이블의 tr의 길이가 3 이상이면
+	const isDuplicated = false; //?
+	
+	if(content_tr_list.length > 3){
+		for(let i=0; i<item_no_list.length; i++){
+			for(let j=0; j<content_tr_list.length; j++){
+				const content_item_no = content_tr_list[j].querySelector('input[type="hidden"]');
+				console.log(`${j}content_item_no=${content_item_no}`);
+				//중복일 경우
+				if(item_no_list[i] == content_item_no){
+					const cnt_td = content_tr_list[j].querySelector('td:nth-child(2)');
+					const item_cnt = parseInt(cnt_td.textContent);
+					cnt_td.textContent = item_cnt + item_cnt_list[i];
+					
+					isDuplicated = true;
+					break;
+				}
+			}
+			//중복이 아닐 경우
+			if(!isDuplicated){
+				str +=
+				`
+						<tr class="itemTr">
+							<td>
+								${item_name_list[i]}
+								<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
+								value="${item_no_list[i]}" class="item-no">
+							</td>
+							<td>${item_cnt_list[i]}</td>
+							<td>${item_price_list[i]}</td>
+							<td>${total_price_list[i]}</td>
+						</tr>
+						`;
+			}
+		}
+		
+		
+		/*
+		console.log('if문 실행');
+		//itemNo가 중복인지 확인
+		content_tr_list.forEach(function(content_tr){
+			const content_item_no = content_tr.querySelector('input[type="hidden"]').value;
+			for(let i = 0; i < item_no_list.length; i++){
+				//item이 중복이면 content 테이블의 수량 증가
+				if(content_item_no == item_no_list[i]){
+					const cnt_td = content_tr.querySelector('td:nth-child(2)');
+					const item_cnt = parseInt(cnt_td.textContent);
+					cnt_td.textContent = item_cnt + item_cnt_list[i];
+					
+					
+					isDuplicated = true;
+					break;
+				}
+				//item이 중복이 아니면 삽입할 str 코드에 tr 추가
+				if(!isDuplicated){
+					str += 
+						`
+						<tr class="itemTr">
+							<td>
+								${item_name_list[i]}
+								<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
+								value="${item_no_list[i]}" class="item-no">
+							</td>
+							<td>${item_cnt_list[i]}</td>
+							<td>${item_price_list[i]}</td>
+							<td>${total_price_list[i]}</td>
+						</tr>
+						`;
+				}
+			}
+			
+		});*/
+	} else {
+		for (let i = 0; i < item_no_list.length; i++) {
+			str +=
+				`
+						<tr class="itemTr">
+							<td>
+								${item_name_list[i]}
+								<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
+								value="${item_no_list[i]}" class="item-no">
+							</td>
+							<td>${item_cnt_list[i]}</td>
+							<td>${item_price_list[i]}</td>
+							<td>${total_price_list[i]}</td>
+						</tr>
+						`;
+		}
 	}
 	
 	
 	// 3.합계 tr(마지막에서 2번째 tr)의 이전 형제태그로 추가
 	const content_tr = document.querySelectorAll('.content-table tr');
-	console.log(content_tr);
 	content_tr[content_tr.length - 2].insertAdjacentHTML('beforebegin', str);
 	
 	// 4. 합계 계산
 	setFinalPrice();
 	
 	// 5.모달 닫기
-	const addItemModal = document.querySelector('#addItemModal');
-	closeModal(addItemModal);
-	
+	addItemModal.hide();
 }
-
-//모달 닫기
-function closeModal(addItemModal){
-	addItemModal.classList.remove('show');
-	// 모달의 opacity와 display를 초기화하여 닫힌 상태를 표현
-	addItemModal.style.opacity = 0;
-	addItemModal.style.display = 'none';
-	// 배경색 제거
-	const backdrop = document.querySelector('.modal-backdrop');
-	if (backdrop) {
-		backdrop.parentElement.removeChild(backdrop);
-	}
-}
-
 
 //합계 계산(모달창에서 '추가' 클릭시 실행)
 function setFinalPrice(){
-	//합계 계산
+	//1. 중복 확인
+	
+	
+	//2. 합계 계산
 	//모든 tr들의 마지막 td 가져오기
 	const total_price_td_list = document.querySelectorAll('.itemTr td:last-child');	
 	let final_price = 0;
@@ -291,6 +356,9 @@ function setFinalPrice(){
 	buy_price_td.textContent = final_price;
 	
 };
+
+
+
 //임시저장
 function saveSignDoc(){
 	
@@ -380,15 +448,15 @@ searchApproverModal.addEventListener('show.bs.modal', function() {
 });
 
 //모달 태그 선택
-const addItemModal = document.querySelector('#addItemModal');
+const addItemModalEvent = document.querySelector('#addItemModal');
 //모달이 열리면 itemList 테이블의 tr을 클릭할 때마다 색상 추가/삭제 이벤트 추가
-addItemModal.addEventListener('show.bs.modal', function() {
+addItemModalEvent.addEventListener('show.bs.modal', function() {
 	const row_list = document.querySelectorAll('.itemTable tr');
 	toggleSelectedColor(row_list, 'tr');
 
 });
 //모달이 닫힐 때 itemList 테이블과 addItem 테이블의 내용(tbody) 초기화
-addItemModal.addEventListener('hidden.bs.modal', function() {
+addItemModalEvent.addEventListener('hidden.bs.modal', function() {
 	const add_item_tbody = document.querySelector('.addItemTable > tbody');
 	add_item_tbody.replaceChildren();
 });

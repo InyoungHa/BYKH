@@ -247,7 +247,6 @@ function showSignDocModal(clickTag){
 			alert('실패');
 		}
 	});
-	//ajax end	
 	
 	modal.hide();
 }
