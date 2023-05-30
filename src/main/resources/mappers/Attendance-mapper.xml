@@ -16,13 +16,11 @@
 	<!--출근시간 저장 -->
 	<insert id="goWork">
 	INSERT INTO ATTENDANCE (GO_WORK) VALUES (CURRENT_TIMESTAMP)
-    WHERE EMPNO = #{empNo}
 	</insert>
 	
 	<!--퇴근시간 저장 -->
 	<insert id="outWork">
 	INSERT INTO ATTENDANCE (GO_WORK) VALUES (CURRENT_TIMESTAMP)
-    WHERE EMPNO = #{empNo}
 	</insert>
     
 	
