@@ -236,7 +236,7 @@ color: black;
 border: 0px;
 }
 .fc-event, .fc-event-dot{
-background-color: #73A9AD;
+background-color: #AFD1E9;
 }
 .fc .fc-list-event:hover td{
 background-color: #D25380;
@@ -283,17 +283,17 @@ font-size: 22px;
             <div data-bs-toggle="modal" data-bs-target="#car1" class='fc-event-main' style="background-color: #E76161; border: 1px solid #E76161; cursor: pointer;">투싼 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE;">소나타 차량</div>
+       <div data-bs-toggle="modal" data-bs-target="#car2" class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE; cursor: pointer;">쏘나타 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #643A6B;  border: 1px solid #643A6B;">스타렉스 차량</div>
+     <div data-bs-toggle="modal" data-bs-target="#car3" class='fc-event-main' style="background-color: #643A6B; border: 1px solid #643A6B; cursor: pointer;">스타리아 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21;">빔프로젝터01</div>
+         <div data-bs-toggle="modal" data-bs-target="#beam1" class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21; cursor: pointer;">빔프로젝터01</div>
     </div>
     
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D;">빔프로젝터02</div>
+     <div data-bs-toggle="modal" data-bs-target="#beam2" class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D; cursor: pointer;">빔프로젝터02</div>
     </div>
       <p style="visibility: hidden;">
       <input type='checkbox' id='drop-remove' />
@@ -336,8 +336,57 @@ font-size: 22px;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 127px; margin-right: 80px;">추가</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="sprintSettingModalClose" style="width: 127px; margin-right: 12px; ">취소</button>
+                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 100%;">추가</button>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- 자원상세내역 -->
+       <div class="modal fade" id="calendarModalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="height: 870px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">자원상세내역</h5>        
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="taskId" class="col-form-label">자원 내용</label>
+                        <input type="text" class="form-control resourceContent" disabled id="calendar_content" name="calendar_content">                           
+                            <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
+                    		<input type="text" id="start_time_resource" name="start_date"  disabled style="width: 100%;">
+                    	
+                    	    <label for="taskId" class="col-form-label">종료 시간</label>
+							<input type="text" id="end_time_resource" name="end_date" disabled style="width: 100%;">
+							
+							<label for="taskId" class="col-form-label">총 사용 시간</label>
+							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
+							<label for="taskId" class="col-form-label">참석자</label>
+							<input type="text" id="participant" name="participant"  style="width: 100%;">
+							
+							<div class="modal-body change" style="margin-right: 50px;">
+							<label for="taskId" class="col-form-label" style="margin-top: 5px;">날짜 수정</label><br>
+                     		<label for="taskId" class="col-form-label" style="margin-top: 5px;">시작 날짜</label>
+                            <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                     
+                        <label for="taskId" class="col-form-label">종료 날짜</label>
+                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
+                           
+                            <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
+                    	 <select name="calendar_start_date" id="calendar_start_time2" style="text-align: center;"></select><br>
+                    	 
+                    	      <label for="taskId" class="col-form-label">종료 시간</label>
+                    	 <select name="calendar_end_date" id="calendar_end_time2" style="text-align: center;"></select>
+
+							</div>
+                     
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" id="saveCalendar" style="width: 100%; margin:0 auto;">저장</button>
                 </div>
     
             </div>
@@ -347,8 +396,8 @@ font-size: 22px;
     <!--회의실01 모달 -->
     <div class="modal fade" id="room1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="height: 600px; width: 500px;">
-    <img src="/img/content/resource/회의실01.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+    <div class="modal-content" style="height: 580px; width: 500px;">
+    <img src="/img/content/resource/회의실01.jpg" style="margin: 0 auto; width:100%;">
       <div class="modal-body">
       <form id="loginForm" method="post">
 							<div class="row mb-3">
@@ -376,7 +425,7 @@ font-size: 22px;
 										</tr>
 										<tr>
 											<td>기타:</td>
-											<td>화상회의, 전화, 에어컨 </td>
+											<td>화상회의, 인터넷, 에어컨 </td>
 										</tr>
 									</table>
 
@@ -392,8 +441,8 @@ font-size: 22px;
    <!--회의실02 모달 -->
    <div class="modal fade" id="room2" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="height: 600px; width: 500px;">
-    <img src="/img/content/resource/회의실02.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+    <div class="modal-content" style="height: 580px; width: 500px;">
+    <img src="/img/content/resource/회의실02.jpg" style="margin: 0 auto; width:100%;">
       <div class="modal-body">
       <form id="loginForm" method="post">
 							<div class="row mb-3">
@@ -438,8 +487,8 @@ font-size: 22px;
    <!--회의실03 모달 -->
    <div class="modal fade" id="room3" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="height: 600px; width: 500px;">
-    <img src="/img/content/resource/회의실03.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+    <div class="modal-content" style="height: 580px; width: 500px;">
+    <img src="/img/content/resource/회의실03.jpg" style="margin: 0 auto; width:100%;">
       <div class="modal-body">
       <form id="loginForm" method="post">
 							<div class="row mb-3">
@@ -467,7 +516,7 @@ font-size: 22px;
 										</tr>
 										<tr>
 											<td>기타:</td>
-											<td>화상회의, 전화, 에어컨 </td>
+											<td>화상회의, 전화, 인터넷 </td>
 										</tr>
 									</table>
 
@@ -484,8 +533,8 @@ font-size: 22px;
    <!--car1 모달 -->
    <div class="modal fade" id="car1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="height: 600px; width: 500px;">
-    <img src="/img/content/resource/투싼.png" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+    <div class="modal-content" style="height: 570px; width: 500px;">
+    <img src="/img/content/resource/투싼.png" style="margin: 0 auto; width:100%;">
       <div class="modal-body">
       <form id="loginForm" method="post">
 							<div class="row mb-3">
@@ -501,7 +550,7 @@ font-size: 22px;
 										</tr>
 										<tr>
 											<td>자원명:</td>
-											<td>투싼</td>
+											<td>현대 투싼NX4</td>
 										</tr>
 										<tr>
 											<td>연료:</td>
@@ -510,6 +559,14 @@ font-size: 22px;
 										<tr>
 											<td>출력:</td>
 											<td>230hp/180hp</td>
+										</tr>
+										<tr>
+											<td>연비:</td>
+											<td>15.8~16.2km/ℓ</td>
+										</tr>
+										<tr>
+											<td>옵션:</td>
+											<td>인스퍼레이션 </td>
 										</tr>
 									</table>
 
@@ -521,6 +578,205 @@ font-size: 22px;
     </div>
   </div>
 </div>
+
+
+  <!--car2 모달 -->
+   <div class="modal fade" id="car2" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 630px; width: 500px;">
+    <img src="/img/content/resource/소나타.JPG" style="margin: 0 auto; width:100%;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>자동차</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>현대 쏘나타 디 엣지</td>
+										</tr>
+										<tr>
+											<td>연료:</td>
+											<td>1.6 가솔린 터보</td>
+										</tr>
+										<tr>
+											<td>출력:</td>
+											<td>180hp</td>
+										</tr>
+										<tr>
+											<td>연비:</td>
+											<td>12~13.5km/ℓ </td>
+										</tr>
+										<tr>
+											<td>옵션:</td>
+											<td>인스퍼레이션 </td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <!--car3 모달 -->
+   <div class="modal fade" id="car3" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 650px; width: 500px;">
+    <img src="/img/content/resource/스타리아.JPG" style="margin: 0 auto; width:100%;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>자동차</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>현대 스타리아 투어러 </td>
+										</tr>
+										<tr>
+											<td>연료:</td>
+											<td>2.2 디젤</td>
+										</tr>
+										<tr>
+											<td>출력:</td>
+											<td>177hp</td>
+										</tr>
+										<tr>
+											<td>연비:</td>
+											<td>10.8~11.8km/ℓ</td>
+										</tr>
+										<tr>
+											<td>기타:</td>
+											<td>9인승, 자동8단</td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <!--beam1 모달 -->
+   <div class="modal fade" id="beam1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 780px; width: 500px;">
+    <img src="/img/content/resource/빔프로젝터01.JPG" style="margin: 0 auto; width:100%;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>빔프로젝터</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>LG전자 시네빔 PF610P</td>
+										</tr>
+										<tr>
+											<td>해상도:</td>
+											<td>Full-HD(1920x1080)</td>
+										</tr>
+										<tr>
+											<td>밝기:</td>
+											<td>1,000안시루멘</td>
+										</tr>
+										<tr>
+											<td>명암비:</td>
+											<td>150,000:1</td>
+										</tr>
+										<tr>
+											<td>소비전력:</td>
+											<td>100W</td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+ <!--beam2 모달 -->
+   <div class="modal fade" id="beam2" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 750px; width: 500px;">
+    <img src="/img/content/resource/빔프로젝터02.JPG" style="margin: 0 auto; width:100%; ">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>빔프로젝터</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>옵토마 UHD33</td>
+										</tr>
+										<tr>
+											<td>해상도:</td>
+											<td>4K(3840x2160)</td>
+										</tr>
+										<tr>
+											<td>밝기:</td>
+											<td>3,600안시루멘</td>
+										</tr>
+										<tr>
+											<td>명암비:</td>
+											<td>1,000,000:1</td>
+										</tr>
+										<tr>
+											<td>소비전력:</td>
+											<td>220W</td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 
   <!-- calendar 태그 -->
   <div id='calendar-container'>

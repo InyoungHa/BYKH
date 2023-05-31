@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							"title": content,
 							"start": start_date,
 							"allDay": allDay,
-							"color": '#E8A0BF',
+							"color": '#F2D8D8',
 							"end": end_date
 						};
 						return_value.push(obj);

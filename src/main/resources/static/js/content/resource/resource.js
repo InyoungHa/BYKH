@@ -32,6 +32,40 @@ document.addEventListener('DOMContentLoaded', function() {
 		   views: {
         listWeek: { buttonText: '자원목록' },
       },
+        eventClick: function(info) {
+			console.log(info.event);
+			console.log(info.event._instance.range.start);
+			$("#calendarModalDetail").modal("show");
+			$(".resourceContent").val(info.event.title);
+			
+
+			
+			//시작날짜
+			var startTime = info.event._instance.range.start;
+			var formattedStartTime = moment.utc(startTime).format("YYYY/M월/D일/A h:mm분");
+			formattedStartTime = formattedStartTime.replace("AM", "오전").replace("PM", "오후");
+			$("#start_time_resource").val(formattedStartTime);
+
+			//종료날짜
+			var endTime = info.event._instance.range.end;
+			var formattedStartTime = moment.utc(endTime).format("YYYY/M월/D일/A h:mm분");
+			formattedStartTime = formattedStartTime.replace("AM", "오전").replace("PM", "오후");
+			$("#end_time_resource").val(formattedStartTime);
+			
+			
+		// 총 사용 시간
+		var totalTime = moment.utc(endTime).diff(startTime, 'hours');
+		$("#total_time_resource").val(totalTime + "시간");
+
+
+			
+
+
+
+
+    // change the border color just for fun
+    info.el.style.borderColor = 'red';
+  },
 		locale: 'ko', // 한국어 설정
 		editable: true,
 		droppable: true,  // 드래그 가능
@@ -250,10 +284,10 @@ function loadingEvents() {
 					color = '#1D267D'; // 회의실03인 경우 
 				} else if (title === '투싼 차량') {
 					color = '#E76161'; // 투싼 차량인 경우 
-				} else if (title === '소나타 차량') {
-					color = '#19A7CE'; // 소나타 차량인 경우 
-				} else if (title === '스타렉스 차량') {
-					color = '#643A6B'; // 스타렉스 차량인 경우 
+				} else if (title === '쏘나타 차량') {
+					color = '#19A7CE'; // 쏘나타 차량인 경우 
+				} else if (title === '스타리아 차량') {
+					color = '#643A6B'; // 스타리아 차량인 경우 
 				} else if (title === '빔프로젝터01') {
 					color = '#9E6F21'; // 빔프로젝터 01인 경우 
 				} else if (title === '빔프로젝터02') {
@@ -306,5 +340,96 @@ for (let hour = 0; hour < 24; hour++) {
 		document.getElementById("calendar_end_time").appendChild(option);
 	}
 }
+
+
+// 시작 시간 초기값 설정2
+let emptyOptionStart2 = document.createElement("option");
+emptyOptionStart2.value = "";
+emptyOptionStart2.innerText = "";
+document.getElementById("calendar_start_time2").appendChild(emptyOptionStart2);
+
+for (let hour = 0; hour < 24; hour++) {
+	for (let minute = 0; minute < 60; minute += 30) {
+		let option = document.createElement("option");
+		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+		document.getElementById("calendar_start_time2").appendChild(option);
+	}
+}
+
+// 종료 시간 초기값 설정2
+let emptyOptionEnd2 = document.createElement("option");
+emptyOptionEnd2.value = "";
+emptyOptionEnd2.innerText = "";
+document.getElementById("calendar_end_time2").appendChild(emptyOptionEnd2);
+
+for (let hour = 0; hour < 24; hour++) {
+	for (let minute = 0; minute < 60; minute += 30) {
+		let option = document.createElement("option");
+		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
+		document.getElementById("calendar_end_time2").appendChild(option);
+	}
+}
+
+
+
+$("#saveCalendar").click(function() {
+	var return_value = [];
+	var content = $("#calendar_content").val();
+						var start_date = $("#calendar_start_date").val();
+						var end_date = $("#calendar_end_date").val();
+						var start_time = $("#calendar_start_time").val();
+						var end_time = $("#calendar_end_time").val();
+						var allDay = false;
+
+						if (content == null || content == "") {
+							alert("내용을 입력하세요.");
+						} else if (start_date == "" || end_date == "") {
+							alert("날짜를 입력하세요.");
+						} else if (new Date(end_date) - new Date(start_date) < 0) {
+							alert("종료일이 시작일보다 먼저입니다.");
+						} else if (start_time == "" && end_time == "") {
+							allDay = true;
+						} else if (start_time == "" && end_time != "") {
+							alert("시작 시간을 선택하세요.");
+							return;
+						} else if (start_time != "" && end_time == "") {
+							alert("종료 시간을 선택하세요.");
+							return;
+						} else {
+							start_date += "T" + start_time;
+							end_date += "T" + end_time;
+						}
+
+						var obj = {
+							"title": content,
+							"start": start_date,
+							"allDay": allDay,
+							"color": '#E8A0BF',
+							"end": end_date
+						};
+						return_value.push(obj);
+						console.log(return_value);
+
+						// 기존의 이벤트 소스를 가져옴.
+						var eventSources = calendar.getOption('eventSources');
+
+						// 새로운 이벤트 소스를 생성하여 기존의 이벤트 소스와 합침.
+						var newEventSources = eventSources.concat({
+							events: return_value
+						});
+
+						// 합쳐진 이벤트 소스를 캘린더에 설정.
+						calendar.setOption('eventSources', newEventSources);
+
+						// 모달 숨기기
+						$("#calendarModal").modal("hide");
+					});
+
+				
+
+			
+	
 
 
