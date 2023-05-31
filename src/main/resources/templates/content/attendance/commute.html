@@ -58,7 +58,7 @@
 	}
 	
 	.workStatusTitle{
-	width:289px;
+	width:280px;
 	height:65px;
 	border-bottom: solid #ebeaed;
 	font-weight: bold;
@@ -155,21 +155,21 @@
 	<span class="time"> 
 	<span class="timeDetail1">[[${attendanceVO.curDate}]]<br>
 	</span><br>
-			 출근시간 : <span class="timeDetail3">00:00</span><br> 
-			 퇴근시간 : <span class="timeDetail3">00:00</span>
+			 출근시간 : <span class="timeDetail3">[[${goWork.goWork}]]</span><br> 
+			 퇴근시간 : <span class="timeDetail3">[[${outWork.outWork}]]</span>
 	</span>
 
 	<!-- 이번달 근무현황 box -->
 	<table class="workStatus">
 		<thead>
 			<tr>
-				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-clock-50.png">이번달 근무 현황</td>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-clock-50.png" style="margin-left: 60px;">이번달 근무 현황</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>근무일수</td>
-				<td>13일</td>
+				<td>[[${workingDays.workingDays}]]일</td>
 			</tr>
 			<tr>
 				<td>연장근무시간</td>
@@ -186,13 +186,13 @@
 	<table class="workStatus">
 		<thead>
 			<tr>
-				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-attendance-50.png">이번달 근태 현황</td>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-attendance-50.png" style="margin-left: 60px;">이번달 근태 현황</td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>지각</td>
-				<td>1회</td>
+				<td>[[${lateCount.lateCount}]]회</td>
 			</tr>
 			<tr>
 				<td>결근</td>
@@ -209,7 +209,7 @@
 	<table class="workStatus">
 		<thead>
 			<tr>
-				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-gift-50.png">휴가 현황</td>
+				<td class="workStatusTitle" colspan="2"><img src="/img/icons8-gift-50.png" style="margin-left: 90px;">휴가 현황</td>
 			</tr>
 		</thead>
 		<tbody>

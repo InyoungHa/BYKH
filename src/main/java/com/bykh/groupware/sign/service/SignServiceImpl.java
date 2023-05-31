@@ -1,6 +1,7 @@
 package com.bykh.groupware.sign.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,22 @@ public class SignServiceImpl implements SignService{
 	public void insertDocPurchaseOrder(SignDocVO signDocVO) {
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
-		sqlsession.insert("signMapper.insertDocPurchaseOrder", signDocVO);
+		//BUY
+		sqlsession.insert("signMapper.insertBuy", signDocVO.getDocPurchaseOrderVO().getBuyVO());
+		sqlsession.insert("signMapper.insertBuyDetails", signDocVO.getDocPurchaseOrderVO().getBuyVO());
+		//BUYDETAIL
+		sqlsession.insert("signMapper.insertDocPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 	}
+	@Override
+	public int getNextBuyNo() {
+		return sqlsession.selectOne("signMapper.getNextBuyNo");
+	}
+	@Override
+	public SignDocVO getDetailDocPurchaseOrder(int docNo) {
+		return sqlsession.selectOne("signMapper.getDetailDocPurchaseOrder", docNo);
+	}
+	
+	
+	
+	
 }

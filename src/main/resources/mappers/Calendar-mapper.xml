@@ -10,22 +10,29 @@
 	<result column="END_DATE" property="end"/>
 	<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
 </resultMap>
+<resultMap type="com.bykh.groupware.resource.vo.ResourceVO" id="resourceCal">
+	<id column="SCHEDULE_CODE" property="id"/>
+	<result column="EVENT_NAME" property="title"/>
+	<result column="START_DATE" property="start"/>
+	<result column="END_DATE" property="end"/>
+	<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
+</resultMap>
 
 	
 	
-<!-- 일정제거 -->
+<!-- 근태관리 캘린더 일정제거 -->
 <delete id="deleteSchedule">
 DELETE FROM  SCHEDUL_FOR_GROUPWARE
 </delete>
 	
 	
-<!-- 일정추가 -->	
+<!-- 근태관리 캘린더 일정추가 -->	
 <insert id="insertSchedule">
 INSERT INTO SCHEDUL_FOR_GROUPWARE (EVENT_NAME, START_DATE, END_DATE, ALLDAY)
 VALUES (#{title}, #{start}, #{end}, #{allDay})
 </insert>
 
-<!-- 일정조회 -->
+<!--근태관리 캘린더 일정조회 -->
 <select id="getAllSchedules" resultMap="cal">
 SELECT SCHEDULE_CODE
 		, EVENT_NAME
@@ -33,6 +40,30 @@ SELECT SCHEDULE_CODE
 		, END_DATE
 		, ALLDAY
 	FROM SCHEDUL_FOR_GROUPWARE
+</select>
+
+
+
+<!-- 자원관리 캘린더 일정제거 -->
+<delete id="deleteResourceSchedule">
+DELETE FROM SCHEDUL_FOR_RESOURCE
+</delete>
+	
+	
+<!-- 자원관리 캘린더 일정추가 -->	
+<insert id="insertResourceSchedule">
+INSERT INTO SCHEDUL_FOR_RESOURCE (EVENT_NAME, START_DATE, END_DATE, ALLDAY)
+VALUES (#{title}, #{start}, #{end}, #{allDay})
+</insert>
+
+<!--자원관리 캘린더 일정조회 -->
+<select id="getAllResourceSchedules" resultMap="resourceCal">
+SELECT SCHEDULE_CODE
+		, EVENT_NAME
+		, START_DATE
+		, END_DATE
+		, ALLDAY
+	FROM SCHEDUL_FOR_RESOURCE
 </select>
 
 

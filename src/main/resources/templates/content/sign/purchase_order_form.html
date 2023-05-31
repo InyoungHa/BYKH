@@ -114,12 +114,13 @@
 		<div class="col-8" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
 				<div class="col text-center">
-					<input type="hidden" value="1" name="docAnnualLeaveVO.dtNo" class="dtNo">
-					<input type="hidden" value="1" name="sgnStatus" class="sgnStatus">
+					<!-- 
+					<input type="hidden" value="1" name="docStatus" class="docStatus">
 					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
-					<input type="hidden" th:value="구매신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
+					<input type="hidden" th:value="구매신청서" name="docTitle" class="">
+					-->						
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
-					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo">
+					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo" class="writerNo">
 					<h2>구매신청서</h2>
 				</div>
 			</div>
@@ -137,6 +138,7 @@
 								<td>기안부서</td>
 								<td>
 									[[${signWriteInfo.empVO.deptVO.dename}]]<!-- 자동입력 -->
+									<input type="hidden" class="deptNo" th:value="${signWriteInfo.empVO.deptno}">
 								</td>
 							</tr>
 							<tr>
@@ -206,7 +208,7 @@
 							<tr>
 								<td>기 타</td>
 								<td colspan="3">
-									<textarea class="full-width-textarea" name="docPurchaseOrder.dpoComment"></textarea>
+									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"></textarea>
 								</td>
 							</tr>
 							
@@ -265,8 +267,8 @@
 				<div class="col-12">
 					<div class="row">
 						<div class="col text-end">
-							<button type="button" class="btn btn-primary" onclick="saveSignDoc();">임시저장</button>
-							<button type="button" class="btn btn-primary" onclick="insertSignDoc();">기안</button>
+							<button type="button" class="btn btn-primary" onclick="insertPurchaseorder(0);">임시저장</button>
+							<button type="button" class="btn btn-primary" onclick="insertPurchaseorder(1);">기안</button>
 						</div>
 					</div>
 				</div>

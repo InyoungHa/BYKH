@@ -136,7 +136,7 @@ function saveSignDoc(){
 };
 //기안올리기
 function insertSignDoc(){
-	document.querySelector('.sgnStatus').value = 1;
+	
 };
 
 

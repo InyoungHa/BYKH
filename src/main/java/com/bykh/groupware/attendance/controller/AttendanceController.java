@@ -2,6 +2,7 @@ package com.bykh.groupware.attendance.controller;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,11 +23,20 @@ public class AttendanceController {
 	
 	// 근태관리 출퇴근기록 페이지(메인)
 	@GetMapping("/commute")
-	public String commute(AttendanceVO attendanceVO) {
+	public String commute(AttendanceVO attendanceVO, Model model) {
 		String nowDate = DateUtil.getNowDateToString(); //오늘날짜설정
 		if(attendanceVO.getCurDate() == null) {
 			attendanceVO.setCurDate(nowDate);
 		}	
+		//출근시간 조회
+		model.addAttribute("goWork",attendanceService.selectGowork());
+		//퇴근시간 조회
+		model.addAttribute("outWork",attendanceService.selectOutwork());
+		//지각횟수 조회
+		model.addAttribute("lateCount",attendanceService.selectLateCount());
+		//근무일수 조회
+		model.addAttribute("workingDays",attendanceService.checkDays());
+		
 		return "content/attendance/commute";
 	}
 
@@ -63,18 +73,18 @@ public class AttendanceController {
 	
 	//출근등록
 	@RequestMapping("/goToWork")
-	public String goToWork(String empNo, AttendanceVO attendanceVO) {
+	public String goToWork( AttendanceVO attendanceVO) {
 	
 		
 		
-		attendanceService.goWork(empNo);
+		attendanceService.goWork();
 	return "redirect:/admin/main";
 	}
 	
 	//퇴근등록
 	@RequestMapping("/outWork")
-	public String outWork(String empNo) {
-		attendanceService.outWork(empNo);
+	public String outWork() {
+		attendanceService.outWork();
 	return "redirect:/admin/main";
 	}	
 }

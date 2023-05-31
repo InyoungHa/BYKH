@@ -252,11 +252,21 @@ li:last-child {
 	                     <ion-icon name="people-outline"></ion-icon>
 	                     <span class="nav_name">조직도</span>
 	                </a>   
-	                     
-	                <a href="#" class="nav__link">
-	                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
-	                    <span class="nav_name">자원관리</span>
-	                </a>
+	                
+	                		<div href="#" class="nav__link">
+                        <a th:href="@{/resource/reserve}" class="ap"> <ion-icon name="file-tray-stacked-outline"></ion-icon></a>
+                       		<a href="#"> <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">자원관리</span></a>
+						<div class="collapse" id="collapseExample2">
+	   						<ul>
+
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/resource/reserve}">예약하기</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/resource/reservationList}">예약 목록</a></li>
+	 						</ul>
+						</div>             	
+ 					</div> 
+	                
+	                    
 	                
 	                
 	                <div href="#" class="nav__link">

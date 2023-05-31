@@ -233,7 +233,10 @@ function showSignDocModal(clickTag){
 				
 			}
 			//구매신청서일 경우
-			
+			else if(key[0] == 'docPurchaseOrder'){
+				const signWriteInfo = result[key[0]];
+				str += ``;
+			}
 			//매출보고서일 경우
 			
 			

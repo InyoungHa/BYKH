@@ -115,7 +115,7 @@ color: white;
     width: 150px;
     padding: 0 10px;
     border: 1px solid #ccc;
-    background: #F0EDD4;
+    background: #DBDFEA;
   }
 
   .demo-topbar + #external-events { /* will get stripped out */
@@ -200,7 +200,7 @@ font-weight: bold;
 	border: 0.3px solid #466583;
 }
 .fc-col-header {
-background-color: #F0EDD4;
+background-color: #DBDFEA;
 }
 
 
@@ -236,7 +236,7 @@ color: black;
 border: 0px;
 }
 .fc-event, .fc-event-dot{
-background-color: #AFD3E2;
+background-color: #73A9AD;
 }
 .fc .fc-list-event:hover td{
 background-color: #D25380;
@@ -258,38 +258,42 @@ color: black;
 .modal.fade.show .modal-content {
   opacity: 1;
 }
+.room1 td{
+padding-bottom: 10px;
+font-size: 22px;
+}
 </style>
 </head>
 <body>
 
 
-<div style="margin-left:472px; font-size: 50px; font-weight: bold; color: #3C486B;">근태 관리 캘린더</div>
+<div style="margin-left:472px; font-size: 50px; font-weight: bold; color: #0b5573;">자원 관리 캘린더</div>
   <div id='external-events'>
-  <button id="saveButton" class="but">일정저장</button>
+  <button id="saveButton" class="but">예약하기</button>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #025464; border: 1px solid #025464;">연차</div>
+      <div data-bs-toggle="modal" data-bs-target="#room1" class='fc-event-main' style="background-color: #025464; border: 1px solid #025464; cursor: pointer;">회의실01</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #1B9C85; border: 1px solid #1B9C85; ">반차</div>
+       <div data-bs-toggle="modal" data-bs-target="#room2" class='fc-event-main' style="background-color: #1B9C85; border: 1px solid #1B9C85; cursor: pointer;">회의실02</div>
     </div>
      <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #1D267D; border: 1px solid #1D267D;">조퇴</div>
+        <div data-bs-toggle="modal" data-bs-target="#room3" class='fc-event-main' style="background-color: #1D267D; border: 1px solid #1D267D; cursor: pointer;">회의실03</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #E76161; border: 1px solid #E76161;">병가</div>
+            <div data-bs-toggle="modal" data-bs-target="#car1" class='fc-event-main' style="background-color: #E76161; border: 1px solid #E76161; cursor: pointer;">투싼 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE;">외출</div>
+      <div class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE;">소나타 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #643A6B;  border: 1px solid #643A6B;">출장</div>
+      <div class='fc-event-main' style="background-color: #643A6B;  border: 1px solid #643A6B;">스타렉스 차량</div>
     </div>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21;">교육</div>
+      <div class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21;">빔프로젝터01</div>
     </div>
     
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D;">휴일근무</div>
+      <div class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D;">빔프로젝터02</div>
     </div>
       <p style="visibility: hidden;">
       <input type='checkbox' id='drop-remove' />
@@ -309,11 +313,11 @@ color: black;
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>        
+                    <h5 class="modal-title" id="exampleModalLabel">자원을 입력하세요.</h5>        
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="taskId" class="col-form-label">일정 내용</label>
+                        <label for="taskId" class="col-form-label">자원 내용</label>
                         <input type="text" class="form-control" id="calendar_content" name="calendar_content">
                         <label for="taskId" class="col-form-label" style="margin-top: 10px;">시작 날짜</label>
                         <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
@@ -339,6 +343,184 @@ color: black;
             </div>
         </div>
     </div>
+    
+    <!--회의실01 모달 -->
+    <div class="modal fade" id="room1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 600px; width: 500px;">
+    <img src="/img/content/resource/회의실01.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>회의실</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>회의실01</td>
+										</tr>
+										<tr>
+											<td>위치:</td>
+											<td>서울본사</td>
+										</tr>
+										<tr>
+											<td>수용인원:</td>
+											<td>15명</td>
+										</tr>
+										<tr>
+											<td>기타:</td>
+											<td>화상회의, 전화, 에어컨 </td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+   <!--회의실02 모달 -->
+   <div class="modal fade" id="room2" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 600px; width: 500px;">
+    <img src="/img/content/resource/회의실02.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>회의실</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>회의실02</td>
+										</tr>
+										<tr>
+											<td>위치:</td>
+											<td>서울본사</td>
+										</tr>
+										<tr>
+											<td>수용인원:</td>
+											<td>35명</td>
+										</tr>
+										<tr>
+											<td>기타:</td>
+											<td>화이트보드, 전화, 에어컨 </td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+   <!--회의실03 모달 -->
+   <div class="modal fade" id="room3" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 600px; width: 500px;">
+    <img src="/img/content/resource/회의실03.jpg" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>회의실</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>회의실03</td>
+										</tr>
+										<tr>
+											<td>위치:</td>
+											<td>울산사무소</td>
+										</tr>
+										<tr>
+											<td>수용인원:</td>
+											<td>10명</td>
+										</tr>
+										<tr>
+											<td>기타:</td>
+											<td>화상회의, 전화, 에어컨 </td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+   <!--car1 모달 -->
+   <div class="modal fade" id="car1" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="height: 600px; width: 500px;">
+    <img src="/img/content/resource/투싼.png" style="margin: 0 auto; width:100%; border: 2px solid #dddddd;">
+      <div class="modal-body">
+      <form id="loginForm" method="post">
+							<div class="row mb-3">
+								<div class="col-12">
+									<table class="room1">
+										<colgroup>
+											<col width="50%" >
+											<col width="50%">
+										</colgroup>
+										<tr>
+											<td>분류:</td>
+											<td>자동차</td>
+										</tr>
+										<tr>
+											<td>자원명:</td>
+											<td>투싼</td>
+										</tr>
+										<tr>
+											<td>연료:</td>
+											<td>하이브리드</td>
+										</tr>
+										<tr>
+											<td>출력:</td>
+											<td>230hp/180hp</td>
+										</tr>
+									</table>
+
+								</div>
+							</div>				
+						</form>
+      </div>
+
+    </div>
+  </div>
+</div>
 
   <!-- calendar 태그 -->
   <div id='calendar-container'>
@@ -426,7 +608,7 @@ color: black;
 
 <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
-<script type="text/javascript" src="/js/content/attendance/calendar.js"></script>
+<script type="text/javascript" src="/js/content/resource/resource.js"></script>
 
   <!-- jquery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
