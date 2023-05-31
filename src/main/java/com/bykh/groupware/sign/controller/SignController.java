@@ -156,7 +156,7 @@ public class SignController {
 		if(signDocVO.getDocType() == 1) {
 			data.put("docAnnualLeave", signService.getDetailDocAnnualLeave(signDocVO.getDocNo()));
 		}else if(signDocVO.getDocType() == 2) {
-			data.put("", signDocVO);
+			data.put("docPurchaseOrder", signService.getDetailDocPurchaseOrder(signDocVO.getDocNo()));
 		}else if(signDocVO.getDocType() == 3) {
 			data.put("", signDocVO);			
 		}

@@ -75,6 +75,10 @@ public class SignServiceImpl implements SignService{
 	public int getNextBuyNo() {
 		return sqlsession.selectOne("signMapper.getNextBuyNo");
 	}
+	@Override
+	public SignDocVO getDetailDocPurchaseOrder(int docNo) {
+		return sqlsession.selectOne("signMapper.getDetailDocPurchaseOrder", docNo);
+	}
 	
 	
 	

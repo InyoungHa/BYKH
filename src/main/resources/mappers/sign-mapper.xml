@@ -301,6 +301,41 @@
 		WHERE DOC_NO = 1
 		AND APPROVER_NO = ${approverNo}
 	</update>
+	<!-- 결재문서 상세조회 - 구매신청서 -->
+	<select id="getDetailDocPurchaseOrder" resultMap="signDoc">
+		SELECT
+		    DOC.DOC_NO
+		    , WRITER_NO
+		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD') INSERT_DATE
+		    , DPO_NO
+		    , DENAME
+		    , ITEM_NAME
+		    , BUY_CNT
+		    , ITEM_PRICE
+		    , BUY_DETAIL_PRICE
+		    , BUY_PRICE
+		    , DPO_COMMENT
+		    , APPROVER_NO
+		    , (SELECT ENAME FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_NAME
+		    , (SELECT E_JOB FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_JOB
+		    , SGN_ORDER
+		    , DECODE(SGN_RESULT, '0', '미결재', '1', '결재') SGN_RESULT_STR
+		    , SGN_COMENT
+		    , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
+		FROM SGN_DOC DOC, DOC_PURCHASE_ORDER DPO, SGN, EMP, DEPT, BUY, BUY_DETAIL BD, ITEM
+		WHERE DOC.DOC_NO = DPO.DOC_NO
+		AND DOC.DOC_NO = SGN.DOC_NO
+		AND DOC.WRITER_NO = EMP.EMPNO
+		AND EMP.DEPTNO = DEPT.DEPTNO
+		AND BUY.BUY_NO = DPO.BUY_NO
+		AND BUY.BUY_NO = BD.BUY_NO
+		AND BD.ITEM_NO = ITEM.ITEM_NO
+		AND DOC.DOC_NO = ${docNo}
+	</select>
+	
+	
+	
+	
 	<select id="getItemList" resultMap="item">
 		SELECT 
 			ITEM_NO

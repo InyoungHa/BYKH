@@ -21,8 +21,10 @@ public interface SignService {
 	//다음 DOC_NO 조회
 	int getNextDocNo();
 	
-	//결재문서 상세조회
+	//연차신청서 상세조회
 	SignDocVO getDetailDocAnnualLeave(int docNo);
+	//구매신청서 상세조회
+	SignDocVO getDetailDocPurchaseOrder(int docNo);
 	
 	//결재/반려 버튼 클릭 시 실행
 	int updateSignResult(SignVO signVO);
