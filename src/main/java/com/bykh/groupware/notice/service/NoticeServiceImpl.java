@@ -1,6 +1,7 @@
 package com.bykh.groupware.notice.service;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -40,6 +41,12 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public String getNextBoardNum() {
 		return sqlSession.selectOne("boardMapper.getNextBoardNum");
+	}
+	
+	//다음으로 들어갈 첨부파일 번호 조회
+	@Override
+	public int getNextFileNumber() {
+		return sqlSession.selectOne("boardMapper.getNextFileNumber");
 	}
 
 	//글 등록
@@ -90,21 +97,12 @@ public class NoticeServiceImpl implements NoticeService {
 		
 		//첨부파일이 있으면 삭제
 		if(deleteFileNumList != null) {
-			for(String deleteFileNum : deleteFileNumList) {
-				BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
-				String attachedFileName = fileVO.getAttachedFileName();
-				
-				File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
-				file.delete();
-				
-				sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
-			}
+			deleteFileByFileNumList(deleteFileNumList);
 		}
 		
 		//글 삭제
 		sqlSession.delete("boardMapper.deleteBoard", boardVO);
 	}
-
 	
 	//글 수정
 	@Override
@@ -112,15 +110,7 @@ public class NoticeServiceImpl implements NoticeService {
 	public void updateBoard(BoardVO boardVO, String[] deleteFileNumArr) {
 		//삭제된 파일 처리
 		if(deleteFileNumArr != null) {
-			for(String deleteFileNum : deleteFileNumArr) {
-				BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
-				String attachedFileName = fileVO.getAttachedFileName();
-				
-				File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
-				file.delete();
-				
-				sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
-			}
+			deleteFileByFileNumList(Arrays.asList(deleteFileNumArr));
 		}
 		
 		//새로운 첨부파일 등록
@@ -136,6 +126,23 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public BoardFileVO getDownloadFileVO(String fileNum) {
 		return sqlSession.selectOne("boardMapper.getDownloadFileVO", fileNum);
+	}
+
+
+	
+
+	//fileNum 리스트로 파일 삭제 메소드
+	public void deleteFileByFileNumList(List<String> deleteFileNumList) {
+		
+		for(String deleteFileNum : deleteFileNumList) {
+			BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
+			String attachedFileName = fileVO.getAttachedFileName();
+			
+			File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+			file.delete();
+			
+			sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
+		}
 	}
 
 

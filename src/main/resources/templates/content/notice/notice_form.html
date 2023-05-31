@@ -7,10 +7,11 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+
 </th:block>
 
 <th:block layout:fragment="content">
-<style>
+<style type="text/css">
 .myBtn {
 color:black;
 background-color: #f8f9fa;
@@ -19,8 +20,8 @@ border: 0.3px solid #466583;
 .numberBtn {
 	color: #466583;
 }
-
 </style>
+
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
@@ -66,7 +67,8 @@ border: 0.3px solid #466583;
 				</div>
 			</div>
 			<div class="row px-2">
-				<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+				<div class="col d-grid gap-2 d-md-flex justify-content-md-end" id="btnDiv">
+					<div id="alertDiv"></div>
 					<div class="btn-group" role="group">
 					  <button type="button" class="btn myBtn" onclick="tempRegNotice();">임시저장</button>
 					  <button type="button" class="btn myBtn numberBtn" data-bs-toggle="modal" data-bs-target="#tempRegModal">1</button>
@@ -77,9 +79,8 @@ border: 0.3px solid #466583;
 			
 			
 			<div class="row">
-				<div class="col">
-					<input type="hidden" name="boardStatus" id="boardStatus">
-				</div>
+				<div class="col" id="hiddenDiv"></div>
+				<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${boardMenuCode}">
 			</div>
 			
 		</form>
