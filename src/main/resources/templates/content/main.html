@@ -108,8 +108,8 @@ font-weight: bold;
 <span class="time">[[${attendanceVO.curDate}]]</span>
 <span style="margin-top: 15px; margin-left:20px; display: inline-block;">
 
-<button type="button" class="btn" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 150px; height: 50px; background-color: #5d96ca;  font-weight: bold; border: 0px; font-size: 20px;">출근</button>
-<button type="button" class="btn" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 150px; height: 50px; background-color: #E06469;  font-weight: bold; border: 0px; font-size: 20px;">퇴근</button>
+<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 150px; height: 50px; background-color: #5d96ca;  font-weight: bold; border: 0px; font-size: 20px;">출근</button>
+<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 150px; height: 50px; background-color: #E06469;  font-weight: bold; border: 0px; font-size: 20px;">퇴근</button>
 </span>
 </span> 
 <span class="sign">전자결재</span>
@@ -133,7 +133,7 @@ font-weight: bold;
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 	
 	<!--연결해야하는 외부 js  -->
-	<!-- <script type="text/javascript" src="/js/content/admin/cate_manage.js"></script> -->
+<script type="text/javascript" src="/js/content/main.js"></script>
 </th:block>
 
 </html>

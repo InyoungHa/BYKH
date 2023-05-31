@@ -41,7 +41,7 @@ public class DateUtil {
 	            break;
 	    }
 
-	    int hour = cal.get(Calendar.HOUR); // 시간
+	    int hour = cal.get(Calendar.HOUR_OF_DAY); // 시간
 	    int minute = cal.get(Calendar.MINUTE); // 분
 
 	    // 날짜 및 시간 문자열로 반환
