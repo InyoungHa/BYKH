@@ -1,6 +1,7 @@
 package com.bykh.groupware.sign.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,16 +10,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.service.SignService;
+import com.bykh.groupware.sign.vo.BuyDetailVO;
+import com.bykh.groupware.sign.vo.BuyVO;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
+import com.bykh.groupware.sign.vo.DocPurchaseOrderVO;
 import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 import com.bykh.groupware.util.DateUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.Resource;
 
@@ -44,7 +50,7 @@ public class SignController {
 		 // 시큐리티 설정 완료 후 바꾸기
 		
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(2023050301));//매개변수 변경하기
-		model.addAttribute("nowDate", DateUtil.getNowDateToString());
+		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		return "content/sign/sign_write_form";
 	}
 	//연차신청서 작성 페이지
@@ -54,7 +60,7 @@ public class SignController {
 	public String purchaseOrderForm(Model model, SignDocVO signDocVO) {
 		//시큐리티 설정 완료 후 바꾸기
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(2023050301));
-		model.addAttribute("nowDate", DateUtil.getNowDateToString());
+		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		model.addAttribute("itemList", signService.getItemList());
 		return "content/sign/purchase_order_form";
 	}
@@ -104,9 +110,41 @@ public class SignController {
 	
 	//구매신청서 작성
 	@ResponseBody
-	@PostMapping("/insertPurchaseorder")
-	public void insertPurchaseorder(SignDocVO signDocVO) {
-		//쿼리 실행
+	@PostMapping("/insertPurchaseorderAjax")
+	public void insertPurchaseorderAjax(@RequestBody Map<String, Object> mapData, SignDocVO signDocVO) {
+		System.out.println("----------------아래:mapData------------------");		
+		//System.out.println(mapData);
+		
+		//1. 데이터 세팅
+		int docNo = signService.getNextDocNo();
+		int buyNo = signService.getNextBuyNo();
+		ObjectMapper mapper = new ObjectMapper();
+		//signDoc
+		signDocVO = mapper.convertValue(mapData.get("sgn_doc"), SignDocVO.class);
+		signDocVO.setDocNo(docNo);
+		//1-3 sgn_arr
+		SignVO[] signArr = mapper.convertValue(mapData.get("sgn_arr"), SignVO[].class);
+		List<SignVO> signVOList = Arrays.asList(signArr);
+		signVOList.get(0).setDocNo(docNo);
+		signDocVO.setSignVOList(signVOList);
+		//1-5 purchase_order
+		DocPurchaseOrderVO docPurchaseOrderVO = mapper.convertValue(mapData.get("doc_purchase_order"), DocPurchaseOrderVO.class);
+		docPurchaseOrderVO.setDocNo(docNo);
+		docPurchaseOrderVO.setBuyNo(buyNo);
+		signDocVO.setDocPurchaseOrderVO(docPurchaseOrderVO);
+		//1-2 buy
+		BuyVO buyVO = mapper.convertValue(mapData.get("buy"), BuyVO.class);
+		buyVO.setBuyNo(buyNo);
+		signDocVO.getDocPurchaseOrderVO().setBuyVO(buyVO);
+		//1-1 buyDetail
+		BuyDetailVO[] buyDetailArr = mapper.convertValue(mapData.get("buy_detail_arr"), BuyDetailVO[].class);
+		List<BuyDetailVO> buyDetailVOList = Arrays.asList(buyDetailArr);
+		buyDetailVOList.get(0).setBuyNo(buyNo);
+		signDocVO.getDocPurchaseOrderVO().getBuyVO().setBuyDetailVOList(buyDetailVOList);
+		System.out.println(signDocVO);
+		
+		//2. 쿼리 실행
+		signService.insertDocPurchaseOrder(signDocVO);
 	}
 	
 	//결재문서 상세조회

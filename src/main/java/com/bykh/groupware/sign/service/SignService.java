@@ -1,9 +1,10 @@
 package com.bykh.groupware.sign.service;
 
 import java.util.List;
+import java.util.Map;
+
 
 import com.bykh.groupware.emp.vo.EmpVO;
-import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
@@ -30,5 +31,8 @@ public interface SignService {
 	List<ItemVO> getItemList();
 	//구매신청서 - INSERT
 	void insertDocPurchaseOrder(SignDocVO signDocVO);
+	//다음 buy_no 조회
+	int getNextBuyNo();
+
 	
 }

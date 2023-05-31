@@ -216,6 +216,13 @@ function addItemTr(){
 	// 1.필요한 데이터 가져오기(item_no, item_name, item_price, total_price)
 	//addItem테이블의 tr들 전체 선택
 	const tr_list = document.querySelectorAll('.addItemTable tr');
+	
+	//addItem 테이블에 데이터가 없을 경우 안내멘트
+	if(tr_list.length == 0){
+		alert('추가할 상품이 없습니다.');
+		return ;
+	}
+	
 	let item_no_list = [];
 	let item_name_list = [];
 	let item_cnt_list = [];
@@ -236,20 +243,20 @@ function addItemTr(){
 	
 	// 2.삽입할 str 코드 작성
 	let str = ``;
-	const content_tr_list = document.querySelectorAll('.content-table tr');
+	const content_tr_list = document.querySelectorAll('.itemTr');
 	// 추가할 테이블의 tr의 길이가 3 이상이면
-	const isDuplicated = false; //?
+	let isDuplicated = false; //?
 	
-	if(content_tr_list.length > 3){
+	if(content_tr_list.length > 0){
+		console.log('3 이상');
 		for(let i=0; i<item_no_list.length; i++){
 			for(let j=0; j<content_tr_list.length; j++){
-				const content_item_no = content_tr_list[j].querySelector('input[type="hidden"]');
-				console.log(`${j}content_item_no=${content_item_no}`);
+				const content_item_no = content_tr_list[j].querySelector('input[type="hidden"]').value;
 				//중복일 경우
 				if(item_no_list[i] == content_item_no){
 					const cnt_td = content_tr_list[j].querySelector('td:nth-child(2)');
 					const item_cnt = parseInt(cnt_td.textContent);
-					cnt_td.textContent = item_cnt + item_cnt_list[i];
+					cnt_td.textContent = item_cnt + parseInt(item_cnt_list[i]);
 					
 					isDuplicated = true;
 					break;
@@ -272,44 +279,8 @@ function addItemTr(){
 						`;
 			}
 		}
-		
-		
-		/*
-		console.log('if문 실행');
-		//itemNo가 중복인지 확인
-		content_tr_list.forEach(function(content_tr){
-			const content_item_no = content_tr.querySelector('input[type="hidden"]').value;
-			for(let i = 0; i < item_no_list.length; i++){
-				//item이 중복이면 content 테이블의 수량 증가
-				if(content_item_no == item_no_list[i]){
-					const cnt_td = content_tr.querySelector('td:nth-child(2)');
-					const item_cnt = parseInt(cnt_td.textContent);
-					cnt_td.textContent = item_cnt + item_cnt_list[i];
-					
-					
-					isDuplicated = true;
-					break;
-				}
-				//item이 중복이 아니면 삽입할 str 코드에 tr 추가
-				if(!isDuplicated){
-					str += 
-						`
-						<tr class="itemTr">
-							<td>
-								${item_name_list[i]}
-								<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
-								value="${item_no_list[i]}" class="item-no">
-							</td>
-							<td>${item_cnt_list[i]}</td>
-							<td>${item_price_list[i]}</td>
-							<td>${total_price_list[i]}</td>
-						</tr>
-						`;
-				}
-			}
-			
-		});*/
 	} else {
+		console.log('3 미만');
 		for (let i = 0; i < item_no_list.length; i++) {
 			str +=
 				`
@@ -382,8 +353,70 @@ function saveSignDoc(){
 	
 };
 //기안올리기
-function insertSignDoc(){
-	document.querySelector('.sgnStatus').value = 1;
+function insertPurchaseorder(sgnStatus){
+	//1. 데이터 세팅
+	//1-1. buyDetail
+	const buy_datail_arr= [];
+	const item_tr_list = document.querySelectorAll('.itemTr');
+	item_tr_list.forEach(function(tr, index){
+		const buy_detail = {
+			'itemNo': tr.querySelector('input[type="hidden"]').value,
+			'buyCnt': tr.querySelector('td:nth-child(2)').textContent,
+			'buyDetailPrice': tr.querySelector('td:last-child').textContent
+		};
+		buy_datail_arr[index] = buy_detail;
+	});
+	//1-2 buy
+	const buy = {
+		'buyDeptNo': document.querySelector('.deptNo').value,
+		'buyPrice': document.querySelector('.buyPriceTd').textContent,
+	};
+	//1-5 docPurchaseOrder
+	const doc_purchase_order = {
+		'dpoComment': document.querySelector('.dpo-comment').value
+	};
+	//1-4 sgn
+	const sgn_arr = [];
+	const approver_no_list = document.querySelectorAll('.approverNo');
+	approver_no_list.forEach(function(approver_no, index){
+		const sgn = {
+			'approverNo':approver_no.value
+		};
+		sgn_arr[index] = sgn;
+	});
+	//1-3 sgnDoc
+	const sgn_doc = {
+		'docType': 2,
+		'writerNo': document.querySelector('.writerNo').value,
+		'docTitle': '구매신청서',
+		'sgnStatus': sgnStatus
+	}
+	
+	
+	const data = {
+		'buy_detail_arr' : buy_datail_arr,
+		'buy' : buy,
+		'sgn_arr' : sgn_arr,
+		'sgn_doc' : sgn_doc,
+		'doc_purchase_order' : doc_purchase_order
+	}
+	//ajax start
+	$.ajax({
+		url: '/sign/insertPurchaseorderAjax', //요청경로
+		type: 'post',
+		async: false, //동기/비동기
+		contentType: 'application/json; charset=UTF-8',
+		//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: JSON.stringify(data), //필요한 데이터
+		success: function(result) {
+			location.href = '/sign/signMain';
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+	
 };
 
 
@@ -453,6 +486,10 @@ const addItemModalEvent = document.querySelector('#addItemModal');
 addItemModalEvent.addEventListener('show.bs.modal', function() {
 	const row_list = document.querySelectorAll('.itemTable tr');
 	toggleSelectedColor(row_list, 'tr');
+	
+	
+	//addItem테이블에 
+	
 
 });
 //모달이 닫힐 때 itemList 테이블과 addItem 테이블의 내용(tbody) 초기화
@@ -462,12 +499,36 @@ addItemModalEvent.addEventListener('hidden.bs.modal', function() {
 });
 
 
-//addItem 함수가 실행된 후 addItem 테이블의 tr을 선택할 수 있도록 하는 코드
+//addItem 함수가 실행된 후 addItem 테이블의 tr을 선택
 document.addEventListener('addItemFinished', function(e) {
 	const td_list = document.querySelectorAll('.addItemTable tr td:first-child');
 	toggleSelectedColor(td_list, 'td');
 
 });
 
+/*
+//시간 남으면 추가(addItem테이블에 추가된 tr이 없을 때마다 안내멘트 출력)
+//addItem 테이블의 tbody가 변경될 때마다 tr 개수를 카운트
+const addItemTbody = document.querySelector('.addItemTable tbody');
 
+function mutationCallback(mutations) {
+	mutations.forEach(function(mutation) {
+		//tbody 내용 변경이 변경되었다면
+		if (mutation.type === 'childList') {
+			//addItem 테이블의 tr 개수가 0개면 tr 추가, 아니면 삭제
+			const addItemTrList = addItemTbody.querySelectorAll('tr');
+			let str = ``;
+			if(addItemTrList == 0){
+				str += `
+					<tr class="message">
+						<td colspan="2">추가된 품목이 없습니다.</td>
+					</tr>
+				`;
+			}
+		}
+	});
+}
 
+const observer = new MutationObserver(mutationCallback);
+observer.observe(addItemTbody, { childList: true });
+*/

@@ -35,7 +35,6 @@
 		<result column="DOC_TITLE" 			property="docTitle"/>
 		<result column="SGN_STATUS" 		property="sgnStatus"/>
 		<result column="SGN_STATUS_STR" 	property="sgnStatusStr"/>
-		<result column="DOC_STATUS" 		property="docStatus"/>
 		<result column="INSERT_DATE" 		property="insertDate"/>
 		<association property="empVO" 		resultMap="empMapper.emp"></association>
 		<association property="docAnnualLeaveVO" 		resultMap="docAnnualLeave"></association>
@@ -97,7 +96,7 @@
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (0, 1)
-		ORDER BY INSERT_DATE
+		ORDER BY INSERT_DATE DESC
 	</select>
 	<select id="getEndSignDocList" resultMap="signDoc">
 		SELECT 
@@ -110,7 +109,7 @@
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (2, 3)
-		ORDER BY INSERT_DATE
+		ORDER BY INSERT_DATE DESC
 	</select>
 	<!-- 기안 작성 페이지 이동 시 회원정보 가져가기 -->
 	<select id="getSingWriteInfo" resultMap="signDoc">
@@ -152,13 +151,13 @@
 		    , DOC_TYPE
 		    , WRITER_NO
 		    , DOC_TITLE
-		    , DOC_STATUS
+		    , SGN_STATUS
 		) VALUES (
 		    (SELECT NVL(MAX(DOC_NO), 0) + 1 FROM SGN_DOC)
 		    , ${docType}
 		    , ${writerNo}
 		    , #{docTitle}
-		    , ${docStatus}
+		    , ${sgnStatus}
 		) 
 	</insert>
 	<!-- 연차신청서 insert -->
@@ -189,6 +188,60 @@
 		    , #{docAnnualLeaveVO.leaveReason}
 		)
 	</insert>
+	<!-- 결재문서 insert -->
+	<insert id="insertDocPurchaseOrder">
+		INSERT INTO DOC_PURCHASE_ORDER (
+		    DPO_NO
+		    , DOC_NO
+		    , DPO_COMMENT
+		    , BUY_NO
+		) VALUES(
+		    (SELECT NVL(MAX(DPO_NO), 0)+1 FROM DOC_PURCHASE_ORDER)
+		    , ${docNo}
+		    , #{dpoComment}
+		    , ${buyNo}
+		)
+	</insert>
+	
+	<!-- 다음 BuyNo 조회 -->
+	<select id="getNextBuyNo" resultType="int">
+		SELECT NVL(MAX(BUY_NO), 0)+1 FROM BUY
+	</select>
+	
+	<!-- buy 테이블 insert -->
+	<insert id="insertBuy">
+		INSERT INTO BUY (
+		    BUY_NO
+		    , BUY_DEPTNO
+		    , BUY_PRICE
+		    , BUY_APPROVAL
+		) VALUES(
+		    ${buyNo}
+		    , ${buyDeptNo}
+		    , ${buyPrice}
+		    , 0
+		)
+	</insert>
+	<!-- buyDetail 테이블 insert -->
+	<insert id="insertBuyDetails">
+		INSERT ALL
+		<foreach collection="buyDetailVOList" item="buyDetail" index="i">
+			 INTO BUY_DETAIL (
+		        BUY_DETAIL_NO
+		        , BUY_NO
+		        , ITEM_NO
+		        , BUY_CNT
+		        , BUY_DETAIL_PRICE
+		    ) VALUES(
+		        (SELECT NVL(MAX(BUY_DETAIL_NO), 0) + ${i+1} FROM BUY_DETAIL)
+		        , ${buyDetailVOList[0].buyNo}
+		        , ${buyDetail.itemNo}
+		        , ${buyDetail.buyCnt}
+		        , ${buyDetail.buyDetailPrice}
+		    )
+		</foreach>
+		SELECT 1 FROM DUAL
+	</insert>
 	<!-- 결재리스트 추가 -->
 	<insert id="insertSignList">
 		INSERT ALL
@@ -198,7 +251,7 @@
 			    , SGN_ORDER
 			    , APPROVER_NO
 			) VALUES(
-			    ${sign.docNo}
+			    ${signVOList[0].docNo}
 			    , ${i+1}
 			    , ${sign.approverNo}
 			)
