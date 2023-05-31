@@ -14,19 +14,24 @@ document.addEventListener('DOMContentLoaded', function() {
 			event.dataTransfer.setData('text', event.target.dataset.event);
 		});
 	});
+	
 	/* initialize the calendar
 	-----------------------------------------------------------------*/
 
 	var calendarEl = document.getElementById('calendar');
 	var dropRemoveCheckbox = document.getElementById('drop-remove');
 	var externalEventsEl = document.getElementById('external-events');
-
 	calendar = new FullCalendar.Calendar(calendarEl, {
+	
+		// XML 레이아웃 파일에서 list 버튼의 ID가 "btn_list"로 정의되었다고 가정합니다.
 		headerToolbar: {
 			left: 'prev,next today,addEventButton',
 			center: 'title',
 			right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
 		},
+		   views: {
+        listWeek: { buttonText: '자원목록' },
+      },
 		locale: 'ko', // 한국어 설정
 		editable: true,
 		droppable: true,  // 드래그 가능
@@ -56,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		customButtons: {
 			addEventButton: { // 추가한 버튼 설정
-				text: "일정 추가",  // 버튼 내용
+				text: "자원 추가",  // 버튼 내용
 				click: function() { // 버튼 클릭 시 이벤트 추가
 					$("#sprintSettingModalClose").click(function() {
 						$("#calendarModal").modal("hide");
@@ -204,14 +209,14 @@ function allSave() {
 function savedata(jsondata) {
 	//ajax start
 	$.ajax({
-		url: '/calendar/calendarSave', //요청경로
+		url: '/calendar/resourceCalendarSave', //요청경로
 		type: 'post',
 		async: false,
 		contentType: 'application/json; charset=UTF-8',
 		data: jsondata,
 		dataType: 'text',
 		success: function(result) {
-			alert("일정이 저장되었습니다.");
+			alert("저장되었습니다.");
 			location.reload();
 		},
 		error: function() {
@@ -227,7 +232,7 @@ loadingEvents();
 function loadingEvents() {
 	//ajax start
 	$.ajax({
-		url: '/calendar/calendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
+		url: '/calendar/resourceCalendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
 		type: 'POST',
 		async: false,
 		dataType: 'json',
@@ -237,22 +242,22 @@ function loadingEvents() {
 				const title = result[i].title;
 				let color;
 
-				if (title === '연차') {
-					color = '#025464'; // 연차인 경우
-				} else if (title === '반차') {
-					color = '#1B9C85'; // 반차인 경우
-				} else if (title === '조퇴') {
-					color = '#1D267D'; // 조퇴인 경우 
-				} else if (title === '병가') {
-					color = '#E76161'; // 병가인 경우 
-				} else if (title === '외출') {
-					color = '#19A7CE'; // 외출인 경우 
-				} else if (title === '출장') {
-					color = '#643A6B'; // 출장인 경우 
-				} else if (title === '교육') {
-					color = '#9E6F21'; // 교육인 경우 
-				} else if (title === '휴일근무') {
-					color = '#c92c6d'; // 휴일근무인 경우 
+				if (title === '회의실01') {
+					color = '#025464'; // 회의실01인 경우
+				} else if (title === '회의실02') {
+					color = '#1B9C85'; // 회의실02인 경우
+				} else if (title === '회의실03') {
+					color = '#1D267D'; // 회의실03인 경우 
+				} else if (title === '투싼 차량') {
+					color = '#E76161'; // 투싼 차량인 경우 
+				} else if (title === '소나타 차량') {
+					color = '#19A7CE'; // 소나타 차량인 경우 
+				} else if (title === '스타렉스 차량') {
+					color = '#643A6B'; // 스타렉스 차량인 경우 
+				} else if (title === '빔프로젝터01') {
+					color = '#9E6F21'; // 빔프로젝터 01인 경우 
+				} else if (title === '빔프로젝터02') {
+					color = '#c92c6d'; // 빔프로젝터 02인 경우 
 				} else {
 					color = '#E8A0BF'; // 나머지
 				}
