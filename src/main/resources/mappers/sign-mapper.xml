@@ -308,6 +308,7 @@
 		    , WRITER_NO
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD') INSERT_DATE
 		    , DPO_NO
+		    , ENAME
 		    , DENAME
 		    , ITEM_NAME
 		    , BUY_CNT
