@@ -33,12 +33,75 @@ document.addEventListener('DOMContentLoaded', function() {
         listWeek: { buttonText: '자원목록' },
       },
         eventClick: function(info) {
+		
+			$('#participant').val("");
+			$('#resourceContent').val("");
+			
+				
+			$("#saveCalendar").click(function() {
+				var id = info.event._def.publicId; //id값
+				var participant = $('#participant').val(); // 참가자 입력값 가져오기
+  				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
+  				
+  		
+
+  				  				
+				 location.reload();
+				 
+				// 인서트 기능 수행
+				$.ajax({
+					url: '/resource/insertScheduleDetail',
+					type: 'post',
+					async: false,
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data: {
+						'id': id,
+						'participant': participant,
+						'resourceContent': resourceContent
+					},
+					success: function(result) {
+					},
+					error: function() {
+						alert('인서트 실패');
+					}
+				});
+		});
+				
+		
+				var id = info.event._def.publicId;
+				console.log(id);
+
+				//ajax start
+				$.ajax({
+					url: '/resource/selectCalendarDetail', //요청경로
+					type: 'post',
+					async: false,
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data: {
+						'id': id
+					}, //HTML에받는  데이터
+					success: function(result) {
+						 
+						var firstObject = result[0];
+						var participant = firstObject.participant;
+						var resourceContent = firstObject.resourceContent;
+
+						$('#participant').val(participant);
+						$('#resourceContent').val(resourceContent);
+
+						console.log(participant);
+						console.log(resourceContent);
+					},
+					error: function() {
+						alert('실패');
+					}
+				});
+				    
+			//ajax end
 			console.log(info.event);
 			$("#calendarModalDetail").modal("show");
 			$(".resourceContent").val(info.event.title);
 			$(".schedule_code").val(info.event._def.publicId);
-			
-
 			
 			//시작날짜
 			var startTime = info.event._instance.range.start;
@@ -56,12 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		// 총 사용 시간
 		var totalTime = moment.utc(endTime).diff(startTime, 'hours');
 		$("#total_time_resource").val(totalTime + "시간");
-
-
-			
-
-
-
 
     // change the border color just for fun
     info.el.style.borderColor = 'red';
@@ -342,75 +399,15 @@ for (let hour = 0; hour < 24; hour++) {
 }
 
 
-// 시작 시간 초기값 설정2
-let emptyOptionStart2 = document.createElement("option");
-emptyOptionStart2.value = "";
-emptyOptionStart2.innerText = "";
-document.getElementById("changeCalendar_start_time").appendChild(emptyOptionStart2);
-
-for (let hour = 0; hour < 24; hour++) {
-	for (let minute = 0; minute < 60; minute += 30) {
-		let option = document.createElement("option");
-		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		document.getElementById("changeCalendar_start_time").appendChild(option);
-	}
-}
-
-// 종료 시간 초기값 설정2
-let emptyOptionEnd2 = document.createElement("option");
-emptyOptionEnd2.value = "";
-emptyOptionEnd2.innerText = "";
-document.getElementById("changeCalendar_end_time").appendChild(emptyOptionEnd2);
-
-for (let hour = 0; hour < 24; hour++) {
-	for (let minute = 0; minute < 60; minute += 30) {
-		let option = document.createElement("option");
-		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		document.getElementById("changeCalendar_end_time").appendChild(option);
-	}
-}
 
 
-//자원관리캘린더 날짜 수정 
-$("#saveCalendar").click(function() {
-	var events = [];
-	var start_date = $("#changeCalendar_start").val();
-	var end_date = $("#changeCalendar_end").val();
-	var start_time = $("#changeCalendar_start_time").val();
-	var end_time = $("#changeCalendar_end_time").val();
-	
-	var content = $("#changeCalendar_content").val();
-	var publicId = $(".schedule_code").val();
-	var allDay = false;
 
 
-	//ajax start
-	$.ajax({
-		url: '/calendar/resourceSchedulesChangeDays', //요청경로
-		type: 'post',
-		async: false,
-		dataType: 'json',
-		contentType: 'application/json; charset=UTF-8',
-		data: jsondata, //HTML에받는  데이터
-		success: function(result) {
-			alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
-		},
-		error: function() {
-			alert('실패');
-		}
-	});
-	//ajax end
-
-	// 모달 숨기기
-	$("#calendarModal").modal("hide");
-});
 
 				
 				
 				
-				
+		
 				
 				
 				
