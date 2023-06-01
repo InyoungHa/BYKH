@@ -1,4 +1,5 @@
 package com.bykh.groupware.calendar.controller;
+
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -16,67 +17,61 @@ import jakarta.annotation.Resource;
 @Controller
 @RequestMapping("/calendar")
 public class CalendarController {
-    @Resource(name = "calendarService")
-    private CalendarService calendarService;
-    @Resource(name = "resourceService")
-    private ResourceService resourceService;
+	@Resource(name = "calendarService")
+	private CalendarService calendarService;
+	@Resource(name = "resourceService")
+	private ResourceService resourceService;
 
-    //근태캘린더 일정추가
-    @ResponseBody
-    @RequestMapping("/calendarSave")
-    public void calendarSaveAjax(@RequestBody List<CalendarVO> calendarVOs) {
-    		for(CalendarVO c: calendarVOs) {
-    			System.out.println(c);
-    		}
-    	
-    	
-    		calendarService.deleteSchedule();
-    	
-        for (CalendarVO calendarVO : calendarVOs) {
-            calendarService.insertSchedule(calendarVO);
-        }
-       
-    }
-    
-    // 근태캘린더 조회
-    @ResponseBody
-    @RequestMapping("/calendarLoad")
-    public List<CalendarVO> calendarLoadAjax() {
-    	
-        return calendarService.getAllSchedules();
-    }
-    
-    
-    
-    
-    //자원관리캘린더 일정추가
-    @ResponseBody
-    @RequestMapping("/resourceCalendarSave")
-    public void resourceCalendarSaveAjax(@RequestBody List<ResourceVO> resourceVOs) {
-    		for(ResourceVO c: resourceVOs) {
-    			System.out.println(c);
-    		}  	
-    		calendarService.deleteResourceSchedule();
-    	
-        for (ResourceVO resourceVO : resourceVOs) {
-            calendarService.insertResourceSchedule(resourceVO);
-        }
-       
-    }
-    
+	// 근태캘린더 일정추가
+	@ResponseBody
+	@RequestMapping("/calendarSave")
+	public void calendarSaveAjax(@RequestBody List<CalendarVO> calendarVOs) {
+		for (CalendarVO c : calendarVOs) {
+			System.out.println(c);
+		}
 
-    // 자원관리캘린더 조회
-    @ResponseBody
-    @RequestMapping("/resourceCalendarLoad")
-    public List<ResourceVO> resourceCalendarLoad() {
-    	
-        return calendarService.getAllResourceSchedules();
-    }
-    
+		calendarService.deleteSchedule();
 
+		for (CalendarVO calendarVO : calendarVOs) {
+			calendarService.insertSchedule(calendarVO);
+		}
+
+	}
+
+	// 근태캘린더 조회
+	@ResponseBody
+	@RequestMapping("/calendarLoad")
+	public List<CalendarVO> calendarLoadAjax() {
+
+		return calendarService.getAllSchedules();
+	}
+
+	// 자원관리캘린더 일정추가
+	@ResponseBody
+	@RequestMapping("/resourceCalendarSave")
+	public void resourceCalendarSaveAjax(@RequestBody List<ResourceVO> resourceVOs) {
+		for (ResourceVO c : resourceVOs) {
+			System.out.println(c);
+		}
+		calendarService.deleteResourceSchedule();
+
+		for (ResourceVO resourceVO : resourceVOs) {
+			calendarService.insertResourceSchedule(resourceVO);
+		}
+
+	}
+
+	// 자원관리캘린더 조회
+	@ResponseBody
+	@RequestMapping("/resourceCalendarLoad")
+	public List<ResourceVO> resourceCalendarLoad() {
+
+		return calendarService.getAllResourceSchedules();
+	}
+
+	
 
 }
-    
     
     
     

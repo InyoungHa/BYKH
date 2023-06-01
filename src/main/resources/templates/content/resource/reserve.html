@@ -348,14 +348,15 @@ font-size: 22px;
        <div class="modal fade" id="calendarModalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="height: 870px;">
+            <div class="modal-content" style="height: 670px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">자원상세내역</h5>        
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="taskId" class="col-form-label">자원 내용</label>
-                        <input type="text" class="form-control resourceContent" disabled id="calendar_content" name="calendar_content">                           
+                        <input type="hidden" class="schedule_code">
+                        <input type="text" class="form-control resourceContent" disabled id="changeCalendar_content" name="changeCalendar_content">                           
                             <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
                     		<input type="text" id="start_time_resource" name="start_date"  disabled style="width: 100%;">
                     	
@@ -365,24 +366,7 @@ font-size: 22px;
 							<label for="taskId" class="col-form-label">총 사용 시간</label>
 							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
 							<label for="taskId" class="col-form-label">참석자</label>
-							<input type="text" id="participant" name="participant"  style="width: 100%;">
-							
-							<div class="modal-body change" style="margin-right: 50px;">
-							<label for="taskId" class="col-form-label" style="margin-top: 5px;">날짜 수정</label><br>
-                     		<label for="taskId" class="col-form-label" style="margin-top: 5px;">시작 날짜</label>
-                            <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
-                     
-                        <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
-                           
-                            <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
-                    	 <select name="calendar_start_date" id="calendar_start_time2" style="text-align: center;"></select><br>
-                    	 
-                    	      <label for="taskId" class="col-form-label">종료 시간</label>
-                    	 <select name="calendar_end_date" id="calendar_end_time2" style="text-align: center;"></select>
-
-							</div>
-                     
+							<input type="text" id="participant" name="participant" style="width: 100%;">
                     </div>
                 </div>
                 <div class="modal-footer">

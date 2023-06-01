@@ -54,6 +54,8 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<ResourceVO> getAllResourceSchedules() {
 		return sqlSession.selectList("calendarMapper.getAllResourceSchedules");
 	}
+
+
 	
 
 
