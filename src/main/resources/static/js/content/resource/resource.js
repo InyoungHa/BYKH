@@ -34,9 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
       },
         eventClick: function(info) {
 			console.log(info.event);
-			console.log(info.event._instance.range.start);
 			$("#calendarModalDetail").modal("show");
 			$(".resourceContent").val(info.event.title);
+			$(".schedule_code").val(info.event._def.publicId);
 			
 
 			
@@ -346,14 +346,14 @@ for (let hour = 0; hour < 24; hour++) {
 let emptyOptionStart2 = document.createElement("option");
 emptyOptionStart2.value = "";
 emptyOptionStart2.innerText = "";
-document.getElementById("calendar_start_time2").appendChild(emptyOptionStart2);
+document.getElementById("changeCalendar_start_time").appendChild(emptyOptionStart2);
 
 for (let hour = 0; hour < 24; hour++) {
 	for (let minute = 0; minute < 60; minute += 30) {
 		let option = document.createElement("option");
 		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		document.getElementById("calendar_start_time2").appendChild(option);
+		document.getElementById("changeCalendar_start_time").appendChild(option);
 	}
 }
 
@@ -361,75 +361,60 @@ for (let hour = 0; hour < 24; hour++) {
 let emptyOptionEnd2 = document.createElement("option");
 emptyOptionEnd2.value = "";
 emptyOptionEnd2.innerText = "";
-document.getElementById("calendar_end_time2").appendChild(emptyOptionEnd2);
+document.getElementById("changeCalendar_end_time").appendChild(emptyOptionEnd2);
 
 for (let hour = 0; hour < 24; hour++) {
 	for (let minute = 0; minute < 60; minute += 30) {
 		let option = document.createElement("option");
 		option.value = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
 		option.innerText = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;
-		document.getElementById("calendar_end_time2").appendChild(option);
+		document.getElementById("changeCalendar_end_time").appendChild(option);
 	}
 }
 
 
-
+//자원관리캘린더 날짜 수정 
 $("#saveCalendar").click(function() {
-	var return_value = [];
-	var content = $("#calendar_content").val();
-						var start_date = $("#calendar_start_date").val();
-						var end_date = $("#calendar_end_date").val();
-						var start_time = $("#calendar_start_time").val();
-						var end_time = $("#calendar_end_time").val();
-						var allDay = false;
+	var events = [];
+	var start_date = $("#changeCalendar_start").val();
+	var end_date = $("#changeCalendar_end").val();
+	var start_time = $("#changeCalendar_start_time").val();
+	var end_time = $("#changeCalendar_end_time").val();
+	
+	var content = $("#changeCalendar_content").val();
+	var publicId = $(".schedule_code").val();
+	var allDay = false;
 
-						if (content == null || content == "") {
-							alert("내용을 입력하세요.");
-						} else if (start_date == "" || end_date == "") {
-							alert("날짜를 입력하세요.");
-						} else if (new Date(end_date) - new Date(start_date) < 0) {
-							alert("종료일이 시작일보다 먼저입니다.");
-						} else if (start_time == "" && end_time == "") {
-							allDay = true;
-						} else if (start_time == "" && end_time != "") {
-							alert("시작 시간을 선택하세요.");
-							return;
-						} else if (start_time != "" && end_time == "") {
-							alert("종료 시간을 선택하세요.");
-							return;
-						} else {
-							start_date += "T" + start_time;
-							end_date += "T" + end_time;
-						}
 
-						var obj = {
-							"title": content,
-							"start": start_date,
-							"allDay": allDay,
-							"color": '#E8A0BF',
-							"end": end_date
-						};
-						return_value.push(obj);
-						console.log(return_value);
+	//ajax start
+	$.ajax({
+		url: '/calendar/resourceSchedulesChangeDays', //요청경로
+		type: 'post',
+		async: false,
+		dataType: 'json',
+		contentType: 'application/json; charset=UTF-8',
+		data: jsondata, //HTML에받는  데이터
+		success: function(result) {
+			alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
 
-						// 기존의 이벤트 소스를 가져옴.
-						var eventSources = calendar.getOption('eventSources');
-
-						// 새로운 이벤트 소스를 생성하여 기존의 이벤트 소스와 합침.
-						var newEventSources = eventSources.concat({
-							events: return_value
-						});
-
-						// 합쳐진 이벤트 소스를 캘린더에 설정.
-						calendar.setOption('eventSources', newEventSources);
-
-						// 모달 숨기기
-						$("#calendarModal").modal("hide");
-					});
+	// 모달 숨기기
+	$("#calendarModal").modal("hide");
+});
 
 				
-
-			
+				
+				
+				
+				
+				
+				
+	
 	
 
 
