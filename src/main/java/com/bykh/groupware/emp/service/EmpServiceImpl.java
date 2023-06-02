@@ -17,8 +17,8 @@ public class EmpServiceImpl implements EmpService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override //로그인 쿼리
-	public EmpVO login(EmpVO empVO) {
-		return sqlSession.selectOne("empMapper.login", empVO);
+	public EmpVO login(int empno) {
+		return sqlSession.selectOne("empMapper.login", empno);
 	}
 
 	

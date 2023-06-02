@@ -84,39 +84,7 @@ function regEmp(){
 }
 
 /*
-function drawEmpTable(empList){
-	//사원 리스트 테이블
-	const emp_table_tage=document.querySelector('#empListTable').querySelector('tbody');
-	//비우기
-	emp_table_tage.replaceChildren();
-	
-	let str ='';
-	
-	console.log('empList =' + JSON.stringify(empList));
-	console.log('empList의 타입:', typeof empList);
-	
-		
-	empList.forEach(function(emp, indx){
-		
-		str += `<tr>`;
-		str += `<td>${indx+1}</td>`;
-		str += `<td>${emp.empno}</td>`;
-		str += `<td>${emp.ename}</td>`;
-		str += `<td>${emp.empno}</td>`;
-		str += `<td>****</td>`;
-		str += `<td>${emp.join_date}</td>`;
-		str += `<td>${emp.deptVO.dename}</td>`;
-		str += `<td>${emp.e_job}</td>`;
-		str += `<td>${emp.e_status_str}</td>`;
-		str += `<td>${emp.e_role}</td>`;
-		str += `<td>`;
-		str += `<button onchange="changAccount(${emp.empno});" type="button" class="button">변경</button>`;
-		str += `</td>`;
-		str += `</tr>`;
-		
-		});
 
-	emp_table_tage.insertAdjacentHTML('afterbegin',str);	
 	
 	
 	//등록 완료 후 form 초기화
@@ -173,8 +141,8 @@ $.ajax({
 	data: {'empno':empNum}, //필요한 데이터
 	success: function(result) {
 		//모달 태그 선택
-		const modal_tag = document.querySelector('#empDtailModal');
-		
+		const modal_tag = document.querySelector('#empDetailModal');
+		//console.log(result);
 		//모달 내용 그리기
 		drawEmpDatail(result);
 
@@ -191,11 +159,15 @@ $.ajax({
 }
 
 //모달 사원 상세정보 그리기
-function drawEmpDatail(empDetail){
+function drawEmpDatail(data){
 	
 	const modal_body=document.querySelector('.modal-body');
 	modal_body.replaceChildren();
 	
+	//직급
+	const options = ['사장', '과장', '대리', '주임', '사원'];
+	const selectedValue = data['empDetail'].e_job;
+
 	let str ='';
 	
 	str += `<label class="page_title">사원 개인 페이지</label>`;
@@ -206,8 +178,8 @@ function drawEmpDatail(empDetail){
 	str += 				`<img src="/upload/empImg/default.png" style="width: 12rem;" id="empImgPreview" class="card-img-top">`;
 	str += 				`<input type="file" class="form-control" id="empImgInput">`;	
 	str += 			`<div class="card-body">`;
-	str += 				`<p class="card-text">${empDetail.ename}</p>`;
-	str += 				`<p class="card-text">${empDetail.deptVO.dename+'(' +empDetail.deptVO.loc+')'}</p>`;
+	str += 				`<p class="card-text">${data.empDetail.ename}</p>`;
+	str += 				`<p class="card-text">${data.empDetail.deptVO.dename +'(' +data.empDetail.deptVO.loc+')'}</p>`;
 	str += 			`</div>`;
 	str += 			`</div>`;
 	str += 		`</div>`;
@@ -221,22 +193,22 @@ function drawEmpDatail(empDetail){
 	str += 				'<tr>';
 	str += 					'<td>이름</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" id="ename" name="ename" class="form-control form-control-sm" placeholder="${empDetail.ename}">`;
+	str += 						`<input type="text" value="${data['empDetail'].ename}" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control form-control-sm">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>사번</td>';
 	str += 					`<td>`;
-	str += 						`<div id="empno">${empDetail.empno} </div>`;
+	str += 						`<div id="empno">${data.empDetail.empno} </div>`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>아이디</td>';
-	str += 					`<td> ${empDetail.empno} </td>`;
+	str += 					`<td> ${data.empDetail.empno} </td>`;
 	str += 				'</tr>';
 	str += 			'</table>';	
 	str += 			`</ul>`;
-	str += 		`</div>`;
+	str += 			`</div>`;
 	str += 		`<div class="row">`;
 	str += 			`<div class="col card" style="width: 25rem;">`;
 	str += 			`<ul class="list-group list-group-flush">`;
@@ -245,18 +217,32 @@ function drawEmpDatail(empDetail){
 	str += 				'<tr>';
 	str += 					'<td>부서</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" id="dename" name="dename" class="form-control form-control-sm" placeholder="${empDetail.deptVO.dename+'('+empDetail.deptVO.loc+')'}">`;
+	str += 						`<select id="deptno" class="form-control">`;
+	for(let i =0; i<data['deptList'].length; i++){	
+		str += 							`<option value="${data['deptList'][i].deptno}">${data['deptList'][i].dename+'('+data['deptList'][i].loc+')'}</option>`;
+	}
+	console.log(data.deptList);
+	str += 						`</select>`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>직급</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" id="eJob" name="eJob" class="form-control form-control-sm" placeholder="${empDetail.e_job}">`;
+	str += 						`<select id="eJob" class="form-control">`;
+				
+	options.forEach(function(option){
+		if (option !== selectedValue) {
+			str += `<option value="${option}">${option}</option>`;
+		}
+		else{
+			str += `<option value="${option}"selected>${option}</option>`;			
+		}
+	});			
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>입사일</td>';
-	str += 					`<td> ${empDetail.joinDate} </td>`;
+	str += 					`<td> ${data.empDetail.joinDate} </td>`;
 	str += 				'</tr>';
 	str += 			'</table>';	
 	str += 			`</ul>`;
@@ -268,18 +254,73 @@ function drawEmpDatail(empDetail){
 	str += 			'<table>';
 	str += 				'<tr>';
 	str += 					'<td>이메일</td>';
-	str += 					`<td> ${empDetail.empno}@bykh.com </td>`;
+	str += 					`<td> ${data.empDetail.empno}@bykh.com </td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>내선번호</td>';
 	str += 					`<td>`;
-	str += 						`<input type="number" id="officeTel" name="officeTel" placeholder="${empDetail.officeTel}" min="0" class="form-control form-control-sm">`;
+	if(data.empDetail.officeTel==undefined){		
+		str += 				'<div class="row">';
+		str += 					'<div class="col-3">';
+		str += 						`<select id="officeTel" class="form-control form-control-sm">`;
+		str += 							`<option value="02">02</option>`;
+		str += 							`<option value="032">032</option>`;
+		str += 							`<option value="051">051</option>`;
+		str += 							`<option value="061">061</option>`;
+		str += 						`</select>`;
+		str += 					'</div>';
+		str += 					'<div class="col-auto">';
+		str += 						`<input type="number" id="officeTel" name="officeTel" value="" min="0" class="form-control form-control-sm">`;
+		str += 					'</div>';
+		str += 				'</div>';
+	}
+	else{
+		str += 				'<div class="row">';
+		str += 					'<div class="col-3">';
+		str += 						`<select id="officeTel" class="form-control form-control-sm">`;
+		str += 							`<option value="02">02</option>`;
+		str += 							`<option value="032">032</option>`;
+		str += 							`<option value="051">051</option>`;
+		str += 							`<option value="061">061</option>`;
+		str += 						`</select>`;
+		str += 					'</div>';
+		str += 					'<div class="col-auto">';
+		str += 						`<input type="number" id="officeTel" name="officeTel" value="${data.empDetail.officeTel}" min="0" class="form-control form-control-sm">`;
+		str += 					'</div>';
+	}	
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>휴대전화</td>';
 	str += 					`<td>`;	
-	str += 						`<input type="number" id="phoneTel" name="phoneTel" placeholder="${empDetail.phoneTel}" min="0" class="form-control form-control-sm">`;
+	if(data.empDetail.phoneTel==undefined){		
+		str += 				'<div class="row">';
+		str += 					'<div class="col-3">';
+		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;
+		str += 							`<option value="010">010</option>`;
+		str += 							`<option value="011">011</option>`;
+		str += 							`<option value="012">012</option>`;
+		str += 						`</select>`;
+		str += 					'</div>';
+		str += 					'<div class="col-auto">';
+		str += 						`<input type="number" id="phoneTel" name="phoneTel" value="" min="0" class="form-control form-control-sm">`;
+		str += 					'</div>';
+		str += 				'</div>';
+	}
+	else{
+		str += 				'<div class="row">';
+		str += 					'<div class="col-3">';
+		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;
+		str += 							`<option value="010">010</option>`;
+		str += 							`<option value="011">011</option>`;
+		str += 							`<option value="012">012</option>`;
+		str += 						`</select>`;
+		str += 					'</div>';
+		str += 					'<div class="col-auto">';
+		str += 						`<input type="number" id="phoneTel" name="phoneTel" value="data['empDetail'].phoneTel" min="0" class="form-control form-control-sm">`;
+		str += 					'</div>';
+		str += 				'</div>';		
+	}	
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 			'</table>';	
@@ -326,26 +367,125 @@ function drawEmpDatail(empDetail){
 	  });
 }
 
-//사진 등록
+//사원상세 정보 등록 유효성 검사
+function reg_empDetail_validate(){
+	
+	//기존 오류 메세지 전부 삭제
+	delete_error_div();
+	
+	//reg_emp_validate()함수의 리턴 결과를 저장하는 변수
+	let result_ename = true;
+	let result_office_tel= true;
+	let result_phone_tel= true;
+	
+	//오류 메세지
+	let str_ename ='';
+	let str_office_tel ='';
+	let str_phone_tel ='';
+	
 
+	//사원 상세정보 모달
+	const ename_tag = document.querySelector('#empDetailModal input[name="ename"]').closest('td');
+	const office_tel_tag = document.querySelector('#empDetailModal input[id="officeTel"]').closest('div');
+	const phone_tel_tag = document.querySelector('#empDetailModal input[id="phoneTel"]').closest('div');
+
+	
+	//validation 빈 값 처리
+	const reg_empExp = /\s/;
+	
+	const ename_tag_value = document.querySelector('#empDetailModal input[name="ename"]').value;
+
+	if(ename_tag_value==''){
+		str_ename ='사원명은 필수 입력입니다.';
+		result_ename =false;
+	}else if(reg_empExp.test(ename_tag_value)){
+		str_ename ='사원명을 공백 없이 입력해주세요';
+		result_ename = false;
+	}
+	
+	const office_tel_tag_value = document.querySelector('#empDetailModal input[id="officeTel"]').value;
+	
+	if(reg_empExp.test(office_tel_tag_value)){
+		str_office_tel ='사무실 전화번호를 공백 없이 입력해주세요';
+		result_epw = false;
+	}else if(office_tel_tag_value.length <4){
+		str_office_tel ='사무실 전화번호 4자리 입력해주세요';
+		result_epw = false;
+	}
+	
+
+	const phone_tel_tag_value = document.querySelector('#empDetailModal input[id="phoneTel"]').value;
+	
+	if(reg_empExp.test(phone_tel_tag_value)){
+		str_phone_tel ='휴대 전화번호를 공백 없이 입력해주세요';
+		result_epw = false;
+	}else if(phone_tel_tag_value.length <4){
+		str_phone_tel ='휴대 전화번호 4자리 입력해주세요';
+		result_epw = false;
+	}
+	
+	//유효성 검사 실패시 오류 메세지 출력(false일때)
+	if(!result_ename){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_ename}</div>`;
+		ename_tag.insertAdjacentHTML('beforeend', errorHTML);
+	}
+	if(!result_office_tel){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_office_tel}</div>`;
+		office_tel_tag.insertAdjacentHTML('beforeend', errorHTML);
+		
+	}	
+	if(!result_phone_tel){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_phone_tel}</div>`;
+		phone_tel_tag.insertAdjacentHTML('beforeend', errorHTML);
+		
+	}	
+	//모든 유효성이 확인될 때
+	return result_ename && result_office_tel && result_phone_tel;	
+}
+
+
+
+//사원 상세정보 등록 + 사진
 function regEmpDetail() {
+	//유효성 검사 진행
+	const isValidate = reg_empDetail_validate();
+	
+	if(!isValidate){
+		return;
+	}	
+	
 	const empno = document.querySelector('#empno').textContent;
 	const orignFileName = document.querySelector('#empImgInput').value;
-	const ename = document.querySelector('#ename').value;
+	const ename = document.querySelector('#empDetailModal input[name="ename"]').value;
+	
+	const deptno= document.querySelector('#deptno').value;
+	//const deptno=deptno_option.options[deptno_option.selectedIndex];
+	console.log(deptno);
+	
 	const ejob = document.querySelector('#eJob').value;
-	const officeTel = document.querySelector('#officeTel').value;
-	const phoneTel = document.querySelector('#phoneTel').value;
+	
+	
+	const office_select = document.querySelector('select[id="officeTel"]').value;
+	const office_input = document.querySelector('input[id="officeTel"]').value;
+	const officeTel = office_select + office_input;
+
+	const phone_select = document.querySelector('select[id="phoneTel"]').value;
+	const phone_input = document.querySelector('input[id="phoneTel"]').value;
+	const phoneTel = phone_select + phone_input;
+
 
 	regDetail={
 		'empno' : empno,
 		'orignFileName' :orignFileName,
 		'ename':ename,
+		'deptno' :deptno,
 		'ejob' : ejob,
 		'officeTel':officeTel,
 		'phoneTel': phoneTel
 		
-	}
-	console.log(regDetail)
+	}	
+
+	console.log(regDetail);
 		
 	$.ajax({
 		url: '/emp/regEmpDetailAjax', //요청경로

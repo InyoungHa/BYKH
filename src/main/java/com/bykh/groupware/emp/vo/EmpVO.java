@@ -56,6 +56,10 @@ public class EmpVO extends PageVO {
 	private EImgVO eImgVO; // 사원 이미지 등록
 	
 	
+	//연락처 정보 저장 변수
+	private String[] memTells;
+	
+	
 
 	//테스트용 추가-희수
 	private int level;

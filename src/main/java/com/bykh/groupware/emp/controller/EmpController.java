@@ -4,8 +4,12 @@ package com.bykh.groupware.emp.controller;
 
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -17,12 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.dept.service.DeptService;
+import com.bykh.groupware.dept.vo.DeptVO;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.util.ConstVariable;
 import com.bykh.groupware.util.UploadUtil;
 
+import groovyjarjarantlr4.v4.misc.EscapeSequenceParsing.Result;
 import jakarta.annotation.Resource;
 import oracle.sql.Mutable;
 
@@ -34,6 +40,8 @@ public class EmpController {
 	private EmpService empService;
 	@Resource(name="deptService")
 	private DeptService deptService;
+	@Autowired
+	private PasswordEncoder encoder;
 	
 
 	
@@ -60,6 +68,9 @@ public class EmpController {
 	@PostMapping("/regEmpForm")//사원 등록_간편
 	public String regEmpAjax(EmpVO empVO) {
 		
+		String encodedPw=encoder.encode(empVO.getEpw());
+		empVO.setEpw(encodedPw);
+		
 		//사원등록
 		empService.insertEmp(empVO);
 		
@@ -68,12 +79,22 @@ public class EmpController {
 	
 	@ResponseBody //사원 상세 정보 모달 띄우기
 	@PostMapping("/getEmpDetailAjax")
-	public EmpVO getEmpDetailAjax(int empno) {
+	public Map<String, Object> getEmpDetailAjax(int empno) {
 		
 		System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
 		
-		//사원 상세정보 조회
-		return empService.selectEmpDetail(empno);
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		//부서 정보 조회
+		List<DeptVO> depList = deptService.selectDeptListIsUse();
+		resultMap.put("deptList", depList);
+		
+		//사원 정보
+		EmpVO empDetail = empService.selectEmpDetail(empno);
+		resultMap.put("empDetail", empDetail);
+		
+		
+		return resultMap;
 	}
 	
 	//사원 사진 등록
@@ -82,6 +103,7 @@ public class EmpController {
 	public void regEmpImgAjax(MultipartFile empImg, @RequestBody Map<String, Object> regDetail) {
 		
 		System.out.println("!!!!!!!!!!!!!!!!"+regDetail.get("empno"));
+		System.out.println("!!!!!!!!!!!!!!!!"+regDetail.toString());
 		
 		//사진 데이터 insert
 		String originFileName=(String)regDetail.get("originFileName");
@@ -93,12 +115,9 @@ public class EmpController {
 			
 		}		
 		
-		//update 데이터
-		if(regDetail.containsValue(null) || regDetail.containsValue("")){
-			return;
-		}
-		
+		//update 데이터		
 		empService.updateEmpDetail(regDetail);		
+		
 	}
 	
 	
