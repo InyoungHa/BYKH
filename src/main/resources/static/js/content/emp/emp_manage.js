@@ -200,13 +200,11 @@ function drawEmpDatail(empDetail){
 	
 	str += `<label class="page_title">사원 개인 페이지</label>`;
 	str += `<form class="row" id="" >`;
-	str += 	`<div class="col-6">`;
+	str += 	`<div class="col-6 mb-3">`;
 	str += 		`<div class="row">`;
 	str += 			`<div class="col card" style="width: 18rem;">`;
-
-	str += 				`<img src="/upload/empImg/가장 빨리 만나는 자바_메인.jpg" id="empImgPreview" class="card-img-top">`;
-	str += 				`<input type="file" class="form-control" id="empImgInput">`;		
-	str += 				`<input type="button" value="저장" onclick="regEmpImg()">`;		
+	str += 				`<img src="/upload/empImg/default.png" style="width: 12rem;" id="empImgPreview" class="card-img-top">`;
+	str += 				`<input type="file" class="form-control" id="empImgInput">`;	
 	str += 			`<div class="card-body">`;
 	str += 				`<p class="card-text">${empDetail.ename}</p>`;
 	str += 				`<p class="card-text">${empDetail.deptVO.dename+'(' +empDetail.deptVO.loc+')'}</p>`;
@@ -214,21 +212,23 @@ function drawEmpDatail(empDetail){
 	str += 			`</div>`;
 	str += 		`</div>`;
 	str += 	`</div>`;
-	str +=	`<div class="col-6 mb-3">`;
-	str += 		`<div class="row">`;
-	str += 			`<div class="col card" style="width: 25rem;">`;
+	str +=	`<div class="col-6">`;
+	str += 		`<div class="row g-3>`;
+	str += 			`<div class="colcard" style="width: 25rem;">`;
 	str += 			`<ul class="list-group list-group-flush">`;
 	str += 			`<li class="list-group-item">기본 정보</li>`;		
 	str += 			'<table>';
 	str += 				'<tr>';
 	str += 					'<td>이름</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.ename}">`;
+	str += 						`<input type="text" id="ename" name="ename" class="form-control form-control-sm" placeholder="${empDetail.ename}">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>사번</td>';
-	str += 					`<td> ${empDetail.empno} </td>`;
+	str += 					`<td>`;
+	str += 						`<div id="empno">${empDetail.empno} </div>`;
+	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>아이디</td>';
@@ -245,13 +245,13 @@ function drawEmpDatail(empDetail){
 	str += 				'<tr>';
 	str += 					'<td>부서</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.deptVO.dename+'('+empDetail.deptVO.loc+')'}">`;
+	str += 						`<input type="text" id="dename" name="dename" class="form-control form-control-sm" placeholder="${empDetail.deptVO.dename+'('+empDetail.deptVO.loc+')'}">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>직급</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" name="ename" class="form-control" placeholder="${empDetail.eJob}">`;
+	str += 						`<input type="text" id="eJob" name="eJob" class="form-control form-control-sm" placeholder="${empDetail.e_job}">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
@@ -261,7 +261,7 @@ function drawEmpDatail(empDetail){
 	str += 			'</table>';	
 	str += 			`</ul>`;
 	str += 		`</div>`;
-	str += 		`<div class="row mb-4">`;
+	str += 		`<div class="row g-3">`;
 	str += 			`<div class="col card" style="width: 25rem;">`;
 	str += 			`<ul class="list-group list-group-flush">`;
 	str += 			`<li class="list-group-item">연락처 정보</li>`;		
@@ -273,24 +273,22 @@ function drawEmpDatail(empDetail){
 	str += 				'<tr>';
 	str += 					'<td>내선번호</td>';
 	str += 					`<td>`;
-	str += 						`<input type="number" name="officeTel" placeholder="${empDetail.officeTel}" min="0">`;
+	str += 						`<input type="number" id="officeTel" name="officeTel" placeholder="${empDetail.officeTel}" min="0" class="form-control form-control-sm">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>휴대전화</td>';
 	str += 					`<td>`;	
-	str += 						`<input type="number" name="phoneTel" placeholder="${empDetail.phoneTel}" min="0">`;
+	str += 						`<input type="number" id="phoneTel" name="phoneTel" placeholder="${empDetail.phoneTel}" min="0" class="form-control form-control-sm">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 			'</table>';	
 	str += 			`</ul>`;
 	str += 		`</div>`;
 	str += 	`</div>`;
-	str += 		`<div class="row">`;
-	str += 			`<div class="col text-right">`;
-	str += 				`<input type="submit" value="저장"  class="btn">`;
-	str += 			`</div>`;
-	str += 			`<div class="col text-right">`;
+	str += 		`<div class="row g-3">`;
+	str += 			`<div class="col d-grid gap-2 d-md-flex justify-content-md-end">`;
+	str += 				`<input type="button" value="저장" onclick="regEmpDetail()" class="btn">`;
 	str += 				`<input type="button" value="취소" class="btn">`;
 	str += 			`</div>`;
 	str += 			`</div>`;
@@ -330,20 +328,34 @@ function drawEmpDatail(empDetail){
 
 //사진 등록
 
-function regEmpImg() {
-	const empno = document.querySelector('#empno');
-	const attachedFileName = document.querySelector('#attachedFileName');
+function regEmpDetail() {
+	const empno = document.querySelector('#empno').textContent;
+	const orignFileName = document.querySelector('#empImgInput').value;
+	const ename = document.querySelector('#ename').value;
+	const ejob = document.querySelector('#eJob').value;
+	const officeTel = document.querySelector('#officeTel').value;
+	const phoneTel = document.querySelector('#phoneTel').value;
 
+	regDetail={
+		'empno' : empno,
+		'orignFileName' :orignFileName,
+		'ename':ename,
+		'ejob' : ejob,
+		'officeTel':officeTel,
+		'phoneTel': phoneTel
+		
+	}
+	console.log(regDetail)
+		
 	$.ajax({
-		url: '/emp/regEmpImgAjax', //요청경로
+		url: '/emp/regEmpDetailAjax', //요청경로
 		type: 'post',
 		async: true, // 동기 방식으로 설정
 		contentType: 'application/json; charset=UTF-8', //Json 타입
 		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
-		data: {'empno':empno,
-				'attachedFileName' : attachedFileName}, //필요한 데이터
+		data: JSON.stringify(regDetail), //필요한 데이터
 		success: function(result) {
-			
+			alert('성공');
 		},
 		error: function() {
 			alert('실패');

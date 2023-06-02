@@ -1,15 +1,17 @@
 package com.bykh.groupware.emp.controller;
 
 
-import java.util.List;
+
+
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,22 +76,27 @@ public class EmpController {
 	
 	//사원 사진 등록
 	@ResponseBody
-	@PostMapping("/regEmpImgAjax")
-	public void regEmpImgAjax(MultipartFile empImg, EImgVO eImgVO, int empno, String attachedFileName) {
+	@PostMapping("/regEmpDetailAjax")
+	public void regEmpImgAjax(MultipartFile empImg, @RequestBody Map<String, Object> regDetail) {
 		
-		EImgVO attachedFiEImgVO = UploadUtil.uploadFile(empImg);
+		System.out.println("!!!!!!!!!!!!!!!!"+regDetail.get("empno"));
 		
-		//사진 등록
-		eImgVO.setAttachedFileName(attachedFileName);
-		eImgVO.setEmpno(empno);
+		//사진 데이터 insert
+		String originFileName=(String)regDetail.get("originFileName");
 		
-		attachedFiEImgVO.setAttachedFileName(attachedFileName);
-		attachedFiEImgVO.setEmpno(empno);
+		if(originFileName !=null && !originFileName.isEmpty()) {
+			EImgVO attachedFile = UploadUtil.uploadFile(empImg);
+			attachedFile.setOriginFileName(originFileName);
+			empService.insertEmpImg(attachedFile);
+			
+		}		
 		
-		empService.insertEmpImg(attachedFiEImgVO);
+		//update 데이터
+		if(regDetail.containsValue(null) || regDetail.containsValue("")){
+			return;
+		}
 		
-
-		
+		empService.updateEmpDetail(regDetail);		
 	}
 	
 	
