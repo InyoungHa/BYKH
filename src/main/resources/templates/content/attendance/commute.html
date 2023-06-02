@@ -150,13 +150,16 @@
 
 	<!-- 출퇴근 -->
 	<div class="commute">김정운님의 출퇴근기록</div>
-
 	<!-- 출퇴근시간box -->
 	<span class="time"> 
 	<span class="timeDetail1">[[${attendanceVO.curDate}]]<br>
 	</span><br>
-			 출근시간 : <span class="timeDetail3">[[${goWork.goWork}]]</span><br> 
-			 퇴근시간 : <span class="timeDetail3">[[${outWork.outWork}]]</span>
+		출근시간: <span class="timeDetail3" th:unless="${goWork == null}" th:text="${goWork.goWork}"></span><br>
+		퇴근시간: <span class="timeDetail3" th:unless="${outWork == null}" th:text="${outWork.outWork}"></span>
+
+
+
+
 	</span>
 
 	<!-- 이번달 근무현황 box -->
@@ -173,11 +176,11 @@
 			</tr>
 			<tr>
 				<td>연장근무시간</td>
-				<td>7시간</td>
+				<td>시간</td>
 			</tr>
 			<tr>
 				<td>총 근무시간</td>
-				<td>103시간</td>
+				<td>[[${totalWorkingTime.workingDays}]]회</td>
 			</tr>
 		</tbody>
 	</table>
@@ -196,11 +199,11 @@
 			</tr>
 			<tr>
 				<td>결근</td>
-				<td>0회</td>
+				<td>회</td>
 			</tr>
 			<tr>
 				<td>연차</td>
-				<td>3회</td>
+				<td>회</td>
 			</tr>
 		</tbody>
 	</table>
@@ -215,7 +218,7 @@
 		<tbody>
 			<tr>
 				<td>잔여휴가</td>
-				<td>5일</td>
+				<td>일</td>
 			</tr>
 		</tbody>
 	</table>
