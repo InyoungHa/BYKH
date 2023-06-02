@@ -65,6 +65,7 @@
 		    , BOARD_TITLE
 		    , BOARD_WRITER
 		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
+		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI:SS') BOARD_DATE_ORDER
 		    , BOARD_VIEW
 		    , ENAME
 		    , (SELECT COUNT(FILE_NUM) 
@@ -80,7 +81,7 @@
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
 		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
 		</if>
-		ORDER BY BOARD_NUM DESC
+		ORDER BY BOARD_DATE_ORDER DESC
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
@@ -90,6 +91,7 @@
 			, BOARD_TITLE
 			, BOARD_WRITER
 			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
+			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI:SS') BOARD_DATE_ORDER
 			, BOARD_VIEW
 		    , ENAME
 		    , (SELECT COUNT(FILE_NUM) 
@@ -103,7 +105,7 @@
 		AND IS_IMPORTANT = 'Y'
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
-		ORDER BY BOARD_NUM DESC
+		ORDER BY BOARD_DATE_ORDER DESC
 	</select>
 	
 	<!-- 다음으로 들어갈 글 번호 조회 -->
@@ -173,6 +175,7 @@
 				, BOARD_CONTENT
 				, BOARD_WRITER
 				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+				, BOARD_STATUS
 				, BOARD_VIEW
 				, IS_IMPORTANT
 				, ENAME
@@ -235,6 +238,10 @@
 		SET BOARD_TITLE = #{boardTitle}
 			, BOARD_CONTENT = #{boardContent}
 			, IS_IMPORTANT = #{isImportant}
+			, BOARD_STATUS = #{boardStatus}
+			<if test="boardDate != null">
+			, BOARD_DATE = ${boardDate}
+			</if>
 		WHERE BOARD_NUM = #{boardNum}
 		AND BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 	</update>
@@ -260,6 +267,26 @@
 		WHERE BOARD_NUM = #{boardNum}
 	</select>
 	
+	<!-- 사번으로 임시저장글 조회 -->
+	<select id="getTempBoardListByEmpno" resultMap="board">
+		SELECT BOARD_NUM
+		    , BOARD_TITLE
+		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+		FROM BOARD, EMP
+		WHERE EMPNO = #{empno}
+		AND BOARD_WRITER = EMPNO
+		AND BOARD_STATUS = 2
+		ORDER BY BOARD_NUM DESC
+	</select>
+	
+	<!-- 사번으로 임시저장글 개수 조회 -->
+	<select id="getTempBoardCntByEmpno" resultType="int">
+		SELECT COUNT(BOARD_NUM)
+		FROM BOARD, EMP
+		WHERE EMPNO = #{empno}
+		AND BOARD_WRITER = EMPNO
+		AND BOARD_STATUS = 2
+	</select>
 	
 	
 </mapper>

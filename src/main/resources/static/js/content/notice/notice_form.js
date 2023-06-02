@@ -33,6 +33,10 @@ function tempRegNotice() {
 		if(!hasHidden) {
 			const statusStr = `<input type="hidden" name="boardStatus" value="${2}">`;
 			hiddenDiv.insertAdjacentHTML('afterbegin', statusStr);
+			
+			//임시저장함 개수 증가
+			const tempModalBtn = document.querySelector('#tempModalBtn');
+			tempModalBtn.value = Number(tempModalBtn.value)+ 1;
 		}
 		
 		
@@ -50,7 +54,6 @@ function tempRegNotice() {
 			success: function(result) {
 				const tempBoard = result;
 				
-				console.log(tempBoard);
 				
 				//알림 메시지 추가
 				const alertDiv = document.querySelector('#alertDiv');
@@ -60,6 +63,7 @@ function tempRegNotice() {
 				alertDiv.insertAdjacentHTML('afterbegin', tempAlertStr);
 				
 				$("#tempAlert").delay(4000).fadeOut(1000);
+				
 				
 				//글 번호 추가
 				if(!hasHidden) {
@@ -97,6 +101,9 @@ function tempRegNotice() {
 						
 						//data-file-num 속성 삭제 (안해도 상관 없지만..)
 						fileInput.removeAttribute('data-file-num');
+						
+						//파일 태그 삭제 버튼 onclick에 deleteFileNum 추가
+						deleteBtn.setAttribute('onClick', `deleteFileInputDiv(this)`);
 					}, { once: true });
 				});
 				
@@ -182,5 +189,78 @@ function deleteFileInputDiv(deleteBtn) {
 	fileInputDiv.remove();
 };
 
+
+//임시저장함 버튼
+function tempBoardList(empno) {
+	
+	
+	//ajax start
+	$.ajax({
+		url: '/notice/tempBoardList', //요청경로
+		type: 'post',
+		async: true,
+		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		data: {'empno' : empno}, //필요한 데이터
+		success: function(result) {
+			const tempBoardList = result;
+			
+			const tempModalBody = document.querySelector('#tempModalBody');
+			
+			tempModalBody.replaceChildren();
+			
+			let str = '';
+			
+			for(const tempBoard of tempBoardList) {
+			str += `<tr>                                                                                                                                                                                                                `;
+			str += `	<td class="text-start">                                                                                                                                                                                         `;
+			str += `		<a href="/notice/update?boardNum=${tempBoard.boardNum}" style="color: black;">${tempBoard.boardTitle}</a>                                                                                                  `;
+			str += `	</td>                                                                                                                                                                                                           `;
+			str += `	<td class="fs-6 text-secondary">${tempBoard.boardDate}</td>                                                                                                                                                    `;
+			str += `	<td>                                                                                                                                                                                        `;
+			str += `		<a href="javascript:void(0);" class="text-danger" onclick="deleteBoard('${tempBoard.boardNum}', this);"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">                                                                                     `;
+			str += `		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>`;
+			str += `		</svg></a>                                                                                                                                                                                                    `;
+			str += `	</td>                                                                                                                                                                                                           `;
+			str += `</tr>                                                                                                                                                                                                               `;
+			}
+			
+			tempModalBody.insertAdjacentHTML('afterbegin', str)
+			
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+	
+	
+}
+
+//글 삭제
+function deleteBoard(boardNum, deleteBtn) {
+	if(confirm('정말 삭제하시겠습니까?')) {
+		//ajax start
+		$.ajax({
+			url: '/notice/tempDelete', //요청경로
+			type: 'post',
+			async: true,
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			data: {'boardNum' : boardNum}, //필요한 데이터
+			success: function(result) {
+				const deletedBoardTr = deleteBtn.parentElement.parentElement;
+				
+				deletedBoardTr.remove();
+				
+				//임시저장함 개수 감소
+				const tempModalBtn = document.querySelector('#tempModalBtn');
+				tempModalBtn.value = Number(tempModalBtn.value) - 1;
+			},
+			error: function() {
+				alert('실패');
+			}
+		});
+		//ajax end
+	}
+}
 
 

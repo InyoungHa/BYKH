@@ -137,13 +137,14 @@
 	<update id="updateEmpDetail">
 		UPDATE EMP
 		SET ENAME = #{ename},
-			E_JOB =#{eJob},
+			DEPTNO =#{deptno},
+			E_JOB =#{ejob},
 			OFFICE_TEL =#{officeTel},
-			PHONE_TEL =#{phoneTel},
-			ATTACHED_FILE_NAME=#{attachedFileName}
+			PHONE_TEL =#{phoneTel}
 		WHERE EMPNO = #{empno}			
 	</update>
 	
+
 	
 	<!--계정 상태 변경  -->
 	<!--재직상태를 휴직으로 바꾸면 계정상태는 휴면, 계정관리 버튼은 복구 버튼으로 바뀜
@@ -158,15 +159,14 @@
 	
 	
 	<!--로그인 쿼리  -->
-<!-- 	<select id="login" resultMap="emp">
+	<select id="login" resultMap="emp">
 		SELECT EMPNO
 			, EPW
-			, E_STATUS
+			, E_ROLE
 		FROM EMP
 		WHERE EMPNO = #{empno}
-		AND EPW =#{epw}
 	</select>
- -->
+
 	
 </mapper>
 

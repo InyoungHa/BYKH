@@ -1,6 +1,7 @@
 package com.bykh.groupware.emp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
@@ -8,7 +9,7 @@ import com.bykh.groupware.emp.vo.EmpVO;
 public interface EmpService {
 
 	//로그인 쿼리
-	EmpVO login(EmpVO empVO);
+	EmpVO login(int empno);
 	
 	//사원 등록_간편
 	void insertEmp(EmpVO empVO);
@@ -26,6 +27,6 @@ public interface EmpService {
 	void insertEmpImg(EImgVO eImgVO);
 	
 	//사원 상세 정보 수정
-	void updateEmpDetail(EmpVO empVO);
-	
+	void updateEmpDetail(Map<String, Object> mapData);
+
 }

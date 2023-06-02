@@ -35,7 +35,7 @@
 		ORDER BY DEPTNO DESC
 	</select>
 	
-	<select id="selectDeptListIsUse" resultMap="dept">
+	<select id="selectDeptListIsUse" resultMap="dept" >
 		SELECT DEPTNO
 			, (REPLACE(TRIM(DENAME), ' ', '')) AS DENAME
 			, LOC

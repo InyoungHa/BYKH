@@ -20,11 +20,11 @@
                 <form class="px-4 py-3" th:action="@{/admin/login}" method="POST" id="loginForm">
                     <div class="mb-3">
                         <label class="form-label">사번</label>
-                        <input type="text" class="form-control" id="empno" placeholder="2020010101">
+                        <input type="text" class="form-control" name="empno" id="empno" placeholder="2020010101">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">비밀번호</label>
-                        <input type="password" class="form-control" id="epw" placeholder="비밀번호를 입력하세요">
+                        <input type="password" class="form-control" name="epw" id="epw" placeholder="비밀번호를 입력하세요">
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="d-grid gap-2 col-12 mx-auto">                    
-	                    <input type="button" value="로그인" class="btn btn-primary" onclick="">
+	                    <input type="submit" value="로그인" class="btn btn-primary">
                     </div>
                 </form>              
                 <a class="dropdown-item" href="#">사번 찾기</a>

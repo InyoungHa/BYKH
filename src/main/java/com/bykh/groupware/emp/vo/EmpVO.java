@@ -14,18 +14,30 @@ import lombok.ToString;
 @ToString
 public class EmpVO extends PageVO {
 
-	
+	@JsonProperty("empno")
 	private int empno;
 	private int deptno;
+	
+	@JsonProperty("ename")
 	private String ename;
 	private String epw;
+	
+	@JsonProperty("e_job")
 	private String eJob;
 	private int age;
 	private String gender;
 	private String eEmail;
+	
+	@JsonProperty("phone_tel")
 	private String phoneTel;
+	
+	@JsonProperty("office_tel")
 	private String officeTel;
+	
+	@JsonProperty("e_role")
 	private String eRole;
+	
+	@JsonProperty("e_status")
 	private int eStatus;
 	private String joinDate;
 	
@@ -40,7 +52,12 @@ public class EmpVO extends PageVO {
 	private String searchKeyword;//검색 키워드
 	private String searchValue; //검색 
 	
+	
 	private EImgVO eImgVO; // 사원 이미지 등록
+	
+	
+	//연락처 정보 저장 변수
+	private String[] memTells;
 	
 	
 

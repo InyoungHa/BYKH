@@ -89,7 +89,7 @@ public class UploadUtil {
 		
 		EImgVO eImgVO = null;
 		
-		if(!empImg.isEmpty()) {
+		if(empImg !=null &&!empImg.isEmpty()) {
 			eImgVO = new EImgVO();
 			
 			String originFileName = empImg.getOriginalFilename();
@@ -107,10 +107,13 @@ public class UploadUtil {
 				
 			} catch (Exception e) {
 				// TODO: handle exception
-			}
+			}	
 						
 		}
 		return eImgVO;
+		
 	}
-	
 }
+
+	
+

@@ -1,6 +1,7 @@
 package com.bykh.groupware.emp.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class EmpServiceImpl implements EmpService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override //로그인 쿼리
-	public EmpVO login(EmpVO empVO) {
-		return sqlSession.selectOne("empMapper.login", empVO);
+	public EmpVO login(int empno) {
+		return sqlSession.selectOne("empMapper.login", empno);
 	}
 
 	
@@ -51,9 +52,9 @@ public class EmpServiceImpl implements EmpService {
 		
 	}
 	@Override //사원 상세 정보 수정
-	public void updateEmpDetail(EmpVO empVO) {
+	public void updateEmpDetail(Map<String, Object> mapData) {
 	
-		sqlSession.update("empMapper.updateEmpDetail", empVO);
+		 sqlSession.update("empMapper.updateEmpDetail", mapData);
 	}
 	
 	
