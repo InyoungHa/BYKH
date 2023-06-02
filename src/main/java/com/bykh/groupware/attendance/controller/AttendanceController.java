@@ -28,6 +28,9 @@ public class AttendanceController {
 		if(attendanceVO.getCurDate() == null) {
 			attendanceVO.setCurDate(nowDate);
 		}	
+		
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
+		System.out.println(attendanceVO);
 		//출근시간 조회
 		model.addAttribute("goWork",attendanceService.selectGowork());
 		//퇴근시간 조회
@@ -36,6 +39,9 @@ public class AttendanceController {
 		model.addAttribute("lateCount",attendanceService.selectLateCount());
 		//근무일수 조회
 		model.addAttribute("workingDays",attendanceService.checkDays());
+		//연장근무시간 조회
+		model.addAttribute("totalWorkingTime",attendanceService.totalWorkingTime());
+		
 		
 		return "content/attendance/commute";
 	}
@@ -75,8 +81,6 @@ public class AttendanceController {
 	@RequestMapping("/goToWork")
 	public String goToWork( AttendanceVO attendanceVO) {
 	
-		
-		
 		attendanceService.goWork();
 	return "redirect:/admin/main";
 	}

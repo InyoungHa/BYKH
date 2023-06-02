@@ -4,117 +4,93 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="attendanceMapper">
 	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
-		<id column="WORK_STATUS" 		property="workStatus"/>
 		<result column="GO_WORK" 		property="goWork"/>
 		<result column="OUT_WORK" 		property="outWork"/>
 		<result column="CUR_DATE" 		property="curDate"/>
 		<result column="LATE_COUNT" 	property="lateCount"/>
+		<result column="CHECK_LATE" 	property="checkLate"/>
 		<result column="WORKING_DAYS" 	property="workingDays"/>
 	</resultMap>
-	
-	
-		
+
 	<!--출근시간 저장 -->
 	<insert id="goWork">
-INSERT INTO ATTENDANCE (
-            ATT_CODE
-            ,GO_WORK
-            ,WORK_STATUS
-            ) 
-VALUES (
-    (SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) + 1, 3, '0') 
-    FROM ATTENDANCE)
-    , SYSDATE
-    ,1
-    )
+		INSERT INTO ATTENDANCE (
+			ATT_CODE
+			,GO_WORK
+		)
+		VALUES (
+			(SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) + 1, 3, '0')
+			FROM ATTENDANCE)
+			, SYSDATE
+		)
 	</insert>
-	
-	<!--퇴근시간 저장 -->
-	<insert id="outWork">
-INSERT INTO ATTENDANCE (
-            ATT_CODE
-            ,OUT_WORK
-            ,WORK_STATUS
-            ) 
-VALUES (
-    (SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) + 1, 3, '0') 
-    FROM ATTENDANCE)
-    , SYSDATE
-    ,2
-    )
-	</insert>
-	
+
+	<!--퇴근시간 저장(NULL -> SYSDATE로 업데이트) -->
+	<update id="outWork">
+	UPDATE ATTENDANCE
+		SET OUT_WORK = SYSDATE
+		WHERE ATT_CODE =  (SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) , 3, '0') 
+	FROM ATTENDANCE)
+	</update>
+
+
 	<!-- 제일최신 출근시간 조회 -->
 	<select id="selectGowork" resultMap="att">
-	SELECT TO_CHAR(GO_WORK, 'HH:MI') AS GO_WORK
-	FROM ATTENDANCE
-	WHERE WORK_STATUS = 1
-	AND GO_WORK >= TRUNC(SYSDATE)
-	ORDER BY GO_WORK DESC
-	FETCH FIRST 1 ROW ONLY
+		SELECT TO_CHAR(GO_WORK, 'HH:MI') AS GO_WORK
+		FROM ATTENDANCE
+		WHERE GO_WORK >= TRUNC(SYSDATE)
+		ORDER BY GO_WORK DESC
+		FETCH FIRST 1 ROW ONLY
 	</select>
-    
-    <!-- 제일최신 퇴근시간 조회 -->
+
+	<!-- 제일최신 퇴근시간 조회 -->
 	<select id="selectOutwork" resultMap="att">
-	SELECT TO_CHAR(OUT_WORK, 'HH:MI') AS OUT_WORK
-	FROM ATTENDANCE
-	WHERE WORK_STATUS = 2
-	AND GO_WORK >= TRUNC(SYSDATE)
-	ORDER BY OUT_WORK DESC
-	FETCH FIRST 1 ROW ONLY
+		SELECT TO_CHAR(OUT_WORK, 'HH:MI') AS OUT_WORK
+		FROM ATTENDANCE
+		WHERE OUT_WORK >= TRUNC(SYSDATE)
+		ORDER BY OUT_WORK DESC
+		FETCH FIRST 1 ROW ONLY
 	</select>
-    
-    
-    <!-- 지각 횟수 조회 -->
+
+
+	<!-- 지각 횟수 조회 -->
 	<select id="selectLateCount" resultMap="att">
-	SELECT COUNT(*) AS LATE_COUNT
-	FROM ATTENDANCE
-	WHERE WORK_STATUS = 1 
-	AND TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:00:00'
+		SELECT COUNT(*) AS LATE_COUNT
+		FROM ATTENDANCE
+		WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 	</select>
-    
-    
-    
+
+
+
 	<!-- 근무일수 조회 -->
 	<select id="checkDays" resultMap="att">
-	SELECT COUNT(*) / 2 AS WORKING_DAYS
-	FROM ATTENDANCE
-	WHERE
-	(SELECT TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS GO_WORK
-	FROM ATTENDANCE
-	WHERE WORK_STATUS = 1
-	AND GO_WORK >= TRUNC(SYSDATE)
-	ORDER BY GO_WORK DESC
-	FETCH FIRST 1 ROW ONLY) 
-	= 
-	(SELECT TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS GO_WORK
-	FROM ATTENDANCE
-	WHERE WORK_STATUS = 2
-	AND GO_WORK >= TRUNC(SYSDATE)
-	ORDER BY OUT_WORK DESC FETCH FIRST 1 ROW ONLY)
+		SELECT COUNT(*) AS WORKING_DAYS
+		FROM ATTENDANCE
+		WHERE
+		(SELECT TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS GO_WORK
+		FROM ATTENDANCE
+		WHERE GO_WORK >= TRUNC(SYSDATE)
+		ORDER BY GO_WORK DESC
+		FETCH FIRST 1 ROW ONLY)
+		=
+		(SELECT TO_CHAR(OUT_WORK, 'YYYY-MM-DD') AS OUT_WORK
+		FROM ATTENDANCE
+		WHERE OUT_WORK >= TRUNC(SYSDATE)
+		ORDER BY OUT_WORK DESC FETCH FIRST 1 ROW ONLY)
 	</select>
 	
 	
 	<!-- 연장근무시간 조회 -->
-	<select id="findOverTime">
-	SELECT
-	SEC_TO_TIME(
-		SUM(
-		CASE
-		WHEN TIME_TO_SEC(QUITTING_TIME) - TIME_TO_SEC(WORKING_TIME) > 28800 THEN TIME_TO_SEC(QUITTING_TIME) -
-		TIME_TO_SEC(WORKING_TIME) - 28800
-		ELSE 0
-		END
-		)
-	) AS 연장근무시간
-	FROM ATTENDANCE
-	WHERE EMPNO = #{empNo}
+	<select id="findOverTime" resultMap="att">
+	
 	</select>
-	
-	
+
+
 	<!-- 총근무시간 조회 -->
-	<select id="totalWorkingTime">
-	SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(QUITTING_TIME) - TIME_TO_SEC(WORKING_TIME))) AS 총근무시간 FROM ATTENDANCE WHERE EMPNO = #{empNo}
+	<select id="totalWorkingTime" resultMap="att">
+		SELECT ROUND(SUM(OUT_WORK - GO_WORK) * 24) AS WORKING_DAYS
+		FROM ATTENDANCE
+		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
 	</select>
 
 	

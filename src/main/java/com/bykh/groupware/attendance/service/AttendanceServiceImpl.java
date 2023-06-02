@@ -19,7 +19,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 		
 	}
 
-	//출근시간등록
+	//퇴근시간등록
 	@Override
 	public void outWork() {
 		sqlSession.insert("attendanceMapper.outWork");
@@ -46,6 +46,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public AttendanceVO checkDays() {
 		return sqlSession.selectOne("attendanceMapper.checkDays");
+	}
+
+	//총 근무시간
+	@Override
+	public AttendanceVO totalWorkingTime() {
+		return sqlSession.selectOne("attendanceMapper.totalWorkingTime");
 	}
 	
 

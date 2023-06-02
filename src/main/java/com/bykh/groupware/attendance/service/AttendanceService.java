@@ -22,6 +22,10 @@ public interface AttendanceService {
 	
 	//근무일수 조회
 	AttendanceVO checkDays();
+	
+	//총근무시간 조회(한달)
+	AttendanceVO totalWorkingTime();
+	
 }
 
 

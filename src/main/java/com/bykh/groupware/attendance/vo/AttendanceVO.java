@@ -8,13 +8,13 @@ import lombok.ToString;
 @Getter
 @ToString
 public class AttendanceVO {
-	
-private	String workStatus; //근무상태
-private	String goWork; //출근
-private	String outWork; //퇴근
-private	String curDate; //현재시간
-private	int lateCount; //지각횟수
-private	int workingDays; //근무일수
+	private String attCode;
+	private	String goWork; //출근
+	private	String outWork; //퇴근
+	private	String curDate; //현재시간
+	private	String empno; 
+	private	int lateCount; //지각횟수
+	private	int workingDays; //근무일수
 }
 
 
