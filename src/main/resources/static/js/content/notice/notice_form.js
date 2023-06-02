@@ -97,6 +97,9 @@ function tempRegNotice() {
 						
 						//data-file-num 속성 삭제 (안해도 상관 없지만..)
 						fileInput.removeAttribute('data-file-num');
+						
+						//파일 태그 삭제 버튼 onclick에 deleteFileNum 추가
+						deleteBtn.setAttribute('onClick', `deleteFileInputDiv(this)`);
 					}, { once: true });
 				});
 				
