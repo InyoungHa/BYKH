@@ -26,13 +26,18 @@
 *,::before,::after{
   box-sizing: border-box;
 }
+.body-pd{
+  display:inline-block;
+ width:100%;
+ margin 0 auto;
+}
 #body-pd{
-  position: relative;
-  margin: 0;
-  padding:  0 0 6.75rem;
+  display:inline-block;
+  width:100%;
+  margin: 0; 
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
-  transition: .5s;
+  transition: .8s;
 }
 h1{
   margin: 0;
@@ -118,7 +123,7 @@ a{
 
 /*Add padding body*/
 .body-pd{
-  padding: 2rem 0 0 16rem;
+  padding: 0rem 0 0 16rem;
 }
 /*Active links menu*/
 .active{
@@ -182,7 +187,7 @@ li:last-child {
             
                 <div class="nav__brand">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-                    <a th:href="@{/admin/main}" class="nav__logo"><img src="/img/content/header/BYKHlogo.png" id="logoImg"></a>
+                    <a th:href="@{/admin/main}" class="nav__logo"><img src="/img/content/header/BYKHlogo.png" id="logoImg" style="width: 120px; height: 105px;"></a>
                 </div>
                 
                 <div class="nav__list">
@@ -247,11 +252,21 @@ li:last-child {
 	                     <ion-icon name="people-outline"></ion-icon>
 	                     <span class="nav_name">조직도</span>
 	                </a>   
-	                     
-	                <a href="#" class="nav__link">
-	                    <ion-icon name="file-tray-stacked-outline"></ion-icon>
-	                    <span class="nav_name">자원관리</span>
-	                </a>
+	                
+	                		<div href="#" class="nav__link">
+                        <a th:href="@{/resource/reserve}" class="ap"> <ion-icon name="file-tray-stacked-outline"></ion-icon></a>
+                       		<a href="#"> <span class="nav_name" data-bs-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">자원관리</span></a>
+						<div class="collapse" id="collapseExample2">
+	   						<ul>
+
+	   						<!-- li 글자 길면 짤리니 주의 ! -->
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/resource/reserve}">예약하기</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/resource/reservationList}">예약 목록</a></li>
+	 						</ul>
+						</div>             	
+ 					</div> 
+	                
+	                    
 	                
 	                
 	                <div href="#" class="nav__link">
@@ -318,7 +333,7 @@ li:last-child {
 	  });
 	</script>
 
-	</script>
+	
 </th:block>
 
 </html>

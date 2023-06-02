@@ -14,5 +14,5 @@ public class BuyVO {
 	private int buyDeptNo;
 	private int buyPrice;
 	private int buyApproval;
-	private List<BuyDetailVO> buyDetailList;
+	private List<BuyDetailVO> buyDetailVOList;
 }

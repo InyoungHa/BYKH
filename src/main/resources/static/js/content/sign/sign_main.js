@@ -233,7 +233,106 @@ function showSignDocModal(clickTag){
 				
 			}
 			//구매신청서일 경우
-			
+			else if(key[0] == 'docPurchaseOrder'){
+				const signWriteInfo = result[key[0]];
+				console.log(signWriteInfo);
+				str += `
+			<div class="row mb-3">
+				<div class="col-7">
+					<table class="table table-bordered text-center sgn-info-table">
+						<tbody>
+							<tr>
+								<td>기안자</td>
+								<td>
+									${signWriteInfo.empVO.ename}
+								</td>
+							</tr>
+							<tr>
+								<td>기안부서</td>
+								<td>
+									${signWriteInfo.empVO.deptVO.dename}<!-- 자동입력 -->
+									<input type="hidden" class="deptNo" th:value="${signWriteInfo.empVO.deptno}">
+								</td>
+							</tr>
+							<tr>
+								<td>기안일</td>
+								<td>
+									${signWriteInfo.insertDate}<!-- 자동입력 -->
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class=" col-5">
+					<div class="float-end">
+						<table class="table table-bordered text-center stamp-table">
+							<tbody>
+								<tr class="eJobTr">
+									<!-- 사원 >> 쿼리 결과로 들어가도록 변경하기!!!!!!!!11 -->
+									<td>사원</td>
+									<td>
+										[[${signWriteInfo.signVOList[0].approverJob}]]
+									</td>
+								</tr>
+								<tr class="enameTr">
+									<td>
+										[[${signWriteInfo.empVO.ename}]]
+									</td><!-- 도장 이미지 -->
+									<td>
+									</td>
+								</tr>
+								<tr class="nowDateTr">
+									<td>[[${nowDate}]]</td><!-- 시간 -->
+									<td></td>
+								</tr>
+								<!-- 결재자 추가시 추가되어야 하는 코드 끝 -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="offset-11 col-1 d-grid">
+					<input type="button" value="추가" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
+				</div>
+				
+				<div class="col-12 mt-3">
+					<table class="table table-bordered text-center content-table">
+						<colgroup>
+							<col width="40%">
+							<col width="20%">
+							<col width="20%">
+							<col width="20%">
+						</colgroup>
+						<thead>
+							<tr>
+								<td>품 명</td>
+								<td>수 량</td>
+								<td>단 가</td>
+								<td>금 액</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>합 계</td>
+								<td colspan="2"></td>
+								<td  class="buyPriceTd"></td>
+							</tr>
+							<tr>
+								<td>기 타</td>
+								<td colspan="3">
+									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"></textarea>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>			
+		</div>
+				`;
+				
+			}
 			//매출보고서일 경우
 			
 			
@@ -247,7 +346,6 @@ function showSignDocModal(clickTag){
 			alert('실패');
 		}
 	});
-	//ajax end	
 	
 	modal.hide();
 }

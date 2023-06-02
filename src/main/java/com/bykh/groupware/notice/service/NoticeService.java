@@ -18,6 +18,9 @@ public interface NoticeService {
 	
 	//다음으로 들어갈 글 번호 조회
 	String getNextBoardNum();
+	
+	//다음으로 들어갈 첨부 파일 번호 조회
+	int getNextFileNumber();
 
 	//글 등록
 	void regNotice(BoardVO boardVO);

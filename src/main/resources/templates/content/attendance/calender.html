@@ -189,6 +189,7 @@ padding-top: 3.5px;
 .fc-toolbar-title{
 padding-right:60px;
 color: #2A2F4F;
+font-weight: bold;
 }
 
 .but{margin-top:290px; margin-left:1px; 
@@ -218,12 +219,37 @@ font-weight: bold;
 pointer-events : none;
 }
 
+
+.modal.fade.show .modal-content {
+  opacity: 1;
+}
+.fc-direction-ltr .fc-list-day-text, .fc-direction-rtl .fc-list-day-side-text{
+color:black;
+}
+.fc-theme-standard .fc-list-day-cushion{
+background-color: #D2E9E9;
+}
+.fc-direction-ltr .fc-list-day-side-text, .fc-direction-rtl .fc-list-day-text{
+color: black;
+}
+.fc-event{
+border: 0px;
+}
+.fc-event, .fc-event-dot{
+background-color: #AFD1E9;
+}
+.fc .fc-list-event:hover td{
+background-color: #D25380;
+}
+.fc .fc-list-day-cushion, .fc .fc-list-table td{
+color: black;
+}
 .modal-content {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
+  width: 20%;
   height: 50%;
   opacity: 0;
   transition: opacity 0.8s ease;
@@ -232,14 +258,12 @@ pointer-events : none;
 .modal.fade.show .modal-content {
   opacity: 1;
 }
-
-
 </style>
 </head>
 <body>
 
 
-<div style="margin-left:435px; font-size: 50px; font-weight: bold; color: #3C486B;">근태 일정 캘린더</div>
+<div style="margin-left:472px; font-size: 50px; font-weight: bold; color: #3C486B;">근태 관리 캘린더</div>
   <div id='external-events'>
   <button id="saveButton" class="but">일정저장</button>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
@@ -274,6 +298,7 @@ pointer-events : none;
   </div>
 
 <!--  -->
+
 <div id="calendarBox">
         <div id="calendar"></div>
     </div>
@@ -282,30 +307,37 @@ pointer-events : none;
     <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="height: 45%; width: 20%">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
-                  
+                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>        
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" style="margin-bottom: 10px;">
-                        <label for="taskId" class="col-form-label">시작 날짜</label>
-                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date" style="margin-bottom: 15px;">
+                        <input type="text" class="form-control" id="calendar_content" name="calendar_content">
+                        <label for="taskId" class="col-form-label" style="margin-top: 10px;">시작 날짜</label>
+                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                     
                         <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date" >
+                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
+                           
+                            <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
+                    	 <select name="calendar_start_date" id="calendar_start_time" style="text-align: center;"></select>
+                    	 
+                    	      <label for="taskId" class="col-form-label">종료 시간</label>
+                    	 <select name="calendar_end_date" id="calendar_end_time" style="text-align: center;"></select>
+
+
+                     <br>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 127px; margin-right: 80px;">추가</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"  id="sprintSettingModalClose" style="width: 127px; margin-right: 20px; ">취소</button>
+                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 100%;">추가</button>
                 </div>
     
             </div>
         </div>
     </div>
-
 
   <!-- calendar 태그 -->
   <div id='calendar-container'>
@@ -395,7 +427,6 @@ pointer-events : none;
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
 <script type="text/javascript" src="/js/content/attendance/calendar.js"></script>
 
-<script type="text/javascript" src="./fullcalendar-2.9.1/gcal.js"></script>
   <!-- jquery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </th:block>

@@ -7,18 +7,19 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+	<style>
+	.page-link {
+		color: black;
+	}
+	.active>.page-link, .page-link.active {
+	    background-color: #22415f;
+	    border-color: #22415f;
+	}
+	</style>
 </th:block>
 
 <th:block layout:fragment="content">
-<style>
-.page-link {
-	color: black;
-}
-.active>.page-link, .page-link.active {
-    background-color: #22415f;
-    border-color: #22415f;
-}
-</style>
+
 
 	<!-- 코드 작성 -->
 	<div class="row mb-5">

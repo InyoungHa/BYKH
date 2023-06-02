@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"> <!--thymleaf 기능 중 layout  -->
 <head>
+
 <meta charset="UTF-8">
-<title>Insert title here</title>
+
 
 <!--bootstrap css 로딩  -->
 <!--부트스트랩 -> Docs에서 복사  -->
@@ -16,18 +17,23 @@
 <th:block layout:fragment="content_css">
 	
 </th:block>
-<style>
+<!-- <style>
 
-</style>
+</style> -->
 </head>
 
 <body>
-<div style="background-color:#1e2b37; height: 100px;  width: 100%; position: relative;">
+<div style="background-color:#1e2b37; height: 100px;  width: 100%; ">
  <th:block th:replace="~{fragment/header::headerFragment}"></th:block>
 </div>
+
+  
+
+
+
 <div class="container"> 
 	<div class="row">
-		<div>
+		<div style="margin-bottom: 60px; ">
 			<th:block th:replace="~{fragment/admin_side::adminSideFragment}"></th:block>
 		</div>
 		<div>

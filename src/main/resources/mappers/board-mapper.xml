@@ -137,6 +137,13 @@
 		)
 	</insert>
 	
+	<!-- 다음 첨부파일 번호 조회 -->
+	<select id="getNextFileNumber" resultType="int">
+		SELECT LPAD(NVL(MAX(TO_NUMBER(SUBSTR(FILE_NUM, 6))), 0) + 1, 3, '0')
+		FROM BOARD_FILE
+	</select>
+	
+	
 	<!-- 글 첨부파일 정보 등록 -->
 	<insert id="regFiles">
 		INSERT INTO BOARD_FILE (
@@ -148,8 +155,7 @@
 		) 
 		<foreach collection="boardFileList" item="boardFile" index="i" separator="UNION ALL">
 			SELECT
-				(SELECT 'FILE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(FILE_NUM, 6))), 0) + 1 + #{i}, 3, '0')
-					FROM BOARD_FILE)
+				#{boardFile.fileNum}
 				, #{boardFile.originFileName}
 				, #{boardFile.attachedFileName}
 				, #{boardFile.fileSize}
