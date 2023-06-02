@@ -3,6 +3,7 @@ package com.bykh.groupware.emp.controller;
 
 
 
+import java.io.File;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.util.ConstVariable;
 import com.bykh.groupware.util.UploadUtil;
 
 import jakarta.annotation.Resource;
