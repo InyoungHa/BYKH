@@ -28,6 +28,9 @@ public interface NoticeService {
 	//공지글 상세 조회
 	BoardVO getNoticeDetail(BoardVO boardVO);
 	
+	//수정을 위한 글 상세 조회(조회수 증가 제외)
+	BoardVO getNoticeDetailForUpdate(BoardVO boardVO);
+	
 	//글 삭제
 	void deleteBoard(BoardVO boardVO);
 	
@@ -37,4 +40,9 @@ public interface NoticeService {
 	//첨부파일 정보 조회
 	BoardFileVO getDownloadFileVO(String fileNum);
 	
+	//사번으로 임시저장글 조회
+	List<BoardVO> getTempBoardListByEmpno(int empno);
+	
+	//사번으로 임시저장글 개수 조회
+	int getTempBoardCntByEmpno(int empno);
 }

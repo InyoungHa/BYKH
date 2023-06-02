@@ -7,6 +7,16 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
+	.numberBtn {
+		color: #466583;
+	}
+	</style>
 </th:block>
 
 <th:block layout:fragment="content">
@@ -61,12 +71,20 @@
 					</table>
 					<div id="hiddenDiv">
 						<input type="hidden" name="boardNum" th:value="${notice.boardNum}">
+						<input type="hidden" name="boardStatus" th:value="${notice.boardStatus}">
 						<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${notice.boardMenuVO.boardMenuCode}">					
 					</div>
 				</div>
 			</div>
+			
 			<div class="row px-2">
-				<div class="col d-grid d-md-flex justify-content-md-end">
+				<div class="col d-grid gap-2 d-md-flex justify-content-md-end" id="btnDiv">
+					<div id="alertDiv"></div>
+					<div class="btn-group" role="group">
+					  <button type="button" class="btn myBtn" onclick="tempRegNotice();">임시저장</button>
+					  <input type="button" class="btn myBtn numberBtn" th:onclick="tempBoardList(20230517)"
+					  			data-bs-toggle="modal" data-bs-target="#tempRegModal" id="tempModalBtn" th:value="${tempBoardCnt}">
+					</div>
 					<button class="btn btn-primary" type="button" onclick="noticeUpdateCheck();">등록</button>
 				</div>
 			</div>
@@ -79,6 +97,37 @@
 		</form>
 		</div>
 	</div>
+	
+	
+<!-- 임시 저장 모달 -->
+<div class="modal fade" id="tempRegModal" tabindex="-1" aria-labelledby="tempRegModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 50rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="tempRegModal">임시 저장함</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mt-3 mb-3">
+        <div class="row">
+        	<div class="col">
+				<table class="table text-center align-middle">
+					<colgroup>
+						<col width="*">
+						<col width="25%">
+						<col width="5%">
+					</colgroup>
+					
+					<tbody id="tempModalBody">
+						
+						
+					</tbody>
+				</table>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </th:block>
 
 <!-- 외부 js 파일 -->

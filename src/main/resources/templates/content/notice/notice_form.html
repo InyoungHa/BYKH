@@ -7,20 +7,21 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
+	.numberBtn {
+		color: #466583;
+	}
+	</style>
 
 </th:block>
 
 <th:block layout:fragment="content">
-<style type="text/css">
-.myBtn {
-color:black;
-background-color: #f8f9fa;
-border: 0.3px solid #466583;
-}
-.numberBtn {
-	color: #466583;
-}
-</style>
+
 
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
@@ -71,7 +72,8 @@ border: 0.3px solid #466583;
 					<div id="alertDiv"></div>
 					<div class="btn-group" role="group">
 					  <button type="button" class="btn myBtn" onclick="tempRegNotice();">임시저장</button>
-					  <button type="button" class="btn myBtn numberBtn" data-bs-toggle="modal" data-bs-target="#tempRegModal">1</button>
+					  <input type="button" class="btn myBtn numberBtn" th:onclick="tempBoardList(20230517)"
+					  			data-bs-toggle="modal" data-bs-target="#tempRegModal" id="tempModalBtn" th:value="${tempBoardCnt}">
 					</div>
 					<button class="btn" type="button" onclick="regNotice();">등록</button>
 				</div>
@@ -107,38 +109,8 @@ border: 0.3px solid #466583;
 						<col width="5%">
 					</colgroup>
 					
-					<tbody>
-						<tr>
-							<td class="text-start">
-								<a style="color: black;">
-									임시저장글
-								</a>
-							</td>
-							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
-							<td class="text-danger">
-								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-								</svg>
-							</td>
-						</tr>
-						<tr>
-							<td class="text-start">임시저장글</td>
-							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
-							<td class="text-danger">
-								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-								</svg>
-							</td>
-						</tr>
-						<tr>
-							<td class="text-start">임시저장글</td>
-							<td class="fs-6 text-secondary">2023-05-26 16:12</td>
-							<td class="text-danger">
-								<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-								  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-								</svg>
-							</td>
-						</tr>
+					<tbody id="tempModalBody">
+						
 						
 					</tbody>
 				</table>
