@@ -19,11 +19,13 @@ public class NoticeServiceImpl implements NoticeService {
 	@Autowired
 	private SqlSessionTemplate sqlSession;
 	
+	
 	//글 개수 조회
 	@Override
 	public int getBoardCnt(BoardVO boardVO) {
 		return sqlSession.selectOne("boardMapper.getBoardCnt", boardVO);
 	}
+	
 	
 	//공지 게시판 목록 조회
 	@Override
@@ -31,11 +33,13 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectList("boardMapper.getNoticeList", boardVO);
 	}
 	
+	
 	//공지 게시판 중요글 목록 조회
 	@Override
 	public List<BoardVO> getNoticeImportantList() {
 		return sqlSession.selectList("boardMapper.getNoticeImportantList");
 	}
+	
 	
 	//다음으로 들어갈 글 번호 조회
 	@Override
@@ -43,12 +47,14 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectOne("boardMapper.getNextBoardNum");
 	}
 	
+	
 	//다음으로 들어갈 첨부파일 번호 조회
 	@Override
 	public int getNextFileNumber() {
 		return sqlSession.selectOne("boardMapper.getNextFileNumber");
 	}
 
+	
 	//글 등록
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -62,32 +68,19 @@ public class NoticeServiceImpl implements NoticeService {
 		}
 	}
 
-	//공지글 상세 조회
+	
+	//공지글 상세 조회 (조회수 증가 + 조회)
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public BoardVO getNoticeDetail(BoardVO boardVO) {
 		//조회수 증가
 		sqlSession.update("boardMapper.updateBoardView", boardVO);
 		
-		//첨부파일 조회
-		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
-		
-		//댓글 조회
-		List<ReplyVO> replyList = sqlSession.selectList("boardMapper.getReplyList", boardVO);
-		
-		//상세 조회하는 글
-		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
-		
-		//첨부파일 변수에 담아줌
-		selectedBoard.setBoardFileList(selectedFileList);
-		
-		//댓글 변수에 담아줌
-		selectedBoard.setReplyList(replyList);
-		
 		//글 상세 조회 정보 반환
-		return selectedBoard;
+		return getBoardDetail(boardVO);
 	}
 
+	
 	//글 삭제
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -103,6 +96,15 @@ public class NoticeServiceImpl implements NoticeService {
 		//글 삭제
 		sqlSession.delete("boardMapper.deleteBoard", boardVO);
 	}
+	
+	
+	//글 수정을 위한 상세 조회(조회수 빼고)
+	@Override
+	public BoardVO getNoticeDetailForUpdate(BoardVO boardVO) {
+		//글 상세 조회 정보 반환
+		return getBoardDetail(boardVO);
+	}
+	
 	
 	//글 수정
 	@Override
@@ -122,6 +124,7 @@ public class NoticeServiceImpl implements NoticeService {
 		sqlSession.update("boardMapper.updateBoard", boardVO);
 	}
 	
+	
 	//첨부파일 정보 조회
 	@Override
 	public BoardFileVO getDownloadFileVO(String fileNum) {
@@ -129,8 +132,25 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 
+	//사번으로 임시저장글 조회
+	@Override
+	public List<BoardVO> getTempBoardListByEmpno(int empno) {
+		return sqlSession.selectList("boardMapper.getTempBoardListByEmpno", empno);
+	}
+
+	
+	//사번으로 임시저장글 개수 조회
+	@Override
+	public int getTempBoardCntByEmpno(int empno) {
+		return sqlSession.selectOne("boardMapper.getTempBoardCntByEmpno", empno);
+	}
 	
 
+	
+	
+	
+	
+	
 	//fileNum 리스트로 파일 삭제 메소드
 	public void deleteFileByFileNumList(List<String> deleteFileNumList) {
 		
@@ -144,6 +164,32 @@ public class NoticeServiceImpl implements NoticeService {
 			sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
 		}
 	}
+	
+	
+	//글 상세 조회 메소드
+	public BoardVO getBoardDetail(BoardVO boardVO) {
+		//첨부파일 조회
+		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
+		
+		//댓글 조회
+		List<ReplyVO> replyList = sqlSession.selectList("boardMapper.getReplyList", boardVO);
+		
+		//상세 조회하는 글
+		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
+		
+		//첨부파일 변수에 담아줌
+		selectedBoard.setBoardFileList(selectedFileList);
+		
+		//댓글 변수에 담아줌
+		selectedBoard.setReplyList(replyList);
+		
+		//글 상세 조회 정보 반환
+		return selectedBoard;
+	}
+
+
+
+
 
 
 

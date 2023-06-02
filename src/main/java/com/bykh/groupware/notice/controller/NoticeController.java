@@ -54,13 +54,26 @@ public class NoticeController {
 	public String regForm(Model model) {
 		model.addAttribute("boardMenuCode", "BOARD_MENU_001");
 		
+		// 로그인 처리후 수정해야됨~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!
+		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(20230517));
+		
 		return "content/notice/notice_form";
 	}
 	
 	//글 신규 등록
 	@PostMapping("/regNotice")
-	public String regNotice(BoardVO boardVO, MultipartFile[] files) {
-		regBoard(boardVO, files);
+	public String regNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+		
+		if(boardVO.getBoardNum() == null) { //신규 등록
+			regBoard(boardVO, files);
+		}
+		else { // 임시저장하고 등록
+			//상태값 변경
+			boardVO.setBoardStatus(1);
+			boardVO.setBoardDate("SYSDATE");
+			
+			updateBoard(boardVO, deleteFileNum, files);			
+		}
 		
 		return "redirect:/notice/list";
 	}
@@ -82,6 +95,16 @@ public class NoticeController {
 		
 		return boardVO; //매개변수로 객체(참조변수)를 전달하면 주소값을 보낸거니까 다시 받아오지 않아도 됨.
 	}
+	
+	//임시저장함 조회
+	@ResponseBody
+	@PostMapping("/tempBoardList")
+	public List<BoardVO> tempBoardList(int empno) {
+		//로그인 처리 이후 변경할 코드~~~~~~~~~~~!!!!!!!!!!!!!!!
+		empno = 20230517;
+		
+		return noticeService.getTempBoardListByEmpno(empno);
+	}
 
 	
 	//글 상세 조회
@@ -101,10 +124,17 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 	
+	//임시저장 글 삭제
+	@ResponseBody
+	@PostMapping("/tempDelete")
+	public void deleteTempBoard(BoardVO boardVO) {
+		noticeService.deleteBoard(boardVO);
+	}
+	
 	//글 수정 페이지로 이동
 	@GetMapping("/update")
 	public String noticeForm(BoardVO boardVO, Model model) {
-		model.addAttribute("notice", noticeService.getNoticeDetail(boardVO));
+		model.addAttribute("notice", noticeService.getNoticeDetailForUpdate(boardVO));
 		
 		return "content/notice/notice_update";
 	}
@@ -112,6 +142,11 @@ public class NoticeController {
 	//글 수정
 	@PostMapping("/update")
 	public String noticeUpdate(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+		if(boardVO.getBoardStatus() == 2) { // 임시저장 글일 때
+			boardVO.setBoardStatus(1);
+			boardVO.setBoardDate("SYSDATE");
+		}
+		
 		updateBoard(boardVO, deleteFileNum, files);
 		
 		return "redirect:/notice/detail?boardNum=" + boardVO.getBoardNum();
