@@ -20,8 +20,8 @@ public class SignServiceImpl implements SignService{
 	private SqlSessionTemplate sqlsession;
 
 	@Override
-	public List<SignDocVO> getInProgressSignDocList() {
-		return sqlsession.selectList("signMapper.getInProgressSignDocList");
+	public List<SignDocVO> getInProgressSignDocList(int empno) {
+		return sqlsession.selectList("signMapper.getInProgressSignDocList", empno);
 	}
 	@Override
 	public List<SignDocVO> getEndSignDocList() {

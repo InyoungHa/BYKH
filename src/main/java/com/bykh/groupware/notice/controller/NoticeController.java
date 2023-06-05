@@ -6,6 +6,8 @@ import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,18 +53,24 @@ public class NoticeController {
 	
 	//글쓰기 페이지 이동
 	@GetMapping("/regNotice")
-	public String regForm(Model model) {
+	public String regForm(Model model, Authentication authentication) {
 		model.addAttribute("boardMenuCode", "BOARD_MENU_001");
 		
-		// 로그인 처리후 수정해야됨~~~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!
-		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(20230517));
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(loginEmpno));
 		
 		return "content/notice/notice_form";
 	}
 	
 	//글 신규 등록
 	@PostMapping("/regNotice")
-	public String regNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+	public String regNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		boardVO.setBoardWriter(loginEmpno);
 		
 		if(boardVO.getBoardNum() == null) { //신규 등록
 			regBoard(boardVO, files);
@@ -82,7 +90,11 @@ public class NoticeController {
 	//글 임시 저장
 	@ResponseBody
 	@PostMapping("/tempRegNotice")
-	public BoardVO tempRegNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+	public BoardVO tempRegNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		boardVO.setBoardWriter(loginEmpno);
 		
 		//가져온 정보에서 글 번호가 없을 때
 		if (boardVO.getBoardNum() == null) { //새로운 임시 글 등록
@@ -90,6 +102,7 @@ public class NoticeController {
 			regBoard(boardVO, files);
 		}
 		else { //같은 임시글 저장
+			boardVO.setBoardDate("SYSDATE");
 			updateBoard(boardVO, deleteFileNum, files);
 		}
 		
@@ -99,13 +112,19 @@ public class NoticeController {
 	//임시저장함 조회
 	@ResponseBody
 	@PostMapping("/tempBoardList")
-	public List<BoardVO> tempBoardList(int empno) {
-		//로그인 처리 이후 변경할 코드~~~~~~~~~~~!!!!!!!!!!!!!!!
-		empno = 20230517;
+	public List<BoardVO> tempBoardList(Authentication authentication) {
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
 		
-		return noticeService.getTempBoardListByEmpno(empno);
+		return noticeService.getTempBoardListByEmpno(loginEmpno);
 	}
-
+	
+	//임시저장 글 조회
+	@ResponseBody
+	@PostMapping("/getTempDetail")
+	public BoardVO getTempDetail(BoardVO boardVO) {
+		return noticeService.getNoticeDetailForUpdate(boardVO);
+	}
 	
 	//글 상세 조회
 	@GetMapping("/detail")
@@ -142,10 +161,6 @@ public class NoticeController {
 	//글 수정
 	@PostMapping("/update")
 	public String noticeUpdate(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
-		if(boardVO.getBoardStatus() == 2) { // 임시저장 글일 때
-			boardVO.setBoardStatus(1);
-			boardVO.setBoardDate("SYSDATE");
-		}
 		
 		updateBoard(boardVO, deleteFileNum, files);
 		

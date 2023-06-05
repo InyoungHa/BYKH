@@ -10,7 +10,7 @@ import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
 public interface SignService {
-	List<SignDocVO> getInProgressSignDocList();
+	List<SignDocVO> getInProgressSignDocList(int empno);
 	List<SignDocVO> getEndSignDocList();
 	SignDocVO getSingWriteInfo(int empno);
 	List<EmpVO> getEmpList(String ename);
