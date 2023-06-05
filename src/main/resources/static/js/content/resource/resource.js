@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	var externalEventsEl = document.getElementById('external-events');
 	calendar = new FullCalendar.Calendar(calendarEl, {
 	
-		// XML 레이아웃 파일에서 list 버튼의 ID가 "btn_list"로 정의되었다고 가정합니다.
 		headerToolbar: {
 			left: 'prev,next today,addEventButton',
 			center: 'title',
@@ -43,8 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				var participant = $('#participant').val(); // 참가자 입력값 가져오기
   				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
   				
-  		
-
   				  				
 				 location.reload();
 				 
@@ -67,10 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				});
 		});
 				
-		
 				var id = info.event._def.publicId;
 				console.log(id);
-
 				//ajax start
 				$.ajax({
 					url: '/resource/selectCalendarDetail', //요청경로

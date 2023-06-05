@@ -1,6 +1,9 @@
 package com.bykh.groupware.attendance.service;
 
+import java.util.List;
+
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.attendance.vo.PageVO;
 
 public interface AttendanceService {
 	
@@ -22,6 +25,23 @@ public interface AttendanceService {
 	
 	//근무일수 조회
 	AttendanceVO checkDays();
+	
+	//총근무시간 조회(한달)
+	AttendanceVO totalWorkingTime();
+	
+	//총연장근무시간 조회(한달)
+	AttendanceVO findOverTime();
+	
+	//결근 횟수조회(한달)
+	AttendanceVO findLateCount();
+	
+	//출퇴근 기록 게시판 조회
+	List<AttendanceVO> workingBoard(PageVO pageVO);
+
+	//전체 게시글 수 조회 (페이징)
+	int getBoardCnt();
+	
+	
 }
 
 
