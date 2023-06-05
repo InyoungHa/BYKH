@@ -1,6 +1,8 @@
 package com.bykh.groupware.attendance.controller;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.attendance.vo.PageVO;
 import com.bykh.groupware.calendar.service.CalendarService;
 import com.bykh.groupware.util.DateUtil;
 
@@ -23,14 +26,12 @@ public class AttendanceController {
 	
 	// 근태관리 출퇴근기록 페이지(메인)
 	@GetMapping("/commute")
-	public String commute(AttendanceVO attendanceVO, Model model) {
+	public String commute(AttendanceVO attendanceVO, Model model, PageVO pageVO) {
 		String nowDate = DateUtil.getNowDateToString(); //오늘날짜설정
 		if(attendanceVO.getCurDate() == null) {
 			attendanceVO.setCurDate(nowDate);
 		}	
 		
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println(attendanceVO);
 		//출근시간 조회
 		model.addAttribute("goWork",attendanceService.selectGowork());
 		//퇴근시간 조회
@@ -39,9 +40,24 @@ public class AttendanceController {
 		model.addAttribute("lateCount",attendanceService.selectLateCount());
 		//근무일수 조회
 		model.addAttribute("workingDays",attendanceService.checkDays());
-		//연장근무시간 조회
+		//총 근무시간 조회
 		model.addAttribute("totalWorkingTime",attendanceService.totalWorkingTime());
+		//총 연장근무시간 조회
+		model.addAttribute("findOverTime",attendanceService.findOverTime());
+		//결근 횟수 조회
+		model.addAttribute("findLateTime",attendanceService.findLateCount());
 		
+		//출퇴근 기록 게시판 조회
+		List<AttendanceVO> attList =  attendanceService.workingBoard(pageVO);
+		model.addAttribute("attList", attList); 
+		
+		//전체 게시글 수 조회
+				int totalDateCnt = attendanceService.getBoardCnt();
+				
+				pageVO.setTotalDataCnt(totalDateCnt);
+				
+				//페이지 정보 세팅
+				pageVO.setPasgeInfo();
 		
 		return "content/attendance/commute";
 	}

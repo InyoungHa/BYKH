@@ -1,10 +1,13 @@
 package com.bykh.groupware.attendance.service;
 
+import java.util.List;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.attendance.vo.PageVO;
 
 @Service("attendanceService")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -52,6 +55,31 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public AttendanceVO totalWorkingTime() {
 		return sqlSession.selectOne("attendanceMapper.totalWorkingTime");
+	}
+
+	//총 연장근무 시간
+	@Override
+	public AttendanceVO findOverTime() {
+		return sqlSession.selectOne("attendanceMapper.findOverTime");
+	}
+
+	//결근 횟수 조회
+	@Override
+	public AttendanceVO findLateCount() {
+		return sqlSession.selectOne("attendanceMapper.findLateCount");
+	}
+
+	//출퇴근 기록 게시판 조회
+	@Override
+	public List<AttendanceVO> workingBoard(PageVO pageVO) {
+		return sqlSession.selectList("attendanceMapper.workingBoard", pageVO);
+	}
+
+	
+	//전체 게시글 수 조회 (페이징)
+	@Override
+	public int getBoardCnt() {
+		return sqlSession.selectOne("attendanceMapper.getBoardCnt");
 	}
 	
 
