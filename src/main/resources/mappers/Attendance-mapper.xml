@@ -10,6 +10,16 @@
 		<result column="LATE_COUNT" 	property="lateCount"/>
 		<result column="CHECK_LATE" 	property="checkLate"/>
 		<result column="WORKING_DAYS" 	property="workingDays"/>
+		<result column="OVER_TIME" 	property="overTime"/>
+		<result column="FIX_TIME" 	property="fixTime"/>
+		<result column="REST_TIME" 	property="restTime"/>
+		<result column="WORKING_STATUS" 	property="workingStatus"/>
+		<result column="WORKING" 	property="working"/>
+		<result column="DAY" 	property="day"/>
+		<result column="WORKING_TIME" 	property="workingTime"/>
+		<result column="OUT_TIME" 	property="outTime"/>
+		<result column="ROW_NUM" property="rowNum"/>
+		<result column="ROW_NUMBER" property="rowNumber"/>
 	</resultMap>
 
 	<!--출근시간 저장 -->
@@ -27,10 +37,14 @@
 
 	<!--퇴근시간 저장(NULL -> SYSDATE로 업데이트) -->
 	<update id="outWork">
-	UPDATE ATTENDANCE
-		SET OUT_WORK = SYSDATE
-		WHERE ATT_CODE =  (SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) , 3, '0') 
-	FROM ATTENDANCE)
+UPDATE ATTENDANCE
+SET OUT_WORK = SYSDATE,
+    WORKING_STATUS = CASE 
+        WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2 
+        WHEN GO_WORK IS NULL THEN 3
+        ELSE 1 
+    END
+WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0), 3, '0') FROM ATTENDANCE)
 	</update>
 
 
@@ -79,12 +93,6 @@
 		ORDER BY OUT_WORK DESC FETCH FIRST 1 ROW ONLY)
 	</select>
 	
-	
-	<!-- 연장근무시간 조회 -->
-	<select id="findOverTime" resultMap="att">
-	
-	</select>
-
 
 	<!-- 총근무시간 조회 -->
 	<select id="totalWorkingTime" resultMap="att">
@@ -92,18 +100,57 @@
 		FROM ATTENDANCE
 		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
 	</select>
-
 	
-	
-	
-	
-	<!-- 결근 횟수 조회 -->
-	<select id="findAbsent">
-	SELECT COUNT(*) AS 결근 FROM ATTENDANCE WHERE EMPNO  = #{empNo}  AND 출근시간 IS NULL;
+		
+	<!-- 연장근무시간 조회 -->
+	<select id="findOverTime" resultMap="att">
+	SELECT ROUND(SUM(
+	CASE
+	WHEN OUT_WORK - GO_WORK > (FIX_TIME - TRUNC(FIX_TIME)) THEN OUT_WORK -
+	GO_WORK - (FIX_TIME - TRUNC(FIX_TIME))
+	ELSE 0
+	END) * 24) AS OVER_TIME
+	FROM ATTENDANCE
+	WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
 	</select>
 
+
+
+	<!-- 결근 횟수 조회 -->
+	<select id="findLateCount" resultMap="att">
+		SELECT COUNT(*) AS LATE_COUNT
+		FROM ATTENDANCE
+		WHERE TRUNC(GO_WORK) = TRUNC(SYSDATE) AND GO_WORK IS NULL
+		AND TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	</select>
+
+
+	<!--출퇴근 기록 게시판 -->
+	<select id="workingBoard" resultMap="att">
+		SELECT
+		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+		TO_CHAR(GO_WORK, 'DY') AS DAY,
+		TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+		TO_CHAR(OUT_WORK, 'HH24:MI') AS OUT_TIME,
+		CASE
+		WHEN WORKING_STATUS = 1 THEN '정상출근'
+		WHEN WORKING_STATUS = 2 THEN '지각'
+		WHEN WORKING_STATUS = 3 THEN '결근'
+		END AS WORKING_STATUS
+		FROM ATTENDANCE
+		<!-- WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum} -->
+	</select>
+	
+
+		
+	<!-- 전체 게시글 수 조회 (페이징 -->
+	<select id="getBoardCnt" resultType="int">
+		SELECT COUNT (WORKING_STATUS) FROM ATTENDANCE
+	</select>
 	
 	
+
+
 </mapper>
 
 
