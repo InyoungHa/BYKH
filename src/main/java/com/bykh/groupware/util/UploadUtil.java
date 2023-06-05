@@ -86,32 +86,26 @@ public class UploadUtil {
 	
 	
 	public static EImgVO uploadFile(MultipartFile empImg) {
-		
-		EImgVO eImgVO = null;
-		
-		if(empImg !=null &&!empImg.isEmpty()) {
-			eImgVO = new EImgVO();
-			
-			String originFileName = empImg.getOriginalFilename();
-			String uuid = UUID.randomUUID().toString();
-			String extension = originFileName.substring(originFileName.lastIndexOf("."));
-			String attachedFileName = uuid + extension;
-			
-			
-			try {
-				File file = new File(ConstVariable.UPLOAD_PATH + attachedFileName);
-				empImg.transferTo(file);
-				
-				eImgVO.setOriginFileName(originFileName);
-				eImgVO.setAttachedFileName(attachedFileName);
-				
-			} catch (Exception e) {
-				// TODO: handle exception
-			}	
-						
-		}
-		return eImgVO;
-		
+	    EImgVO eImgVO = new EImgVO();
+
+	    if (empImg != null && !empImg.isEmpty()) {
+	        String originFileName = empImg.getOriginalFilename();
+	        String uuid = UUID.randomUUID().toString();
+	        String extension = originFileName.substring(originFileName.lastIndexOf("."));
+	        String attachedFileName = uuid + extension;
+
+	        try {
+	            File file = new File(ConstVariable.UPLOAD_PATH + attachedFileName);
+	            empImg.transferTo(file);
+
+	            eImgVO.setOriginFileName(originFileName);
+	            eImgVO.setAttachedFileName(attachedFileName);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return eImgVO;
 	}
 }
 
