@@ -81,6 +81,13 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	
+	//글 수정을 위한 상세 조회(조회수 빼고)
+	@Override
+	public BoardVO getNoticeDetailForUpdate(BoardVO boardVO) {
+		//글 상세 조회 정보 반환
+		return getBoardDetail(boardVO);
+	}
+	
 	//글 삭제
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -97,13 +104,6 @@ public class NoticeServiceImpl implements NoticeService {
 		sqlSession.delete("boardMapper.deleteBoard", boardVO);
 	}
 	
-	
-	//글 수정을 위한 상세 조회(조회수 빼고)
-	@Override
-	public BoardVO getNoticeDetailForUpdate(BoardVO boardVO) {
-		//글 상세 조회 정보 반환
-		return getBoardDetail(boardVO);
-	}
 	
 	
 	//글 수정

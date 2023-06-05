@@ -130,8 +130,8 @@
 			#{boardNum}
 			, #{boardTitle}
 			, #{boardContent}
-			, 20230517
-			, 'BOARD_MENU_001'
+			, #{boardWriter}
+			, #{boardMenuVO.boardMenuCode}
 			, #{boardStatus}
 			<if test="isImportant != null">
 			, #{isImportant}
@@ -222,14 +222,12 @@
 		UPDATE BOARD
 		SET BOARD_VIEW = BOARD_VIEW + 1
 		WHERE BOARD_NUM = #{boardNum}
-		AND BOARD_MENU_CODE = 'BOARD_MENU_001'
 	</update>
 	
 	<!-- 글 삭제 -->
 	<delete id="deleteBoard">
 		DELETE BOARD
 		WHERE BOARD_NUM = #{boardNum}
-		AND BOARD_MENU_CODE = 'BOARD_MENU_001'
 	</delete>
 	
 	<!-- 글 수정  -->
@@ -243,7 +241,6 @@
 			, BOARD_DATE = ${boardDate}
 			</if>
 		WHERE BOARD_NUM = #{boardNum}
-		AND BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 	</update>
 	
 	<!-- 첨부파일 삭제 -->

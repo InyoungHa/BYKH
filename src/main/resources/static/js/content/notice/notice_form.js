@@ -167,6 +167,35 @@ function noticeFormCheck() {
 	return true;
 }
 
+//제목, 내용, 파일 비어있는지 확인
+function noticeFormNullCheck() {
+	const boardTitle = document.querySelector('#boardTitle').value;
+	const boardContent = document.querySelector('#boardContent').value;
+	const fileInputList = document.querySelectorAll('#fileInput');
+	
+	const titleNull = boardTitle == '' || boardTitle == null;
+	const contentNull = boardContent == '' || boardContent == null;
+	let fileNull = true;
+	
+	if(fileInputList.length != 0) {
+		for(const fileInput of fileInputList) {
+			if(fileInput.value == '' || fileInput.value == null) {
+				fileNull = true;
+			}
+			else {
+				fileNull = false;
+			}
+		}
+	}
+	
+	if(titleNull && contentNull && fileNull) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 
 
 //파일 추가 버튼
@@ -174,7 +203,7 @@ function addFileInputDiv(buttonTag) {
 	const fileTd = buttonTag.parentElement;
 	
 	let str = '';
-	str += `<div class="input-group my-2">                                              `;
+	str += `<div class="input-group my-2" id="fileDiv">                                              `;
 	str += `	<input class="form-control form-control-sm" type="file" name="files" id="fileInput">                   `;
 	str += `	<button class="btn btn-outline-secondary btn-sm" type="button" onclick="deleteFileInputDiv(this);">삭제</button>`;
 	str += `</div>                                                                      `;
@@ -191,7 +220,7 @@ function deleteFileInputDiv(deleteBtn) {
 
 
 //임시저장함 버튼
-function tempBoardList(empno) {
+function tempBoardList() {
 	
 	
 	//ajax start
@@ -200,7 +229,7 @@ function tempBoardList(empno) {
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		data: {'empno' : empno}, //필요한 데이터
+		data: {}, //필요한 데이터
 		success: function(result) {
 			const tempBoardList = result;
 			
@@ -213,7 +242,7 @@ function tempBoardList(empno) {
 			for(const tempBoard of tempBoardList) {
 			str += `<tr>                                                                                                                                                                                                                `;
 			str += `	<td class="text-start">                                                                                                                                                                                         `;
-			str += `		<a href="/notice/update?boardNum=${tempBoard.boardNum}" style="color: black;">${tempBoard.boardTitle}</a>                                                                                                  `;
+			str += `		<a href="javascript:void(0);" onclick="updateTempBoard('${tempBoard.boardNum}');" style="color: black;">${tempBoard.boardTitle}</a>                                                        `;
 			str += `	</td>                                                                                                                                                                                                           `;
 			str += `	<td class="fs-6 text-secondary">${tempBoard.boardDate}</td>                                                                                                                                                    `;
 			str += `	<td>                                                                                                                                                                                        `;
@@ -232,9 +261,103 @@ function tempBoardList(empno) {
 		}
 	});
 	//ajax end
-	
-	
 }
+
+
+//임시저장함 글 가져오기
+function updateTempBoard(boardNum) {
+	if(noticeFormNullCheck()) {
+		getTempBoard(boardNum);
+	}
+	else if(confirm('작성 중인 내용을 임시저장하고 선택한 문서를 불러오시겠습니까?')) {
+		if(!noticeFormCheck()) {
+			return false;
+		}
+		else {
+			//상태값 설정
+			const hiddenDiv = document.querySelector('#hiddenDiv');
+			
+			const hasHidden = hiddenDiv.hasChildNodes();
+			
+			//hiddenDiv에 자식 노드가 없으면(첫 임시저장일 때)
+			if(!hasHidden) {
+				const statusStr = `<input type="hidden" name="boardStatus" value="${2}">`;
+				hiddenDiv.insertAdjacentHTML('afterbegin', statusStr);
+				
+				//임시저장함 개수 증가
+				const tempModalBtn = document.querySelector('#tempModalBtn');
+				tempModalBtn.value = Number(tempModalBtn.value)+ 1;
+			}
+			
+			//폼 태그
+			const formData = new FormData(document.querySelector('#noticeForm'));
+			
+			//ajax start
+			$.ajax({
+				url: '/notice/tempRegNotice', //요청경로
+				type: 'post',
+				async: true,
+				data: formData,
+			    processData: false,
+			    contentType: false,
+				success: function(result) {
+					
+					
+					getTempBoard(boardNum);
+				},
+				error: function() {
+					alert('실패');
+				}
+			});
+			//ajax end
+		}
+	}
+}
+
+//임시저장함 글 조회
+function getTempBoard(boardNum) {
+	//ajax start
+	$.ajax({
+		url: '/notice/getTempDetail', //요청경로
+		type: 'post',
+		async: true,
+		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+		data: {'boardNum' : boardNum}, //필요한 데이터
+		success: function(result) {
+			const tempBoard = result;
+			
+			$('#tempRegModal').modal('hide');
+			
+			document.querySelector('#boardTitle').value = tempBoard.boardTitle;
+			document.querySelector('#boardContent').value = tempBoard.boardContent;
+			
+			const fileDivs = document.querySelectorAll('#fileDiv');
+			
+			for(const fileDiv of fileDivs) {
+				fileDiv.remove();
+			}
+			
+			//hiddenDiv 비우고 boardNum, boardStatus 넣기
+			const hiddenDiv = document.querySelector('#hiddenDiv');
+			hiddenDiv.replaceChildren();
+			
+			let tempStr = '';
+			tempStr += `<input type="hidden" name="boardNum" value="${tempBoard.boardNum}">`;
+			tempStr += `<input type="hidden" name="boardStatus" value="2">     `;
+			
+			hiddenDiv.insertAdjacentHTML('afterbegin', tempStr);
+			
+			//파일 처리~~~~~~~~~~~~~~~~!!!!!!
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+}
+
+
+
 
 //글 삭제
 function deleteBoard(boardNum, deleteBtn) {

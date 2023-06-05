@@ -1,3 +1,15 @@
+//정상 글 등록
+function updateNotice() {
+	if(!noticeUpdateCheck()) {
+		return false;
+	}
+	else {
+		document.querySelector('#noticeUpdateForm').submit();
+	}
+}
+
+
+//제목, 내용, 파일 첨부 유효성 체크
 function noticeUpdateCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
@@ -23,7 +35,7 @@ function noticeUpdateCheck() {
 		}
 	}
 	
-	document.querySelector('#noticeUpdateForm').submit();
+	return true;
 }
 
 //파일 추가 버튼
