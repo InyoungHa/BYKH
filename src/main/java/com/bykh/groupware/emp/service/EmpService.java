@@ -27,6 +27,6 @@ public interface EmpService {
 	void insertEmpImg(EImgVO eImgVO);
 	
 	//사원 상세 정보 수정
-	void updateEmpDetail(Map<String, Object> mapData);
+	void updateEmpDetail(EmpVO empVO);
 
 }

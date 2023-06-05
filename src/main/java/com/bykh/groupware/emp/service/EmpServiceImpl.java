@@ -52,9 +52,9 @@ public class EmpServiceImpl implements EmpService {
 		
 	}
 	@Override //사원 상세 정보 수정
-	public void updateEmpDetail(Map<String, Object> mapData) {
+	public void updateEmpDetail(EmpVO empVO) {
 	
-		 sqlSession.update("empMapper.updateEmpDetail", mapData);
+		 sqlSession.update("empMapper.updateEmpDetail", empVO);
 	}
 	
 	

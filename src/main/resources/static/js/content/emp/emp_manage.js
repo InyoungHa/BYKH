@@ -247,7 +247,7 @@ function drawEmpDatail(data){
 	str += 			'<table>';
 	str += 				'<tr>';
 	str += 					'<td>이메일</td>';
-	str += 					`<td id="eEmail" name="eEmail"> ${data.empDetail.empno}@bykh.com </td>`;
+	str += 					`<td id="eEmail" name="eEmail">${data.empDetail.empno}@bykh.com</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>내선번호</td>';
@@ -466,7 +466,6 @@ function regEmpDetail() {
 	
 	const empno = document.querySelector('#empno').textContent;
 	console.log(empno);
-	const originFileName = document.querySelector('#empImgInput').value;
 	const ename = document.querySelector('#empDetailModal input[name="ename"]').value;
 	
 	const deptno= document.querySelector('#deptno').value;
@@ -488,7 +487,6 @@ function regEmpDetail() {
 
 	regDetail={
 		'empno' : empno,		
-		'originFileName' :originFileName,
 		'ename':ename,
 		'deptno' :deptno,
 		'eEmail' : eEmail,
@@ -497,16 +495,35 @@ function regEmpDetail() {
 		'phoneTel': phoneTel
 		
 	}	
+	
+	
+	//폼 객체 생성
+	const form_data = new FormData();
+
+	//json 데이터 폼 객체로 옮겨주기
+	for (const key in regDetail) {
+	    form_data.append(key, regDetail[key]);
+	}
+	
+	//file 데이터 폼 객체에 담아주기
+	form_data.append('empImg', $('#empImgInput')[0].files[0])
+	
+
 
 	console.log(regDetail);
-		
+	
+	//form 객체를 컨트롤러로 넘겨줌
+	//이때 processData, contentType를 false로 해야 file 데이터까지 넘어감	
 	$.ajax({
 		url: '/emp/regEmpDetailAjax', //요청경로
 		type: 'post',
+		data: form_data,
+	    processData: false,
+	    contentType: false,
 		async: true, // 동기 방식으로 설정
-		contentType: 'application/json; charset=UTF-8', //Json 타입
+		//contentType: 'application/json; charset=UTF-8', //Json 타입
 		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
-		data: JSON.stringify(regDetail), //필요한 데이터
+		//data: JSON.stringify(regDetail), //필요한 데이터
 		success: function(result) {
 			alert('사원 세부 정보 등록 완료입니다.');
 			location.reload();
