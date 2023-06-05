@@ -269,10 +269,14 @@ function showSignDocModal(clickTag){
 							<tbody>
 								<tr class="eJobTr">
 									<!-- 사원 >> 쿼리 결과로 들어가도록 변경하기!!!!!!!!11 -->
-									<td>사원</td>
+									<td>사원</td>`;
+								signWriteInfo.signVOList.forEach
+									str += `
 									<td>
-										[[${signWriteInfo.signVOList[0].approverJob}]]
-									</td>
+										${signWriteInfo.signVOList[0].approverJob}
+									</td>`;
+									
+									str += `
 								</tr>
 								<tr class="enameTr">
 									<td>
@@ -391,36 +395,3 @@ function updateSignResult(sgnResult){
 
 //===========이벤트================
 
-//const showSignDocModal = document.querySelector('#showSignDoc');
-/*
-showSignDocModal.addEventListener('show.bs.modal', function() {
-	//모달 각 영역 선택
-	const modalTitleArea = document.querySelector('.modal-title');
-	const modalBodyArea = document.querySelector('.modal-body');
-	const modalFooterArea = document.querySelector('.modal-footer');
-	//내용 초기화
-	modalTitleArea.replaceChildren();
-	modalBodyArea.replaceChildren();
-	modalFooterArea.style.display = 'none'; //block
-	
-	//문서번호 가져오기
-	document.querySelector('.')
-	
-	
-	//ajax start
-	$.ajax({
-		url: '/sign/getgetSignDocDetailAjax', //요청경로
-		type: 'post',
-		async: true, //동기/비동기
-		//contentType: 'application/json; charset=UTF-8',
-		//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		data: {}, //필요한 데이터
-		success: function(result) {
-			alert('ajax 통신 성공');
-		},
-		error: function() {
-			alert('실패');
-		}
-	});
-	//ajax end	
-});*/

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +20,7 @@ import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.sign.vo.BuyDetailVO;
 import com.bykh.groupware.sign.vo.BuyVO;
-import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 import com.bykh.groupware.sign.vo.DocPurchaseOrderVO;
-import com.bykh.groupware.sign.vo.ItemVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 import com.bykh.groupware.util.DateUtil;
@@ -36,20 +36,19 @@ public class SignController {
 	
 	//결재 메인 페이지 이동
 	@GetMapping("/signMain")
-	public String signMain(Model model) {
-		model.addAttribute("inProgressSignDocList", signService.getInProgressSignDocList());
+	public String signMain(Model model, Authentication authentication) {
+		User user = (User)authentication.getPrincipal();
+		model.addAttribute("inProgressSignDocList", signService.getInProgressSignDocList(Integer.parseInt(user.getUsername())));
 		model.addAttribute("endSignDocList", signService.getEndSignDocList());
 		return "content/sign/signMain";
 	}
 	
 	//결제문서 작성 페이지로 이동
 	@GetMapping("/signWriteForm")
-	public String signWriteForm(Model model, SignDocVO signDocVO) {
-		//로그인기능 + 시큐리티 설정 완료 후 바꿔야 하는 코드 시작
-		//유저이름 + 부서정보 + 기안일 가져가기 + 도장이미지정보? + 상위 결재자 가져가기
-		 // 시큐리티 설정 완료 후 바꾸기
+	public String signWriteForm(Model model, SignDocVO signDocVO, Authentication authentication) {
+		User user = (User)authentication.getPrincipal();
 		
-		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(2023050301));//매개변수 변경하기
+		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));//매개변수 변경하기
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		return "content/sign/sign_write_form";
 	}
@@ -57,9 +56,10 @@ public class SignController {
 	
 	//구매신청서 작성 페이지
 	@GetMapping("/purchaseOrderForm")
-	public String purchaseOrderForm(Model model, SignDocVO signDocVO) {
+	public String purchaseOrderForm(Model model, SignDocVO signDocVO, Authentication authentication) {
+		User user = (User)authentication.getPrincipal();
 		//시큐리티 설정 완료 후 바꾸기
-		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(2023050301));
+		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		model.addAttribute("itemList", signService.getItemList());
 		return "content/sign/purchase_order_form";
