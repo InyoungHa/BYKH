@@ -208,7 +208,7 @@
 
 
 	<!-- 출퇴근 -->
-	<div class="commute">김정운님의 출퇴근기록</div>
+	<div class="commute">[[${selectName.empVO.ename}]]님의 출퇴근기록</div>
 	<!-- 출퇴근시간box -->
 	<span class="time"> 
 	<span class="timeDetail1">[[${attendanceVO.curDate}]]<br>
@@ -235,11 +235,11 @@
 			</tr>
 			<tr>
 				<td>연장근무시간</td>
-				<td>[[${findOverTime.overTime}]]시간</td>
+				<td th:text="${findOverTime != null ? findOverTime.overTime : ''} + '시간'"></td>
 			</tr>
 			<tr>
 				<td>총 근무시간</td>
-				<td>[[${totalWorkingTime.workingDays}]]시간</td>
+				<td th:text="${totalWorkingTime != null ? totalWorkingTime.workingDays : ''} + '시간'"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -292,7 +292,7 @@
 
 	<!--출퇴근기록 테이블 box -->
 	<div class="bottomBox">
-		<div class="bottomTitle">2023년 김정운님의 출퇴근 기록 (최근 5일)</div>
+		<div class="bottomTitle">[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 출퇴근 기록 (최근 5일)</div>
 
 		<table class="bottomTable">
 			<thead class="bottomThead">

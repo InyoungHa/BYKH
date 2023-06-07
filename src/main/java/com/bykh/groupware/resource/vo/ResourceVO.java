@@ -16,6 +16,7 @@ public class ResourceVO {
     private Date end;
     private boolean allDay;
     private int type;
+    private int empno;
 }
 
 

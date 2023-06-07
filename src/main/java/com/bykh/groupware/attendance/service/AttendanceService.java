@@ -3,42 +3,46 @@ package com.bykh.groupware.attendance.service;
 import java.util.List;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 
 public interface AttendanceService {
 	
 	
+	//이름조회
+	AttendanceVO selectName(int empno);
+	
 	//출근시간저장
-	void goWork();
+	void goWork(int empno);
 	
 	//퇴근시간저장
-	void outWork();
+	void outWork(int empno);
 	
 	//제일최신 출근시간 조회
-	AttendanceVO selectGowork();
+	AttendanceVO selectGowork(int empno);
 	
 	//제일최신 퇴근시간 조회
-	AttendanceVO selectOutwork();
+	AttendanceVO selectOutwork(int empno);
 	
 	//지각횟수 조회
-	AttendanceVO selectLateCount();
+	AttendanceVO selectLateCount(int empno);
 	
 	//근무일수 조회
-	AttendanceVO checkDays();
+	AttendanceVO checkDays(int empno);
 	
 	//총근무시간 조회(한달)
-	AttendanceVO totalWorkingTime();
+	AttendanceVO totalWorkingTime(int empno);
 	
 	//총연장근무시간 조회(한달)
-	AttendanceVO findOverTime();
+	AttendanceVO findOverTime(int empno);
 	
 	//결근 횟수조회(한달)
-	AttendanceVO findLateCount();
+	AttendanceVO findLateCount(int empno);
 	
 	//출퇴근 기록 게시판 조회 (최근5일)
-	List<AttendanceVO> workingBoard();
+	List<AttendanceVO> workingBoard(int empno);
 
 	//출퇴근 기록 게시판 조회 (전체)
-	List<AttendanceVO> workingBoardAll();
+	List<AttendanceVO> workingBoardAll(int empno);
 	
 	
 }

@@ -18,8 +18,8 @@ public class CalendarServiceImpl implements CalendarService {
 	
 	//근태관리 캘린더 일정제거
 	@Override
-	public void deleteSchedule() {
-		sqlSession.delete("calendarMapper.deleteSchedule");
+	public void deleteSchedule(int empno) {
+		sqlSession.delete("calendarMapper.deleteSchedule", empno);
 	}
 
 
@@ -31,15 +31,15 @@ public class CalendarServiceImpl implements CalendarService {
 	
 	//근태관리 캘린더 일정조회
 	@Override
-	public List<CalendarVO> getAllSchedules() {
-		return sqlSession.selectList("calendarMapper.getAllSchedules");
+	public List<CalendarVO> getAllSchedules(int empno) {
+		return sqlSession.selectList("calendarMapper.getAllSchedules", empno);
 	}
 	
 	
 	//자원관리 캘린더 일정제거
 	@Override
-	public void deleteResourceSchedule() {
-		sqlSession.delete("calendarMapper.deleteResourceSchedule");
+	public void deleteResourceSchedule(int empno) {
+		sqlSession.delete("calendarMapper.deleteResourceSchedule", empno);
 	}
 
 
@@ -51,8 +51,8 @@ public class CalendarServiceImpl implements CalendarService {
 	
 	//자원관리 캘린더 일정조회
 	@Override
-	public List<ResourceVO> getAllResourceSchedules() {
-		return sqlSession.selectList("calendarMapper.getAllResourceSchedules");
+	public List<ResourceVO> getAllResourceSchedules(int empno) {
+		return sqlSession.selectList("calendarMapper.getAllResourceSchedules", empno);
 	}
 
 
