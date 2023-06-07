@@ -3,7 +3,6 @@ package com.bykh.groupware.attendance.service;
 import java.util.List;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.attendance.vo.PageVO;
 
 public interface AttendanceService {
 	
@@ -35,11 +34,11 @@ public interface AttendanceService {
 	//결근 횟수조회(한달)
 	AttendanceVO findLateCount();
 	
-	//출퇴근 기록 게시판 조회
-	List<AttendanceVO> workingBoard(PageVO pageVO);
+	//출퇴근 기록 게시판 조회 (최근5일)
+	List<AttendanceVO> workingBoard();
 
-	//전체 게시글 수 조회 (페이징)
-	int getBoardCnt();
+	//출퇴근 기록 게시판 조회 (전체)
+	List<AttendanceVO> workingBoardAll();
 	
 	
 }
