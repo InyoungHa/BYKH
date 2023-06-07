@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.attendance.vo.PageVO;
 
 @Service("attendanceService")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -69,18 +68,20 @@ public class AttendanceServiceImpl implements AttendanceService {
 		return sqlSession.selectOne("attendanceMapper.findLateCount");
 	}
 
-	//출퇴근 기록 게시판 조회
+	//출퇴근 기록 게시판 조회(최근5일)
 	@Override
-	public List<AttendanceVO> workingBoard(PageVO pageVO) {
-		return sqlSession.selectList("attendanceMapper.workingBoard", pageVO);
+	public List<AttendanceVO> workingBoard() {
+		return sqlSession.selectList("attendanceMapper.workingBoard");
+	}
+
+	//출퇴근 기록 게시판 조회(전체)
+	@Override
+	public List<AttendanceVO> workingBoardAll() {
+		return sqlSession.selectList("attendanceMapper.workingBoardAll");
 	}
 
 	
-	//전체 게시글 수 조회 (페이징)
-	@Override
-	public int getBoardCnt() {
-		return sqlSession.selectOne("attendanceMapper.getBoardCnt");
-	}
+
 	
 
 
