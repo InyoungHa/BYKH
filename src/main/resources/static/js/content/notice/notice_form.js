@@ -221,8 +221,6 @@ function deleteFileInputDiv(deleteBtn) {
 
 //임시저장함 버튼
 function tempBoardList() {
-	
-	
 	//ajax start
 	$.ajax({
 		url: '/notice/tempBoardList', //요청경로
@@ -239,18 +237,38 @@ function tempBoardList() {
 			
 			let str = '';
 			
+			const boardNumInput = document.querySelector("input[name='boardNum']");
+			let boardNum = null;
+			
+			if(boardNumInput != null) {
+				boardNum = boardNumInput.value;
+			}
+			
+			
 			for(const tempBoard of tempBoardList) {
-			str += `<tr>                                                                                                                                                                                                                `;
-			str += `	<td class="text-start">                                                                                                                                                                                         `;
-			str += `		<a href="javascript:void(0);" onclick="updateTempBoard('${tempBoard.boardNum}');" style="color: black;">${tempBoard.boardTitle}</a>                                                        `;
-			str += `	</td>                                                                                                                                                                                                           `;
-			str += `	<td class="fs-6 text-secondary">${tempBoard.boardDate}</td>                                                                                                                                                    `;
-			str += `	<td>                                                                                                                                                                                        `;
-			str += `		<a href="javascript:void(0);" class="text-danger" onclick="deleteBoard('${tempBoard.boardNum}', this);"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">                                                                                     `;
-			str += `		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>`;
-			str += `		</svg></a>                                                                                                                                                                                                    `;
-			str += `	</td>                                                                                                                                                                                                           `;
-			str += `</tr>                                                                                                                                                                                                               `;
+				const currentBoard = boardNum != null && boardNum == tempBoard.boardNum;	
+					
+				str += `<tr>                                                                                                                                                                                                                `;
+				str += `	<td class="text-start">                                                                                                                                                                                         `;
+				if(currentBoard) {
+				str += `		<a href="javascript:void(0);" onclick="currentBoardAlert();" style="color: black;">${tempBoard.boardTitle}</a>                                                        `;
+				}
+				else{
+				str += `		<a href="javascript:void(0);" onclick="updateTempBoard('${tempBoard.boardNum}');" style="color: black;">${tempBoard.boardTitle}</a>                                                        `;
+				}
+				str += `	</td>                                                                                                                                                                                                           `;
+				str += `	<td class="fs-6 text-secondary">${tempBoard.boardDate}</td>                                                                                                                                                    `;
+				str += `	<td>                                                                                                                                                                                        `;
+				if(currentBoard) {
+				str += `	<span class="fs-6 text-danger">작성중</span>                                                                                                                                                                                        `;
+				}
+				else{
+				str += `		<a href="javascript:void(0);" class="text-danger" onclick="deleteBoard('${tempBoard.boardNum}', this);"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">                                                                                     `;
+				str += `		  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>`;
+				str += `		</svg></a>                                                                                                                                                                                                    `;
+				}
+				str += `	</td>                                                                                                                                                                                                           `;
+				str += `</tr>                                                                                                                                                                                                               `;
 			}
 			
 			tempModalBody.insertAdjacentHTML('afterbegin', str)
@@ -261,6 +279,10 @@ function tempBoardList() {
 		}
 	});
 	//ajax end
+}
+
+function currentBoardAlert() {
+	alert('현재 편집 중인 글입니다.');
 }
 
 
@@ -348,6 +370,21 @@ function getTempBoard(boardNum) {
 			hiddenDiv.insertAdjacentHTML('afterbegin', tempStr);
 			
 			//파일 처리~~~~~~~~~~~~~~~~!!!!!!
+			console.log(tempBoard);
+				
+			if(tempBoard.boardFileList.length != 0) {
+				let fileStr = '';
+				for(const file of tempBoard.boardFileList) {
+					fileStr += `<div class="mb-1">`;
+					fileStr += `<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
+					fileStr += `${file.originFileName}</a> (${file.fileSize}) `;
+					fileStr += `<button class="btn btn-primary btn-sm" type="button" onclick="deleteAttachedFile('${file.fileNum}', this);">삭제</button></div>`;
+				}
+				
+				const fileTd = document.querySelector('#fileTd');
+				fileTd.insertAdjacentHTML('beforeend', fileStr);
+				
+			}
 		},
 		error: function() {
 			alert('실패');
@@ -355,6 +392,19 @@ function getTempBoard(boardNum) {
 	});
 	//ajax end
 }
+
+//첨부된 파일 삭제 버튼
+function deleteAttachedFile(fileNum, attachedFileBtn) {
+	if(confirm('해당 파일을 삭제하시겠습니까?')) {
+		const hiddenDiv = document.querySelector('#hiddenDiv');
+		
+		const str = `<input type="hidden" name="deleteFileNum" value="${fileNum}">`;
+		hiddenDiv.insertAdjacentHTML('beforeend', str);
+	
+		const attachedFileDiv = attachedFileBtn.parentElement;
+		attachedFileDiv.remove();
+	}
+};
 
 
 

@@ -11,7 +11,7 @@ import com.bykh.groupware.resource.vo.ResourceVO;
 public interface CalendarService {
 	
 //근태관리 캘린더 일정제거
-void deleteSchedule();
+void deleteSchedule(int empno);
 	
 	
 //근태관리 캘린더 일정추가
@@ -19,11 +19,11 @@ void insertSchedule(CalendarVO calendarVO);
 
 
 //근태관리 캘린더 일정조회
-List<CalendarVO> getAllSchedules();
+List<CalendarVO> getAllSchedules(int empno);
 
 
 //자원관리 캘린더 일정제거
-void deleteResourceSchedule();
+void deleteResourceSchedule(int empno);
 	
 	
 //자원관리 캘린더 일정추가
@@ -31,7 +31,7 @@ void insertResourceSchedule(ResourceVO resourceVO);
 
 
 //자원관리 캘린더 일정조회
-List<ResourceVO> getAllResourceSchedules();
+List<ResourceVO> getAllResourceSchedules(int empno);
 
 
 

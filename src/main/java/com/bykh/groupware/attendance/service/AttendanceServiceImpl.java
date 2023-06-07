@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.attendance.vo.PageVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 
 @Service("attendanceService")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -15,72 +15,83 @@ public class AttendanceServiceImpl implements AttendanceService {
 	private SqlSessionTemplate sqlSession;
 
 
+	//이름조회
+	@Override
+	public AttendanceVO selectName(int empno) {
+	    return sqlSession.selectOne("attendanceMapper.selectName", empno);
+	}
+
+
+	
 	//출근시간등록
 	@Override
-	public void goWork() {
-		sqlSession.insert("attendanceMapper.goWork");
+	public void goWork(int empno) {
+		sqlSession.insert("attendanceMapper.goWork", empno);
 		
 	}
 
 	//퇴근시간등록
 	@Override
-	public void outWork() {
-		sqlSession.insert("attendanceMapper.outWork");
+	public void outWork(int empno) {
+		sqlSession.insert("attendanceMapper.outWork", empno);
 	}
 
 	//제일최신 출근시간 조회
 	@Override
-	public AttendanceVO selectGowork() {
-		return sqlSession.selectOne("attendanceMapper.selectGowork");
+	public AttendanceVO selectGowork(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectGowork", empno);
 	}
 
 	//제일최신 퇴근시간 조회
 	@Override
-	public AttendanceVO selectOutwork() {
-		return sqlSession.selectOne("attendanceMapper.selectOutwork");
+	public AttendanceVO selectOutwork(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectOutwork", empno);
 	}
 
 	//지각회수 조회
 	@Override
-	public AttendanceVO selectLateCount() {
-		return sqlSession.selectOne("attendanceMapper.selectLateCount");
+	public AttendanceVO selectLateCount(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectLateCount", empno);
 	}
 
 	@Override
-	public AttendanceVO checkDays() {
-		return sqlSession.selectOne("attendanceMapper.checkDays");
+	public AttendanceVO checkDays(int empno) {
+		return sqlSession.selectOne("attendanceMapper.checkDays", empno);
 	}
 
 	//총 근무시간
 	@Override
-	public AttendanceVO totalWorkingTime() {
-		return sqlSession.selectOne("attendanceMapper.totalWorkingTime");
+	public AttendanceVO totalWorkingTime(int empno) {
+		return sqlSession.selectOne("attendanceMapper.totalWorkingTime", empno);
 	}
 
 	//총 연장근무 시간
 	@Override
-	public AttendanceVO findOverTime() {
-		return sqlSession.selectOne("attendanceMapper.findOverTime");
+	public AttendanceVO findOverTime(int empno) {
+		return sqlSession.selectOne("attendanceMapper.findOverTime", empno);
 	}
 
 	//결근 횟수 조회
 	@Override
-	public AttendanceVO findLateCount() {
-		return sqlSession.selectOne("attendanceMapper.findLateCount");
+	public AttendanceVO findLateCount(int empno) {
+		return sqlSession.selectOne("attendanceMapper.findLateCount", empno);
 	}
 
-	//출퇴근 기록 게시판 조회
+	//출퇴근 기록 게시판 조회(최근5일)
 	@Override
-	public List<AttendanceVO> workingBoard(PageVO pageVO) {
-		return sqlSession.selectList("attendanceMapper.workingBoard", pageVO);
+	public List<AttendanceVO> workingBoard(int empno) {
+		return sqlSession.selectList("attendanceMapper.workingBoard", empno);
+	}
+
+	//출퇴근 기록 게시판 조회(전체)
+	@Override
+	public List<AttendanceVO> workingBoardAll(int empno) {
+		return sqlSession.selectList("attendanceMapper.workingBoardAll", empno);
 	}
 
 	
-	//전체 게시글 수 조회 (페이징)
-	@Override
-	public int getBoardCnt() {
-		return sqlSession.selectOne("attendanceMapper.getBoardCnt");
-	}
+	
+
 	
 
 

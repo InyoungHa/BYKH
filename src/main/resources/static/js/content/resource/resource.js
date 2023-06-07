@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			event.dataTransfer.setData('text', event.target.dataset.event);
 		});
 	});
-	
+
 	/* initialize the calendar
 	-----------------------------------------------------------------*/
 
@@ -22,29 +22,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	var dropRemoveCheckbox = document.getElementById('drop-remove');
 	var externalEventsEl = document.getElementById('external-events');
 	calendar = new FullCalendar.Calendar(calendarEl, {
-	
+
 		headerToolbar: {
 			left: 'prev,next today,addEventButton',
 			center: 'title',
 			right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
 		},
-		   views: {
-        listWeek: { buttonText: '자원목록' },
-      },
-        eventClick: function(info) {
-		
+		views: {
+			listWeek: { buttonText: '자원목록' },
+		},
+		eventClick: function(info) {
+
 			$('#participant').val("");
 			$('#resourceContent').val("");
-			
-				
-			$("#saveCalendar").click(function() {
-				var id = info.event._def.publicId; //id값
+
+
+			$('#saveCalendar').off('click').on('click', function() {
+				var id = info.event._def.publicId; // id값
 				var participant = $('#participant').val(); // 참가자 입력값 가져오기
-  				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
-  				
-  				  				
-				 location.reload();
-				 
+				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
+
+				location.reload();
+
 				// 인서트 기능 수행
 				$.ajax({
 					url: '/resource/insertScheduleDetail',
@@ -56,48 +55,47 @@ document.addEventListener('DOMContentLoaded', function() {
 						'participant': participant,
 						'resourceContent': resourceContent
 					},
-					success: function(result) {
-					},
+					success: function(result) { },
 					error: function() {
 						alert('인서트 실패');
 					}
 				});
-		});
-				
-				var id = info.event._def.publicId;
-				console.log(id);
-				//ajax start
-				$.ajax({
-					url: '/resource/selectCalendarDetail', //요청경로
-					type: 'post',
-					async: false,
-					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-					data: {
-						'id': id
-					}, //HTML에받는  데이터
-					success: function(result) {
-						 
-						var firstObject = result[0];
-						var participant = firstObject.participant;
-						var resourceContent = firstObject.resourceContent;
+			});
 
-						$('#participant').val(participant);
-						$('#resourceContent').val(resourceContent);
+			var id = info.event._def.publicId;
+			console.log(id);
+			//ajax start
+			$.ajax({
+				url: '/resource/selectCalendarDetail', //요청경로
+				type: 'post',
+				async: false,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				data: {
+					'id': id
+				}, //HTML에받는  데이터
+				success: function(result) {
 
-						console.log(participant);
-						console.log(resourceContent);
-					},
-					error: function() {
-						alert('실패');
-					}
-				});
-				    
+					var firstObject = result[0];
+					var participant = firstObject.participant;
+					var resourceContent = firstObject.resourceContent;
+
+					$('#participant').val(participant);
+					$('#resourceContent').val(resourceContent);
+
+					console.log(participant);
+					console.log(resourceContent);
+				},
+				error: function() {
+					alert('실패');
+				}
+			});
+
 			//ajax end
 			console.log(info.event);
 			$("#calendarModalDetail").modal("show");
 			$(".resourceContent").val(info.event.title);
 			$(".schedule_code").val(info.event._def.publicId);
-			
+
 			//시작날짜
 			var startTime = info.event._instance.range.start;
 			var formattedStartTime = moment.utc(startTime).format("YYYY/M월/D일/A h:mm분");
@@ -109,15 +107,29 @@ document.addEventListener('DOMContentLoaded', function() {
 			var formattedStartTime = moment.utc(endTime).format("YYYY/M월/D일/A h:mm분");
 			formattedStartTime = formattedStartTime.replace("AM", "오전").replace("PM", "오후");
 			$("#end_time_resource").val(formattedStartTime);
-			
-			
-		// 총 사용 시간
-		var totalTime = moment.utc(endTime).diff(startTime, 'hours');
-		$("#total_time_resource").val(totalTime + "시간");
 
-    // change the border color just for fun
-    info.el.style.borderColor = 'red';
-  },
+
+			// 총 사용 시간
+			var totalTime = moment.utc(endTime).diff(startTime);
+			var duration = moment.duration(totalTime);
+
+			var hours = Math.floor(duration.asHours());
+			var minutes = duration.minutes();
+
+			var totalTimeDisplay = "";
+			if (hours > 0) {
+				totalTimeDisplay += hours + "시간";
+			}
+			if (minutes > 0) {
+				totalTimeDisplay += " " + minutes + "분";
+			}
+
+			$("#total_time_resource").val(totalTimeDisplay.trim());
+
+
+			// change the border color just for fun
+			info.el.style.borderColor = 'red';
+		},
 		locale: 'ko', // 한국어 설정
 		editable: true,
 		droppable: true,  // 드래그 가능
@@ -399,14 +411,14 @@ for (let hour = 0; hour < 24; hour++) {
 
 
 
-				
-				
-				
-		
-				
-				
-				
-	
-	
+
+
+
+
+
+
+
+
+
 
 

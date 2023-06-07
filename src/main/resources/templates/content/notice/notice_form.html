@@ -59,7 +59,7 @@
 						</tr>
 						<tr>
 							<td class="table-light">첨부파일</td>
-							<td colspan="2" class="text-start">
+							<td colspan="2" class="text-start" id="fileTd">
 								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
 								<!-- 첨부파일 -->
 							</td>
@@ -94,7 +94,7 @@
 <!-- 임시 저장 모달 -->
 <div class="modal fade" id="tempRegModal" tabindex="-1" aria-labelledby="tempRegModal" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content" style="min-height: 50rem;">
+    <div class="modal-content" style="min-height: 40rem;">
       <div class="modal-header">
       	<h1 class="modal-title fs-5" id="tempRegModal">임시 저장함</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -106,7 +106,7 @@
 					<colgroup>
 						<col width="*">
 						<col width="25%">
-						<col width="5%">
+						<col width="10%">
 					</colgroup>
 					
 					<tbody id="tempModalBody">
