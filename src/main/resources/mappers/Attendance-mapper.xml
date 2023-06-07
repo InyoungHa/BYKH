@@ -4,6 +4,7 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="attendanceMapper">
 	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
+		<id column="ATT_CODE" 		property="attCode;"/>
 		<result column="GO_WORK" 		property="goWork"/>
 		<result column="OUT_WORK" 		property="outWork"/>
 		<result column="CUR_DATE" 		property="curDate"/>
@@ -18,8 +19,6 @@
 		<result column="DAY" 	property="day"/>
 		<result column="WORKING_TIME" 	property="workingTime"/>
 		<result column="OUT_TIME" 	property="outTime"/>
-		<result column="ROW_NUM" property="rowNum"/>
-		<result column="ROW_NUMBER" property="rowNumber"/>
 	</resultMap>
 
 	<!--출근시간 저장 -->
@@ -125,7 +124,7 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 	</select>
 
 
-	<!--출퇴근 기록 게시판 -->
+	<!--출퇴근 기록 게시판 최근 5일 -->
 	<select id="workingBoard" resultMap="att">
 		SELECT
 		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
@@ -138,16 +137,28 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 		WHEN WORKING_STATUS = 3 THEN '결근'
 		END AS WORKING_STATUS
 		FROM ATTENDANCE
-		<!-- WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum} -->
+		ORDER BY GO_WORK DESC FETCH FIRST 5 ROW ONLY
+	</select>
+	
+		<!--출퇴근 기록 게시판 전체 -->
+	<select id="workingBoardAll" resultMap="att">
+		SELECT
+		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+		TO_CHAR(GO_WORK, 'DY') AS DAY,
+		TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+		TO_CHAR(OUT_WORK, 'HH24:MI') AS OUT_TIME,
+		CASE
+		WHEN WORKING_STATUS = 1 THEN '정상출근'
+		WHEN WORKING_STATUS = 2 THEN '지각'
+		WHEN WORKING_STATUS = 3 THEN '결근'
+		END AS WORKING_STATUS
+		FROM ATTENDANCE
+		ORDER BY GO_WORK DESC
 	</select>
 	
 
 		
-	<!-- 전체 게시글 수 조회 (페이징 -->
-	<select id="getBoardCnt" resultType="int">
-		SELECT COUNT (WORKING_STATUS) FROM ATTENDANCE
-	</select>
-	
+
 	
 
 

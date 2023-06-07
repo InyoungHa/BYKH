@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.attendance.vo.PageVO;
 import com.bykh.groupware.calendar.service.CalendarService;
 import com.bykh.groupware.util.DateUtil;
 
@@ -26,7 +25,7 @@ public class AttendanceController {
 	
 	// 근태관리 출퇴근기록 페이지(메인)
 	@GetMapping("/commute")
-	public String commute(AttendanceVO attendanceVO, Model model, PageVO pageVO) {
+	public String commute(AttendanceVO attendanceVO, Model model) {
 		String nowDate = DateUtil.getNowDateToString(); //오늘날짜설정
 		if(attendanceVO.getCurDate() == null) {
 			attendanceVO.setCurDate(nowDate);
@@ -47,17 +46,14 @@ public class AttendanceController {
 		//결근 횟수 조회
 		model.addAttribute("findLateTime",attendanceService.findLateCount());
 		
-		//출퇴근 기록 게시판 조회
-		List<AttendanceVO> attList =  attendanceService.workingBoard(pageVO);
+		//출퇴근 기록 게시판 조회(최근5일)
+		List<AttendanceVO> attList =  attendanceService.workingBoard();
 		model.addAttribute("attList", attList); 
 		
-		//전체 게시글 수 조회
-				int totalDateCnt = attendanceService.getBoardCnt();
-				
-				pageVO.setTotalDataCnt(totalDateCnt);
-				
-				//페이지 정보 세팅
-				pageVO.setPasgeInfo();
+		//출퇴근 기록 게시판 조회(전체)
+		List<AttendanceVO> attListAll =  attendanceService.workingBoardAll();
+		model.addAttribute("attListAll", attListAll); 
+	
 		
 		return "content/attendance/commute";
 	}
