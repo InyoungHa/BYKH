@@ -89,7 +89,8 @@
 							<tr>
 								<td>휴가 종류</td>
 								<td>
-									<input type="text" class="full-width-input annualType" placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate(this);" name="docAnnualLeaveVO.dalType">
+									<input type="text" class="full-width-input annualType" th:value="${signDocVO.docAnnualLeaveVO != null ? signDocVO.docAnnualLeaveVO.dalType : ''}" 
+									placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate(this);" name="docAnnualLeaveVO.dalType">
 								</td>
 							</tr>
 						<tr>

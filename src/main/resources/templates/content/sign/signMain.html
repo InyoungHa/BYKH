@@ -8,7 +8,7 @@
 <th:block layout:fragment="content_css">
    	<!-- <link rel="stylesheet" href="/"> -->
    		<style type="text/css">
-		.sgn-info-table, .stamp-table, .content-table{
+		.sgn-info-table, .stamp-table, .annual-content-table, .purchase-content-table{
 			--bs-table-border-color: black;
 		}
 		.sgn-info-table{
@@ -67,45 +67,52 @@
 			vertical-align: middle;
 		}
 
-		.content-table > tbody > tr:nth-child(4) > td{
+		.annual-content-table > tbody > tr:nth-child(4) > td{
 			vertical-align: middle;
 		}
-		.content-table > tbody > tr:nth-child(4){
+		.annual-content-table > tbody > tr:nth-child(4){
 			 height: 200px;
 		}
-		.content-table > tbody > tr > td:last-child{
+		.annual-content-table > tbody > tr > td:last-child{
 			text-align: left;
 		}
-		.content-table > tbody > tr > td:first-child{
+		.annual-content-table > tbody > tr > td:first-child{
 			background-color: #dddddd;
 		}
+		.purchase-content-table{
+			vertical-align: middle;
+		}
+		.purchase-content-table > thead, .purchase-content-table > tbody > tr:last-child > td:first-child, .purchase-content-table > tbody > tr:nth-last-child(2){
+			background-color: #dddddd;
+		}
+		
 		.rounded-image {
-            border-radius: 15px;
+            border-radius: 100%;
 		}
 		.outer-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 800px;
-}
-
-.image-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.image-box {
-    width: 300px;
-    text-align: center;
-    border-radius: 50px;
-    margin-right: 10px;
-    background-color: #f3f3f3;
-    cursor: pointer;
-}
-
-.image-title {
-    margin-top: 10px;
-}
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    height: 800px;
+		}
+		
+		.image-container {
+		    display: flex;
+		    justify-content: space-between;
+		}
+		
+		.image-box {
+		    width: 300px;
+		    text-align: center;
+		    border-radius: 50px;
+		    margin-right: 10px;
+		    background-color: #f3f3f3;
+		    cursor: pointer;
+		}
+		
+		.image-title {
+		    margin-top: 10px;
+		}
 		
 	</style>
 </th:block>
@@ -147,7 +154,17 @@
 									<th:block th:each="signDoc, status : ${inProgressSignDocList}">
 										<tr>
 											<td>[[${status.size - status.index}]]</td>
-											<td  style="cursor: pointer;" th:onclick="showSignDocModal(this);" 
+											<td th:if="${signDoc.sgnStatusStr == '임시저장'}" 
+											style="cursor: pointer;" 
+											th:onclick="goWriteForm(this);" 
+											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
+												<span>
+													[[${signDoc.docTitle}]]
+												</span>
+											</td>
+											<td th:if="${signDoc.sgnStatusStr != '임시저장'}" 
+											style="cursor: pointer;" 
+											th:onclick="showSignDocModal(this);" 
 											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
 												<span>
 													[[${signDoc.docTitle}]]

@@ -11,7 +11,7 @@ import com.bykh.groupware.sign.vo.SignVO;
 
 public interface SignService {
 	List<SignDocVO> getInProgressSignDocList(int empno);
-	List<SignDocVO> getEndSignDocList();
+	List<SignDocVO> getEndSignDocList(int empno);
 	SignDocVO getSingWriteInfo(int empno);
 	List<EmpVO> getEmpList(String ename);
 	

@@ -1,6 +1,13 @@
+//제목 클릭 시 - 임시저장일 경우
+function goWriteForm(clickTag){
+	const docType = clickTag.dataset.docType;
+	const address = docType == 1 ? '/sign/signWriteForm' : '/sign/purchaseOrderForm';
+	
+	location.href = address;
+	
+}
 
-
-
+//제목 클릭 시 - 임시저장이 아닐 경우
 function showSignDocModal(clickTag){
 	//모달 선택(여닫기 위한)
 	const showSignDocModal = document.querySelector('#showSignDoc');
@@ -109,7 +116,7 @@ function showSignDocModal(clickTag){
 							</div>
 							<div class="row">
 								<div class="col">
-									<table class="table table-bordered text-center content-table">
+									<table class="table table-bordered text-center annual-content-table">
 										<tbody>
 											<colgroup>
 												<col width="20%">
@@ -237,6 +244,8 @@ function showSignDocModal(clickTag){
 				const signWriteInfo = result[key[0]];
 				console.log(signWriteInfo);
 				str += `
+			<div class="row">
+			<div class="col-8" style="border: 1px solid #dee2e6;">
 			<div class="row mb-3">
 				<div class="col-7">
 					<table class="table table-bordered text-center sgn-info-table">
@@ -270,24 +279,35 @@ function showSignDocModal(clickTag){
 								<tr class="eJobTr">
 									<!-- 사원 >> 쿼리 결과로 들어가도록 변경하기!!!!!!!!11 -->
 									<td>사원</td>`;
-								signWriteInfo.signVOList.forEach
+								signWriteInfo.signVOList.forEach(function(signVO){
 									str += `
 									<td>
-										${signWriteInfo.signVOList[0].approverJob}
-									</td>`;
+										${signVO.approverJob}
+									</td>`;									
+								});
 									
 									str += `
 								</tr>
 								<tr class="enameTr">
 									<td>
-										[[${signWriteInfo.empVO.ename}]]
-									</td><!-- 도장 이미지 -->
+										${signWriteInfo.empVO.ename}
+									</td>`;
+								signWriteInfo.signVOList.forEach(function(signVO){
+									str += `
 									<td>
-									</td>
+										${signVO.sgnResult == 0 ? '' : signVO.approverName}
+									</td>`;
+								});
+									str += `
 								</tr>
 								<tr class="nowDateTr">
-									<td>[[${nowDate}]]</td><!-- 시간 -->
-									<td></td>
+									<td>${signWriteInfo.insertDate}</td><!-- 시간 -->
+									`;
+								signWriteInfo.signVOList.forEach(function(signVO){	
+									str += `
+									<td>${signVO.sgnResult == 0 ? '' : signVO.sgnDate}</td>`;
+								});	
+									str += `
 								</tr>
 								<!-- 결재자 추가시 추가되어야 하는 코드 끝 -->
 							</tbody>
@@ -296,12 +316,9 @@ function showSignDocModal(clickTag){
 				</div>
 			</div>
 			<div class="row">
-				<div class="offset-11 col-1 d-grid">
-					<input type="button" value="추가" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
-				</div>
 				
 				<div class="col-12 mt-3">
-					<table class="table table-bordered text-center content-table">
+					<table class="table table-bordered text-center purchase-content-table">
 						<colgroup>
 							<col width="40%">
 							<col width="20%">
@@ -316,11 +333,24 @@ function showSignDocModal(clickTag){
 								<td>금 액</td>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody>`;
+					signWriteInfo.docPurchaseOrderVO.buyVO.buyDetailVOList.forEach(function(buyDetail){
+						str += `
+							<tr>
+								<td>${buyDetail.itemVO.itemName}</td>
+								<td>${buyDetail.buyCnt}</td>
+								<td>${buyDetail.itemVO.itemPrice}</td>
+								<td>${buyDetail.buyDetailPrice}</td>
+							</tr>
+						`;
+					});
+						str += `
 							<tr>
 								<td>합 계</td>
 								<td colspan="2"></td>
-								<td  class="buyPriceTd"></td>
+								<td  class="buyPriceTd">
+									${signWriteInfo.docPurchaseOrderVO.buyVO.buyPrice}
+								</td>
 							</tr>
 							<tr>
 								<td>기 타</td>
@@ -334,6 +364,68 @@ function showSignDocModal(clickTag){
 				</div>
 			</div>			
 		</div>
+		
+		<div class="col-4">
+		<div class="row" style="min-height: 400px;">
+						<div class="col">
+						
+							<div class="row">
+								<div class="col">
+									<h3>결재라인</h3>
+								</div>
+							</div>`;
+							signWriteInfo.signVOList.forEach(function(sign){
+								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
+									<div class="col-3">
+										<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+											class="rounded-image">
+									</div>
+									<div class="col-9">
+										${sign.approverName} ${sign.approverJob}
+									</div>`;
+								if(sign.signComent != null){
+									str += `
+									<div class="col-12 mt-3">
+										${sign.sgnComent}
+									</div>
+									`;
+								}	
+								str += `</div>
+								`;
+							});
+							str += `
+							</div>
+								</div>`;
+							if(true){	
+								str += `
+							<!-- 다음 결재자일 경우 코맨트 활성화 -->
+							<div class="row" style="min-height: 400px;">
+							<div class="col">
+							<div class="row">
+								<div class="col-12">
+									<h3>코멘트</h3>
+								</div>
+								<div class="col">
+									<textarea rows="5" cols="30" class="sgnComent"></textarea>
+								</div>
+							</div>
+							</div>
+							</div>`;
+							//결재/반려 버튼 노출여부 지정
+							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
+							
+							str += `
+								<div class="row btn-area">
+									<div class="col-6 d-grid">
+										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0);">
+									</div>
+									<div class="col-6 d-grid">
+										<input type="button" class="btn btn-primary" value="결재" onclick="updateSignResult(1);">
+									</div>
+								</div>`
+							}
+						str += `</div>
+					</div>
 				`;
 				
 			}

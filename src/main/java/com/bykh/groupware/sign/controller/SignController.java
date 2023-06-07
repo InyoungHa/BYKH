@@ -39,7 +39,7 @@ public class SignController {
 	public String signMain(Model model, Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		model.addAttribute("inProgressSignDocList", signService.getInProgressSignDocList(Integer.parseInt(user.getUsername())));
-		model.addAttribute("endSignDocList", signService.getEndSignDocList());
+		model.addAttribute("endSignDocList", signService.getEndSignDocList(Integer.parseInt(user.getUsername())));
 		return "content/sign/signMain";
 	}
 	

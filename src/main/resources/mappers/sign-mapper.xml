@@ -96,7 +96,13 @@
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (0, 1)
-		AND ((SGN_STATUS = 0 AND SD.WRITER_NO = ${empno}) OR SGN_STATUS = 1)
+		AND (
+                (SGN_STATUS = 0 AND SD.WRITER_NO = ${empno}) 
+            OR 
+                (SGN_STATUS = 1 AND SD.WRITER_NO = ${empno})
+            OR
+                (SGN_STATUS = 1 AND EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+            )
 		ORDER BY INSERT_DATE DESC
 	</select>
 	<select id="getEndSignDocList" resultMap="signDoc">
@@ -110,6 +116,11 @@
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (2, 3)
+		AND (
+				(SD.WRITER_NO = ${empno})
+			OR
+				(EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+			)
 		ORDER BY INSERT_DATE DESC
 	</select>
 	<!-- 기안 작성 페이지 이동 시 회원정보 가져가기 -->
@@ -312,6 +323,7 @@
 		    , ITEM_NAME
 		    , BUY_CNT
 		    , ITEM_PRICE
+		    , BUY_DETAIL_NO
 		    , BUY_DETAIL_PRICE
 		    , BUY_PRICE
 		    , DPO_COMMENT
@@ -322,6 +334,7 @@
 		    , DECODE(SGN_RESULT, '0', '미결재', '1', '결재') SGN_RESULT_STR
 		    , SGN_COMENT
 		    , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
+		    , BUY.BUY_NO
 		FROM SGN_DOC DOC, DOC_PURCHASE_ORDER DPO, SGN, EMP, DEPT, BUY, BUY_DETAIL BD, ITEM
 		WHERE DOC.DOC_NO = DPO.DOC_NO
 		AND DOC.DOC_NO = SGN.DOC_NO
