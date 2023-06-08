@@ -4,6 +4,7 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="attendanceMapper">
 	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
+		<id column="ATT_CODE" 		property="attCode;"/>
 		<result column="GO_WORK" 		property="goWork"/>
 		<result column="OUT_WORK" 		property="outWork"/>
 		<result column="CUR_DATE" 		property="curDate"/>
@@ -18,20 +19,30 @@
 		<result column="DAY" 	property="day"/>
 		<result column="WORKING_TIME" 	property="workingTime"/>
 		<result column="OUT_TIME" 	property="outTime"/>
-		<result column="ROW_NUM" property="rowNum"/>
-		<result column="ROW_NUMBER" property="rowNumber"/>
+		<result column="EMPNO" property="empno"/>
+		<association property="empVO" resultMap="empMapper.emp"></association>
 	</resultMap>
+	
+
+	<!-- 회원정보 조회 -->
+	<select id="selectName" resultMap="att">
+	SELECT ENAME, E_JOB FROM EMP
+	WHERE EMPNO = #{empno}
+	</select>
+	
 
 	<!--출근시간 저장 -->
 	<insert id="goWork">
 		INSERT INTO ATTENDANCE (
 			ATT_CODE
-			,GO_WORK
+			, GO_WORK
+			, EMPNO
 		)
 		VALUES (
 			(SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) + 1, 3, '0')
 			FROM ATTENDANCE)
 			, SYSDATE
+			, #{empno}
 		)
 	</insert>
 
@@ -45,6 +56,7 @@ SET OUT_WORK = SYSDATE,
         ELSE 1 
     END
 WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0), 3, '0') FROM ATTENDANCE)
+AND EMPNO = #{empno}
 	</update>
 
 
@@ -53,6 +65,7 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 		SELECT TO_CHAR(GO_WORK, 'HH:MI') AS GO_WORK
 		FROM ATTENDANCE
 		WHERE GO_WORK >= TRUNC(SYSDATE)
+		AND EMPNO = #{empno}
 		ORDER BY GO_WORK DESC
 		FETCH FIRST 1 ROW ONLY
 	</select>
@@ -62,6 +75,7 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 		SELECT TO_CHAR(OUT_WORK, 'HH:MI') AS OUT_WORK
 		FROM ATTENDANCE
 		WHERE OUT_WORK >= TRUNC(SYSDATE)
+		AND EMPNO = #{empno}
 		ORDER BY OUT_WORK DESC
 		FETCH FIRST 1 ROW ONLY
 	</select>
@@ -72,25 +86,16 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 		SELECT COUNT(*) AS LATE_COUNT
 		FROM ATTENDANCE
 		WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
+		AND EMPNO = #{empno} 
 	</select>
 
 
 
 	<!-- 근무일수 조회 -->
 	<select id="checkDays" resultMap="att">
-		SELECT COUNT(*) AS WORKING_DAYS
-		FROM ATTENDANCE
-		WHERE
-		(SELECT TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS GO_WORK
-		FROM ATTENDANCE
-		WHERE GO_WORK >= TRUNC(SYSDATE)
-		ORDER BY GO_WORK DESC
-		FETCH FIRST 1 ROW ONLY)
-		=
-		(SELECT TO_CHAR(OUT_WORK, 'YYYY-MM-DD') AS OUT_WORK
-		FROM ATTENDANCE
-		WHERE OUT_WORK >= TRUNC(SYSDATE)
-		ORDER BY OUT_WORK DESC FETCH FIRST 1 ROW ONLY)
+	 SELECT COUNT(DISTINCT TO_CHAR(GO_WORK, 'YYYY-MM-DD')) AS WORKING_DAYS
+  	FROM ATTENDANCE
+  	WHERE GO_WORK >= TRUNC(SYSDATE) AND EMPNO = #{empno}
 	</select>
 	
 
@@ -99,6 +104,7 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 		SELECT ROUND(SUM(OUT_WORK - GO_WORK) * 24) AS WORKING_DAYS
 		FROM ATTENDANCE
 		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+		AND EMPNO = #{empno} 
 	</select>
 	
 		
@@ -112,42 +118,84 @@ WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))),
 	END) * 24) AS OVER_TIME
 	FROM ATTENDANCE
 	WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	AND EMPNO = #{empno} 
 	</select>
 
 
 
 	<!-- 결근 횟수 조회 -->
 	<select id="findLateCount" resultMap="att">
-		SELECT COUNT(*) AS LATE_COUNT
-		FROM ATTENDANCE
-		WHERE TRUNC(GO_WORK) = TRUNC(SYSDATE) AND GO_WORK IS NULL
-		AND TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	SELECT COUNT(*) AS LATE_COUNT
+	FROM ATTENDANCE
+	WHERE TRUNC(GO_WORK) = TRUNC(SYSDATE) AND GO_WORK IS NULL
+	AND
+	TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	AND
+	TO_CHAR(GO_WORK, 'D') NOT IN (1, 7)
+	AND TO_CHAR(GO_WORK, 'YYYY-MM-DD')
+	NOT IN (
+	'2023-01-01', -- 신정
+	'2023-02-16', -- 설날
+	'2023-02-17', -- 설날
+	'2023-02-18', -- 설날
+	'2023-03-01', -- 삼일절
+	'2023-05-05', -- 어린이날
+	'2023-05-09', -- 석가탄신일
+	'2023-06-06', -- 현충일
+	'2023-08-15', -- 광복절
+	'2023-09-14', -- 추석
+	'2023-09-15', -- 추석
+	'2023-09-16', -- 추석
+	'2023-10-03', -- 개천절
+	'2023-10-09' -- 한글날
+	)
+	AND EMPNO = #{empno}
 	</select>
 
 
-	<!--출퇴근 기록 게시판 -->
+	<!--출퇴근 기록 게시판 최근 5일 -->
 	<select id="workingBoard" resultMap="att">
-		SELECT
-		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
-		TO_CHAR(GO_WORK, 'DY') AS DAY,
-		TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
-		TO_CHAR(OUT_WORK, 'HH24:MI') AS OUT_TIME,
-		CASE
-		WHEN WORKING_STATUS = 1 THEN '정상출근'
-		WHEN WORKING_STATUS = 2 THEN '지각'
-		WHEN WORKING_STATUS = 3 THEN '결근'
-		END AS WORKING_STATUS
-		FROM ATTENDANCE
-		<!-- WHERE ROW_NUM &gt;= #{startNum} AND ROW_NUM &lt;= #{endNum} -->
+	SELECT
+	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+	TO_CHAR(GO_WORK, 'DY')
+	AS DAY,
+	TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+	TO_CHAR(OUT_WORK,
+	'HH24:MI') AS OUT_TIME,
+	CASE
+	WHEN WORKING_STATUS = 1 THEN '정상출근'
+	WHEN WORKING_STATUS = 2 THEN '지각'
+	WHEN WORKING_STATUS = 3 THEN '결근'
+	END AS WORKING_STATUS
+	FROM ATTENDANCE
+	WHERE EMPNO = #{empno}
+	ORDER BY GO_WORK DESC
+	FETCH FIRST 5 ROW ONLY
+
+	</select>
+	
+		<!--출퇴근 기록 게시판 전체 -->
+	<select id="workingBoardAll" resultMap="att">
+	SELECT
+	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+	TO_CHAR(GO_WORK, 'DY')
+	AS DAY,
+	TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+	TO_CHAR(OUT_WORK,
+	'HH24:MI') AS OUT_TIME,
+	CASE
+	WHEN WORKING_STATUS = 1 THEN '정상출근'
+	WHEN WORKING_STATUS = 2 THEN '지각'
+	WHEN WORKING_STATUS = 3 THEN '결근'
+	END AS WORKING_STATUS
+	FROM ATTENDANCE
+	WHERE EMPNO = #{empno}
+	ORDER BY GO_WORK DESC
 	</select>
 	
 
 		
-	<!-- 전체 게시글 수 조회 (페이징 -->
-	<select id="getBoardCnt" resultType="int">
-		SELECT COUNT (WORKING_STATUS) FROM ATTENDANCE
-	</select>
-	
+
 	
 
 

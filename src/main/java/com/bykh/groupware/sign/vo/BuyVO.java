@@ -11,6 +11,7 @@ import lombok.ToString;
 @ToString
 public class BuyVO {
 	private int buyNo;
+	private int docNo;
 	private int buyDeptNo;
 	private int buyPrice;
 	private int buyApproval;

@@ -11,6 +11,5 @@ public class DocPurchaseOrderVO {
 	private int dpoNo;
 	private int docNo;
 	private String dpoComment;
-	private int buyNo;
 	private BuyVO buyVO;
 }

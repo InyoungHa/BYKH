@@ -11,7 +11,7 @@ import com.bykh.groupware.sign.vo.SignVO;
 
 public interface SignService {
 	List<SignDocVO> getInProgressSignDocList(int empno);
-	List<SignDocVO> getEndSignDocList();
+	List<SignDocVO> getEndSignDocList(int empno);
 	SignDocVO getSingWriteInfo(int empno);
 	List<EmpVO> getEmpList(String ename);
 	
@@ -35,6 +35,7 @@ public interface SignService {
 	void insertDocPurchaseOrder(SignDocVO signDocVO);
 	//다음 buy_no 조회
 	int getNextBuyNo();
-
+	//구매신청서 - DELETE
+	void delPurchaseOrder(int docNo);
 	
 }

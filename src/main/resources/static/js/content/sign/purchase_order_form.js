@@ -1,4 +1,10 @@
 const addItemModal = new bootstrap.Modal(document.querySelector('#addItemModal'));
+init();
+
+function init(){
+	setFinalPrice();
+}
+
 
 //결재자 리스트 div에 추가
 function addApproverHTML(approverNo, approverName, approverJob){
@@ -244,11 +250,9 @@ function addItemTr(){
 	// 2.삽입할 str 코드 작성
 	let str = ``;
 	const content_tr_list = document.querySelectorAll('.itemTr');
-	// 추가할 테이블의 tr의 길이가 3 이상이면
 	let isDuplicated = false; //?
 	
 	if(content_tr_list.length > 0){
-		console.log('3 이상');
 		for(let i=0; i<item_no_list.length; i++){
 			for(let j=0; j<content_tr_list.length; j++){
 				const content_item_no = content_tr_list[j].querySelector('input[type="hidden"]').value;
@@ -280,7 +284,6 @@ function addItemTr(){
 			}
 		}
 	} else {
-		console.log('3 미만');
 		for (let i = 0; i < item_no_list.length; i++) {
 			str +=
 				`
@@ -328,30 +331,6 @@ function setFinalPrice(){
 	
 };
 
-
-
-//임시저장
-function saveSignDoc(){
-	
-	//sgnStatus 값 세팅(임시저장/등록 여부)
-	document.querySelector('.sgnStatus').value = 0;
-	//approverNo값 세팅
-	let approverNoStr = '';
-	const approver_no_list = document.querySelectorAll('.approverNo');
-	approver_no_list.forEach(function(approver_no){
-		approverNoStr += approver_no.value + ','
-	});
-	document.querySelector('.approverNoStr').value = approverNoStr;
-	
-	//==========추가==============
-	
-	
-	
-	
-	signDocForm.submit();
-	
-	
-};
 //기안올리기
 function insertPurchaseorder(sgnStatus){
 	//1. 데이터 세팅
@@ -387,6 +366,7 @@ function insertPurchaseorder(sgnStatus){
 	//1-3 sgnDoc
 	const sgn_doc = {
 		'docType': 2,
+		'docNo': document.querySelector('.docNo').value,
 		'writerNo': document.querySelector('.writerNo').value,
 		'docTitle': '구매신청서',
 		'sgnStatus': sgnStatus
