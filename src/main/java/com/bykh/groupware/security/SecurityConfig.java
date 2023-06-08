@@ -9,37 +9,41 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity security) throws Exception{
+		
 		security.csrf().disable()
-		   .authorizeHttpRequests()
-		 //  .requestMatchers("/emp/**").hasRole("ADMIN","SUPER_ADMIN")
-		 //  .requestMatchers("/dept/**").hasRole("ADMIN","SUPER_ADMIN")
-		 //  .requestMatchers("/admin/**").hasAnyRole("ADMIN", "MANAGER")
-		   .anyRequest().authenticated()
-	.and()
-			.formLogin()
-			.loginPage("/")
-			.usernameParameter("empno")
-			.passwordParameter("epw")
-			.loginProcessingUrl("/admin/login")
-			.defaultSuccessUrl("/admin/main")
-			.failureUrl("/")
-	//		.successHandler(getSuccessHandler())
-	//		.failureHandler(getFailureHandler())
-			.permitAll() //로그인
-	.and()
-			.logout()
-			.logoutUrl("/member/logout")
-			.invalidateHttpSession(true)
-			.logoutSuccessUrl("/"); // 로그아웃
-	//.and()
-	//		.exceptionHandling()  				// 예외 다르는 방법
-	//		.accessDeniedPage("/accessDeny");   // 예외를 연결하는 경로_> IndexController
-	//		.accessDeniedHandler(null) //Handler이용해서 미인가시 다루기
+				.authorizeHttpRequests()
+			   		//.requestMatchers("/", "/user/loginForm").permitAll()
+			   		.requestMatchers("/emp/**").hasAnyRole("ADMIN","SUPER_ADMIN")
+			   		.requestMatchers("/dept/**").hasAnyRole("ADMIN","SUPER_ADMIN")
+			   		.anyRequest().authenticated()
+				.and()
+						.formLogin()
+						.loginPage("/user/log")
+						.usernameParameter("empno")
+						.passwordParameter("epw")
+						.loginProcessingUrl("/user/login")
+				//		.defaultSuccessUrl("/user/main")
+				//		.failureUrl("/user/log")
+						.successHandler(getSucessHandler())
+						.failureHandler(getFailureHandler())
+						.permitAll() //로그인
+				//.and() 	.rememberMe().key("AbcdEfghIjklmNopQrsTuvXyz_0123456789")
+				.and()
+						.logout()
+						.logoutUrl("/user/logout")
+						.invalidateHttpSession(true)
+						.logoutSuccessUrl("/user/log") // 로그아웃
+				.and()
+						.exceptionHandling()  				// 예외 다르는 방법
+						.accessDeniedPage("/accessDeny");   // 예외를 연결하는 경로_> IndexController
+				//		.accessDeniedHandler(null) //Handler이용해서 미인가시 다루기
 
 		
 
@@ -58,4 +62,16 @@ return security.build();
 		
 		return new BCryptPasswordEncoder();
 	}
+	//로그인 실패 시 실행되는 클래스 객체 생성
+	@Bean
+	public FailureHandler getFailureHandler() {
+		return new FailureHandler();
+	}
+
+	@Bean
+	public SuccessHandler getSucessHandler() {
+		return new SuccessHandler();
+	}
+	
+
 }

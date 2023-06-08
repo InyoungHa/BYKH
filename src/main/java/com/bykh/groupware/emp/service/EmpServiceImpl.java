@@ -56,6 +56,21 @@ public class EmpServiceImpl implements EmpService {
 	
 		 sqlSession.update("empMapper.updateEmpDetail", empVO);
 	}
+
+
+	@Override //계정 상태 변경
+	public void updateE_Account(EmpVO empVO) {
+		sqlSession.update("empMapper.updateE_Account",empVO);
+		
+	}
+
+
+	@Override //사원 삭제 
+	public void deleteEmp(int empno) {
+		sqlSession.delete("empMapper.deleteEmp",empno);
+		
+	}
+	
 	
 	
 	

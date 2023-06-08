@@ -117,8 +117,9 @@
 					<!-- 
 					<input type="hidden" value="1" name="docStatus" class="docStatus">
 					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
-					<input type="hidden" th:value="구매신청서" name="docTitle" class="">
 					-->						
+					<input type="hidden" th:value="${docPurchaseOrder != null and docPurchaseOrder.buyVO != null ? docPurchaseOrder.buyVO.buyNo : 0}" name="buyNo" class="buyNo">
+					<input type="hidden" th:value="${docPurchaseOrder != null and docPurchaseOrder.docNo != null ? docPurchaseOrder.docNo : 0}" name="docNo" class="docNo">
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
 					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo" class="writerNo">
 					<h2>구매신청서</h2>
@@ -200,15 +201,30 @@
 							</tr>
 						</thead>
 						<tbody>
+							<th:block th:if="${docPurchaseOrder != null and docPurchaseOrder.buyVO != null}">
+								<th:block th:each="buyDetail : ${docPurchaseOrder.buyVO.buyDetailVOList}">
+									<tr class="itemTr">
+										<td>[[${buyDetail.itemVO.itemName}]]
+											<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
+											th:value="${buyDetail.itemVO.itemNo}" class="item-no">
+										</td>
+										<td>[[${buyDetail.buyCnt}]]</td>
+										<td>[[${buyDetail.itemVO.itemPrice}]]</td>
+										<td>[[${buyDetail.buyDetailPrice}]]</td>
+									</tr>
+								</th:block>
+							</th:block>
 							<tr>
 								<td>합 계</td>
 								<td colspan="2"></td>
-								<td  class="buyPriceTd"></td>
+								<td class="buyPriceTd"></td>
 							</tr>
 							<tr>
-								<td>기 타</td>
+								<td>구매사유</td>
 								<td colspan="3">
-									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"></textarea>
+									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"
+									>[[${docPurchaseOrder != null and docPurchaseOrder.dpoComment != null
+									? docPurchaseOrder.dpoComment : ''}]]</textarea>
 								</td>
 							</tr>
 							

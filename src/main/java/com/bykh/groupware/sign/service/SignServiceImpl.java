@@ -79,6 +79,10 @@ public class SignServiceImpl implements SignService{
 	public SignDocVO getDetailDocPurchaseOrder(int docNo) {
 		return sqlsession.selectOne("signMapper.getDetailDocPurchaseOrder", docNo);
 	}
+	@Override
+	public void delPurchaseOrder(int docNo) {
+		sqlsession.delete("signMapper.delPurchaseOrder", docNo);
+	}
 	
 	
 	

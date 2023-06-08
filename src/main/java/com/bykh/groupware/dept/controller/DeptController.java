@@ -25,8 +25,6 @@ public class DeptController {
 	@GetMapping("/deptManage")
 	public String deptManage(Model model, DeptVO deptVO) {
 		
-		
-		
 		//부서 목록 조회
 		model.addAttribute("deptList", deptService.selectDeptList());
 		return "content/dept/dept_manage";

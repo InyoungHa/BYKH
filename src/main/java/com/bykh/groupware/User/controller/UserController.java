@@ -1,4 +1,4 @@
-package com.bykh.groupware.admin.controller;
+package com.bykh.groupware.User.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -14,11 +14,16 @@ import com.bykh.groupware.util.DateUtil;
 import jakarta.annotation.Resource;
 
 @Controller
-@RequestMapping("/admin")
-public class adminController {
+@RequestMapping("/user")
+public class UserController {
 	@Resource(name = "attendanceService")
 	private  AttendanceService attendanceService;
-
+	
+	//로그인 페이지
+	@GetMapping("/log")
+	public String login() {
+		return "content/login";
+	}
 	
 	//메인페이지이동
 	@GetMapping("/main")

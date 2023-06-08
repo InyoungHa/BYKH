@@ -134,6 +134,8 @@
 					</th:block>
 					<th:block th:unless="${#lists.size(empList)==0}">
 						<tr th:each="emp,state:${empList}">
+						<input type="hidden" name="eStatus" id="eStatus" th:value="${emp.eStatus}">
+						<input type="hidden" name="eAccount" id="eAccount" th:value="${emp.eAccount}">
 							<td>[[${state.count}]]</td>
 							<td>[[${emp.empno}]]</td>
 							<td>
@@ -149,8 +151,8 @@
 							<td>[[${emp.eStatusStr}]]</td>
 							<td>[[${emp.eAccountStr}]]</td>
 							<td>
-								<button th:onchange="changAccount([[${emp.empno}]]);"
-									type="button" class="button">변경</button>
+								 <button th:onclick="changAccount([[${emp.empno}]]);"  type="button" class="button" >변경</button>
+								<!-- <span data-bs-toggle="modal" data-bs-target="#changeEAccountModal" style="cursor: pointer;">변경</span> -->
 							</td>
 						</tr>
 					</th:block>
@@ -186,29 +188,20 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-body">					
-					<!-- <label class="page_title">사원 개인 페이지</label>
-					<form class="row" id="" >
-						<div class="col">
-							<div class="row" >
-								<div class="card" style="width: 18rem;">
-									<img src="..." class="card-img-top" alt="...">
-									<div class="card-body">
-										<p class="card-text"></p>
-										<p class="card-text"></p>
-									</div>
-								</div>
-							</div>						
-						</div>
-						<div class="col">
-							<div class="row">
-								dfadf
-							</div>
-							<div class="row">
-								dfadf
-							</div>
-						</div>
-						
-					</form> -->
+		
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- changeEAccountModal -->
+	<div class="modal fade modal-xl" id="changeEAccountModal" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+
+		
 				</div>
 			</div>
 		</div>
