@@ -33,63 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 		eventClick: function(info) {
 
-			$('#participant').val("");
-			$('#resourceContent').val("");
-
-
-			$('#saveCalendar').off('click').on('click', function() {
-				var id = info.event._def.publicId; // id값
-				var participant = $('#participant').val(); // 참가자 입력값 가져오기
-				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
-
-				location.reload();
-
-				// 인서트 기능 수행
-				$.ajax({
-					url: '/resource/insertScheduleDetail',
-					type: 'post',
-					async: false,
-					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-					data: {
-						'id': id,
-						'participant': participant,
-						'resourceContent': resourceContent
-					},
-					success: function(result) { },
-					error: function() {
-						alert('인서트 실패');
-					}
-				});
-			});
-
-			var id = info.event._def.publicId;
-			console.log(id);
-			//ajax start
-			$.ajax({
-				url: '/resource/selectCalendarDetail', //요청경로
-				type: 'post',
-				async: false,
-				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				data: {
-					'id': id
-				}, //HTML에받는  데이터
-				success: function(result) {
-
-					var firstObject = result[0];
-					var participant = firstObject.participant;
-					var resourceContent = firstObject.resourceContent;
-
-					$('#participant').val(participant);
-					$('#resourceContent').val(resourceContent);
-
-					console.log(participant);
-					console.log(resourceContent);
-				},
-				error: function() {
-					alert('실패');
-				}
-			});
-
 			//ajax end
 			console.log(info.event);
 			$("#calendarModalDetail").modal("show");
@@ -195,7 +138,8 @@ document.addEventListener('DOMContentLoaded', function() {
 							start_date += "T" + start_time;
 							end_date += "T" + end_time;
 						}
-
+				
+					
 						var obj = {
 							"title": content,
 							"start": start_date,
@@ -270,7 +214,7 @@ var calendar;
 
 document.getElementById("saveButton").addEventListener("click", allSave);
 
-///일정저장////
+///예약하기////
 function allSave() {
 	var allEvent = calendar.getEvents();
 	var events = [];
@@ -328,6 +272,7 @@ var return_value = null;
 loadingEvents();
 
 function loadingEvents() {
+	
 	//ajax start
 	$.ajax({
 		url: '/calendar/resourceCalendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
@@ -336,10 +281,12 @@ function loadingEvents() {
 		dataType: 'json',
 
 		success: function(result) {
+		
 			for (let i = 0; i < result.length; i++) {
+				
 				const title = result[i].title;
 				let color;
-
+				
 				if (title === '회의실01') {
 					color = '#025464'; // 회의실01인 경우
 				} else if (title === '회의실02') {
@@ -364,7 +311,6 @@ function loadingEvents() {
 			}
 			console.log(result);
 			var jsonResult = JSON.stringify(result);
-
 			return_value = JSON.parse(jsonResult);
 		},
 		error: function() {
@@ -372,6 +318,7 @@ function loadingEvents() {
 		}
 	});
 	return return_value;
+	
 }
 
 

@@ -11,11 +11,14 @@ public interface AttendanceService {
 	//이름조회
 	AttendanceVO selectName(int empno);
 	
+	//ATT_CODE 최신 첫번쨰 조회
+	AttendanceVO selectAtt(int empno);
+	
 	//출근시간저장
 	void goWork(int empno);
 	
 	//퇴근시간저장
-	void outWork(int empno);
+	void outWork(AttendanceVO attendanceVO);
 	
 	//제일최신 출근시간 조회
 	AttendanceVO selectGowork(int empno);

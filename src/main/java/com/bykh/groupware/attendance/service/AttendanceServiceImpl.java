@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.emp.vo.EmpVO;
 
 @Service("attendanceService")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -19,6 +18,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public AttendanceVO selectName(int empno) {
 	    return sqlSession.selectOne("attendanceMapper.selectName", empno);
+	}
+	
+	//ATTCODE 최신 첫번쨰 조회
+	@Override
+	public AttendanceVO selectAtt(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectAtt", empno);
 	}
 
 
@@ -32,8 +37,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 
 	//퇴근시간등록
 	@Override
-	public void outWork(int empno) {
-		sqlSession.insert("attendanceMapper.outWork", empno);
+	public void outWork(AttendanceVO attendanceVO) {
+	    sqlSession.insert("attendanceMapper.outWork", attendanceVO);
 	}
 
 	//제일최신 출근시간 조회
@@ -88,6 +93,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public List<AttendanceVO> workingBoardAll(int empno) {
 		return sqlSession.selectList("attendanceMapper.workingBoardAll", empno);
 	}
+
+	
+
+
+	
 
 	
 	

@@ -79,34 +79,6 @@ SELECT SCHEDULE_CODE
 
 
 
-<!-- 자원관리 캘린더 디테일 내용추가 -->	
-<insert id="insertScheduleDetail">
-INSERT INTO RESOURCE_DETAIL (
-DETAIL_NUM,
-ID,
-PARTICIPANT,
-RESOURCE_CONTENT
-) VALUES (
-(SELECT NVL(MAX(DETAIL_NUM), 0) + 1 FROM RESOURCE_DETAIL),
-#{id}
-,#{participant}
-,#{resourceContent}
-)
-</insert>
-
-<!--자원관리 캘린더 디테일 내용 조회 -->
-<select id="selectCalendarDetail" resultMap="resourceDetail">
-SELECT PARTICIPANT, RESOURCE_CONTENT FROM RESOURCE_DETAIL
-WHERE ID = #{id}
-</select>
-
-<update id="insertOrUpdateScheduleDetail">
-UPDATE RESOURCE_DETAIL
-SET PARTICIPANT = #{participant}, RESOURCE_CONTENT = #{resourceContent}
-WHERE ID = #{id}
-</update>
-
-
 </mapper>
 
 

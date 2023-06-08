@@ -17,6 +17,10 @@ public class ResourceVO {
     private boolean allDay;
     private int type;
     private int empno;
+    private String startDay;
+    private String endDay;
+    private String totalDuration;
+
 }
 
 
