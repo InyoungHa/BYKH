@@ -2,8 +2,8 @@
 
 
 //정상 글 등록
-function regNotice() {
-	if(!noticeFormCheck()) {
+function regArchive() {
+	if(!formCheck()) {
 		return false;
 	}
 	else {
@@ -13,14 +13,14 @@ function regNotice() {
 		const statusStr = `<input type="hidden" name="boardStatus" value="${1}">`;
 		hiddenDiv.insertAdjacentHTML('beforeend', statusStr);
 		
-		document.querySelector('#noticeForm').submit();
+		document.querySelector('#archiveForm').submit();
 	}
 }
 
 
 //임시 저장 글 등록
-function tempRegNotice() {
-	if(!noticeFormCheck()) {
+function tempRegArchive() {
+	if(!formCheck()) {
 		return false;
 	}
 	else {
@@ -41,11 +41,11 @@ function tempRegNotice() {
 		
 		
 		//폼 태그
-		const formData = new FormData(document.querySelector('#noticeForm'));
+		const formData = new FormData(document.querySelector('#archiveForm'));
 		
 		//ajax start
 		$.ajax({
-			url: '/notice/tempRegNotice', //요청경로
+			url: '/archive/tempRegArchive', //요청경로
 			type: 'post',
 			async: true,
 			data: formData,
@@ -139,7 +139,7 @@ function tempDeleteFileInputDiv(deleteBtn, fileNum) {
 
 
 //제목, 내용, 파일 첨부 유효성 체크
-function noticeFormCheck() {
+function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
@@ -168,7 +168,7 @@ function noticeFormCheck() {
 }
 
 //제목, 내용, 파일 비어있는지 확인
-function noticeFormNullCheck() {
+function formNullCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
@@ -223,7 +223,7 @@ function deleteFileInputDiv(deleteBtn) {
 function tempBoardList() {
 	//ajax start
 	$.ajax({
-		url: '/notice/tempBoardList', //요청경로
+		url: '/archive/tempBoardList', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -288,11 +288,11 @@ function currentBoardAlert() {
 
 //임시저장함 글 가져오기
 function updateTempBoard(boardNum) {
-	if(noticeFormNullCheck()) {
+	if(formNullCheck()) {
 		getTempBoard(boardNum);
 	}
 	else if(confirm('작성 중인 내용을 임시저장하고 선택한 문서를 불러오시겠습니까?')) {
-		if(!noticeFormCheck()) {
+		if(!formCheck()) {
 			return false;
 		}
 		else {
@@ -312,11 +312,11 @@ function updateTempBoard(boardNum) {
 			}
 			
 			//폼 태그
-			const formData = new FormData(document.querySelector('#noticeForm'));
+			const formData = new FormData(document.querySelector('#archiveForm'));
 			
 			//ajax start
 			$.ajax({
-				url: '/notice/tempRegNotice', //요청경로
+				url: '/archive/tempRegArchive', //요청경로
 				type: 'post',
 				async: true,
 				data: formData,
@@ -340,7 +340,7 @@ function updateTempBoard(boardNum) {
 function getTempBoard(boardNum) {
 	//ajax start
 	$.ajax({
-		url: '/notice/getTempDetail', //요청경로
+		url: '/archive/getTempDetail', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -376,7 +376,7 @@ function getTempBoard(boardNum) {
 				let fileStr = '';
 				for(const file of tempBoard.boardFileList) {
 					fileStr += `<div class="mb-1">`;
-					fileStr += `<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
+					fileStr += `<a th:href="@{/archive/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
 					fileStr += `${file.originFileName}</a> (${file.fileSize}) `;
 					fileStr += `<button class="btn btn-primary btn-sm" type="button" onclick="deleteAttachedFile('${file.fileNum}', this);">삭제</button></div>`;
 				}
@@ -414,7 +414,7 @@ function deleteBoard(boardNum, deleteBtn) {
 	if(confirm('정말 삭제하시겠습니까?')) {
 		//ajax start
 		$.ajax({
-			url: '/notice/tempDelete', //요청경로
+			url: '/archive/tempDelete', //요청경로
 			type: 'post',
 			async: true,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

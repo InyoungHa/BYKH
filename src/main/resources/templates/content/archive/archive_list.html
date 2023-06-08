@@ -30,14 +30,14 @@
 		<div class="col">
 			<div class="row mb-2">
 				<div class="col fs-1 fw-bolder">
-					전사공지
+					자료실
 				</div>
 			</div>
 		
 			<div class="row mb-2">
 				<div class="col d-grid d-flex justify-content-between">
 					<div class="text-secondary fs-6 align-self-end">전체 <span class="text-dark">[[${boardVO.totalDataCnt}]]</span>건</div>
-					<form action="/notice/list" method="get" id="noticeForm">
+					<form action="/archive/list" method="get" id="archiveForm">
 						<div class="input-group" style="width: 20rem;">
 							<select class="form-select" name="searchBoardVO.searchSelect">
 							  <option value="BOARD_TITLE" 
@@ -78,12 +78,12 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:if="${#lists.size(noticeImportantList) != 0}" th:each="important, state : ${noticeImportantList}"  class="table-light">
+							<tr th:if="${#lists.size(archiveImportantList) != 0}" th:each="important, state : ${archiveImportantList}"  class="table-light">
 								<td>
 									<span class="badge text-bg-success">중요</span>
 								</td>
 								<td class="text-start">
-									<a th:href="@{/notice/detail(boardNum=${important.boardNum})}" style="color: black;">
+									<a th:href="@{/archive/detail(boardNum=${important.boardNum})}" style="color: black;">
 									[[${important.boardTitle}]]
 									</a>
 									
@@ -93,59 +93,50 @@
 								</td>
 								<td>
 									<th:block th:if="${important.fileCnt != 0}">
-										<div class="dropdown">
-											<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
-											  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-											</svg>
-										  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-											  <th:block th:each="file : ${important.boardFileList}">
-											    <li class="my-1">
-											    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
-											    </li>
-											  </th:block>
-										  </ul>
-										</div>
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+										  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+										</svg>
 									</th:block>
 								</td>
 								<td>[[${important.ename}]]</td>
 								<td>[[${important.boardDate}]]</td>
 								<td>[[${important.boardView}]]</td>
 							</tr>
-							<th:block th:if="${#lists.size(noticeList) == 0}">
+							<th:block th:if="${#lists.size(archiveList) == 0}">
 								<tr>
 									<td colspan="6">등록된 게시글이 없습니다.</td>
 								</tr>						
 							</th:block>
-							<th:block th:unless="${#lists.size(noticeList) == 0}">
-								<tr th:each="notice, state : ${noticeList}">
+							<th:block th:unless="${#lists.size(archiveList) == 0}">
+								<tr th:each="archive, state : ${archiveList}">
 									<td>[[${boardVO.totalDataCnt - ((boardVO.nowPage - 1) * boardVO.displayCnt + state.index)}]]</td>
 									<td class="text-start">
-										<a th:href="@{/notice/detail(boardNum=${notice.boardNum})}" style="color: black;">
-										[[${notice.boardTitle}]]
+										<a th:href="@{/archive/detail(boardNum=${archive.boardNum})}" style="color: black;">
+										[[${archive.boardTitle}]]
 										</a>
-										<th:block th:if="${notice.replyCnt != 0}">
-											<span class="fs-6 text-secondary" th:text="'[' + ${notice.replyCnt} + ']'"></span>
+										<th:block th:if="${archive.replyCnt != 0}">
+											<span class="fs-6 text-secondary" th:text="'[' + ${archive.replyCnt} + ']'"></span>
 										</th:block>
 									</td>
 									<td>
-										<th:block th:if="${notice.fileCnt != 0}">
+										<th:block th:if="${archive.fileCnt != 0}">
 											<div class="dropdown">
 												<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>
 											  <ul class="dropdown-menu dropdown-menu-end">
-												  <th:block th:each="file : ${notice.boardFileList}">
+												  <th:block th:each="file : ${archive.boardFileList}">
 												    <li class="my-1">
-												    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
+												    	<a class="dropdown-item py-0" th:href="@{/archive/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
 												    </li>
 												  </th:block>
 											  </ul>
 											</div>
 										</th:block>
 									</td>
-									<td>[[${notice.ename}]]</td>
-									<td>[[${notice.boardDate}]]</td>
-									<td>[[${notice.boardView}]]</td>
+									<td>[[${archive.ename}]]</td>
+									<td>[[${archive.boardDate}]]</td>
+									<td>[[${archive.boardView}]]</td>
 								</tr>
 							</th:block>
 						</tbody>
@@ -154,7 +145,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<input type="button" class="btn float-end" th:onclick="|location.href='@{/notice/regNotice}'|" value="글쓰기">
+					<input type="button" class="btn float-end" th:onclick="|location.href='@{/archive/regArchive}'|" value="글쓰기">
 					<nav aria-label="Page navigation example">
 					  <ul class="pagination justify-content-center">
 					    <li class="page-item" th:classappend="${boardVO.prev} ? '' :  'disabled'">
@@ -191,7 +182,7 @@
 
 <!-- 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/notice/notice_list.js"></script>
+	<script type="text/javascript" src="/js/content/archive/archive_list.js"></script>
 </th:block>
 
 </html>

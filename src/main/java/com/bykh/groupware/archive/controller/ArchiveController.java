@@ -1,4 +1,4 @@
-package com.bykh.groupware.notice.controller;
+package com.bykh.groupware.archive.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bykh.groupware.archive.service.ArchiveService;
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardMenuVO;
@@ -28,19 +29,22 @@ import com.bykh.groupware.util.UploadUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 
-
-//공지사항 게시판
+//자료실 게시판
 @Controller
-@RequestMapping("/notice")
-public class NoticeController {
+@RequestMapping("/archive")
+public class ArchiveController {
+	@Resource(name = "archiveService")
+	private ArchiveService archiveService;
+	
 	@Resource(name = "noticeService")
 	private NoticeService noticeService;
 	
+	
 	//게시판 목록
 	@GetMapping("/list")
-	public String noticeList(Model model, BoardVO boardVO) {
+	public String archiveList(Model model, BoardVO boardVO) {
 		BoardMenuVO boardMenuVO = new BoardMenuVO();
-		boardMenuVO.setBoardMenuCode("BOARD_MENU_001");
+		boardMenuVO.setBoardMenuCode("BOARD_MENU_002");
 		
 		boardVO.setBoardMenuVO(boardMenuVO);
 		
@@ -51,18 +55,18 @@ public class NoticeController {
 		boardVO.setPageInfo();
 		
 		//전체 글 목록 조회
-		model.addAttribute("noticeList", noticeService.getBoardList(boardVO));
+		model.addAttribute("archiveList", noticeService.getBoardList(boardVO));
 		
 		//중요글 목록 조회
-		model.addAttribute("noticeImportantList", noticeService.getBoardImportantList(boardVO));
+		model.addAttribute("archiveImportantList", noticeService.getBoardImportantList(boardVO));
 		
-		return "content/notice/notice_list";
+		return "content/archive/archive_list";
 	}
 	
 	//글쓰기 페이지 이동
-	@GetMapping("/regNotice")
+	@GetMapping("/regArchive")
 	public String regForm(Model model, Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_001";
+		String boardMenuCode = "BOARD_MENU_002";
 		model.addAttribute("boardMenuCode", boardMenuCode);
 		
 		User user = (User) authentication.getPrincipal();
@@ -74,12 +78,12 @@ public class NoticeController {
 		
 		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(dataMap));
 		
-		return "content/notice/notice_form";
+		return "content/archive/archive_form";
 	}
 	
 	//글 신규 등록
-	@PostMapping("/regNotice")
-	public String regNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
+	@PostMapping("/regArchive")
+	public String regArchive(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
 		
@@ -96,14 +100,13 @@ public class NoticeController {
 			updateBoard(boardVO, deleteFileNum, files);			
 		}
 		
-		return "redirect:/notice/list";
+		return "redirect:/archive/list";
 	}
-	
-	
+
 	//글 임시 저장
 	@ResponseBody
-	@PostMapping("/tempRegNotice")
-	public BoardVO tempRegNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
+	@PostMapping("/tempRegArchive")
+	public BoardVO tempRegArchive(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
 		
@@ -126,7 +129,7 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping("/tempBoardList")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_001";
+		String boardMenuCode = "BOARD_MENU_002";
 		
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
@@ -154,38 +157,38 @@ public class NoticeController {
 	
 	//글 상세 조회
 	@GetMapping("/detail")
-	public String noticeDetail(BoardVO boardVO, Model model) {
+	public String archiveDetail(BoardVO boardVO, Model model) {
 		//상세 조회 + 조회수 증가 (글 + 첨부파일 + 댓글)
-		model.addAttribute("notice", noticeService.getBoardDetail(boardVO));
+		model.addAttribute("archive", noticeService.getBoardDetail(boardVO));
 		
-		return "content/notice/notice_detail";
+		return "content/archive/archive_detail";
 	}
 	
 	//글 삭제
 	@GetMapping("/delete")
-	public String deleteNotice(BoardVO boardVO) {
+	public String deleteArchive(BoardVO boardVO) {
 		noticeService.deleteBoard(boardVO);
 		
-		return "redirect:/notice/list";
+		return "redirect:/archive/list";
 	}
 	
 	//글 수정 페이지로 이동
 	@GetMapping("/update")
 	public String updateForm(BoardVO boardVO, Model model) {
-		model.addAttribute("notice", noticeService.getBoardDetailForUpdate(boardVO));
+		model.addAttribute("archive", noticeService.getBoardDetailForUpdate(boardVO));
 		
-		return "content/notice/notice_update";
+		return "content/archive/archive_update";
 	}
 	
 	//글 수정
 	@PostMapping("/update")
-	public String noticeUpdate(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
+	public String archiveUpdate(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files) {
 		
 		updateBoard(boardVO, deleteFileNum, files);
 		
-		return "redirect:/notice/detail?boardNum=" + boardVO.getBoardNum();
+		return "redirect:/archive/detail?boardNum=" + boardVO.getBoardNum();
 	}
-
+	
 	//첨부파일 다운로드
 	@GetMapping("/download")
 	public void fileDownload(String fileNum, HttpServletResponse response) {
@@ -212,8 +215,7 @@ public class NoticeController {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
+	}	
 	
 	
 	
@@ -279,9 +281,5 @@ public class NoticeController {
 		
 		return attachedBoardFileList;
 	}
-	
-	
-	
-	
-	
+
 }

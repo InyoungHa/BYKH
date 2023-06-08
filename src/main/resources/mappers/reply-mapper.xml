@@ -10,6 +10,7 @@
 		<result column="REPLY_DATE" 		property="replyDate"/>
 		<result column="BOARD_NUM" 			property="boardNum"/>
 		<result column="ENAME" 				property="ename"/>
+		<result column="ATTACHED_FILE_NAME" property="attachedFileName"/>
 	</resultMap>
 	
 	<!-- 다음으로 들어갈 댓글 번호 조회 -->
@@ -27,7 +28,7 @@
 			, BOARD_NUM
 		) VALUES (
 			#{replyNum}
-			, 20230517
+			, #{replyWriter}
 			, #{replyContent}
 			, #{boardNum}
 		)
@@ -36,9 +37,13 @@
 	<!-- 댓글 번호로 조회 -->
 	<select id="getReplyByReplyNum" resultMap="reply">
 		SELECT REPLY_NUM
+			, REPLY_WRITER
 			, ENAME
 			, REPLY_CONTENT
 			, TO_CHAR(REPLY_DATE, 'YYYY-MM-DD HH24:MI') REPLY_DATE
+			, (SELECT ATTACHED_FILE_NAME 
+		        FROM E_IMG 
+		        WHERE REPLY_WRITER = E_IMG.EMPNO) AS ATTACHED_FILE_NAME
 		FROM BOARD_REPLY, EMP
 		WHERE REPLY_NUM = #{replyNum}
 		AND REPLY_WRITER = EMPNO

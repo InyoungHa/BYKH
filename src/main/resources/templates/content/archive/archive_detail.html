@@ -17,9 +17,9 @@
 		
 			<div class="row mb-2">
 				<div class="col d-grid gap-1 d-md-flex justify-content-md-end">
-					<input type="button" class="btn me-md-1" th:onclick="|location.href='@{/notice/update(boardNum=${notice.boardNum})}'|"  value="수정">
-					<input type="button" class="btn me-md-1" th:onclick="deleteBoard([[${notice.boardNum}]]);" value="삭제">
-					<input type="button" class="btn" th:onclick="|location.href='@{/notice/list}'|" value="목록">
+					<input type="button" class="btn me-md-1" th:onclick="|location.href='@{/archive/update(boardNum=${archive.boardNum})}'|"  value="수정">
+					<input type="button" class="btn me-md-1" th:onclick="deleteBoard([[${archive.boardNum}]]);" value="삭제">
+					<input type="button" class="btn" th:onclick="|location.href='@{/archive/list}'|" value="목록">
 				</div>
 			</div>
 			<div class="row">
@@ -33,25 +33,25 @@
 						</colgroup>
 						<tr>
 							<td class="table-light">제목</td>
-							<td class="text-start">[[${notice.boardTitle}]]</td>
+							<td class="text-start">[[${archive.boardTitle}]]</td>
 							<td class="table-light">작성자</td>
-							<td>[[${notice.ename}]]</td>
+							<td>[[${archive.ename}]]</td>
 						</tr>
 						<tr>
 							<td class="table-light">작성일</td>
-							<td class="text-start">[[${notice.boardDate}]]</td>
+							<td class="text-start">[[${archive.boardDate}]]</td>
 							<td class="table-light">조회수</td>
-							<td>[[${notice.boardView}]]</td>
+							<td>[[${archive.boardView}]]</td>
 						</tr>
 						<tr>
 							<td class="table-light">첨부파일</td>
 							<td class="text-start" colspan="3">
-								<div th:if="${#lists.size(notice.boardFileList) == 0}" class="text-secondary">
+								<div th:if="${#lists.size(archive.boardFileList) == 0}" class="text-secondary">
 									첨부된 파일이 없습니다.
 								</div>
-								<div th:unless="${#lists.size(notice.boardFileList) == 0}"
-											th:each="file : ${notice.boardFileList}">
-									<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
+								<div th:unless="${#lists.size(archive.boardFileList) == 0}"
+											th:each="file : ${archive.boardFileList}">
+									<a th:href="@{/archive/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
 									[[${file.originFileName}]]
 									</a>
 									 ([[${file.fileSize}]])
@@ -60,32 +60,32 @@
 						</tr>
 						<tr>
 							<td colspan="4" class="text-start align-baseline">
-								<div style="min-height: 20rem">[[${notice.boardContent}]]</div>
+								<div style="min-height: 20rem">[[${archive.boardContent}]]</div>
 							</td>
 						</tr>
 						<tr class="table-group-divider">
 							<td class="table-light">이전글</td>
 							<td class="text-start" colspan="3">
-								<th:block th:if="${notice.boardPrevNum != 'BOARD_000'}">
-									<a th:href="@{/notice/detail(boardNum=${notice.boardPrevNum})}" style="color : black">
-									[[${notice.boardPrevTitle}]]
+								<th:block th:if="${archive.boardPrevNum != 'BOARD_000'}">
+									<a th:href="@{/archive/detail(boardNum=${archive.boardPrevNum})}" style="color : black">
+									[[${archive.boardPrevTitle}]]
 									</a>
 								</th:block>
-								<th:block th:unless="${notice.boardPrevNum != 'BOARD_000'}">
-									<div class="text-secondary">[[${notice.boardPrevTitle}]]</div>
+								<th:block th:unless="${archive.boardPrevNum != 'BOARD_000'}">
+									<div class="text-secondary">[[${archive.boardPrevTitle}]]</div>
 								</th:block>
 							</td>
 						</tr>
 						<tr>
 							<td class="table-light">다음글</td>
 							<td class="text-start" colspan="3">
-								<th:block th:if="${notice.boardNextNum != 'BOARD_000'}">
-									<a th:if="${boardNextNum} != 'BOARD_000'" th:href="@{/notice/detail(boardNum=${notice.boardNextNum})}" style="color : black">
-									[[${notice.boardNextTitle}]]
+								<th:block th:if="${archive.boardNextNum != 'BOARD_000'}">
+									<a th:if="${boardNextNum} != 'BOARD_000'" th:href="@{/archive/detail(boardNum=${archive.boardNextNum})}" style="color : black">
+									[[${archive.boardNextTitle}]]
 									</a>
 								</th:block>
-								<th:block th:unless="${notice.boardNextNum != 'BOARD_000'}">
-									<div class="text-secondary">[[${notice.boardNextTitle}]]</div>
+								<th:block th:unless="${archive.boardNextNum != 'BOARD_000'}">
+									<div class="text-secondary">[[${archive.boardNextTitle}]]</div>
 								</th:block>
 							</td>
 						</tr>
@@ -96,7 +96,7 @@
 			
 			<div class="row">
 				<div class="col-12 mb-1">
-					<span id="replyCntSpan">[[${notice.replyCnt}]]</span>개의 댓글
+					<span id="replyCntSpan">[[${archive.replyCnt}]]</span>개의 댓글
 				</div>
 				<div class="col-12">
 					<table class="table table-borderless border-top border-bottom" id="replyTable">
@@ -105,15 +105,15 @@
 							<col width="*">
 						</colgroup>
 
-						<th:block th:if="${#lists.size(notice.replyList) == 0}">
+						<th:block th:if="${#lists.size(archive.replyList) == 0}">
 							<tr class="border-top" id="noReplyTr">
 								<td class="text-secondary text-center align-middle" colspan="2" height="120px">
 									등록된 댓글이 없습니다.
 								</td>
 							</tr>
 						</th:block>
-						<th:block th:if="${#lists.size(notice.replyList) != 0}"
-									th:each="reply : ${notice.replyList}">
+						<th:block th:if="${#lists.size(archive.replyList) != 0}"
+									th:each="reply : ${archive.replyList}">
 							<tr class="border-top">
 								<td class="text-center">
 									<img th:src="${reply.attachedFileName} ? @{/upload/empImg/} + ${reply.attachedFileName} : @{/upload/empImg/default.png}" 
@@ -137,7 +137,7 @@
 							<td colspan="2">
 								<div class="input-group">
 									<textarea class="form-control" rows="5px" style="resize: none" id="replyTextarea"></textarea>
-									<input type="button" class="btn" th:onclick="regReply([[${notice.boardNum}]]);" value="등록">
+									<input type="button" class="btn" th:onclick="regReply([[${archive.boardNum}]]);" value="등록">
 								</div>
 							</td>
 						</tr>
@@ -161,7 +161,7 @@
 
 <!-- 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/notice/notice_detail.js"></script>
+	<script type="text/javascript" src="/js/content/archive/archive_detail.js"></script>
 </th:block>
 
 </html>
