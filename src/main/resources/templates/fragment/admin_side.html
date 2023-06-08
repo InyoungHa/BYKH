@@ -191,7 +191,7 @@ li:last-child {
                 </div>
                 
                 <div class="nav__list">
-                    <a th:href="@{/admin/main}" class="nav__link active">
+                    <a th:href="@{/user/main}" class="nav__link active">
                         <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                         <span class="nav_name" >메인화면</span>
                     </a>
@@ -238,8 +238,8 @@ li:last-child {
 						<div class="collapse" id="collapseExample2">
 	   						<ul>
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
-			    				<li class="nav-item"><a  aria-current="page" href="#">사원관리</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">부서관리</a></li>
+			    				<li class="nav-item"><a  aria-current="page" th:href="@{/emp/empManage}">사원관리</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/dept/deptManage}">부서관리</a></li>
 			    				<li class="nav-item"><a aria-current="page" href="#">조직도</a></li>
 	 						</ul>
 						</div>             	

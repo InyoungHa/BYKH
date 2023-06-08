@@ -23,6 +23,7 @@
 		
 		<result column="E_ACCOUNT_STR" 				property="eAccountStr"/>
 		<result column="E_STATUS_STR" 				property="eStatusStr"/>
+		<result column="SELECTED_E_STATUS" 				property="selectedEStatus"/>
 		
 		
 		<!-- 테스트용 임시 추가 - 희수 -->
@@ -48,6 +49,7 @@
 		SELECT EMPNO
 			, EPW
 			, E_ROLE
+			, ENAME
 		FROM EMP
 		WHERE EMPNO = #{empno}
 	</select>
@@ -83,6 +85,8 @@
 			, E_JOB
 			, EMP.DEPTNO
 			, LOC		
+			, E_STATUS
+			, E_ACCOUNT
 			, DECODE(E_STATUS, 1, '재직중', 2,'휴직', 3,'퇴직') AS E_STATUS_STR
 			, DECODE(E_ACCOUNT, 1, '정상', 2,'휴면') AS E_ACCOUNT_STR	
 			, DECODE(E_ROLE, 'USER', '직원', 'ADMIN','관리자','SUPER_ADMIN','책임 관리자') AS E_ROLE
@@ -119,12 +123,13 @@
 			, E_EMAIL
 			, PHONE_TEL
 			, OFFICE_TEL
-			,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME
 			,(SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
+			, E_STATUS
 		FROM EMP EMP, DEPT DEPT
 		WHERE EMP.DEPTNO = DEPT.DEPTNO
 		AND EMPNO = #{empno}		
 	</select>
+	<!--  		,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME-->
 
 	
 	<!-- 사원 이미지 넣기  -->
@@ -151,7 +156,29 @@
 			E_JOB =#{eJob},
 			E_EMAIL =#{eEmail},
 			OFFICE_TEL =#{officeTel},
-			PHONE_TEL =#{phoneTel}
+			PHONE_TEL =#{phoneTel},
+			E_STATUS = 
+				CASE
+			        WHEN #{eStatus} = 1 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 2 THEN 2
+			                WHEN #{selectedEStatus} = 3 THEN 3
+			                ELSE 1
+			            END
+			        WHEN #{eStatus} = 2 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 1 THEN 1
+			                WHEN #{selectedEStatus} = 3 THEN 3
+			                ELSE 2
+			            END
+			        WHEN #{eStatus} = 3 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 1 THEN 1
+			                WHEN #{selectedEStatus} = 2 THEN 2
+			                ELSE 3
+			            END
+			        ELSE #{eStatus}
+			    END
 		WHERE EMPNO = #{empno}			
 	</update>
 	
@@ -160,13 +187,21 @@
 	<!--계정 상태 변경  -->
 	<!--재직상태를 휴직으로 바꾸면 계정상태는 휴면, 계정관리 버튼은 복구 버튼으로 바뀜
 		재직상태를 퇴사로 바꾸면 계정관리 버튼에 삭제 버튼으로 바뀜-->
-<!-- 	<update id="">
+ 	<update id="updateE_Account">
 		UPDATE EMP
-		SET E_STATUS =(
+		SET E_STATUS =#{eStatus}+1,
+			E_ACCOUNT=#{eAccount}+1
+		WHERE E_STATUS = #{eStatus}
+		AND E_ACCOUNT = #{eAccount}	
+		AND EMPNO = #{empno}	
+	</update>
 	
-	</update> -->
-	
-	
+<!-- 	사원 삭제  
+	<delete id="delteEmp">
+		DELETE EMP
+		WHRE EMPNO =#{empno}	
+	</delete>
+	 -->
 	
 	
 

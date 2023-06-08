@@ -123,28 +123,28 @@ function getEmpDetail(empno){
 	//자료형 int로 변경
 	const empNum = parseInt(empno);
 	
-$.ajax({
-	url: '/emp/getEmpDetailAjax', //요청경로
-	type: 'post',
-	async: true, // 동기 방식으로 설정
-	//contentType: 'application/json; charset=UTF-8', //Json 타입
-	contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
-	data: {'empno':empNum}, //필요한 데이터
-	success: function(result) {
-		//모달 태그 선택
-		const modal_tag = document.querySelector('#empDetailModal');
-		console.log(result);
-		//모달 내용 그리기
-		drawEmpDatail(result);
-
-		//bootstrap 모달 불러오기
-		const modal = new bootstrap.Modal(modal_tag);
-		modal.show();
-	},
-	error: function() {
-		alert('실패');
-	}
-});
+	$.ajax({
+		url: '/emp/getEmpDetailAjax', //요청경로
+		type: 'post',
+		async: true, // 동기 방식으로 설정
+		//contentType: 'application/json; charset=UTF-8', //Json 타입
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: {'empno':empNum}, //필요한 데이터
+		success: function(result) {
+			//모달 태그 선택
+			const modal_tag = document.querySelector('#empDetailModal');
+			//console.log(result);
+			//모달 내용 그리기
+			drawEmpDatail(result);
+	
+			//bootstrap 모달 불러오기
+			const modal = new bootstrap.Modal(modal_tag);
+			modal.show();
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
 }
 
 //모달 사원 상세정보 그리기
@@ -152,6 +152,8 @@ function drawEmpDatail(data){
 	
 	const modal_body=document.querySelector('.modal-body');
 	modal_body.replaceChildren();
+	
+	console.log(data['empDetail']);
 	
 	//직급
 	const options = ['사장', '과장', '대리', '주임', '사원'];
@@ -161,29 +163,29 @@ function drawEmpDatail(data){
 	
 	str += `<label class="page_title">사원 개인 페이지</label>`;
 	str += `<form class="row" action="/emp/regEmpDetail" method="post" id="regEmpDetail" >`;
-	str += 	`<div class="col-6 mb-3">`;
+	str += 	`<div class="col-6 ">`;
 	str += 		`<div class="row">`;
-	str += 			`<div class="col card" style="width: 18rem;">`;
+	str += 			`<div class="col card text-center" style="max-width: 35rem;">`;
 	str += 				`<img src="${data['empDetail'].eimgVO.attached_file_name ? '/upload/empImg/' + data['empDetail'].eimgVO.attached_file_name : '/upload/empImg/default.png'}"
-							style="width: 12rem;" id="empImgPreview" class="card-img-top">`;
+							style="width: 18rem; display: block;  margin: 0 auto;" id="empImgPreview" class="card-img-top">`;
 	str += 				`<input type="file" class="form-control" id="empImgInput">`;	
 	str += 			`<div class="card-body">`;
-	str += 				`<p class="card-text">${data.empDetail.ename} </p>`;
+	str += 				`<h4 class="card-title">${data.empDetail.ename} </h4>`;
 	str += 				`<p class="card-text">${data.empDetail.deptVO.dename +'(' +data.empDetail.deptVO.loc+')'}</p>`;
 	str += 			`</div>`;
 	str += 			`</div>`;
 	str += 		`</div>`;
 	str += 	`</div>`;
 	str +=	`<div class="col-6">`;
-	str += 		`<div class="row g-3>`;
-	str += 			`<div class="colcard" style="width: 30rem;">`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col card mb-3" style="max-width: 28rem;">`;
 	str += 			`<ul class="list-group list-group-flush">`;
 	str += 			`<li class="list-group-item">기본 정보</li>`;		
-	str += 			'<table>';
+	str += 			'<table style="margin-bottom:1rem;">';
 	str += 				'<tr>';
 	str += 					'<td>이름</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" value="${data['empDetail'].ename}" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control form-control-sm">`;
+	str += 						`<input type="text" value="${data['empDetail'].ename}" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
@@ -200,10 +202,10 @@ function drawEmpDatail(data){
 	str += 			`</ul>`;
 	str += 			`</div>`;
 	str += 		`<div class="row">`;
-	str += 			`<div class="col card" style="width: 25rem;">`;
+	str += 			`<div class="col card mb-3" style="max-width: 28rem;"">`;
 	str += 			`<ul class="list-group list-group-flush">`;
 	str += 			`<li class="list-group-item">인사 정보</li>`;		
-	str += 			'<table>';
+	str += 			'<table style="margin-bottom:1rem;">';
 	str += 				'<tr>';
 	str += 					'<td>부서</td>';
 	str += 					`<td>`;
@@ -221,38 +223,49 @@ function drawEmpDatail(data){
 	str += 				'<tr>';
 	str += 					'<td>직급</td>';
 	str += 					`<td>`;
-	str += 						`<select id="eJob" name="eJob" class="form-control">`;
+	str += 						`<select id="eJob" class="form-control">`;
 				
 	options.forEach(option => {
   if (option !== selectedValue) {
-    str += `<option value="${option}">${option}</option>`;
+    str += 							`<option value="${option}">${option}</option>`;
 		}
 	});
 
-	str += `<option value="${selectedValue}" selected>${selectedValue}</option>`;
-
+	str += 							`<option value="${selectedValue}" selected>${selectedValue}</option>`;
+	str += 						'</select>';
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>입사일</td>';
-	str += 					`<td> ${data.empDetail.joinDate} </td>`;
+	str += 					`<td>${data.empDetail.joinDate}</td>`;
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>재직상태</td>';
+	str += 					`<input type="hidden" id="eStatus" value="${data['empDetail'].e_status}">`;
+	str += 					'<td>';
+	str += 						'<select id="selectedEStatus" class="form-control">';
+	str += 							`<option value="1" ${data['empDetail'].e_status == 1 ? 'selected' :''}>재직중</option>`;
+	str += 							`<option value="2" ${data['empDetail'].e_status == 2 ? 'selected' : ''}>휴직</option>`;
+	str += 							`<option value="3" ${data['empDetail'].e_status == 3 ? 'selected' :''}>퇴사</option>`;
+	str += 						'</select>';
+	str += 					'<td>';
 	str += 				'</tr>';
 	str += 			'</table>';	
 	str += 			`</ul>`;
 	str += 		`</div>`;
-	str += 		`<div class="row g-3">`;
-	str += 			`<div class="col card" style="width: 25rem;">`;
+	str += 		`<div class="row">`;
+	str += 			`<div class="col card mb-3" style="max-width: 28rem;">`;
 	str += 			`<ul class="list-group list-group-flush">`;
 	str += 			`<li class="list-group-item">연락처 정보</li>`;		
-	str += 			'<table>';
+	str += 			'<table style="margin-bottom:1rem;">';
 	str += 				'<tr>';
 	str += 					'<td>이메일</td>';
-	str += 					`<td id="eEmail" name="eEmail">${data.empDetail.empno}@bykh.com</td>`;
+	str += 					`<td id="eEmail">${data.empDetail.empno}@bykh.com</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>내선번호</td>';
 	str += 					`<td>`;
-
+	
 	if(data.empDetail.office_tel==undefined){	
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
@@ -291,6 +304,7 @@ function drawEmpDatail(data){
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
+	
 	str += 					'<td>휴대전화</td>';
 	str += 					`<td>`;	
 	if(data.empDetail.phone_tel==undefined){				
@@ -317,8 +331,7 @@ function drawEmpDatail(data){
 		
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
-		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;
-		
+		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;		
 		str += 							`<option value="010" ${phoneTelPrefix ==="010"? "selected":""}>010</option>`;
 		str += 							`<option value="011" ${phoneTelPrefix ==="011"? "selected":""}>011</option>`;
 		str += 							`<option value="012" ${phoneTelPrefix ==="012"? "selected":""}>012</option>`;
@@ -332,11 +345,11 @@ function drawEmpDatail(data){
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 			'</table>';	
-	str += 			`</ul>`;
 	str += 			`<div style="color: black; font-size: 0.8rem; text-align:center;">전화번호는 숫자만 입력해주세요(-없이)</div>`;
+	str += 			`</ul>`;
 	str += 		`</div>`;
 	str += 	`</div>`;
-	str += 		`<div class="row g-3">`;
+	str += 		`<div class="row g-2">`;
 	str += 			`<div class="col d-grid gap-2 d-md-flex justify-content-md-end">`;
 	str += 				`<input type="button" value="저장" onclick="regEmpDetail()" class="btn">`;
 	str += 				`<input type="button" value="취소" onclick="revoke_modal()" class="btn">`;
@@ -464,26 +477,28 @@ function regEmpDetail() {
 		return;
 	}	
 	
-	const empno = document.querySelector('#empno').textContent;
-	console.log(empno);
-	const ename = document.querySelector('#empDetailModal input[name="ename"]').value;
+	const empno = document.querySelector('#empno').textContent; //사번
+	const ename = document.querySelector('#empDetailModal input[name="ename"]').value; //이름
 	
-	const deptno= document.querySelector('#deptno').value;
-	
-	console.log(deptno);
-	
-	const eJob = document.querySelector('#eJob').value;
-	const eEmail = document.querySelector('#eEmail').textContent;
+	const deptno= document.querySelector('#deptno').value; //부서번호
 	
 	
-	const office_select = document.querySelector('#officeTel').value;
+	const eJob = document.querySelector('#eJob').value; //직책
+	const eEmail = document.querySelector('#eEmail').textContent; //이메일
+	
+	
+	const office_select = document.querySelector('#officeTel').value; //사무실번호
 	const office_input = document.querySelector('#officeTelInput').value;
 	const officeTel = office_select + office_input;
 
-	const phone_select = document.querySelector('#phoneTel').value;
+	const phone_select = document.querySelector('#phoneTel').value; //휴대전화번호
 	const phone_input = document.querySelector('#phoneTelInput').value;
 	const phoneTel = phone_select + phone_input;
-
+	
+	const eStatus = document.querySelector('#eStatus').value;
+	const selectedEStatus = document.querySelector('#selectedEStatus').value; //재직 상태
+	console.log(eStatus);
+	console.log(selectedEStatus);
 
 	regDetail={
 		'empno' : empno,		
@@ -492,8 +507,10 @@ function regEmpDetail() {
 		'eEmail' : eEmail,
 		'eJob' : eJob,
 		'officeTel':officeTel,
-		'phoneTel': phoneTel
-		
+		'phoneTel': phoneTel,
+		'eStatus':eStatus,	
+		'selectedEStatus':selectedEStatus	
+			
 	}	
 	
 	
@@ -521,9 +538,6 @@ function regEmpDetail() {
 	    processData: false,
 	    contentType: false,
 		async: true, // 동기 방식으로 설정
-		//contentType: 'application/json; charset=UTF-8', //Json 타입
-		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
-		//data: JSON.stringify(regDetail), //필요한 데이터
 		success: function(result) {
 			alert('사원 세부 정보 등록 완료입니다.');
 			location.reload();
@@ -541,33 +555,90 @@ function revoke_modal(){
 	location.reload();
 }
 
-/*
-//사원 상세정보 등록 + 사진
-function regEmpDetail(){
-	
-	//유효성 검사 진행
-	const isValidate = reg_empDetail_validate();
-	
-	if(!isValidate){
-		return;
-	}	
-	
-	const enameValue = document.querySelector('#empDetailModal input[name="ename"]').value;
-
-	  // 가져온 값 출력
-	  console.log(enameValue);
-	  
-	document.querySelector('#regEmpDetail').submit();	
-	
-}
-
-*/
 
 //계정 상태 변경
 // 변경을 누르면 휴먼 계정으로 변경, 사원 세부 정보에서 퇴직일때는 삭제 버튼으로 변경 가능
 // 휴먼 계정으로 바뀌면 계정은 휴직으로 변경된다...?
 function changAccount(empno){
+
+	const change_e_account_modal = document.querySelector('#changeEAccountModal');
+
+	const eStatus=document.querySelector('#eStatus').value;
+	const eAccount=document.querySelector('#eAccount').value;
+
+
+	drawAccountModal(empno, eStatus, eAccount);
+
+	
+	//bootstrap 모달 불러오기
+	const modal = new bootstrap.Modal(change_e_account_modal);
+	modal.show();
+	
+
+	
+} 
+
+function drawAccountModal(empno, eStatus, eAccount){
+	console.log(empno);
+	console.log(eStatus);
+	console.log(eAccount);
+	
+	const modal_body_tag=document.querySelector('#changeEAccountModal .modal-body');
+	modal_body_tag.replaceChildren();
+	
+		
+	let str ='';
+	
+	str += '<label class="page_title">계정 상태 변경</label>';
+	str += 	'<div class="row">';
+	str += 		'<div class="col">';
+	str += 			'<form id=changeEAccountForm>';
+	str += 			'<table>';
+	str += 				'<tr>';
+	str += 					'<td>재직 상태</td>';
+	str += 					'<td>';
+	str += 						'<select id="eStatus">';
+	str += 							`<option value="1" ${eStatus== 1 ? 'selected':''}>재직중</option>`;
+	str += 							`<option value="2" ${eStatus== 2 ? 'selected':''}>휴직</option>`;
+	str += 							`<option value="3" ${eStatus== 3 ? 'selected':''}>퇴직</option>`;
+	str += 						'</select>';
+	str += 					'</td>';
+	str += 				'</tr>';
+	str += 				'<tr>';
+	str += 					'<td>계정 상태</td>';
+	str += 					'<td>';
+	str += 						'<select id="eAccount">';
+	str += 							`<option value="1" ${eAccount== 1 ? 'selected':''}>정상</option>`;
+	str += 							`<option value="2" ${eAccount== 2 ? 'selected':''}>휴면</option>`;
+	str += 						'</select>';
+	str += 					'</td>';
+	str += 				'</tr>';
+	str += 			'</table>';
+	str += 			'<input type="button" class="btn" value="변경">';
+	str += 			'</form>';
+	str += 		'</div>';
+	str += 	'</div>';
+	
+	modal_body_tag.insertAdjacentHTML('beforebegin', str);
 	
 }
 
+/*	
+	$.ajax({
+		url: '/emp/updateAccountAjax', //요청경로
+		type: 'post',
+		async: true, // 동기 방식으로 설정
+		//contentType: 'application/json; charset=UTF-8', //Json 타입
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: { 'empno': empno,
+				'eStatus':eStatus,
+				'eAccount':eAccount}, //필요한 데이터
+		success: function(result) {
+			location.reload()
+		},
+		error: function() {
+			alert('실패');
+		}
+	});*/
+	
 

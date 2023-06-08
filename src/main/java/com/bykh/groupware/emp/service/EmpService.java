@@ -28,5 +28,11 @@ public interface EmpService {
 	
 	//사원 상세 정보 수정
 	void updateEmpDetail(EmpVO empVO);
+	
+	//계정 상태 변경
+	void updateE_Account(EmpVO empVO);
+	
+	//사원 삭제
+	void deleteEmp(int empno);
 
 }

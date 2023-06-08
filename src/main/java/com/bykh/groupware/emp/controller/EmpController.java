@@ -12,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -82,7 +81,7 @@ public class EmpController {
 	@PostMapping("/getEmpDetailAjax")
 	public Map<String, Object> getEmpDetailAjax(int empno) {
 		
-		//System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
+		System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -104,12 +103,6 @@ public class EmpController {
 	public void regEmpImgAjax(EmpVO empVO, MultipartFile empImg) {
 		System.out.println(empVO);
 		
-		//ajax로 파일 데이터 보낼 때는 originFileName만 들고 오면 안 되고 파일 데이터 자체를 받아와야 하는데
-		//그게 json이랑 map 객체로 하기 어려워서ㅠㅠ 
-		//자바스크립트에서 ajax로 formData 객체 보내고 컨트롤러에서 VO로 받는 걸로 바꿨어요
-		//하다 보니까 좀 많이 바뀐 것 같아서 ㅠㅠ
-		//일단 최대한 원래 코드 살리는 쪽으로 바꿔봤어요
-		
 		//사진 업로드
 		if(empImg != null) {
 			//사진 업로드하고 객체 반환함
@@ -126,8 +119,7 @@ public class EmpController {
 		}
 		
 		
-		//사원 상세 정보 업데이트
-		
+		//사원 상세 정보 업데이트		
 		// 사무실 전화번호
 		String officeTel = (String)empVO.getOfficeTel();
 		
@@ -158,57 +150,24 @@ public class EmpController {
 			empVO.setPhoneTel(phoneTel);
 		}
 		
-		System.out.println(empVO);
+		//재직 상태
+		
+		
 		empService.updateEmpDetail(empVO);
-		
-		
-//		//사진 데이터 insert
-//		int empno=Integer.parseInt(regDetail.get("empno").toString()); //empno
-//		
-//		String originFileName=(String)regDetail.get("originFileName"); //origin
-//		String attachedFileName=(String)regDetail.get("originFileName"); //origin
-//		
-//		if(originFileName !=null && !originFileName.isEmpty()) {
-//			EImgVO eImgVO = UploadUtil.uploadFile(empImg);			
-//			eImgVO.setEmpno(empno);		
-//			eImgVO.setOriginFileName(originFileName);
-//			eImgVO.setAttachedFileName(eImgVO.getAttachedFileName());
-//			//eImgVO.setAttachedFileName(attachedFileName);
-//			empService.insertEmpImg(eImgVO);			
-//		}	
-//		
-//		//사무실 전화번호 
-//		String officeTel=(String) regDetail.get("officeTel");
-//		
-//		if(officeTel != null && !officeTel.isEmpty()) {
-//			officeTel = officeTel.replaceAll("[\\s-]", "");
-//			
-//			  if (officeTel.length() == 10) {				  
-//		            
-//		            officeTel = officeTel.substring(0, 2) + "-" +
-//		                        officeTel.substring(2, 6) + "-" +
-//		                        officeTel.substring(6);
-//		        } else if (officeTel.length() == 11) {
-//		            
-//		            officeTel = officeTel.substring(0, 3) + "-" +
-//		                        officeTel.substring(3, 7) + "-" +
-//		                        officeTel.substring(7);
-//		        }
-//			  
-//			 regDetail.put("officeTel",officeTel);
-//		}
-//		
-//		//휴대전화번호
-//		String phoneTel = (String)regDetail.get("phoneTel");
-//		
-//		if(phoneTel != null && !phoneTel.isEmpty()) {
-//			phoneTel = phoneTel.substring(0,3) + "-" + phoneTel.substring(3, 7) + "-" + phoneTel.substring(7);
-//			regDetail.put("phoneTel",phoneTel);
-//		}
-//		
-//		empService.updateEmpDetail(regDetail); 
 	}
 	
-	
+	@ResponseBody //재직 상태에 따른 계정 상태 변경
+	@PostMapping("/updateAccountAjax")
+	public void updateAccountAjax(int empno, int eStatus, int eAccount, EmpVO empVO) {
+		System.out.println("!!!!!!!!!!!!!"+empVO);
+		System.out.println("!!!!!!!!!!!!!"+empno);
+		System.out.println("!!!!!!!!!!!!!"+eStatus);
+		System.out.println("!!!!!!!!!!!!!"+eAccount);
+		
+		empVO.setEmpno(empno);
+		empVO.setEStatus(eStatus);
+		empVO.setEAccount(eAccount);
+		empService.updateE_Account(empVO);
+	}
 }
 
