@@ -99,7 +99,7 @@ function tempRegNotice() {
 						const deleteFileNumStr = `<input type="hidden" name="deleteFileNum" value="${tempBoard.boardFileList[index].fileNum}">`;
 						hiddenDiv.insertAdjacentHTML('beforeend', deleteFileNumStr);
 						
-						//data-file-num 속성 삭제 (안해도 상관 없지만..)
+						//data-file-num 속성 삭제
 						fileInput.removeAttribute('data-file-num');
 						
 						//파일 태그 삭제 버튼 onclick에 deleteFileNum 추가

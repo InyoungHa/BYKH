@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+   layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+	<!--<link rel="stylesheet" href=""> -->
+</th:block>
+
+<th:block layout:fragment="content">
+	<div class="row">
+		<label class="page_title">사원 개인 페이지</label>
+		<form class="row" th:action="@{/emp/regEmpDetail}" th:method="post" id="regEmpDetail">
+		<div class="col-6">
+			<div class="row">
+				<div class="col card text-center" style="max-width: 35rem;">;
+					<img src="${data['empDetail'].eimgVO.attached_file_name ? '/upload/empImg/' + data['empDetail'].eimgVO.attached_file_name : '/upload/empImg/default.png'}"
+							style="width: 18rem; display: block;  margin: 0 auto;" id="empImgPreview" class="card-img-top">
+	 			<input type="file" class="form-control" id="empImgInput">
+				<div class="card-body">;
+					<h4 class="card-title">${data.empDetail.ename} </h4>
+					<p class="card-text">${data.empDetail.deptVO.dename +'(' +data.empDetail.deptVO.loc+')'}</p>
+				</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="row">
+				<div class="col card mb-3" style="max-width: 28rem;">
+					<ul class="list-group list-group-flush">
+					<li class="list-group-item">기본 정보</li>		
+					<table style="margin-bottom:1rem;">
+						<tr>
+							<td>이름</td>
+							<td>
+								<input type="text" value="${data['empDetail'].ename}" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control">;
+							</td>
+						</tr>
+						<tr>
+							<td>사번</td>
+							<td>
+								<div id="empno">${data.empDetail.empno}</div>
+								</td>
+						</tr>
+						<tr>
+							<td>아이디</td>
+							<td> ${data.empDetail.empno} </td>
+						</tr>
+				</table>
+				</ul>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col card mb-3" style="max-width: 28rem;">
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item">인사 정보</li>	
+				<table style="margin-bottom:1rem;">
+					<tr>
+						<td>부서</td>
+						<td>
+							<select id="deptno" class="form-control">
+								<option value="${dept.deptno}" ${isSelected}>${dept.dename}(${dept.loc})</option>
+ 							</select>
+ 						</td>
+ 					</tr>
+ 					<tr>
+ 						<td>직급</td>
+ 						<td>
+ 							<select id="eJob" class="form-control">
+   								<option value="${option}">${option}</option>
+   							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>입사일</td>
+						<td>${data.empDetail.joinDate}</td>
+					</tr>
+				</table>
+				</ul>
+				</div>			
+			</div>
+			<div class="row">
+				<div class="col card mb-3" style="max-width: 28rem;">
+				<ul class="list-group list-group-flush">
+				<li class="list-group-item">연락처 정보</li>
+					<table style="margin-bottom:1rem;">
+						<tr>
+							<td>이메일</td>
+							<td id="eEmail">${data.empDetail.empno}@bykh.com</td>
+						</tr>
+						<tr>
+							<td>내선번호</td>
+							<td>
+								<div class="row">
+									<div class="col-3">
+										<select id="officeTel" class="form-control form-control-sm">
+											<option value="02">02(서울)</option>
+											<option value="032">032(인천)</option>
+											<option value="051">051(부산)</option>
+											<option value="061">061(여수)</option>
+										</select>
+									</div>
+									<div class="col-auto">
+										<input type="number" id="officeTelInput" oninput="reg_empDetail_validate();" value="" min="0" class="form-control form-control-sm">
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>휴대전화</td>
+							<td>	
+								<div class="row">
+									<div class="col-3">';
+										<select id="phoneTel" class="form-control form-control-sm">
+											<option value="010">010</option>
+											<option value="011">011</option>
+											<option value="012">012</option>
+										</select>
+									</div>
+									<div class="col-auto">
+										<input type="number" id="phoneTelInput" oninput="reg_empDetail_validate();" value="" min="0" class="form-control form-control-sm">
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+						<div style="color: black; font-size: 0.8rem; text-align:center;">전화번호는 숫자만 입력해주세요(-없이)</div>
+				</ul>
+				</div>
+			</div>
+		<div class="row g-2">
+			<div class="col d-grid gap-2 d-md-flex justify-content-md-end">
+				<input type="button" value="저장" onclick="regEmpDetail()" class="btn">
+				<input type="button" value="취소" onclick="revoke_modal()" class="btn">
+			</div>
+		</div>
+		</form>
+	</div>
+	</div>
+</th:block>
+
+<th:block layout:fragment="content_js">
+	<!--연결해야하는 외부 js  -->
+	<!--<script type="text/javascript" src=""></script> -->
+</th:block>
+
+</html>

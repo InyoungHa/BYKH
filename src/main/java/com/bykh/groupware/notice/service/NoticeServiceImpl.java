@@ -3,6 +3,7 @@ package com.bykh.groupware.notice.service;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,15 @@ public class NoticeServiceImpl implements NoticeService {
 	
 	//공지 게시판 목록 조회
 	@Override
-	public List<BoardVO> getNoticeList(BoardVO boardVO) {
-		return sqlSession.selectList("boardMapper.getNoticeList", boardVO);
+	public List<BoardVO> getBoardList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getBoardList", boardVO);
 	}
 	
 	
 	//공지 게시판 중요글 목록 조회
 	@Override
-	public List<BoardVO> getNoticeImportantList() {
-		return sqlSession.selectList("boardMapper.getNoticeImportantList");
+	public List<BoardVO> getBoardImportantList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getBoardImportantList", boardVO);
 	}
 	
 	
@@ -58,9 +59,9 @@ public class NoticeServiceImpl implements NoticeService {
 	//글 등록
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void regNotice(BoardVO boardVO) {
+	public void regBoard(BoardVO boardVO) {
 		//글 등록
-		sqlSession.insert("boardMapper.regNotice", boardVO);
+		sqlSession.insert("boardMapper.regBoard", boardVO);
 		
 		//첨부파일 등록
 		if(boardVO.getBoardFileList() != null) {
@@ -72,20 +73,20 @@ public class NoticeServiceImpl implements NoticeService {
 	//공지글 상세 조회 (조회수 증가 + 조회)
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public BoardVO getNoticeDetail(BoardVO boardVO) {
+	public BoardVO getBoardDetail(BoardVO boardVO) {
 		//조회수 증가
 		sqlSession.update("boardMapper.updateBoardView", boardVO);
 		
 		//글 상세 조회 정보 반환
-		return getBoardDetail(boardVO);
+		return getSelectedBoardDetail(boardVO);
 	}
 
 	
 	//글 수정을 위한 상세 조회(조회수 빼고)
 	@Override
-	public BoardVO getNoticeDetailForUpdate(BoardVO boardVO) {
+	public BoardVO getBoardDetailForUpdate(BoardVO boardVO) {
 		//글 상세 조회 정보 반환
-		return getBoardDetail(boardVO);
+		return getSelectedBoardDetail(boardVO);
 	}
 	
 	//글 삭제
@@ -134,15 +135,15 @@ public class NoticeServiceImpl implements NoticeService {
 
 	//사번으로 임시저장글 조회
 	@Override
-	public List<BoardVO> getTempBoardListByEmpno(int empno) {
-		return sqlSession.selectList("boardMapper.getTempBoardListByEmpno", empno);
+	public List<BoardVO> getTempBoardListByEmpno(Map<String, Object> dataMap) {
+		return sqlSession.selectList("boardMapper.getTempBoardListByEmpno", dataMap);
 	}
 
 	
 	//사번으로 임시저장글 개수 조회
 	@Override
-	public int getTempBoardCntByEmpno(int empno) {
-		return sqlSession.selectOne("boardMapper.getTempBoardCntByEmpno", empno);
+	public int getTempBoardCntByEmpno(Map<String, Object> dataMap) {
+		return sqlSession.selectOne("boardMapper.getTempBoardCntByEmpno", dataMap);
 	}
 	
 
@@ -167,7 +168,7 @@ public class NoticeServiceImpl implements NoticeService {
 	
 	
 	//글 상세 조회 메소드
-	public BoardVO getBoardDetail(BoardVO boardVO) {
+	public BoardVO getSelectedBoardDetail(BoardVO boardVO) {
 		//첨부파일 조회
 		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
 		
@@ -175,7 +176,7 @@ public class NoticeServiceImpl implements NoticeService {
 		List<ReplyVO> replyList = sqlSession.selectList("boardMapper.getReplyList", boardVO);
 		
 		//상세 조회하는 글
-		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getNoticeDetail", boardVO);
+		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getBoardDetail", boardVO);
 		
 		//첨부파일 변수에 담아줌
 		selectedBoard.setBoardFileList(selectedFileList);

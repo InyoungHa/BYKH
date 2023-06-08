@@ -7,4 +7,6 @@ public class ConstVariable {
 	//첨부파일 경로
 	public static final String UPLOAD_PATH ="C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.15.1.RELEASE\\BYKH\\src\\main\\resources\\static\\upload\\empImg\\";
 	
+	//이미지 테스트 경로
+	public static final String TEST_PATH = "C:\\dev\\workspaceSTS\\BYKH\\src\\main\\resources\\static\\upload\\empImg\\";
 }

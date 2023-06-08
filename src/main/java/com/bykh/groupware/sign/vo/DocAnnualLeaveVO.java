@@ -13,8 +13,8 @@ public class DocAnnualLeaveVO {
 	private String dalType;
 	private String startDate;
 	private String endDate;
-	private String startTime;
-	private String endTime;
+	private int startTime;
+	private int endTime;
 	private int leaveDays;
 	private String leaveReason;
 	

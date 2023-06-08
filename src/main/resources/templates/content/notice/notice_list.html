@@ -15,6 +15,10 @@
 	    background-color: #22415f;
 	    border-color: #22415f;
 	}
+	.dropdown-item:hover {
+		text-decoration:underline; 
+		text-underline-offset : 5px;
+	}
 	</style>
 </th:block>
 
@@ -24,6 +28,11 @@
 	<!-- 코드 작성 -->
 	<div class="row mb-5">
 		<div class="col">
+			<div class="row mb-2">
+				<div class="col fs-1 fw-bolder">
+					전사공지
+				</div>
+			</div>
 		
 			<div class="row mb-2">
 				<div class="col d-grid d-flex justify-content-between">
@@ -84,9 +93,18 @@
 								</td>
 								<td>
 									<th:block th:if="${important.fileCnt != 0}">
-										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
-										  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-										</svg>
+										<div class="dropdown">
+											<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
+											  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+											</svg>
+										  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+											  <th:block th:each="file : ${important.boardFileList}">
+											    <li class="my-1">
+											    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
+											    </li>
+											  </th:block>
+										  </ul>
+										</div>
 									</th:block>
 								</td>
 								<td>[[${important.ename}]]</td>
@@ -111,9 +129,18 @@
 									</td>
 									<td>
 										<th:block th:if="${notice.fileCnt != 0}">
-											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
-											  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-											</svg>
+											<div class="dropdown">
+												<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
+												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
+												</svg>
+											  <ul class="dropdown-menu dropdown-menu-end">
+												  <th:block th:each="file : ${notice.boardFileList}">
+												    <li class="my-1">
+												    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
+												    </li>
+												  </th:block>
+											  </ul>
+											</div>
 										</th:block>
 									</td>
 									<td>[[${notice.ename}]]</td>

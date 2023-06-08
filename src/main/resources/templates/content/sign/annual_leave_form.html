@@ -6,7 +6,7 @@
 
 <!-- 연결해야할 외부 css 파일 -->
 <th:block layout:fragment="content_css">
-	<link rel="stylesheet" href="/css/sign/sign_write_form.css">
+	<link rel="stylesheet" href="/css/sign/annual_leave_form.css">
 	
 </th:block>
 
@@ -89,7 +89,9 @@
 							<tr>
 								<td>휴가 종류</td>
 								<td>
-									<input type="text" class="full-width-input annualType" placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate(this);" name="docAnnualLeaveVO.dalType">
+									<input type="text" class="full-width-input annualType" 
+									th:value="${docAnnualLeave != null and docAnnualLeave.dalType != null  ? docAnnualLeave.dalType : ''}" 
+									placeholder="연차 / 반차" th:onkeyup="setDateTimeActivate();" name="docAnnualLeaveVO.dalType">
 								</td>
 							</tr>
 						<tr>
@@ -98,25 +100,39 @@
 								<div class="row">
 									<div class="col-6">
 										<div class="input-group">
-											<input type="date" class="form-control start-date" onchange="setLeaveDays();" name="docAnnualLeaveVO.startDate">
+											<input type="date" class="form-control start-date" 
+											onchange="setLeaveDays();" name="docAnnualLeaveVO.startDate" 
+											th:value="${docAnnualLeave != null and docAnnualLeave.startDate != null  
+											? docAnnualLeave.startDate : ''}">
 											<span class="input-group-text">-</span>
-											<input type="date" class="form-control end-date"  onchange="setLeaveDays();" name="docAnnualLeaveVO.endDate">
+											<input type="date" class="form-control end-date"  
+											onchange="setLeaveDays();" name="docAnnualLeaveVO.endDate"
+											th:value="${docAnnualLeave != null and docAnnualLeave.endDate != null  
+											? docAnnualLeave.endDate : ''}">
 										</div>
 									</div>
 									<div class="col-6">
 										<div class="input-group">
 											<select class="form-select start-time" disabled name="docAnnualLeaveVO.startTime">
-												<option disabled selected>시작시간</option>
+												<option>시작시간</option>
 												<th:block th:each="startTime : ${#numbers.sequence(9, 18)}">
-													<option>[[${startTime}]]</option>
+													<option
+													th:selected="${docAnnualLeave != null and docAnnualLeave.startTime != 0
+													and docAnnualLeave.startTime == startTime}"
+													>
+													[[${startTime}]]
+													</option>
 												</th:block>
 											</select>
 											 
 											<span class="input-group-text">-</span>
 											<select class="form-select end-time" disabled name="docAnnualLeaveVO.endTime">
-												<option disabled selected>종료시간</option>
+												<option>종료시간</option>
 												<th:block th:each="endTime : ${#numbers.sequence(9, 18)}">
-													<option>[[${endTime}]]</option>
+													<option
+													th:selected="${docAnnualLeave != null and docAnnualLeave.endTime != 0
+													and docAnnualLeave.endTime == endTime}"
+													>[[${endTime}]]</option>
 												</th:block>
 											</select>
 										</div>
@@ -135,7 +151,10 @@
 							<tr>
 								<td>휴가 사유</td>
 								<td>
-									<textarea class="full-width-textarea" name="docAnnualLeaveVO.leaveReason"></textarea>
+									<textarea class="full-width-textarea" name="docAnnualLeaveVO.leaveReason"
+									th:attr="value=${docAnnualLeave != null and docAnnualLeave.leaveReason != null
+									? docAnnualLeave.leaveReason : ''}">
+									</textarea>
 								</td>
 							</tr>
 							<tr>
@@ -229,7 +248,7 @@
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/sign/sign_write_form.js"></script>
+	<script type="text/javascript" src="/js/content/sign/annual_leave_form.js"></script>
 </th:block>
 
 </html>

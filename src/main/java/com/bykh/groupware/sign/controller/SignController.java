@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -39,20 +40,24 @@ public class SignController {
 	public String signMain(Model model, Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		model.addAttribute("inProgressSignDocList", signService.getInProgressSignDocList(Integer.parseInt(user.getUsername())));
-		model.addAttribute("endSignDocList", signService.getEndSignDocList());
+		model.addAttribute("endSignDocList", signService.getEndSignDocList(Integer.parseInt(user.getUsername())));
 		return "content/sign/signMain";
 	}
 	
-	//결제문서 작성 페이지로 이동
-	@GetMapping("/signWriteForm")
+	//연차신청서 작성 페이지로 이동
+	@GetMapping("/annualLeaveForm")
 	public String signWriteForm(Model model, SignDocVO signDocVO, Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));//매개변수 변경하기
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
-		return "content/sign/sign_write_form";
+		if(signDocVO.getDocNo() != 0) {
+			signDocVO = signService.getDetailDocAnnualLeave(signDocVO.getDocNo());
+			model.addAttribute("docAnnualLeave", signDocVO.getDocAnnualLeaveVO());
+		}
+		
+		return "content/sign/annual_leave_form";
 	}
-	//연차신청서 작성 페이지
 	
 	//구매신청서 작성 페이지
 	@GetMapping("/purchaseOrderForm")
@@ -62,6 +67,12 @@ public class SignController {
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		model.addAttribute("itemList", signService.getItemList());
+		if(signDocVO.getDocNo() != 0) {
+			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
+			System.out.println("data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.out.println(signDocVO);
+			model.addAttribute("docPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
+		}
 		return "content/sign/purchase_order_form";
 	}
 	
@@ -114,34 +125,50 @@ public class SignController {
 	public void insertPurchaseorderAjax(@RequestBody Map<String, Object> mapData, SignDocVO signDocVO) {
 		System.out.println("----------------아래:mapData------------------");		
 		//System.out.println(mapData);
+		//기존 데이터가 있다면 삭제
 		
 		//1. 데이터 세팅
-		int docNo = signService.getNextDocNo();
-		int buyNo = signService.getNextBuyNo();
 		ObjectMapper mapper = new ObjectMapper();
 		//signDoc
 		signDocVO = mapper.convertValue(mapData.get("sgn_doc"), SignDocVO.class);
-		signDocVO.setDocNo(docNo);
+		System.out.println("signDocVO = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
+		System.out.println(signDocVO);
+		
 		//1-3 sgn_arr
 		SignVO[] signArr = mapper.convertValue(mapData.get("sgn_arr"), SignVO[].class);
 		List<SignVO> signVOList = Arrays.asList(signArr);
-		signVOList.get(0).setDocNo(docNo);
+		
 		signDocVO.setSignVOList(signVOList);
 		//1-5 purchase_order
 		DocPurchaseOrderVO docPurchaseOrderVO = mapper.convertValue(mapData.get("doc_purchase_order"), DocPurchaseOrderVO.class);
-		docPurchaseOrderVO.setDocNo(docNo);
-		docPurchaseOrderVO.setBuyNo(buyNo);
+		
 		signDocVO.setDocPurchaseOrderVO(docPurchaseOrderVO);
 		//1-2 buy
 		BuyVO buyVO = mapper.convertValue(mapData.get("buy"), BuyVO.class);
-		buyVO.setBuyNo(buyNo);
+		
 		signDocVO.getDocPurchaseOrderVO().setBuyVO(buyVO);
 		//1-1 buyDetail
 		BuyDetailVO[] buyDetailArr = mapper.convertValue(mapData.get("buy_detail_arr"), BuyDetailVO[].class);
 		List<BuyDetailVO> buyDetailVOList = Arrays.asList(buyDetailArr);
-		buyDetailVOList.get(0).setBuyNo(buyNo);
+		
 		signDocVO.getDocPurchaseOrderVO().getBuyVO().setBuyDetailVOList(buyDetailVOList);
 		System.out.println(signDocVO);
+		
+		
+		// 기존 데이터가 있다면 삭제(임시저장문서)
+		if (signDocVO.getDocNo() != 0) {
+			signService.delPurchaseOrder(signDocVO.getDocNo());
+		} else {
+			// 기존 데이터 없으면 docNo, buyNo 값 세팅
+			int docNo = signService.getNextDocNo();
+			int buyNo = signService.getNextBuyNo();
+			signDocVO.setDocNo(docNo);
+			signVOList.get(0).setDocNo(docNo);
+			docPurchaseOrderVO.setDocNo(docNo);
+			buyVO.setBuyNo(buyNo);
+			buyVO.setDocNo(docNo);
+			buyDetailVOList.get(0).setBuyNo(buyNo);
+		}
 		
 		//2. 쿼리 실행
 		signService.insertDocPurchaseOrder(signDocVO);

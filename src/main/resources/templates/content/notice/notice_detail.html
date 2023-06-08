@@ -7,6 +7,7 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+
 </th:block>
 
 <th:block layout:fragment="content">
@@ -115,7 +116,8 @@
 									th:each="reply : ${notice.replyList}">
 							<tr class="border-top">
 								<td class="text-center">
-									<img src="/img/content/board/testProfile.png" width="100%" class="mx-0">
+									<img th:src="${reply.attachedFileName} ? @{/upload/empImg/} + ${reply.attachedFileName} : @{/upload/empImg/default.png}" 
+											width="100%" class="mx-0 rounded-circle border">
 								</td>
 								<td>
 									<div class="d-flex justify-content-between">

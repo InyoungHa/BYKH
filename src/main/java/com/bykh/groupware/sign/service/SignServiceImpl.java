@@ -24,8 +24,8 @@ public class SignServiceImpl implements SignService{
 		return sqlsession.selectList("signMapper.getInProgressSignDocList", empno);
 	}
 	@Override
-	public List<SignDocVO> getEndSignDocList() {
-		return sqlsession.selectList("signMapper.getEndSignDocList");
+	public List<SignDocVO> getEndSignDocList(int empno) {
+		return sqlsession.selectList("signMapper.getEndSignDocList", empno);
 	}
 	@Override
 	public SignDocVO getSingWriteInfo(int empno) {
@@ -78,6 +78,10 @@ public class SignServiceImpl implements SignService{
 	@Override
 	public SignDocVO getDetailDocPurchaseOrder(int docNo) {
 		return sqlsession.selectOne("signMapper.getDetailDocPurchaseOrder", docNo);
+	}
+	@Override
+	public void delPurchaseOrder(int docNo) {
+		sqlsession.delete("signMapper.delPurchaseOrder", docNo);
 	}
 	
 	

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
+import com.bykh.groupware.notice.vo.BoardMenuVO;
 import com.bykh.groupware.notice.vo.BoardVO;
 import com.bykh.groupware.util.ConstVariable;
 import com.bykh.groupware.util.UploadUtil;
@@ -36,6 +39,11 @@ public class NoticeController {
 	//게시판 목록
 	@GetMapping("/list")
 	public String noticeList(Model model, BoardVO boardVO) {
+		BoardMenuVO boardMenuVO = new BoardMenuVO();
+		boardMenuVO.setBoardMenuCode("BOARD_MENU_001");
+		
+		boardVO.setBoardMenuVO(boardMenuVO);
+		
 		//전체 데이터 수
 		boardVO.setTotalDataCnt(noticeService.getBoardCnt(boardVO));
 		
@@ -43,10 +51,10 @@ public class NoticeController {
 		boardVO.setPageInfo();
 		
 		//전체 글 목록 조회
-		model.addAttribute("noticeList", noticeService.getNoticeList(boardVO));
+		model.addAttribute("noticeList", noticeService.getBoardList(boardVO));
 		
 		//중요글 목록 조회
-		model.addAttribute("noticeImportantList", noticeService.getNoticeImportantList());
+		model.addAttribute("noticeImportantList", noticeService.getBoardImportantList(boardVO));
 		
 		return "content/notice/notice_list";
 	}
@@ -54,12 +62,17 @@ public class NoticeController {
 	//글쓰기 페이지 이동
 	@GetMapping("/regNotice")
 	public String regForm(Model model, Authentication authentication) {
-		model.addAttribute("boardMenuCode", "BOARD_MENU_001");
+		String boardMenuCode = "BOARD_MENU_001";
+		model.addAttribute("boardMenuCode", boardMenuCode);
 		
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
 		
-		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(loginEmpno));
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("boardMenuCode", boardMenuCode);
+		dataMap.put("empno", loginEmpno);
+		
+		model.addAttribute("tempBoardCnt", noticeService.getTempBoardCntByEmpno(dataMap));
 		
 		return "content/notice/notice_form";
 	}
@@ -113,24 +126,37 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping("/tempBoardList")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
+		String boardMenuCode = "BOARD_MENU_001";
+		
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
+
+		Map<String, Object> dataMap = new HashMap<>();
+		dataMap.put("boardMenuCode", boardMenuCode);
+		dataMap.put("empno", loginEmpno);
 		
-		return noticeService.getTempBoardListByEmpno(loginEmpno);
+		return noticeService.getTempBoardListByEmpno(dataMap);
 	}
 	
 	//임시저장 글 조회
 	@ResponseBody
 	@PostMapping("/getTempDetail")
 	public BoardVO getTempDetail(BoardVO boardVO) {
-		return noticeService.getNoticeDetailForUpdate(boardVO);
+		return noticeService.getBoardDetailForUpdate(boardVO);
+	}
+	
+	//임시저장 글 삭제
+	@ResponseBody
+	@PostMapping("/tempDelete")
+	public void deleteTempBoard(BoardVO boardVO) {
+		noticeService.deleteBoard(boardVO);
 	}
 	
 	//글 상세 조회
 	@GetMapping("/detail")
 	public String noticeDetail(BoardVO boardVO, Model model) {
 		//상세 조회 + 조회수 증가 (글 + 첨부파일 + 댓글)
-		model.addAttribute("notice", noticeService.getNoticeDetail(boardVO));
+		model.addAttribute("notice", noticeService.getBoardDetail(boardVO));
 		
 		return "content/notice/notice_detail";
 	}
@@ -143,17 +169,10 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 	
-	//임시저장 글 삭제
-	@ResponseBody
-	@PostMapping("/tempDelete")
-	public void deleteTempBoard(BoardVO boardVO) {
-		noticeService.deleteBoard(boardVO);
-	}
-	
 	//글 수정 페이지로 이동
 	@GetMapping("/update")
-	public String noticeForm(BoardVO boardVO, Model model) {
-		model.addAttribute("notice", noticeService.getNoticeDetailForUpdate(boardVO));
+	public String updateForm(BoardVO boardVO, Model model) {
+		model.addAttribute("notice", noticeService.getBoardDetailForUpdate(boardVO));
 		
 		return "content/notice/notice_update";
 	}
@@ -214,7 +233,7 @@ public class NoticeController {
 			boardVO.setBoardFileList(attachedBoardFileList);
 		}
 		
-		noticeService.regNotice(boardVO);
+		noticeService.regBoard(boardVO);
 	}
 	
 	

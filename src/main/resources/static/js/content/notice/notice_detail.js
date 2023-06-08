@@ -40,7 +40,12 @@ function regReply(boardNum) {
 			
 			str += `<tr class="border-top">                                                         `;
 			str += `	<td class="text-center">                                                    `;
-			str += `		<img src="/img/content/board/testProfile.png" width="100%" class="mx-0">`;
+			if(reply.attachedFileName == null) {
+			str += `		<img src="/upload/empImg/default.png" width="100%" class="mx-0 rounded-circle border">`;
+			}
+			else {
+			str += `		<img src="/upload/empImg/${reply.attachedFileName}" width="100%" class="mx-0 rounded-circle border">`;
+			}
 			str += `	</td>                                                                       `;
 			str += `	<td>                                                                        `;
 			str += `		<div class="d-flex justify-content-between">                            `;

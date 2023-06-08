@@ -50,7 +50,7 @@
 	<select id="getBoardCnt" resultType="int">
 		SELECT COUNT(BOARD_NUM)
 		FROM BOARD, EMP
-		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
+		WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
@@ -60,8 +60,8 @@
 	
 	<!-- 공지사항 글 목록 조회 -->
 	<!-- 상태값 1(등록) --> 
-	<select id="getNoticeList" resultMap="board">
-		SELECT BOARD_NUM
+	<select id="getBoardList" resultMap="board">
+		SELECT BOARD.BOARD_NUM
 		    , BOARD_TITLE
 		    , BOARD_WRITER
 		    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
@@ -74,10 +74,13 @@
 			, (SELECT COUNT(REPLY_NUM)
                 FROM BOARD_REPLY
                 WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
-		FROM BOARD, EMP
-		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
+			, FILE_NUM
+            , ORIGIN_FILE_NAME
+		FROM BOARD, EMP, BOARD_FILE
+		WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
+		AND BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM (+)
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
 		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
 		</if>
@@ -86,8 +89,8 @@
 	</select>
 	
 	<!-- 공지사항 중요글 목록 조회 -->
-	<select id="getNoticeImportantList" resultMap="board">
-		SELECT BOARD_NUM
+	<select id="getBoardImportantList" resultMap="board">
+		SELECT BOARD.BOARD_NUM
 			, BOARD_TITLE
 			, BOARD_WRITER
 			, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
@@ -100,11 +103,14 @@
 			, (SELECT COUNT(REPLY_NUM)
                 FROM BOARD_REPLY
                 WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
-		FROM BOARD, EMP
-		WHERE BOARD_MENU_CODE = 'BOARD_MENU_001'
+			, FILE_NUM
+            , ORIGIN_FILE_NAME
+		FROM BOARD, EMP, BOARD_FILE
+		WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 		AND IS_IMPORTANT = 'Y'
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
+		AND BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM (+)
 		ORDER BY BOARD_DATE_ORDER DESC
 	</select>
 	
@@ -115,7 +121,7 @@
 	</select>
 	
 	<!-- 공지사항 글 등록 -->
-	<insert id="regNotice">
+	<insert id="regBoard">
 		INSERT INTO BOARD (
 			BOARD_NUM
 			, BOARD_TITLE
@@ -168,7 +174,7 @@
 	
 	
 	<!-- 글 상세 조회 -->
-	<select id="getNoticeDetail" resultMap="board">
+	<select id="getBoardDetail" resultMap="board">
 		SELECT * FROM
 			(SELECT BOARD_NUM
 				, BOARD_TITLE
@@ -206,14 +212,17 @@
 	<!-- (상세 조회) + 댓글 리스트 조회 -->
 	<select id="getReplyList" resultMap="replyMapper.reply">
 		SELECT REPLY_NUM
-            , REPLY_WRITER
-            , ENAME
-			, REPLY_CONTENT
-            , TO_CHAR(REPLY_DATE, 'YYYY-MM-DD HH24:MI') REPLY_DATE
-        FROM BOARD_REPLY, EMP
-        WHERE BOARD_NUM = #{boardNum}
-        AND REPLY_WRITER = EMPNO
-        ORDER BY REPLY_NUM
+		    , REPLY_WRITER
+		    , ENAME
+		    , REPLY_CONTENT
+		    , TO_CHAR(REPLY_DATE, 'YYYY-MM-DD HH24:MI') REPLY_DATE
+		    , (SELECT ATTACHED_FILE_NAME 
+		        FROM E_IMG 
+		        WHERE REPLY_WRITER = E_IMG.EMPNO) AS ATTACHED_FILE_NAME
+		FROM BOARD_REPLY, EMP
+		WHERE BOARD_NUM = #{boardNum}
+		AND REPLY_WRITER = EMPNO
+		ORDER BY REPLY_NUM
 	</select>
 	
 	
@@ -273,6 +282,7 @@
 		WHERE EMPNO = #{empno}
 		AND BOARD_WRITER = EMPNO
 		AND BOARD_STATUS = 2
+		AND BOARD_MENU_CODE = #{boardMenuCode}
 		ORDER BY BOARD_NUM DESC
 	</select>
 	
@@ -283,6 +293,7 @@
 		WHERE EMPNO = #{empno}
 		AND BOARD_WRITER = EMPNO
 		AND BOARD_STATUS = 2
+		AND BOARD_MENU_CODE = #{boardMenuCode}
 	</select>
 	
 	
