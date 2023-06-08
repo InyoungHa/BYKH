@@ -1,9 +1,10 @@
 //제목 클릭 시 - 임시저장일 경우
 function goWriteForm(clickTag){
 	const docType = clickTag.dataset.docType;
-	const address = docType == 1 ? '/sign/signWriteForm' : '/sign/purchaseOrderForm';
+	const docNo = clickTag.dataset.docNo;
+	const address = docType == 1 ? '/sign/annualLeaveForm?docNo=' : '/sign/purchaseOrderForm?docNo=';
 	
-	location.href = address;
+	location.href = address + docNo;
 	
 }
 

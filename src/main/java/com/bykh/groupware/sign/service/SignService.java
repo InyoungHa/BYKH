@@ -35,6 +35,7 @@ public interface SignService {
 	void insertDocPurchaseOrder(SignDocVO signDocVO);
 	//다음 buy_no 조회
 	int getNextBuyNo();
-
+	//구매신청서 - DELETE
+	void delPurchaseOrder(int docNo);
 	
 }

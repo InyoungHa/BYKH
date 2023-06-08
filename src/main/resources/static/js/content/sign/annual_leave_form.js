@@ -4,12 +4,16 @@
 init();
 
 function init(){
-	setLeaveDays();
+	//setTimeout(() => {
+		setLeaveDays();
+		setDateTimeActivate();
+	//}, 100);
 }
 
 //연차/반차 여부에 따라 시간 선택 select 활성화
-function setDateTimeActivate(annualTypeTag){
-	if(annualTypeTag.value=='반차'){
+function setDateTimeActivate(){
+	const annualType = document.querySelector('.annualType').value;
+	if(annualType =='반차'){
 		document.querySelector('.start-time').disabled = false;
 		document.querySelector('.end-time').disabled = false;
 	}else{

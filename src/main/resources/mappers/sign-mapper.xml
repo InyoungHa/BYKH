@@ -23,7 +23,6 @@
 		<id column="DPO_NO" 				property="dpoNo" />
 		<result column="DOC_NO" 			property="docNo" />
 		<result column="DPO_COMMENT" 		property="dpoComment" />
-		<result column="BUY_NO" 			property="buyNo" />
 		<association property="buyVO" resultMap="buy"></association>
 	</resultMap>
 	
@@ -67,6 +66,7 @@
 	<!-- 구매 테이블 -->
 	<resultMap type="com.bykh.groupware.sign.vo.BuyVO" id="buy">
 		<id column="BUY_NO"					property="buyNo"/>
+		<result column="DOC_NO"			property="docNo"/>
 		<result column="BUY_DEPTNO"			property="buyDeptNo"/>
 		<result column="BUY_PRICE"			property="buyPrice"/>
 		<result column="BUY_APPROVAL" 		property="buyApproval"/>
@@ -204,12 +204,10 @@
 		    DPO_NO
 		    , DOC_NO
 		    , DPO_COMMENT
-		    , BUY_NO
 		) VALUES(
 		    (SELECT NVL(MAX(DPO_NO), 0)+1 FROM DOC_PURCHASE_ORDER)
 		    , ${docNo}
 		    , #{dpoComment}
-		    , ${buyNo}
 		)
 	</insert>
 	
@@ -222,11 +220,13 @@
 	<insert id="insertBuy">
 		INSERT INTO BUY (
 		    BUY_NO
+		    , DOC_NO
 		    , BUY_DEPTNO
 		    , BUY_PRICE
 		    , BUY_APPROVAL
 		) VALUES(
 		    ${buyNo}
+		    , ${docNo}
 		    , ${buyDeptNo}
 		    , ${buyPrice}
 		    , 0
@@ -335,19 +335,17 @@
 		    , SGN_COMENT
 		    , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
 		    , BUY.BUY_NO
+		    , ITEM.ITEM_NO
 		FROM SGN_DOC DOC, DOC_PURCHASE_ORDER DPO, SGN, EMP, DEPT, BUY, BUY_DETAIL BD, ITEM
 		WHERE DOC.DOC_NO = DPO.DOC_NO
 		AND DOC.DOC_NO = SGN.DOC_NO
 		AND DOC.WRITER_NO = EMP.EMPNO
 		AND EMP.DEPTNO = DEPT.DEPTNO
-		AND BUY.BUY_NO = DPO.BUY_NO
+		AND BUY.DOC_NO = DPO.DOC_NO
 		AND BUY.BUY_NO = BD.BUY_NO
 		AND BD.ITEM_NO = ITEM.ITEM_NO
 		AND DOC.DOC_NO = ${docNo}
 	</select>
-	
-	
-	
 	
 	<select id="getItemList" resultMap="item">
 		SELECT 
@@ -358,7 +356,16 @@
 		ORDER BY ITEM_NO
 	</select>
 	
-	
+	<!-- 구매신청서 삭제 -->
+	<delete id="delPurchaseOrder">
+		BEGIN
+		    DELETE FROM BUY_DETAIL WHERE BUY_NO = (SELECT BUY_NO FROM BUY WHERE DOC_NO = ${docNo});
+		    DELETE FROM BUY WHERE DOC_NO = ${docNo};
+            DELETE FROM DOC_PURCHASE_ORDER WHERE DOC_NO = ${docNo};
+		    DELETE FROM SGN WHERE DOC_NO = ${docNo};
+		    DELETE FROM SGN_DOC WHERE DOC_NO = ${docNo};
+		END
+	</delete>
 	
 	
 </mapper>
