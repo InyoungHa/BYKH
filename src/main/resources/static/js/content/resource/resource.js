@@ -32,6 +32,64 @@ document.addEventListener('DOMContentLoaded', function() {
 			listWeek: { buttonText: '자원목록' },
 		},
 		eventClick: function(info) {
+						
+			$('#participant').val("");
+			$('#resourceContent').val("");
+
+
+			$('#saveCalendar').off('click').on('click', function() {
+				var id = info.event._def.publicId; // id값
+				var participant = $('#participant').val(); // 참가자 입력값 가져오기
+				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
+
+				location.reload();
+
+				// 인서트 기능 수행
+				$.ajax({
+					url: '/resource/insertScheduleDetail',
+					type: 'post',
+					async: false,
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data: {
+						'idDetail': id,
+						'participant': participant,
+						'resourceContent': resourceContent
+					},
+					success: function(result) { },
+					error: function() {
+						alert('인서트 실패');
+					}
+				});
+			});
+
+			var id = info.event._def.publicId;
+			console.log(id);
+			
+			//ajax start
+			$.ajax({
+				url: '/resource/selectCalendarDetail', //요청경로
+				type: 'post',
+				async: false,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				data: {
+					'idDetail': id
+				}, //HTML에받는  데이터
+				success: function(result) {
+
+					var firstObject = result[0];
+					var participant = firstObject.participant;
+					var resourceContent = firstObject.resourceContent;
+
+					$('#participant').val(participant);
+					$('#resourceContent').val(resourceContent);
+
+					console.log(participant);
+					console.log(resourceContent);
+				},
+				error: function() {
+					alert('실패');
+				}
+			});
 
 			//ajax end
 			console.log(info.event);

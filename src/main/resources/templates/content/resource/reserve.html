@@ -349,7 +349,7 @@ font-size: 22px;
        <div class="modal fade" id="calendarModalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="height: 450px;">
+            <div class="modal-content" style="height: 750px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">자원상세내역</h5>        
                 </div>
@@ -368,8 +368,19 @@ font-size: 22px;
 							<label for="taskId" class="col-form-label">총 사용 시간</label>
 							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
 							
-                    </div>
-                </div>
+							<label for="taskId" class="col-form-label">참석자</label>
+							<input type="text" id="participant" name="participant" style="width: 100%;"><br>
+							<label for="taskId" class="col-form-label" style="margin-bottom: 5px;">사유</label>
+							<textarea rows="5" cols="30" id="resourceContent" name="resourceContent" style="resize: none;"></textarea>
+	                    </div>
+	                </div>
+	                
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-warning" id="saveCalendar" style="width: 100%; margin:0 auto;">저장</button>
+	                </div>
+							
+                    
+       
               
     
             </div>

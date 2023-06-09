@@ -91,15 +91,14 @@ margin-right: 10px;
 }
 
 </style>
-
 	
+		
 
 	<!--출퇴근기록 테이블 box -->
 	<div class="bottomBox" id="bottomBox">
 		<div class="bottomTitle" style="margin-bottom: 30px; font-weight: bold; font-size: 22px;">
-			2023년 김정운님의 자원예약내역
+			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 자원예약내역
 		</div>
-
 		<table class="bottomTable">
 		<colgroup>
 			<col width="20%">
@@ -108,7 +107,6 @@ margin-right: 10px;
 			<col width="15%">
 			<col width="15%">
 		</colgroup>
-		
 			<thead class="bottomThead" >
 				<tr style="text-align: center; font-weight: bold;">
 					<td>시작일자</td>
@@ -124,18 +122,20 @@ margin-right: 10px;
 					<td>[[${resList.startDay}]]</td>
 					<td>[[${resList.endDay}]]</td>
 					<td>[[${resList.totalDuration}]]</td>
-					<td>[[${resList.title}]]</td>
-					<td><input type="text" style="width: 95%;"></td>
-					<td><input type="text" style="width: 95%;"></td>
-				</tr>
+					<td>[[${resList.title}]]</td>		
+					<td></td>
+					<td></td>		
+	
+				</tr>			
 			</tbody>
+		</table>	
 		
-		</table>
 	</div>
-	<div style="margin-left:530px;">
-	<input type="text" class="btn" value="저장" style="width: 12%; margin-top: 10px;">
+	<div style="margin-left:570px;">
+
 	<input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top:10px;" />
 	</div>
+	
 </th:block>
 </th:block>
 

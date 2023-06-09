@@ -104,7 +104,7 @@ public class AttendanceController {
 		int empno = Integer.parseInt(user.getUsername());
 	
 		attendanceService.goWork(empno);
-	return "redirect:/admin/main";
+	return "redirect:/user/main";
 	}
 	
 	// 퇴근등록
@@ -119,7 +119,7 @@ public class AttendanceController {
 
 	    attendanceService.outWork(attendanceVO);
 
-	    return "redirect:/admin/main";
+	    return "redirect:/user/main";
 	}
 
 }

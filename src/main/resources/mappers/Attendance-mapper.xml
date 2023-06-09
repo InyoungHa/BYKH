@@ -30,10 +30,14 @@
 		<result column="END_DATE" property="end"/>
 		<result column="START_DAY" property="startDay"/>
 		<result column="END_DAY" property="endDay"/>
+		<result column="PARTICIPANT" property="participant"/>
+		<result column="RESOURCE_CONTENT" property="resourceContent"/>
 		<result column="TOTAL_DURATION" property="totalDuration"/>
 		<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
 		<result column="EMPNO" property="empno"/>
 	</resultMap>
+	
+
 	
 	
 	
@@ -203,7 +207,7 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 
 	</select>
 	
-		<!--출퇴근 기록 게시판 전체 -->
+    <!--출퇴근 기록 게시판 전체 -->
 	<select id="workingBoardAll" resultMap="att">
 	SELECT
 	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
@@ -222,7 +226,7 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 	ORDER BY GO_WORK DESC
 	</select>
 	
-
+<!--자원조회내역 -->
 <select id="selectResource" resultMap="resourceCal">
 	SELECT EVENT_NAME,
 	TO_CHAR(START_DATE, 'YYYY-MM-DD(DY) HH24:MI')AS START_DAY,
@@ -232,8 +236,26 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 	WHERE EMPNO = #{empno}
 </select>
 		
+<!-- 자원디테일 내역 저장  -->		
+<update id="insertResDetail">
+	UPDATE SCHEDUL_FOR_RESOURCE
+	SET PARTICIPANT = #{participant},
+	RESOURCE_CONTENT = #{resourceContent}
+	WHERE EMPNO = #{empno} AND SCHEDULE_CODE = #{id}
+</update>
 
-	
+<!-- ID조회 -->
+<select id="selectId" resultMap="resourceCal">
+SELECT SCHEDULE_CODE FROM SCHEDUL_FOR_RESOURCE  WHERE EMPNO = #{empno}
+</select>
+
+<!-- 자원디테일 내역 조회  -->
+<select id="resourceDetail" resultMap="resourceCal">
+SELECT PARTICIPANT
+, RESOURCE_CONTENT 
+FROM SCHEDUL_FOR_RESOURCE
+WHERE EMPNO = #{empno}
+</select>
 
 
 </mapper>

@@ -15,15 +15,14 @@
 	<id column="SCHEDULE_CODE" property="id"/>
 	<result column="EVENT_NAME" property="title"/>
 	<result column="START_DATE" property="start"/>
+	<result column="ID_DETAIL" property="idDetail"/>
+	<result column="PARTICIPANT" property="participant"/>
+	<result column="RESOURCE_CONTENT" property="resourceContent"/>
 	<result column="END_DATE" property="end"/>
 	<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
 	<result column="EMPNO" property="empno"/>
 </resultMap>
-<resultMap type="com.bykh.groupware.resource.vo.ResourceDetailVO" id="resourceDetail">
-	<result column="PARTICIPANT" property="participant"/>
-	<result column="RESOURCE_CONTENT" property="resourceContent"/>
-	<result column="ID" property="id"/>
-</resultMap>
+
 
 	
 	 
@@ -72,9 +71,33 @@ SELECT SCHEDULE_CODE
 		, START_DATE
 		, END_DATE
 		, ALLDAY
-	FROM SCHEDUL_FOR_RESOURCE
-	WHERE EMPNO = #{empno}
+FROM SCHEDUL_FOR_RESOURCE
+WHERE EMPNO = #{empno}
 </select>
+
+
+
+	<!-- 자원관리 캘린더 디테일 내용추가 -->
+	<insert id="insertScheduleDetail">
+		INSERT INTO SCHEDUL_FOR_RESOURCE (
+		EMPNO,
+		ID_DETAIL,
+		PARTICIPANT,
+		RESOURCE_CONTENT
+		) VALUES (
+		#{empno},
+		#{idDetail} 
+		,#{participant}
+		,#{resourceContent}
+		)
+	</insert>
+	
+	<!--자원관리 캘린더 디테일 내용 조회 -->
+	<select id="selectCalendarDetail" resultMap="resourceCal">
+		SELECT PARTICIPANT, RESOURCE_CONTENT FROM SCHEDUL_FOR_RESOURCE
+		WHERE ID_DETAIL = #{idDetail}
+	</select>
+	
 
 
 

@@ -24,6 +24,32 @@ public class ResourceServiceImpl implements ResourceService {
 
 
 
+	//자원디테일 조회
+	@Override
+	public List<ResourceVO> resourceDetail(int empno) {
+		return sqlSession.selectList("attendanceMapper.resourceDetail", empno);
+	}
+
+	//id조회
+	@Override
+	public List<ResourceVO> selectId(int empno) {
+		return sqlSession.selectList("attendanceMapper.selectId", empno);
+	}
+	
+	//자원관리 캘린더 상세정보 저장
+		@Override
+		public void insertScheduleDetail(ResourceVO resourceVO) {
+			sqlSession.insert("calendarMapper.insertScheduleDetail", resourceVO);
+		}
+
+		//자원관리 캘린더 상세정보 조회
+		@Override
+		public List<ResourceVO> selectCalendarDetail(int idDetail) {
+			return sqlSession.selectList("calendarMapper.selectCalendarDetail", idDetail);
+		}
+
+
+
 	
 	
 

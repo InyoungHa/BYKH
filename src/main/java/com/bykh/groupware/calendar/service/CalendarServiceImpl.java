@@ -55,6 +55,12 @@ public class CalendarServiceImpl implements CalendarService {
 		return sqlSession.selectList("calendarMapper.getAllResourceSchedules", empno);
 	}
 
+	//자원관리 캘린더 세부일정 추가
+	@Override
+	public void insertScheduleDetail(ResourceVO resourceVO) {
+		sqlSession.insert("calendarMapper.insertScheduleDetail", resourceVO);
+	}
+
 
 	
 
