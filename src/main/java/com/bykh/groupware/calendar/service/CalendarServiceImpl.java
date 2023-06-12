@@ -38,8 +38,8 @@ public class CalendarServiceImpl implements CalendarService {
 	
 	//자원관리 캘린더 일정제거
 	@Override
-	public void deleteResourceSchedule(int empno) {
-		sqlSession.delete("calendarMapper.deleteResourceSchedule", empno);
+	public void deleteResourceSchedule(ResourceVO resourceVO) {
+		sqlSession.delete("calendarMapper.deleteResourceSchedule", resourceVO);
 	}
 
 
@@ -47,6 +47,12 @@ public class CalendarServiceImpl implements CalendarService {
 	@Override
 	public void insertResourceSchedule(ResourceVO resourceVO) {
 		sqlSession.insert("calendarMapper.insertResourceSchedule", resourceVO);
+	}
+	
+	//자원관리 캘린더 일정(주/일)업데이트
+	@Override
+	public void updateResourceSchedule(ResourceVO resourceVO) {
+		sqlSession.update("calendarMapper.resourceCalendarUpdate", resourceVO);
 	}
 	
 	//자원관리 캘린더 일정조회
@@ -60,6 +66,16 @@ public class CalendarServiceImpl implements CalendarService {
 	public void insertScheduleDetail(ResourceVO resourceVO) {
 		sqlSession.insert("calendarMapper.insertScheduleDetail", resourceVO);
 	}
+
+
+	@Override
+	public int getInsertScheduleCode() {
+		return sqlSession.selectOne("calendarMapper.getLastSchedulCode");
+	}
+	
+
+
+
 
 
 	

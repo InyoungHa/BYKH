@@ -39,13 +39,13 @@ public class ResourceServiceImpl implements ResourceService {
 	//자원관리 캘린더 상세정보 저장
 		@Override
 		public void insertScheduleDetail(ResourceVO resourceVO) {
-			sqlSession.insert("calendarMapper.insertScheduleDetail", resourceVO);
+			sqlSession.update("calendarMapper.insertScheduleDetail", resourceVO);
 		}
 
 		//자원관리 캘린더 상세정보 조회
 		@Override
-		public List<ResourceVO> selectCalendarDetail(int idDetail) {
-			return sqlSession.selectList("calendarMapper.selectCalendarDetail", idDetail);
+		public List<ResourceVO> selectCalendarDetail(int id) {
+			return sqlSession.selectList("calendarMapper.selectCalendarDetail", id);
 		}
 
 

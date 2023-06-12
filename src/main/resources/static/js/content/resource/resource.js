@@ -32,17 +32,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			listWeek: { buttonText: '자원목록' },
 		},
 		eventClick: function(info) {
-						
 			$('#participant').val("");
 			$('#resourceContent').val("");
 
 
-			$('#saveCalendar').off('click').on('click', function() {
-				var id = info.event._def.publicId; // id값
+			$("#saveCalendar").click(function() {
+				var id = info.event._def.publicId; //id값
 				var participant = $('#participant').val(); // 참가자 입력값 가져오기
-				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
+  				var resourceContent = $('#resourceContent').val(); // 내용 입력값 가져오기
 
-				location.reload();
+
+
+
+				 location.reload();
 
 				// 인서트 기능 수행
 				$.ajax({
@@ -51,46 +53,48 @@ document.addEventListener('DOMContentLoaded', function() {
 					async: false,
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					data: {
-						'idDetail': id,
+						'id': id,
 						'participant': participant,
 						'resourceContent': resourceContent
 					},
-					success: function(result) { },
+					success: function(result) {
+					},
 					error: function() {
 						alert('인서트 실패');
 					}
 				});
-			});
+		});
 
-			var id = info.event._def.publicId;
-			console.log(id);
-			
-			//ajax start
-			$.ajax({
-				url: '/resource/selectCalendarDetail', //요청경로
-				type: 'post',
-				async: false,
-				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				data: {
-					'idDetail': id
-				}, //HTML에받는  데이터
-				success: function(result) {
 
-					var firstObject = result[0];
-					var participant = firstObject.participant;
-					var resourceContent = firstObject.resourceContent;
-
-					$('#participant').val(participant);
-					$('#resourceContent').val(resourceContent);
-
-					console.log(participant);
-					console.log(resourceContent);
-				},
-				error: function() {
-					alert('실패');
-				}
-			});
-
+		var id = info.event._def.publicId;
+		console.log("@@@@@@@@@");
+		console.log(id);
+				console.log(id);
+				//ajax start
+				$.ajax({
+					url: '/resource/selectCalendarDetail', //요청경로
+					type: 'post',
+					async: false,
+					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+					data: {
+						'id': id
+					}, //HTML에받는  데이터
+					success: function(result) {
+							console.log("!!!!!!!!!");
+						 	console.log(result);
+						var firstObject = result[0];
+						var participant = firstObject.participant;
+						var resourceContent = firstObject.resourceContent;
+						$('#participant').val(participant);
+						$('#resourceContent').val(resourceContent);
+						console.log(participant);
+						console.log(resourceContent);
+					},
+					error: function() {
+						alert('실패');
+					}
+				});
+				    
 			//ajax end
 			console.log(info.event);
 			$("#calendarModalDetail").modal("show");
@@ -131,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			// change the border color just for fun
 			info.el.style.borderColor = 'red';
 		},
+		
 		locale: 'ko', // 한국어 설정
 		editable: true,
 		droppable: true,  // 드래그 가능
@@ -151,12 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				, id: '2'
 			},
 		],
-
-		eventReceive: function(info) {
-			if (dropRemoveCheckbox.checked) {
-				info.draggedEl.remove();
-			}
-		},
 
 		customButtons: {
 			addEventButton: { // 추가한 버튼 설정
@@ -227,10 +226,186 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			}
 		},
+		//이벤트 드래그 드랍 후 저장 
+		eventReceive: function(info) {
+			console.log(info);
+				const event_info = info.event;
+			var events = [];
+			
+			const obj = {
+				title: event_info._def.title,
+				allDay: event_info._def.allDay,
+				start: event_info._instance.range.start,
+				end: event_info._instance.range.end
+			};
+			console.log(obj);
+			
 
+			events.push(obj);
+			
+		
 
+			var jsondata = JSON.stringify(events);
+			jsonEvent = JSON.parse(jsondata);
+
+			var updatedEvents = jsonEvent.map(function(event) {
+				return event;
+			});
+
+			var jsondataUpdated = JSON.stringify(updatedEvents);
+			
+			console.log(jsondataUpdated);
+			
+			//ajax start
+				$.ajax({
+				url: '/calendar/resourceCalendarSave', //요청경로
+				type: 'post',
+				async: false,
+				contentType: 'application/json; charset=UTF-8',
+				data: jsondataUpdated,
+				dataType: 'text',
+				success: function(result) {
+					//location.reload();
+					
+				},
+				error: function() {
+				}
+			});
+		
+				
+				
+				
+				
+				
+			
+			
+			
+
+		},
+	
+		//이벤트 일정 이동시
+		eventDrop: function(info){
+			console.log("@@@@@@@@@@@@@");
+			console.log(info.oldEvent);
+			const event_info = info.event;
+			var events = [];
+			
+			const obj = {
+				title: event_info._def.title,
+				allDay: event_info._def.allDay,
+				start: event_info._instance.range.start,
+				end: event_info._instance.range.end
+			};
+			console.log(obj);
+			
+		
+			events.push(obj);
+			
+		
+
+			var jsondata = JSON.stringify(events);
+			jsonEvent = JSON.parse(jsondata);
+
+			var updatedEvents = jsonEvent.map(function(event) {
+				return event;
+			});
+
+			var jsondataUpdated = JSON.stringify(updatedEvents);
+			
+			console.log(jsondataUpdated);
+			
+			//ajax start
+				$.ajax({
+				url: '/calendar/resourceCalendarUpdate', //요청경로
+				type: 'post',
+				async: false,
+				contentType: 'application/json; charset=UTF-8',
+				data: jsondataUpdated,
+				dataType: 'text',
+				success: function(result) {
+				
+				},
+				error: function() {
+				}
+			});
+		},
+
+		//주 일 시간 대 변경 업데이트
+		eventResize: function(info){	
+			  
+				
+				
+			const event_info = info.event;
+			var events = [];
+			
+			const obj = {
+				title: event_info._def.title,
+				allDay: event_info._def.allDay,
+				start: event_info._instance.range.start,
+				end: event_info._instance.range.end,
+				id: event_info._def.publicId	
+			};
+			console.log(obj);
+			
+
+			events.push(obj);
+			
+		
+
+			var jsondata = JSON.stringify(events);
+			jsonEvent = JSON.parse(jsondata);
+
+			var updatedEvents = jsonEvent.map(function(event) {
+				return event;
+			});
+
+			var jsondataUpdated = JSON.stringify(updatedEvents);
+			
+			console.log(jsondataUpdated);
+			
+			//ajax start
+				$.ajax({
+				url: '/calendar/resourceCalendarUpdate', //요청경로
+				type: 'post',
+				async: false,
+				contentType: 'application/json; charset=UTF-8',
+				data: jsondataUpdated,
+				dataType: 'text',
+				success: function(result) {
+					alert(result);
+				
+				},
+				error: function() {
+				}
+			});
+						
+				
+		},
+
+		
+		//드래그앤드랍 삭제
 		eventDragStop: function(info) {
-
+		const id = info.event.id;
+		console.log(id);
+			//ajax start
+			$.ajax({
+				url: '/calendar/deleteResourceSchedule', //요청경로
+				type: 'post',
+				async: false,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				data: {
+					id: id
+				},
+				success: function(result) {
+			
+					
+				},
+				error: function() {
+				}
+			});
+			
+			
+			
 			var jsEvent = info.jsEvent;
 
 			if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
@@ -270,59 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 var calendar;
 
-document.getElementById("saveButton").addEventListener("click", allSave);
 
-///예약하기////
-function allSave() {
-	var allEvent = calendar.getEvents();
-	var events = [];
-
-	for (const e of allEvent) {
-	}
-	for (var i = 0; i < allEvent.length; i++) {
-
-		const is_holy = allEvent[i]._def.extendedProps.description != undefined ? true : false;
-		if (!is_holy) {
-			var obj = {
-				title: allEvent[i]._def.title,
-				allDay: allEvent[i]._def.allDay,
-				start: allEvent[i]._instance.range.start,
-				end: allEvent[i]._instance.range.end,
-
-			};
-			events.push(obj);
-		}
-	}
-
-	var jsondata = JSON.stringify(events);
-	jsonEvent = JSON.parse(jsondata);
-
-	var updatedEvents = jsonEvent.map(function(event) {
-		return event;
-	});
-
-	var jsondataUpdated = JSON.stringify(updatedEvents);
-
-	savedata(jsondataUpdated);
-}
-
-function savedata(jsondata) {
-	//ajax start
-	$.ajax({
-		url: '/calendar/resourceCalendarSave', //요청경로
-		type: 'post',
-		async: false,
-		contentType: 'application/json; charset=UTF-8',
-		data: jsondata,
-		dataType: 'text',
-		success: function(result) {
-			alert("저장되었습니다.");
-			location.reload();
-		},
-		error: function() {
-		}
-	});
-}
 
 /////////일정 조회////////////
 var return_value = null;

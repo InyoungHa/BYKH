@@ -80,9 +80,9 @@ public class ResourceController {
 		// 자원관리 캘린더상세정보 조회
 		@ResponseBody
 		@RequestMapping("/selectCalendarDetail")
-		public List<ResourceVO> selectCalendarDetail(int idDetail) {
+		public List<ResourceVO> selectCalendarDetail(int id) {
 
-			return resourceService.selectCalendarDetail(idDetail);
+			return resourceService.selectCalendarDetail(id);
 		}
 	
 
