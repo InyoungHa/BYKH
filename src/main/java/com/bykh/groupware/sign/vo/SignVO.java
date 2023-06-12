@@ -13,6 +13,7 @@ public class SignVO {
 	private String sgnResultStr;
 	private int sgnResult;
 	private int approverNo;
+	private int nextApproverNo;
 	private String approverName;
 	private String approverJob;
 	private String sgnComent;

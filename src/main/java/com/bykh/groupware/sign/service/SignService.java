@@ -38,4 +38,7 @@ public interface SignService {
 	//구매신청서 - DELETE
 	void delPurchaseOrder(int docNo);
 	
+	//다음 결재자번호 조회
+	int getNextApproverNo(int docNo);
+	
 }

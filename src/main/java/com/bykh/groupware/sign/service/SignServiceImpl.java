@@ -83,6 +83,10 @@ public class SignServiceImpl implements SignService{
 	public void delPurchaseOrder(int docNo) {
 		sqlsession.delete("signMapper.delPurchaseOrder", docNo);
 	}
+	@Override
+	public int getNextApproverNo(int docNo) {
+		return sqlsession.selectOne("signMapper.getNextApproverNo", docNo);
+	}
 	
 	
 	

@@ -180,21 +180,31 @@ public class SignController {
 	public Map<String, SignDocVO> getSignDocDetailAjax(SignDocVO signDocVO) {
 		Map<String, SignDocVO> data = new HashMap<>();
 		//docType에 따라 쿼리 실행
+		String keyName = "";
 		if(signDocVO.getDocType() == 1) {
-			data.put("docAnnualLeave", signService.getDetailDocAnnualLeave(signDocVO.getDocNo()));
+			keyName = "docAnnualLeave";
+			signDocVO = signService.getDetailDocAnnualLeave(signDocVO.getDocNo());
 		}else if(signDocVO.getDocType() == 2) {
-			data.put("docPurchaseOrder", signService.getDetailDocPurchaseOrder(signDocVO.getDocNo()));
+			keyName = "docPurchaseOrder";
+			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
 		}else if(signDocVO.getDocType() == 3) {
-			data.put("", signDocVO);			
+			keyName = "";
+			signDocVO = null;
 		}
-		
+		data.put(keyName, signDocVO);
 		return data;
 	}
 	//
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
-	public int updateSignResultAjax(SignVO signVO) {
-		return signService.updateSignResult(signVO);
+	public void updateSignResultAjax(SignVO signVO) {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(signVO);
+		
+		signService.updateSignResult(signVO);
+		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) != 0) {
+		}
+		
 	}
 	
 	

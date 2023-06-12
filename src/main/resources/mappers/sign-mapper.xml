@@ -53,6 +53,8 @@
 		<result column="APPROVER_JOB" 		property="approverJob"/>
 		<result column="SGN_COMENT" 		property="sgnComent"/>
 		<result column="SGN_DATE" 			property="sgnDate"/>
+		<result column="NEXT_APPROVER_NO" 	property="nextApproverNo"/>
+		
 	</resultMap>
 	
 	<!-- 아이템 테이블 -->
@@ -293,6 +295,9 @@
             , DECODE(SGN_RESULT, '0', '미결재', '1', '결재') SGN_RESULT_STR
             , SGN_COMENT
             , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
+            , (SELECT APPROVER_NO FROM SGN S_SGN
+            WHERE S_SGN.DOC_NO = SGN.DOC_NO
+            AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
 		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT
 		WHERE DOC.DOC_NO = DAL.DOC_NO
         AND SGN.DOC_NO = DOC.DOC_NO
@@ -308,9 +313,29 @@
 		    , SGN_COMENT = #{sgnComent}
 		</if>
 		    , SGN_DATE = SYSDATE
-		WHERE DOC_NO = 1
+		WHERE DOC_NO = #{docNo}
 		AND APPROVER_NO = ${approverNo}
 	</update>
+	<!-- 결재문서 결재상태(SGN_STATUS) 변경 (0:임시저장/1:결재중/2:결재완료/3:반려) -->
+	<update id="updateSingStatus">
+		UPDATE SGN_DOC
+		SET SGN_STATUS = #{sgnStatus}
+	</update>
+	
+	<!-- 다음 결재자 조회 -->
+	<select id="getNextApproverNo" resultType="int">
+		SELECT 
+		    APPROVER_NO
+		FROM SGN
+		WHERE DOC_NO = #{docNo}
+		AND (
+		    NOT (0 = (SELECT SUM(DECODE(SGN_RESULT, 1, 0, 1)) FROM SGN WHERE DOC_NO = #{docNo}))
+		    AND
+		    NOT (EXISTS(SELECT 1 FROM SGN WHERE DOC_NO = #{docNo} AND SGN_RESULT = 0))
+		)
+		AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN WHERE DOC_NO = 2 AND SGN_RESULT IS NULL )
+	</select>
+	
 	<!-- 결재문서 상세조회 - 구매신청서 -->
 	<select id="getDetailDocPurchaseOrder" resultMap="signDoc">
 		SELECT
@@ -334,6 +359,9 @@
 		    , DECODE(SGN_RESULT, '0', '미결재', '1', '결재') SGN_RESULT_STR
 		    , SGN_COMENT
 		    , TO_CHAR(SGN_DATE, 'YYYY-MM-DD')SGN_DATE
+		    , (SELECT APPROVER_NO FROM SGN S_SGN
+            WHERE S_SGN.DOC_NO = SGN.DOC_NO
+            AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
 		    , BUY.BUY_NO
 		    , ITEM.ITEM_NO
 		FROM SGN_DOC DOC, DOC_PURCHASE_ORDER DPO, SGN, EMP, DEPT, BUY, BUY_DETAIL BD, ITEM
@@ -366,6 +394,7 @@
 		    DELETE FROM SGN_DOC WHERE DOC_NO = ${docNo};
 		END
 	</delete>
+	
 	
 	
 </mapper>
