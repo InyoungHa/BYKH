@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
+	.numberBtn {
+		color: #466583;
+	}
+	</style>
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+		<form th:action="@{/community/update}" method="post" id="communityUpdateForm" enctype="multipart/form-data">
+		
+			<div class="row">
+				<div class="col">
+					<table class="table text-center align-middle table-group-divider">
+						<colgroup>
+							<col width="10%">
+							<col width="*">
+							<col width="10%">
+							<col width="10%">
+						</colgroup>
+						<tr>
+							<td class="table-light">제목</td>
+							<td>
+								<input type="text" class="form-control" name="boardTitle" id="boardTitle" th:value="${community.boardTitle}">
+							</td>
+							<td class="table-light">카테고리</td>
+							<td>
+								<select class="form-select" name="boardCategoryVO.boardCateCode">
+									<th:block th:each="boardCate : ${boardCateList}">
+									  <option th:value="${boardCate.boardCateCode}"
+									  		th:selected="${community.boardCategoryVO.boardCateCode == boardCate.boardCateCode}">[[${boardCate.boardCateName}]]</option>
+									</th:block>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="align-baseline table-light">내용</td>
+							<td colspan="3">
+								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent">[[${community.boardContent}]]</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light">첨부파일</td>
+							<td colspan="3" class="text-start">
+								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
+								<div class="mb-1" th:if="${#lists.size(community.boardFileList) != 0}"
+											th:each="file : ${community.boardFileList}">
+									<a th:href="@{/community/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
+									[[${file.originFileName}]]
+									</a>
+									 ([[${file.fileSize}]])
+									<button class="btn btn-primary btn-sm" type="button" th:onclick="deleteAttachedFile([[${file.fileNum}]], this);">삭제</button>
+								</div>
+								<!-- 첨부파일 -->
+							</td>
+						</tr>
+					</table>
+					<div id="hiddenDiv">
+						<input type="hidden" name="boardNum" th:value="${community.boardNum}">
+						<input type="hidden" name="boardStatus" th:value="${community.boardStatus}">
+					</div>
+				</div>
+			</div>
+			
+			<div class="row px-2">
+				<div class="col d-grid d-md-flex justify-content-md-end" id="btnDiv">
+					<button class="btn btn-primary" type="button" onclick="updateCommunity();">등록</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+				
+				</div>
+			</div>
+			
+		</form>
+		</div>
+	</div>
+	
+	
+
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src="/js/content/community/community_update.js"></script>
+</th:block>
+
+</html>

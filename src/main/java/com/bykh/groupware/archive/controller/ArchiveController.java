@@ -44,7 +44,7 @@ public class ArchiveController {
 	@GetMapping("/list")
 	public String archiveList(Model model, BoardVO boardVO) {
 		BoardMenuVO boardMenuVO = new BoardMenuVO();
-		boardMenuVO.setBoardMenuCode("BOARD_MENU_002");
+		boardMenuVO.setBoardMenuCode("BOARD_MENU_001");
 		
 		boardVO.setBoardMenuVO(boardMenuVO);
 		
@@ -64,9 +64,9 @@ public class ArchiveController {
 	}
 	
 	//글쓰기 페이지 이동
-	@GetMapping("/regArchive")
+	@GetMapping("/regForm")
 	public String regForm(Model model, Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_002";
+		String boardMenuCode = "BOARD_MENU_001";
 		model.addAttribute("boardMenuCode", boardMenuCode);
 		
 		User user = (User) authentication.getPrincipal();
@@ -129,7 +129,7 @@ public class ArchiveController {
 	@ResponseBody
 	@PostMapping("/tempBoardList")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_002";
+		String boardMenuCode = "BOARD_MENU_001";
 		
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
@@ -252,6 +252,11 @@ public class ArchiveController {
 		//중요글 체크 해제 시 null값 체크
 		if(boardVO.getIsImportant() == null) {
 			boardVO.setIsImportant("N");
+		}
+		
+		//비밀글 체크 해제 시 null 값 체크
+		if(boardVO.getIsPrivate() == null) {
+			boardVO.setIsPrivate("N");
 		}
 		
 		noticeService.updateBoard(boardVO, deleteFileNum);

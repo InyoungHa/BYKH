@@ -18,7 +18,6 @@ public class SignDocVO {
 	private String docTitle;
 	private int sgnStatus;
 	private String sgnStatusStr;
-	private int docStatus;
 	private String insertDate;
 	
 	private DocAnnualLeaveVO docAnnualLeaveVO;

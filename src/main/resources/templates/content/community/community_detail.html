@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+		
+			<div class="row mb-2">
+				<div class="col d-grid gap-1 d-md-flex justify-content-md-end">
+					<input type="button" class="btn me-md-1" th:onclick="|location.href='@{/community/update(boardNum=${community.boardNum})}'|"  value="수정">
+					<input type="button" class="btn me-md-1" th:onclick="deleteBoard([[${community.boardNum}]]);" value="삭제">
+					<input type="button" class="btn" th:onclick="|location.href='@{/community/list}'|" value="목록">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<table class="table text-center align-middle table-group-divider">
+						<colgroup>
+							<col width="10%">
+							<col width="*">
+							<col width="10%">
+							<col width="10%">
+						</colgroup>
+						<tr>
+							<td class="table-light">제목</td>
+							<td class="text-start">
+								<span class="badge text-bg-light">[[${community.boardCategoryVO.boardCateName}]]</span> [[${community.boardTitle}]]
+							</td>
+							<td class="table-light">작성자</td>
+							<td>[[${community.ename}]]</td>
+						</tr>
+						<tr>
+							<td class="table-light">작성일</td>
+							<td class="text-start">[[${community.boardDate}]]</td>
+							<td class="table-light">조회수</td>
+							<td>[[${community.boardView}]]</td>
+						</tr>
+						<tr>
+							<td class="table-light">첨부파일</td>
+							<td colspan="3" class="text-start">
+								<div th:if="${#lists.size(community.boardFileList) == 0}" class="text-secondary">
+									첨부된 파일이 없습니다.
+								</div>
+								<div th:unless="${#lists.size(community.boardFileList) == 0}"
+											th:each="file : ${community.boardFileList}">
+									<a th:href="@{/community/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">
+									[[${file.originFileName}]]
+									</a>
+									 ([[${file.fileSize}]])
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-start align-baseline">
+								<div style="min-height: 20rem">[[${community.boardContent}]]</div>
+							</td>
+						</tr>
+						<tr class="table-group-divider">
+							<td class="table-light">이전글</td>
+							<td class="text-start" colspan="3">
+								<th:block th:if="${community.boardPrevNum != 'BOARD_000'}">
+									<th:block th:if="${community.boardPrevPrivate == 'Y'}">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+										  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+										</svg>
+										<a href="javascript:void(0)" th:onclick="isPrivateModal([[${community.boardPrevNum}]])" class="link-dark" data-bs-toggle="modal" data-bs-target="#privateModal" id="privateModalBtn">
+											[[${community.boardPrevTitle}]]
+										</a>
+									</th:block>
+									<th:block th:unless="${community.boardPrevPrivate == 'Y'}">
+										<a th:href="@{/community/detail(boardNum=${community.boardPrevNum})}" class="link-dark">
+										[[${community.boardPrevTitle}]]
+										</a>
+									</th:block>
+								</th:block>
+								<th:block th:unless="${community.boardPrevNum != 'BOARD_000'}">
+									<div class="text-secondary">[[${community.boardPrevTitle}]]</div>
+								</th:block>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light">다음글</td>
+							<td class="text-start" colspan="3">
+								<th:block th:if="${community.boardNextNum != 'BOARD_000'}">
+									<th:block th:if="${community.boardNextPrivate == 'Y'}">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+										  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+										</svg>
+										<a href="javascript:void(0)" th:onclick="isPrivateModal([[${community.boardNextNum}]])" class="link-dark" data-bs-toggle="modal" data-bs-target="#privateModal" id="privateModalBtn">
+											[[${community.boardNextTitle}]]
+										</a>
+									</th:block>
+									<th:block th:unless="${community.boardNextPrivate == 'Y'}">
+										<a th:href="@{/community/detail(boardNum=${community.boardNextNum})}" class="link-dark">
+										[[${community.boardNextTitle}]]
+										</a>
+									</th:block>
+									<a th:if="${boardNextNum} != 'BOARD_000'" th:href="@{/community/detail(boardNum=${community.boardNextNum})}" style="color : black">
+									[[${community.boardNextTitle}]]
+									</a>
+								</th:block>
+								<th:block th:unless="${community.boardNextNum != 'BOARD_000'}">
+									<div class="text-secondary">[[${community.boardNextTitle}]]</div>
+								</th:block>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			
+			
+			<div class="row">
+				<div class="col-12 mb-1">
+					<span id="replyCntSpan">[[${community.replyCnt}]]</span>개의 댓글
+				</div>
+				<div class="col-12">
+					<table class="table table-borderless border-top border-bottom" id="replyTable">
+						<colgroup>
+							<col width="5%">
+							<col width="*">
+						</colgroup>
+
+						<th:block th:if="${#lists.size(community.replyList) == 0}">
+							<tr class="border-top" id="noReplyTr">
+								<td class="text-secondary text-center align-middle" colspan="2" height="120px">
+									등록된 댓글이 없습니다.
+								</td>
+							</tr>
+						</th:block>
+						<th:block th:if="${#lists.size(community.replyList) != 0}"
+									th:each="reply : ${community.replyList}">
+							<tr class="border-top">
+								<td class="text-center">
+									<img th:src="${reply.attachedFileName} ? @{/upload/empImg/} + ${reply.attachedFileName} : @{/upload/empImg/default.png}" 
+											width="100%" class="mx-0 rounded-circle border">
+								</td>
+								<td>
+									<div class="d-flex justify-content-between">
+										<div class="fw-semibold mb-1">[[${reply.ename}]]</div>
+										<div class="text-secondary fs-6">[[${reply.replyDate}]]</div>
+									</div>
+									<div th:utext="${reply.replyContent}"></div>
+									<div class="d-grid gap-1 d-md-flex justify-content-md-end">
+										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정">
+										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제">
+									</div>
+								</td>
+							</tr>
+						</th:block>
+						
+						<tr class="border-top" id="regReplyTr">
+							<td colspan="2">
+								<div class="input-group">
+									<textarea class="form-control" rows="5px" style="resize: none" id="replyTextarea"></textarea>
+									<input type="button" class="btn" th:onclick="regReply([[${community.boardNum}]]);" value="등록">
+								</div>
+							</td>
+						</tr>
+						
+						
+					</table>
+				</div>
+			</div>
+		
+		
+		
+		
+		</div>
+	</div>
+	
+	
+	
+	
+<!-- 비밀글 모달 -->
+<div class="modal fade" id="privateModal" tabindex="-1" aria-labelledby="privateModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 20rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="privateModal">비밀글</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-5">
+        <div class="row">
+        	<div class="col text-center">
+				<div class="fw-semibold mb-3">비밀글 기능으로 보호된 글입니다.</div>
+				<div class="mb-5">작성자와 관리자만 열람하실 수 있습니다. 본인이라면 비밀번호를 입력하세요.</div>
+				
+				<div><input type="hidden" id="boardNum"></div>
+				<div class="text-start"><span class="text-danger">*</span> 비밀번호</div>
+				<div class="input-group mb-3">
+				  <input type="password" class="form-control" name="boardPw" id="boardPw">
+				  <button class="btn" type="button" onclick="checkBoardPw()">확인</button>
+				</div>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src="/js/content/community/community_detail.js"></script>
+</th:block>
+
+</html>

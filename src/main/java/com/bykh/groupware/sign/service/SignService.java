@@ -28,6 +28,7 @@ public interface SignService {
 	
 	//결재/반려 버튼 클릭 시 실행
 	int updateSignResult(SignVO signVO);
+	int updateSignStatus(SignDocVO signDocVO);
 	
 	//구매신청서 - 모든 아이템 리스트 조회
 	List<ItemVO> getItemList();
@@ -37,5 +38,8 @@ public interface SignService {
 	int getNextBuyNo();
 	//구매신청서 - DELETE
 	void delPurchaseOrder(int docNo);
+	
+	//다음 결재자번호 조회
+	int getNextApproverNo(int docNo);
 	
 }

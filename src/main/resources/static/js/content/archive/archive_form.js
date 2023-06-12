@@ -359,6 +359,8 @@ function getTempBoard(boardNum) {
 				fileDiv.remove();
 			}
 			
+			const isImportant = document.querySelector('#isImportant');
+			
 			//hiddenDiv 비우고 boardNum, boardStatus 넣기
 			const hiddenDiv = document.querySelector('#hiddenDiv');
 			hiddenDiv.replaceChildren();
@@ -369,14 +371,12 @@ function getTempBoard(boardNum) {
 			
 			hiddenDiv.insertAdjacentHTML('afterbegin', tempStr);
 			
-			//파일 처리~~~~~~~~~~~~~~~~!!!!!!
-			console.log(tempBoard);
 				
 			if(tempBoard.boardFileList.length != 0) {
 				let fileStr = '';
 				for(const file of tempBoard.boardFileList) {
 					fileStr += `<div class="mb-1">`;
-					fileStr += `<a th:href="@{/archive/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
+					fileStr += `<a href="/archive/download?fileNum=${file.fileNum}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
 					fileStr += `${file.originFileName}</a> (${file.fileSize}) `;
 					fileStr += `<button class="btn btn-primary btn-sm" type="button" onclick="deleteAttachedFile('${file.fileNum}', this);">삭제</button></div>`;
 				}
@@ -384,6 +384,13 @@ function getTempBoard(boardNum) {
 				const fileTd = document.querySelector('#fileTd');
 				fileTd.insertAdjacentHTML('beforeend', fileStr);
 				
+			}
+			
+			if(tempBoard.isImportant == 'Y') {
+				isImportant.checked = true;
+			}
+			else {
+				isImportant.checked = false;
 			}
 		},
 		error: function() {

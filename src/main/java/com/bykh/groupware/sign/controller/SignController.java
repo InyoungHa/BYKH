@@ -69,8 +69,6 @@ public class SignController {
 		model.addAttribute("itemList", signService.getItemList());
 		if(signDocVO.getDocNo() != 0) {
 			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
-			System.out.println("data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			System.out.println(signDocVO);
 			model.addAttribute("docPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 		}
 		return "content/sign/purchase_order_form";
@@ -123,7 +121,6 @@ public class SignController {
 	@ResponseBody
 	@PostMapping("/insertPurchaseorderAjax")
 	public void insertPurchaseorderAjax(@RequestBody Map<String, Object> mapData, SignDocVO signDocVO) {
-		System.out.println("----------------아래:mapData------------------");		
 		//System.out.println(mapData);
 		//기존 데이터가 있다면 삭제
 		
@@ -131,8 +128,6 @@ public class SignController {
 		ObjectMapper mapper = new ObjectMapper();
 		//signDoc
 		signDocVO = mapper.convertValue(mapData.get("sgn_doc"), SignDocVO.class);
-		System.out.println("signDocVO = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
-		System.out.println(signDocVO);
 		
 		//1-3 sgn_arr
 		SignVO[] signArr = mapper.convertValue(mapData.get("sgn_arr"), SignVO[].class);
@@ -157,8 +152,10 @@ public class SignController {
 		
 		// 기존 데이터가 있다면 삭제(임시저장문서)
 		if (signDocVO.getDocNo() != 0) {
+			System.out.println("delPurchaseOrder if문 실행");
 			signService.delPurchaseOrder(signDocVO.getDocNo());
 		} else {
+			System.out.println("delPurchaseOrder else if문 실행");
 			// 기존 데이터 없으면 docNo, buyNo 값 세팅
 			int docNo = signService.getNextDocNo();
 			int buyNo = signService.getNextBuyNo();
@@ -170,8 +167,11 @@ public class SignController {
 			buyDetailVOList.get(0).setBuyNo(buyNo);
 		}
 		
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(signDocVO.getDocNo());
+		
 		//2. 쿼리 실행
-		signService.insertDocPurchaseOrder(signDocVO);
+		//signService.insertDocPurchaseOrder(signDocVO);
 	}
 	
 	//결재문서 상세조회
@@ -180,21 +180,43 @@ public class SignController {
 	public Map<String, SignDocVO> getSignDocDetailAjax(SignDocVO signDocVO) {
 		Map<String, SignDocVO> data = new HashMap<>();
 		//docType에 따라 쿼리 실행
+		String keyName = "";
 		if(signDocVO.getDocType() == 1) {
-			data.put("docAnnualLeave", signService.getDetailDocAnnualLeave(signDocVO.getDocNo()));
+			keyName = "docAnnualLeave";
+			signDocVO = signService.getDetailDocAnnualLeave(signDocVO.getDocNo());
 		}else if(signDocVO.getDocType() == 2) {
-			data.put("docPurchaseOrder", signService.getDetailDocPurchaseOrder(signDocVO.getDocNo()));
+			keyName = "docPurchaseOrder";
+			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
 		}else if(signDocVO.getDocType() == 3) {
-			data.put("", signDocVO);			
+			keyName = "";
+			signDocVO = null;
 		}
-		
+		data.put(keyName, signDocVO);
 		return data;
 	}
 	//
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
-	public int updateSignResultAjax(SignVO signVO) {
-		return signService.updateSignResult(signVO);
+	public void updateSignResultAjax(SignVO signVO) {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(signVO);
+		
+		signService.updateSignResult(signVO);
+
+		SignDocVO signDocVO = new SignDocVO();
+		signDocVO.setDocNo(signVO.getDocNo());
+		//결재결과가 '결재'고 다음 결재자가 없다면 문서 상태를 '결재완료'로 변경
+		
+		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) == 0) {
+			signDocVO.setSgnStatus(2);
+			signService.updateSignStatus(signDocVO);
+		//결재결과가 '반려'이면 문서상태를 '반려'로 변경
+		}else if(signVO.getSgnResult() == 0) {
+			signDocVO.setSgnStatus(3);
+			signService.updateSignStatus(signDocVO);
+			
+		}
+		
 	}
 	
 	

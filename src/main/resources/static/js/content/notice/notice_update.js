@@ -1,6 +1,6 @@
 //정상 글 등록
 function updateNotice() {
-	if(!noticeUpdateCheck()) {
+	if(!formCheck()) {
 		return false;
 	}
 	else {
@@ -10,7 +10,7 @@ function updateNotice() {
 
 
 //제목, 내용, 파일 첨부 유효성 체크
-function noticeUpdateCheck() {
+function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');

@@ -61,6 +61,8 @@ public class EmpController {
 		//사원 조회 쿼리
 		model.addAttribute("empList", empService.selectEmpList(empVO));
 		
+		
+		
 		return "content/emp/emp_manage";
 	}
 	
@@ -81,7 +83,7 @@ public class EmpController {
 	@PostMapping("/getEmpDetailAjax")
 	public Map<String, Object> getEmpDetailAjax(int empno) {
 		
-		System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
+		//System.out.println("~~~~~~~~!!!!!!!!!!!!!!!!"+ empService.selectEmpDetail(empno));
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		
@@ -101,7 +103,7 @@ public class EmpController {
 	@ResponseBody
 	@PostMapping("/regEmpDetailAjax")
 	public void regEmpImgAjax(EmpVO empVO, MultipartFile empImg) {
-		System.out.println(empVO);
+		//System.out.println(empVO);
 		
 		//사진 업로드
 		if(empImg != null) {
@@ -112,7 +114,7 @@ public class EmpController {
 			eImgVO.setEmpno(empVO.getEmpno());
 			
 			//쿼리에 필요한 데이터 다 있음(originFileName, attachedFileName, empno)
-			System.out.println(eImgVO);
+			//System.out.println(eImgVO);
 			
 			//그 객체로 insert 쿼리 실행
 			empService.insertEmpImg(eImgVO);
@@ -149,24 +151,16 @@ public class EmpController {
 			
 			empVO.setPhoneTel(phoneTel);
 		}
-		
-		//재직 상태
-		
-		
+				
 		empService.updateEmpDetail(empVO);
 	}
 	
 	@ResponseBody //재직 상태에 따른 계정 상태 변경
 	@PostMapping("/updateAccountAjax")
 	public void updateAccountAjax(int empno, int eStatus, int eAccount, EmpVO empVO) {
-		System.out.println("!!!!!!!!!!!!!"+empVO);
-		System.out.println("!!!!!!!!!!!!!"+empno);
-		System.out.println("!!!!!!!!!!!!!"+eStatus);
-		System.out.println("!!!!!!!!!!!!!"+eAccount);
-		
-		empVO.setEmpno(empno);
-		empVO.setEStatus(eStatus);
-		empVO.setEAccount(eAccount);
+		//System.out.println("!!!!!!!!!!!!!"+empVO);
+
+
 		empService.updateE_Account(empVO);
 	}
 }

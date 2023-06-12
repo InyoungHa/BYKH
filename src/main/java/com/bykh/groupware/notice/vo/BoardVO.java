@@ -38,8 +38,10 @@ public class BoardVO extends PageVO {
 	private String ename;
 	private String boardPrevNum;
 	private String boardPrevTitle;
+	private String boardPrevPrivate;
 	private String boardNextNum;
 	private String boardNextTitle;
+	private String boardNextPrivate;
 	private int fileCnt;
 	private int replyCnt;
 	
