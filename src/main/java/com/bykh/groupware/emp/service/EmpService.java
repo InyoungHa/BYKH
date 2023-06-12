@@ -1,7 +1,7 @@
 package com.bykh.groupware.emp.service;
 
 import java.util.List;
-import java.util.Map;
+
 
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
@@ -32,7 +32,15 @@ public interface EmpService {
 	//계정 상태 변경
 	void updateE_Account(EmpVO empVO);
 	
-	//사원 삭제
-	void deleteEmp(int empno);
+	
+	//계정 상태 변경 조회 쿼리
+	void selectE_Account(int empno);
+
+	//마이페이지 조회
+	EmpVO selectSelfEmpDetail(int empno);
+	
+	//마이페이지 수정
+	void updateSelfEmpDetail(EmpVO empVO);
+
 
 }

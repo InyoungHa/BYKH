@@ -1,7 +1,7 @@
 package com.bykh.groupware.emp.service;
 
 import java.util.List;
-import java.util.Map;
+
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,12 +65,27 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 
-	@Override //사원 삭제 
-	public void deleteEmp(int empno) {
-		sqlSession.delete("empMapper.deleteEmp",empno);
+
+	@Override //계정 상태 변경 조회 쿼리
+	public void selectE_Account(int empno) {
+		sqlSession.selectOne("empMapper.selectE_Account", empno);
 		
 	}
-	
+
+
+	@Override //마이페이지 조회
+	public EmpVO selectSelfEmpDetail(int empno) {
+		
+		return sqlSession.selectOne("empMapper.selectSelfEmpDetail",empno);
+	}
+
+
+	@Override //마이페이지 수정
+	public void updateSelfEmpDetail(EmpVO empVO) {
+		sqlSession.update("empMapper.updateSelfEmpDetail",empVO);
+		
+	}
+
 	
 	
 	
