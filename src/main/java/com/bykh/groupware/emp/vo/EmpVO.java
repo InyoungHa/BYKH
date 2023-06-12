@@ -56,6 +56,7 @@ public class EmpVO extends PageVO {
 	private EImgVO eImgVO; // 사원 이미지 등록
 	
 	private int selectedEStatus;//재직 상태 변경
+	private int selectedEAccount;//계정 상태 변경
 	
 	//테스트용 추가-희수
 	private int level;

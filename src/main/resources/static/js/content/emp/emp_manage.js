@@ -1,4 +1,25 @@
 
+
+
+
+init();
+
+
+function init(){
+	
+	
+	const changeEAccountModal = document.getElementById('changeEAccountModal');
+
+	changeEAccountModal.addEventListener('hidden.bs.modal', event=>{
+	
+	document.querySelector('#changeEAccountForm').reset();
+	//const modal_body_tag=document.querySelector('#changeEAccountModal .modal-content');
+	//modal_body_tag.innerHTML='';
+	});
+	
+} 
+
+
 //오류 메세지 div 전체 제거
 function delete_error_div(){
 	const error_divs= document.querySelectorAll('div[class="my-invalid"]');
@@ -243,7 +264,7 @@ function drawEmpDatail(data){
 	str += 					'<td>재직상태</td>';
 	str += 					`<input type="hidden" id="eStatus" value="${data['empDetail'].e_status}">`;
 	str += 					'<td>';
-	str += 						'<select id="selectedEStatus" class="form-control">';
+	str += 						'<select id="selectedEStatus" class="form-select">';
 	str += 							`<option value="1" ${data['empDetail'].e_status == 1 ? 'selected' :''}>재직중</option>`;
 	str += 							`<option value="2" ${data['empDetail'].e_status == 2 ? 'selected' : ''}>휴직</option>`;
 	str += 							`<option value="3" ${data['empDetail'].e_status == 3 ? 'selected' :''}>퇴사</option>`;
@@ -269,7 +290,7 @@ function drawEmpDatail(data){
 	if(data.empDetail.office_tel==undefined){	
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
-		str += 						`<select id="officeTel" class="form-control form-control-sm">`;
+		str += 						`<select id="officeTel" class="form-select form-control-sm">`;
 		str += 							`<option value="02">02(서울)</option>`;
 		str += 							`<option value="032">032(인천)</option>`;
 		str += 							`<option value="051">051(부산)</option>`;
@@ -289,7 +310,7 @@ function drawEmpDatail(data){
 		
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
-		str += 						`<select id="officeTel" class="form-control form-control-sm">`;
+		str += 						`<select id="officeTel" class="form-select form-control-sm">`;
 		str += 							`<option value="02" ${officeTelPrefix === "02" ? "selected" : ""}>02(서울)</option>`;
 		str += 							`<option value="032" ${officeTelPrefix === "032" ? "selected" : ""}>032(인천)</option>`;
 		str += 							`<option value="051" ${officeTelPrefix === "051" ? "selected" : ""}>051(부산)</option>`;
@@ -310,7 +331,7 @@ function drawEmpDatail(data){
 	if(data.empDetail.phone_tel==undefined){				
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
-		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;
+		str += 						`<select id="phoneTel" class="form-select form-control-sm">`;
 		str += 							`<option value="010">010</option>`;
 		str += 							`<option value="011">011</option>`;
 		str += 							`<option value="012">012</option>`;
@@ -331,7 +352,7 @@ function drawEmpDatail(data){
 		
 		str += 				'<div class="row">';
 		str += 					'<div class="col-3">';
-		str += 						`<select id="phoneTel" class="form-control form-control-sm">`;		
+		str += 						`<select id="phoneTel" class="form-select form-control-sm">`;		
 		str += 							`<option value="010" ${phoneTelPrefix ==="010"? "selected":""}>010</option>`;
 		str += 							`<option value="011" ${phoneTelPrefix ==="011"? "selected":""}>011</option>`;
 		str += 							`<option value="012" ${phoneTelPrefix ==="012"? "selected":""}>012</option>`;
@@ -497,8 +518,8 @@ function regEmpDetail() {
 	
 	const eStatus = document.querySelector('#eStatus').value;
 	const selectedEStatus = document.querySelector('#selectedEStatus').value; //재직 상태
-	console.log(eStatus);
-	console.log(selectedEStatus);
+	//console.log(eStatus);
+	//console.log(selectedEStatus);
 
 	regDetail={
 		'empno' : empno,		
@@ -556,18 +577,15 @@ function revoke_modal(){
 }
 
 
+
 //계정 상태 변경
 // 변경을 누르면 휴먼 계정으로 변경, 사원 세부 정보에서 퇴직일때는 삭제 버튼으로 변경 가능
 // 휴먼 계정으로 바뀌면 계정은 휴직으로 변경된다...?
-function changAccount(empno){
-
+function changAccount(empno,eStatus,eAccount){
 	const change_e_account_modal = document.querySelector('#changeEAccountModal');
 
-	const eStatus=document.querySelector('#eStatus').value;
-	const eAccount=document.querySelector('#eAccount').value;
 
-
-	drawAccountModal(empno, eStatus, eAccount);
+	draw_change_account_modal(empno, eStatus, eAccount);
 
 	
 	//bootstrap 모달 불러오기
@@ -578,43 +596,47 @@ function changAccount(empno){
 	
 } 
 
-function drawAccountModal(empno, eStatus, eAccount){
-	console.log(empno);
-	console.log(eStatus);
-	console.log(eAccount);
-	
+function draw_change_account_modal(empno, eStatus, eAccount){	
 	const modal_body_tag=document.querySelector('#changeEAccountModal .modal-body');
 	modal_body_tag.replaceChildren();
 	
 		
 	let str ='';
 	
-	str += '<label class="page_title">계정 상태 변경</label>';
-	str += 	'<div class="row">';
-	str += 		'<div class="col">';
-	str += 			'<form id=changeEAccountForm>';
+	
+	str += 	'<div class="row mt-2">';
+	str += 		'<div class="col-8 offset-3">';
+	str += 			'<div class="row mb-3">';
+	str += 			'<form id="changeEAccountForm" style="margin:0 auto">';
+	str += 			`<input type="hidden" id="empno" value="${empno}">`;
+	str += 			`<input type="hidden" id="eStatus" value="${eStatus}">`;
+	str += 			`<input type="hidden" id="eAccount" value="${eAccount}">`;
 	str += 			'<table>';
 	str += 				'<tr>';
 	str += 					'<td>재직 상태</td>';
 	str += 					'<td>';
-	str += 						'<select id="eStatus">';
-	str += 							`<option value="1" ${eStatus== 1 ? 'selected':''}>재직중</option>`;
-	str += 							`<option value="2" ${eStatus== 2 ? 'selected':''}>휴직</option>`;
-	str += 							`<option value="3" ${eStatus== 3 ? 'selected':''}>퇴직</option>`;
+	str += 						'<select id="selectedEStatus" class="form-select">';
+	str += 							`<option value="1" ${eStatus== 1 ? "selected":""}>재직중</option>`;
+	str += 							`<option value="2" ${eStatus== 2 ? "selected":""}>휴직</option>`;
+	str += 							`<option value="3" ${eStatus== 3 ? "selected":""}>퇴직</option>`;
 	str += 						'</select>';
 	str += 					'</td>';
 	str += 				'</tr>';
 	str += 				'<tr>';
 	str += 					'<td>계정 상태</td>';
 	str += 					'<td>';
-	str += 						'<select id="eAccount">';
+	str += 						'<select id="selectedEAccount" class="form-select">';
 	str += 							`<option value="1" ${eAccount== 1 ? 'selected':''}>정상</option>`;
 	str += 							`<option value="2" ${eAccount== 2 ? 'selected':''}>휴면</option>`;
 	str += 						'</select>';
 	str += 					'</td>';
 	str += 				'</tr>';
 	str += 			'</table>';
-	str += 			'<input type="button" class="btn" value="변경">';
+	str += 			'</div>';
+	str += 			'<div class="row">';
+	str += 				'<div class="col-7 d-grid gap-2 ">';
+	str += 					'<input type="button" class="btn" value="변경" onclick="change_account_fu()">';
+	str += 				'</div>';
 	str += 			'</form>';
 	str += 		'</div>';
 	str += 	'</div>';
@@ -623,7 +645,23 @@ function drawAccountModal(empno, eStatus, eAccount){
 	
 }
 
-/*	
+
+
+function change_account_fu(){
+	const empno = document.querySelector('#changeEAccountForm #empno').value;
+	
+	const eStatus = document.querySelector('#changeEAccountForm #eStatus').value;
+	const selectedEStatus = document.querySelector('#changeEAccountForm #selectedEStatus').value;
+	
+	const eAccount = document.querySelector('#changeEAccountForm #eAccount').value;
+	const selectedEAccount = document.querySelector('#changeEAccountForm #selectedEAccount').value;
+	
+	console.log(empno);
+	console.log(`eStatus :${eStatus}`);
+	console.log(`selectedEStatus :${selectedEStatus}`);
+	console.log(`eAccount : ${eAccount}`);
+	console.log(`selectedEAccount : ${selectedEAccount}`);
+	
 	$.ajax({
 		url: '/emp/updateAccountAjax', //요청경로
 		type: 'post',
@@ -632,13 +670,19 @@ function drawAccountModal(empno, eStatus, eAccount){
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
 		data: { 'empno': empno,
 				'eStatus':eStatus,
-				'eAccount':eAccount}, //필요한 데이터
+				'selectedEStatus' : selectedEStatus,				
+				'eAccount':eAccount,
+				'selectedEAccount':selectedEAccount}, //필요한 데이터
 		success: function(result) {
 			location.reload()
 		},
 		error: function() {
 			alert('실패');
 		}
-	});*/
+	});
+	
+}
+
+	
 	
 
