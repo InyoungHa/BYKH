@@ -15,4 +15,5 @@ public class ReplyVO {
 	private String boardNum;
 	
 	private String ename;
+	private String attachedFileName;
 }

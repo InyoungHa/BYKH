@@ -34,7 +34,8 @@ void insertResourceSchedule(ResourceVO resourceVO);
 List<ResourceVO> getAllResourceSchedules(int empno);
 
 
-
+//자원관리 캘린더 세부일정 추가
+void insertScheduleDetail(ResourceVO resourceVO);
 
 }
 

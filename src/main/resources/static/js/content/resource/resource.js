@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			listWeek: { buttonText: '자원목록' },
 		},
 		eventClick: function(info) {
-
+						
 			$('#participant').val("");
 			$('#resourceContent').val("");
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					async: false,
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 					data: {
-						'id': id,
+						'idDetail': id,
 						'participant': participant,
 						'resourceContent': resourceContent
 					},
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			var id = info.event._def.publicId;
 			console.log(id);
+			
 			//ajax start
 			$.ajax({
 				url: '/resource/selectCalendarDetail', //요청경로
@@ -71,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				async: false,
 				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 				data: {
-					'id': id
+					'idDetail': id
 				}, //HTML에받는  데이터
 				success: function(result) {
 
@@ -195,7 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
 							start_date += "T" + start_time;
 							end_date += "T" + end_time;
 						}
-
+				
+					
 						var obj = {
 							"title": content,
 							"start": start_date,
@@ -270,7 +272,7 @@ var calendar;
 
 document.getElementById("saveButton").addEventListener("click", allSave);
 
-///일정저장////
+///예약하기////
 function allSave() {
 	var allEvent = calendar.getEvents();
 	var events = [];
@@ -328,6 +330,7 @@ var return_value = null;
 loadingEvents();
 
 function loadingEvents() {
+	
 	//ajax start
 	$.ajax({
 		url: '/calendar/resourceCalendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
@@ -336,10 +339,12 @@ function loadingEvents() {
 		dataType: 'json',
 
 		success: function(result) {
+		
 			for (let i = 0; i < result.length; i++) {
+				
 				const title = result[i].title;
 				let color;
-
+				
 				if (title === '회의실01') {
 					color = '#025464'; // 회의실01인 경우
 				} else if (title === '회의실02') {
@@ -364,7 +369,6 @@ function loadingEvents() {
 			}
 			console.log(result);
 			var jsonResult = JSON.stringify(result);
-
 			return_value = JSON.parse(jsonResult);
 		},
 		error: function() {
@@ -372,6 +376,7 @@ function loadingEvents() {
 		}
 	});
 	return return_value;
+	
 }
 
 

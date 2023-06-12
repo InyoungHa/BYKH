@@ -4,7 +4,7 @@
 <!-- 해당 파일에 모든 쿼리문을 작성 -->
 <mapper namespace="attendanceMapper">
 	<resultMap type="com.bykh.groupware.attendance.vo.AttendanceVO" id="att">
-		<id column="ATT_CODE" 		property="attCode;"/>
+		<id column="ATT_CODE" 		property="attCode"/>
 		<result column="GO_WORK" 		property="goWork"/>
 		<result column="OUT_WORK" 		property="outWork"/>
 		<result column="CUR_DATE" 		property="curDate"/>
@@ -23,6 +23,24 @@
 		<association property="empVO" resultMap="empMapper.emp"></association>
 	</resultMap>
 	
+	<resultMap type="com.bykh.groupware.resource.vo.ResourceVO" id="resourceCal">
+		<id column="SCHEDULE_CODE" property="id"/>
+		<result column="EVENT_NAME" property="title"/>
+		<result column="START_DATE" property="start"/>
+		<result column="END_DATE" property="end"/>
+		<result column="START_DAY" property="startDay"/>
+		<result column="END_DAY" property="endDay"/>
+		<result column="PARTICIPANT" property="participant"/>
+		<result column="RESOURCE_CONTENT" property="resourceContent"/>
+		<result column="TOTAL_DURATION" property="totalDuration"/>
+		<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
+		<result column="EMPNO" property="empno"/>
+	</resultMap>
+	
+
+	
+	
+	
 
 	<!-- 회원정보 조회 -->
 	<select id="selectName" resultMap="att">
@@ -30,33 +48,45 @@
 	WHERE EMPNO = #{empno}
 	</select>
 	
+	<!--ATT_CODE 최신 첫번쨰 조회  -->
+	<select id="selectAtt" resultMap="att">
+		SELECT ATT_CODE
+		FROM (
+		SELECT ATT_CODE
+		FROM ATTENDANCE
+		WHERE EMPNO = #{empno}
+		ORDER BY ATT_CODE DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
+	
 
 	<!--출근시간 저장 -->
 	<insert id="goWork">
-		INSERT INTO ATTENDANCE (
-			ATT_CODE
-			, GO_WORK
-			, EMPNO
-		)
-		VALUES (
-			(SELECT 'ATT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0) + 1, 3, '0')
-			FROM ATTENDANCE)
-			, SYSDATE
-			, #{empno}
-		)
+	INSERT INTO ATTENDANCE (
+	ATT_CODE,
+	GO_WORK,
+	EMPNO
+	)
+	SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 5))), 0) + 1, 3, '0'),
+	SYSDATE,
+	#{empno}
+	FROM ATTENDANCE
+
 	</insert>
 
 	<!--퇴근시간 저장(NULL -> SYSDATE로 업데이트) -->
 	<update id="outWork">
-UPDATE ATTENDANCE
-SET OUT_WORK = SYSDATE,
-    WORKING_STATUS = CASE 
-        WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2 
-        WHEN GO_WORK IS NULL THEN 3
-        ELSE 1 
-    END
-WHERE ATT_CODE = (SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 7))), 0), 3, '0') FROM ATTENDANCE)
-AND EMPNO = #{empno}
+	UPDATE ATTENDANCE
+	SET OUT_WORK = SYSDATE,
+	WORKING_STATUS = CASE
+	WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2
+	WHEN GO_WORK IS NULL THEN 3
+	ELSE 1
+	END
+	WHERE ATT_CODE = #{attCode}
+	AND EMPNO = #{empno}
+	
 	</update>
 
 
@@ -69,6 +99,7 @@ AND EMPNO = #{empno}
 		ORDER BY GO_WORK DESC
 		FETCH FIRST 1 ROW ONLY
 	</select>
+
 
 	<!-- 제일최신 퇴근시간 조회 -->
 	<select id="selectOutwork" resultMap="att">
@@ -83,10 +114,12 @@ AND EMPNO = #{empno}
 
 	<!-- 지각 횟수 조회 -->
 	<select id="selectLateCount" resultMap="att">
-		SELECT COUNT(*) AS LATE_COUNT
-		FROM ATTENDANCE
-		WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
-		AND EMPNO = #{empno} 
+SELECT COUNT(*) AS LATE_COUNT
+FROM ATTENDANCE
+WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
+    AND EMPNO = #{empno}
+    AND TRUNC(GO_WORK) = TRUNC(SYSDATE)
+    AND ROWNUM = 1
 	</select>
 
 
@@ -174,7 +207,7 @@ AND EMPNO = #{empno}
 
 	</select>
 	
-		<!--출퇴근 기록 게시판 전체 -->
+    <!--출퇴근 기록 게시판 전체 -->
 	<select id="workingBoardAll" resultMap="att">
 	SELECT
 	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
@@ -193,10 +226,36 @@ AND EMPNO = #{empno}
 	ORDER BY GO_WORK DESC
 	</select>
 	
-
+<!--자원조회내역 -->
+<select id="selectResource" resultMap="resourceCal">
+	SELECT EVENT_NAME,
+	TO_CHAR(START_DATE, 'YYYY-MM-DD(DY) HH24:MI')AS START_DAY,
+	TO_CHAR(END_DATE, 'YYYY-MM-DD(DY) HH24:MI')AS END_DAY,
+	ROUND((END_DATE - START_DATE) * 24, 2) AS TOTAL_DURATION
+	FROM SCHEDUL_FOR_RESOURCE
+	WHERE EMPNO = #{empno}
+</select>
 		
+<!-- 자원디테일 내역 저장  -->		
+<update id="insertResDetail">
+	UPDATE SCHEDUL_FOR_RESOURCE
+	SET PARTICIPANT = #{participant},
+	RESOURCE_CONTENT = #{resourceContent}
+	WHERE EMPNO = #{empno} AND SCHEDULE_CODE = #{id}
+</update>
 
-	
+<!-- ID조회 -->
+<select id="selectId" resultMap="resourceCal">
+SELECT SCHEDULE_CODE FROM SCHEDUL_FOR_RESOURCE  WHERE EMPNO = #{empno}
+</select>
+
+<!-- 자원디테일 내역 조회  -->
+<select id="resourceDetail" resultMap="resourceCal">
+SELECT PARTICIPANT
+, RESOURCE_CONTENT 
+FROM SCHEDUL_FOR_RESOURCE
+WHERE EMPNO = #{empno}
+</select>
 
 
 </mapper>

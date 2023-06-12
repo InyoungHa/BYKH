@@ -1,6 +1,7 @@
 package com.bykh.groupware.resource.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,13 @@ public class ResourceVO {
     private boolean allDay;
     private int type;
     private int empno;
+    private String startDay;
+    private String endDay;
+    private String totalDuration;
+    private String participant;
+    private String resourceContent;
+    private int idDetail;
+
 }
 
 

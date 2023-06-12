@@ -104,16 +104,22 @@ public class AttendanceController {
 		int empno = Integer.parseInt(user.getUsername());
 	
 		attendanceService.goWork(empno);
-	return "redirect:/admin/main";
+	return "redirect:/user/main";
 	}
 	
-	//퇴근등록
+	// 퇴근등록
 	@RequestMapping("/outWork")
-	public String outWork(Authentication authentication) {
-		User user = (User)authentication.getPrincipal();
-		int empno = Integer.parseInt(user.getUsername());
-		
-		attendanceService.outWork(empno);
-	return "redirect:/admin/main";
-	}	
+	public String outWork(Authentication authentication, AttendanceVO attendanceVO) {
+	    User user = (User) authentication.getPrincipal();
+	    int empno = Integer.parseInt(user.getUsername());
+	    AttendanceVO attCode = attendanceService.selectAtt(empno);
+
+	    attendanceVO.setEmpno(empno);
+	    attendanceVO.setAttCode(attCode.getAttCode());
+
+	    attendanceService.outWork(attendanceVO);
+
+	    return "redirect:/user/main";
+	}
+
 }

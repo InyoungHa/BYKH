@@ -1,21 +1,155 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{fragment/admin_layout}">
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   layout:decorate="~{fragment/admin_layout}">
 
-<!-- 연결해야 할 외부 css 파일 -->
-<th:block layout:fragment="content_css">
-	<!-- <link rel="stylesheet" href="/css/board_list.css"> -->
+<th:block layout:fragment="content" >
+
+<style>
+body {
+	  background-color: #f6f8fa;
+	  margin-bottom: 20px;
+	}
+	
+
+	
+	.bottomTitle {
+	  margin-top: 10px;
+	  margin-bottom: 20px;
+	  margin-left: 10px;
+	  font-size: 20px;
+	  font-weight: bold;
+	}
+	
+	.bottomTable {
+	  margin: 0 auto;
+	}
+	
+	.bottomThead {
+	  margin-left: 10px;
+	  margin-right: 10px;
+	  border: solid #ebeaed;
+	}
+	
+	.bottomBox {
+
+	  margin-top: 15px;
+	  height: 400px;
+	  background-color: #fffeff;
+	  border: solid #ebeaed;
+	}
+	
+	.bottomTable tr td {
+	  height: 50px;
+	  width: 250px;
+	  text-align: center;
+	}
+	
+	.imageContainer {
+		
+	  display: inline-block;
+	}
+	
+	.vacationBox {
+	margin-left:20px;
+	  height: 100px;
+	  text-align: center;
+	  display: inline-block;
+	  vertical-align: middle; /* Align the text vertically */
+	}
+	.vacationBox tr:nth-child(1) td {
+	font-weight: bold;
+	font-size: 15px;
+	}
+	.vacationBox tr:nth-child(2) td {
+		padding-top: 20px;
+		font-size: 20px;
+		
+		
+	}
+	.btn{
+	margin-left:10px;
+	height: 40px;
+	}
+.position-absolute {
+  position: absolute;
+  /* 이동할 위치 지정 */
+  top: 65px;
+  left: 1663px;
+}
+.alram{
+margin-right: 10px;
+}
+
+@media print {
+    html, body { width: 210mm; height: 297mm; }
+    table { page-break-inside:auto; }
+    tr    { page-break-inside:avoid; page-break-after:auto; }
+    thead { display:table-header-group; }
+    tfoot { display:table-footer-group; }
+}
+
+</style>
+	
+		
+
+	<!--출퇴근기록 테이블 box -->
+	<div class="bottomBox" id="bottomBox">
+		<div class="bottomTitle" style="margin-bottom: 30px; font-weight: bold; font-size: 22px;">
+			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 자원예약내역
+		</div>
+		<table class="bottomTable">
+		<colgroup>
+			<col width="20%">
+			<col width="20%">
+			<col width="*">
+			<col width="15%">
+			<col width="15%">
+		</colgroup>
+			<thead class="bottomThead" >
+				<tr style="text-align: center; font-weight: bold;">
+					<td>시작일자</td>
+					<td>종료일자</td>
+					<td>소요시간</td>
+					<td>자원명</td>
+					<td>참석자</td>
+					<td>사유</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="resList : ${resList}" style="text-align: center;">
+					<td>[[${resList.startDay}]]</td>
+					<td>[[${resList.endDay}]]</td>
+					<td>[[${resList.totalDuration}]]</td>
+					<td>[[${resList.title}]]</td>		
+					<td></td>
+					<td></td>		
+	
+				</tr>			
+			</tbody>
+		</table>	
+		
+	</div>
+	<div style="margin-left:570px;">
+
+	<input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top:10px;" />
+	</div>
+	
+</th:block>
 </th:block>
 
-<th:block layout:fragment="content">
-	예약목록 페이지입니다.
-</th:block>
-
-<!-- 연결해야 할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-<!-- <script type="text/javascript" src="/js/test.js"></script> -->
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	
+<script type="text/javascript" src="/js/content/resource/reservationList.js"></script>
+  <!-- jquery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </th:block>
+
 
 </html>
+
+
+
+
