@@ -165,7 +165,7 @@
 		    , DOC_TITLE
 		    , SGN_STATUS
 		) VALUES (
-		    (SELECT NVL(MAX(DOC_NO), 0) + 1 FROM SGN_DOC)
+		    ${docNo}
 		    , ${docType}
 		    , ${writerNo}
 		    , #{docTitle}

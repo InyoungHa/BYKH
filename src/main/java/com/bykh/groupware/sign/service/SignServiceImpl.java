@@ -81,6 +81,7 @@ public class SignServiceImpl implements SignService{
 	}
 	@Override
 	public void delPurchaseOrder(int docNo) {
+		System.out.println("!!!!!!!!!!!!!!!!delPurchaseOrder Impl 실행!!!!!!!!!!!!!!!!!!");
 		sqlsession.delete("signMapper.delPurchaseOrder", docNo);
 	}
 	@Override
@@ -89,7 +90,6 @@ public class SignServiceImpl implements SignService{
 	}
 	@Override
 	public int updateSignStatus(SignDocVO signDocVO) {
-		System.out.println("!!!!!!!!!!!!!!!!updateSingStatusImpl 실행!!!!!!!!!!!!!!!!!!");
 		return sqlsession.update("signMapper.updateSignStatus", signDocVO);
 	}
 	

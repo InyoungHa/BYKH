@@ -69,8 +69,6 @@ public class SignController {
 		model.addAttribute("itemList", signService.getItemList());
 		if(signDocVO.getDocNo() != 0) {
 			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
-			System.out.println("data!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-			System.out.println(signDocVO);
 			model.addAttribute("docPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 		}
 		return "content/sign/purchase_order_form";
@@ -123,7 +121,6 @@ public class SignController {
 	@ResponseBody
 	@PostMapping("/insertPurchaseorderAjax")
 	public void insertPurchaseorderAjax(@RequestBody Map<String, Object> mapData, SignDocVO signDocVO) {
-		System.out.println("----------------아래:mapData------------------");		
 		//System.out.println(mapData);
 		//기존 데이터가 있다면 삭제
 		
@@ -131,8 +128,6 @@ public class SignController {
 		ObjectMapper mapper = new ObjectMapper();
 		//signDoc
 		signDocVO = mapper.convertValue(mapData.get("sgn_doc"), SignDocVO.class);
-		System.out.println("signDocVO = !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11");
-		System.out.println(signDocVO);
 		
 		//1-3 sgn_arr
 		SignVO[] signArr = mapper.convertValue(mapData.get("sgn_arr"), SignVO[].class);
@@ -157,8 +152,10 @@ public class SignController {
 		
 		// 기존 데이터가 있다면 삭제(임시저장문서)
 		if (signDocVO.getDocNo() != 0) {
+			System.out.println("delPurchaseOrder if문 실행");
 			signService.delPurchaseOrder(signDocVO.getDocNo());
 		} else {
+			System.out.println("delPurchaseOrder else if문 실행");
 			// 기존 데이터 없으면 docNo, buyNo 값 세팅
 			int docNo = signService.getNextDocNo();
 			int buyNo = signService.getNextBuyNo();
@@ -170,8 +167,11 @@ public class SignController {
 			buyDetailVOList.get(0).setBuyNo(buyNo);
 		}
 		
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println(signDocVO.getDocNo());
+		
 		//2. 쿼리 실행
-		signService.insertDocPurchaseOrder(signDocVO);
+		//signService.insertDocPurchaseOrder(signDocVO);
 	}
 	
 	//결재문서 상세조회
