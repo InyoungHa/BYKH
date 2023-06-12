@@ -317,15 +317,17 @@
 		AND APPROVER_NO = ${approverNo}
 	</update>
 	<!-- 결재문서 결재상태(SGN_STATUS) 변경 (0:임시저장/1:결재중/2:결재완료/3:반려) -->
-	<update id="updateSingStatus">
+	<update id="updateSignStatus">
 		UPDATE SGN_DOC
 		SET SGN_STATUS = #{sgnStatus}
+		WHERE DOC_NO = #{docNo}
 	</update>
 	
-	<!-- 다음 결재자 조회 -->
+	<!-- 다음 결재자 존재여부 조회 -->
+	<!-- 시간 날 때 결재자 번호 조회로 변경하기 -->
 	<select id="getNextApproverNo" resultType="int">
 		SELECT 
-		    APPROVER_NO
+		    NVL2(MIN(APPROVER_NO), 1, 0) 
 		FROM SGN
 		WHERE DOC_NO = #{docNo}
 		AND (
@@ -333,7 +335,7 @@
 		    AND
 		    NOT (EXISTS(SELECT 1 FROM SGN WHERE DOC_NO = #{docNo} AND SGN_RESULT = 0))
 		)
-		AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN WHERE DOC_NO = 2 AND SGN_RESULT IS NULL )
+		AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN WHERE DOC_NO = #{docNo} AND SGN_RESULT IS NULL )
 	</select>
 	
 	<!-- 결재문서 상세조회 - 구매신청서 -->

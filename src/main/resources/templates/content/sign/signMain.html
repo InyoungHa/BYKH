@@ -212,10 +212,13 @@
 									<th:block th:each="signDoc, status : ${endSignDocList}">
 										<tr>
 											<td>[[${status.size - status.index}]]</td>
-											<td>
+											<td 
+											style="cursor: pointer;" 
+											th:onclick="showSignDocModal(this);" 
+											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
 												<span>
 													[[${signDoc.docTitle}]]
-												</span>											
+												</span>
 											</td>
 											<td>[[${signDoc.insertDate}]]</td>
 											<td>[[${signDoc.empVO.ename}]]</td>

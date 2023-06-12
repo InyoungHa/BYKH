@@ -87,6 +87,11 @@ public class SignServiceImpl implements SignService{
 	public int getNextApproverNo(int docNo) {
 		return sqlsession.selectOne("signMapper.getNextApproverNo", docNo);
 	}
+	@Override
+	public int updateSignStatus(SignDocVO signDocVO) {
+		System.out.println("!!!!!!!!!!!!!!!!updateSingStatusImpl 실행!!!!!!!!!!!!!!!!!!");
+		return sqlsession.update("signMapper.updateSignStatus", signDocVO);
+	}
 	
 	
 	

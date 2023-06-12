@@ -202,7 +202,19 @@ public class SignController {
 		System.out.println(signVO);
 		
 		signService.updateSignResult(signVO);
-		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) != 0) {
+
+		SignDocVO signDocVO = new SignDocVO();
+		signDocVO.setDocNo(signVO.getDocNo());
+		//결재결과가 '결재'고 다음 결재자가 없다면 문서 상태를 '결재완료'로 변경
+		
+		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) == 0) {
+			signDocVO.setSgnStatus(2);
+			signService.updateSignStatus(signDocVO);
+		//결재결과가 '반려'이면 문서상태를 '반려'로 변경
+		}else if(signVO.getSgnResult() == 0) {
+			signDocVO.setSgnStatus(3);
+			signService.updateSignStatus(signDocVO);
+			
 		}
 		
 	}

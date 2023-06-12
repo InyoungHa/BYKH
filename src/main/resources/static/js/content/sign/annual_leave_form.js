@@ -121,7 +121,7 @@ function delStampTableTd(this_tag) {
 		}
 	}
 }
-//임시저장
+//임시저장 -> 추후 삭제
 function saveSignDoc(){
 	
 	//sgnStatus 값 세팅(임시저장/등록 여부)
@@ -139,8 +139,18 @@ function saveSignDoc(){
 	
 };
 //기안올리기
-function insertSignDoc(){
+function insertAnnualLeave(sgnStatus){
+	//sgnStatus 값 세팅(임시저장/등록 여부)
+	document.querySelector('.sgnStatus').value = sgnStatus;
+	//approverNo값 세팅
+	let approverNoStr = '';
+	const approver_no_list = document.querySelectorAll('.approverNo');
+	approver_no_list.forEach(function(approver_no){
+		approverNoStr += approver_no.value + ','
+	});
+	document.querySelector('.approverNoStr').value = approverNoStr;
 	
+	signDocForm.submit();
 };
 
 

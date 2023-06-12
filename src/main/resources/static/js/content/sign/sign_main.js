@@ -99,7 +99,7 @@ function showSignDocModal(clickTag){
 												str +=
 												   `<td>
 												   		
-														${signVO.sgnResultStr == '결재' ? signVO.approverName : ''}
+														${signVO.sgnResultStr == '결재' ? signVO.approverName : signVO.sgnResultStr == '미결재' ? '반려' : ''}
 													</td>`;
 												});
 												str +=	`
@@ -140,7 +140,7 @@ function showSignDocModal(clickTag){
 														 ~ 
 														${signWriteInfo.docAnnualLeaveVO.endDate}
 													</div>`;
-													if(signWriteInfo.docAnnualLeaveVO.startTime != null && signWriteInfo.docAnnualLeaveVO.endTime != null){
+													if(signWriteInfo.docAnnualLeaveVO.startTime != 0 && signWriteInfo.docAnnualLeaveVO.endTime != 0){
 														str += `
 														<div class="col-5">
 															${signWriteInfo.docAnnualLeaveVO.startTime}	 
@@ -196,19 +196,18 @@ function showSignDocModal(clickTag){
 									<div class="col-9">
 										${sign.approverName} ${sign.approverJob}
 									</div>`;
-								if(sign.signComent != null){
+								if(sign.sgnComent != null){
 									str += `
 									<div class="col-12 mt-3">
 										${sign.sgnComent}
 									</div>
 									`;
-								}	
+								}
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
 								}	
 								str += `</div>
 								`;
-								//
 							});
 							str += `
 							</div>
@@ -304,7 +303,7 @@ function showSignDocModal(clickTag){
 								signWriteInfo.signVOList.forEach(function(signVO){
 									str += `
 									<td>
-										${signVO.sgnResultStr == '결재' ? signVO.approverName : ''}
+										${signVO.sgnResultStr == '결재' ? signVO.approverName : signVO.sgnResultStr == '미결재' ? '반려' : ''}
 									</td>`;
 								});
 									str += `
@@ -314,7 +313,7 @@ function showSignDocModal(clickTag){
 									`;
 								signWriteInfo.signVOList.forEach(function(signVO){	
 									str += `
-									<td>${signVO.sgnResultStr == '결재' ? signVO.sgnDate : ''}</td>`;
+									<td>${signVO.sgnDate != null ? signVO.sgnDate : ''}</td>`;
 								});	
 									str += `
 								</tr>
@@ -364,7 +363,7 @@ function showSignDocModal(clickTag){
 							<tr>
 								<td>구매사유</td>
 								<td colspan="3">
-									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"></textarea>
+									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment">${signWriteInfo.docPurchaseOrderVO.dpoComment}</textarea>
 								</td>
 							</tr>
 							
@@ -478,15 +477,9 @@ function updateSignResult(sgnResult, docNo){
 			//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 			data: {'sgnResult':sgnResult, 'approverNo':approverNo, 'docNo':docNo, 'sgnComent':sgnComent}, //필요한 데이터
 			success: function(result) {
-				
-				if(result == 1){
 					alert(`${sgnResult == 0 ? '반려' : '결재'}되었습니다.`);
-					modal.hide();
-				}else{
-					alert(`${sgnResult == 0 ? '반려' : '결재'}에 실패했습니다.`);
-					modal.hide();
-				}
-				
+					//modal.hide();
+					location.href='/sign/signMain'
 			},
 			error: function() {
 				alert('실패');
