@@ -132,10 +132,8 @@
 							<td colspan="11">등록된 사원이 없습니다.</td>
 						</tr>						
 					</th:block>
-					<th:block th:unless="${#lists.size(empList)==0}">
+					<th:block th:unless="${#lists.size(empList)==0}">						
 						<tr th:each="emp,state:${empList}">
-						<input type="hidden" name="eStatus" id="eStatus" th:value="${emp.eStatus}">
-						<input type="hidden" name="eAccount" id="eAccount" th:value="${emp.eAccount}">
 							<td>[[${state.count}]]</td>
 							<td>[[${emp.empno}]]</td>
 							<td>
@@ -151,10 +149,10 @@
 							<td>[[${emp.eStatusStr}]]</td>
 							<td>[[${emp.eAccountStr}]]</td>
 							<td>
-								 <button th:onclick="changAccount([[${emp.empno}]]);"  type="button" class="button" >변경</button>
+								 <button th:onclick="changAccount([[${emp.empno}]],[[${emp.eStatus}]],[[${emp.eAccount}]]);"  type="button" class="button" >변경</button>
 								<!-- <span data-bs-toggle="modal" data-bs-target="#changeEAccountModal" style="cursor: pointer;">변경</span> -->
 							</td>
-						</tr>
+						</tr>						
 					</th:block>
 				</tbody>
 			</table>
@@ -195,14 +193,14 @@
 	</div>
 	
 	<!-- changeEAccountModal -->
-	<div class="modal fade modal-xl" id="changeEAccountModal" data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	<div class="modal" tabindex="-1" id="changeEAccountModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-body">
-
-		
+				<div class="modal-header">
+					<h2 class="modal-title">계정 상태 변경</h2>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"	aria-label="Close"></button>
 				</div>
+				<div class="modal-body"></div>
 			</div>
 		</div>
 	</div>

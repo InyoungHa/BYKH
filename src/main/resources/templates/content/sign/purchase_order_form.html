@@ -114,14 +114,11 @@
 		<div class="col-8" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
 				<div class="col text-center">
-					<!-- 
-					<input type="hidden" value="1" name="docStatus" class="docStatus">
-					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
-					-->						
 					<input type="hidden" th:value="${docPurchaseOrder != null and docPurchaseOrder.buyVO != null ? docPurchaseOrder.buyVO.buyNo : 0}" name="buyNo" class="buyNo">
 					<input type="hidden" th:value="${docPurchaseOrder != null and docPurchaseOrder.docNo != null ? docPurchaseOrder.docNo : 0}" name="docNo" class="docNo">
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
 					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo" class="writerNo">
+					
 					<h2>구매신청서</h2>
 				</div>
 			</div>

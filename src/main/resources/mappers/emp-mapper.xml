@@ -23,7 +23,8 @@
 		
 		<result column="E_ACCOUNT_STR" 				property="eAccountStr"/>
 		<result column="E_STATUS_STR" 				property="eStatusStr"/>
-		<result column="SELECTED_E_STATUS" 				property="selectedEStatus"/>
+		<result column="SELECTED_E_STATUS" 				property="selectedEStatus"/><!--재직상태변경  -->
+		<result column="SELECTED_E_ACCOUNT" 				property="selectedEAccount"/><!--계정상태 변경  -->
 		
 		
 		<!-- 테스트용 임시 추가 - 희수 -->
@@ -129,7 +130,8 @@
 		WHERE EMP.DEPTNO = DEPT.DEPTNO
 		AND EMPNO = #{empno}		
 	</select>
-	<!--  		,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME-->
+	 <!-- 		,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME-->
+
 
 	
 	<!-- 사원 이미지 넣기  -->
@@ -181,28 +183,93 @@
 			    END
 		WHERE EMPNO = #{empno}			
 	</update>
-	
 
 	
 	<!--계정 상태 변경  -->
-	<!--재직상태를 휴직으로 바꾸면 계정상태는 휴면, 계정관리 버튼은 복구 버튼으로 바뀜
-		재직상태를 퇴사로 바꾸면 계정관리 버튼에 삭제 버튼으로 바뀜-->
  	<update id="updateE_Account">
 		UPDATE EMP
-		SET E_STATUS =#{eStatus}+1,
-			E_ACCOUNT=#{eAccount}+1
-		WHERE E_STATUS = #{eStatus}
-		AND E_ACCOUNT = #{eAccount}	
-		AND EMPNO = #{empno}	
+		SET 
+			E_STATUS = 
+				CASE
+			        WHEN #{eStatus} = 1 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 2 THEN 2
+			                WHEN #{selectedEStatus} = 3 THEN 3
+			                ELSE 1
+			            END
+			        WHEN #{eStatus} = 2 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 1 THEN 1
+			                WHEN #{selectedEStatus} = 3 THEN 3
+			                ELSE 2
+			            END
+			        WHEN #{eStatus} = 3 THEN
+			            CASE
+			                WHEN #{selectedEStatus} = 1 THEN 1
+			                WHEN #{selectedEStatus} = 2 THEN 2
+			                ELSE 3
+			            END
+			        ELSE #{eStatus}
+			    END,
+			E_ACCOUNT = 
+				CASE
+			        WHEN #{eAccount} = 1 THEN
+			            CASE
+			                WHEN #{selectedEAccount} = 2 THEN 2
+			                WHEN #{selectedEAccount} = 3 THEN 3
+			                ELSE 1
+			            END
+			        WHEN #{eAccount} = 2 THEN
+			            CASE
+			                WHEN #{selectedEAccount} = 1 THEN 1
+			                WHEN #{selectedEAccount} = 3 THEN 3
+			                ELSE 2
+			            END
+			        WHEN #{eAccount} = 3 THEN
+			            CASE
+			                WHEN #{selectedEAccount} = 1 THEN 1
+			                WHEN #{selectedEAccount} = 2 THEN 2
+			                ELSE 3
+			            END
+			        ELSE #{eAccount}
+			    END
+		WHERE EMPNO = #{empno}	
 	</update>
 	
-<!-- 	사원 삭제  
-	<delete id="delteEmp">
-		DELETE EMP
-		WHRE EMPNO =#{empno}	
-	</delete>
-	 -->
-	
+	<!--마이페이지 조회  -->
+	<select id="selectSelfEmpDetail" resultMap="emp">
+		SELECT EMP.EMPNO,
+			EMP.DEPTNO,
+			DEPT.LOC,
+			DEPT.DENAME,
+			EMP.EPW,
+			EMP.ENAME,
+			EMP.E_JOB,
+			TO_CHAR(EMP.JOIN_DATE, 'YYYY-MM-DD') AS JOIN_DATE,
+			EMP.E_EMAIL,
+			EMP.PHONE_TEL,
+			EMP.OFFICE_TEL,
+			E_IMG.ATTACHED_FILE_NAME AS ATTACHED_FILE_NAME,
+			EMP.E_STATUS
+		FROM EMP
+		JOIN DEPT ON EMP.DEPTNO = DEPT.DEPTNO
+		LEFT JOIN E_IMG ON E_IMG.EMPNO = EMP.EMPNO
+		WHERE EMP.EMPNO = #{empno}
+		AND ROWNUM = 1
+	</select>
+		
+
+	<!--사원 정보 수정  -->
+	<update id="updateSelfEmpDetail">
+		UPDATE EMP
+		SET ENAME = #{ename},
+			DEPTNO =#{deptno},
+			E_JOB =#{eJob},
+			E_EMAIL =#{eEmail},
+			OFFICE_TEL =#{officeTel},
+			PHONE_TEL =#{phoneTel}
+		WHERE EMPNO = #{empno}			
+	</update>
 	
 
 	

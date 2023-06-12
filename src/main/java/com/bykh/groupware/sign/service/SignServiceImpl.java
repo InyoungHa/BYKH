@@ -81,7 +81,16 @@ public class SignServiceImpl implements SignService{
 	}
 	@Override
 	public void delPurchaseOrder(int docNo) {
+		System.out.println("!!!!!!!!!!!!!!!!delPurchaseOrder Impl 실행!!!!!!!!!!!!!!!!!!");
 		sqlsession.delete("signMapper.delPurchaseOrder", docNo);
+	}
+	@Override
+	public int getNextApproverNo(int docNo) {
+		return sqlsession.selectOne("signMapper.getNextApproverNo", docNo);
+	}
+	@Override
+	public int updateSignStatus(SignDocVO signDocVO) {
+		return sqlsession.update("signMapper.updateSignStatus", signDocVO);
 	}
 	
 	
