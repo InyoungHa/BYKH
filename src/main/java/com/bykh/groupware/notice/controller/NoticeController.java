@@ -40,7 +40,7 @@ public class NoticeController {
 	@GetMapping("/list")
 	public String noticeList(Model model, BoardVO boardVO) {
 		BoardMenuVO boardMenuVO = new BoardMenuVO();
-		boardMenuVO.setBoardMenuCode("BOARD_MENU_001");
+		boardMenuVO.setBoardMenuCode("BOARD_MENU_002");
 		
 		boardVO.setBoardMenuVO(boardMenuVO);
 		
@@ -60,9 +60,9 @@ public class NoticeController {
 	}
 	
 	//글쓰기 페이지 이동
-	@GetMapping("/regNotice")
+	@GetMapping("/regForm")
 	public String regForm(Model model, Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_001";
+		String boardMenuCode = "BOARD_MENU_002";
 		model.addAttribute("boardMenuCode", boardMenuCode);
 		
 		User user = (User) authentication.getPrincipal();
@@ -99,7 +99,6 @@ public class NoticeController {
 		return "redirect:/notice/list";
 	}
 	
-	
 	//글 임시 저장
 	@ResponseBody
 	@PostMapping("/tempRegNotice")
@@ -126,7 +125,7 @@ public class NoticeController {
 	@ResponseBody
 	@PostMapping("/tempBoardList")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
-		String boardMenuCode = "BOARD_MENU_001";
+		String boardMenuCode = "BOARD_MENU_002";
 		
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
@@ -250,6 +249,11 @@ public class NoticeController {
 		//중요글 체크 해제 시 null값 체크
 		if(boardVO.getIsImportant() == null) {
 			boardVO.setIsImportant("N");
+		}
+		
+		//비밀글 체크 해제 시 null 값 체크
+		if(boardVO.getIsPrivate() == null) {
+			boardVO.setIsPrivate("N");
 		}
 		
 		noticeService.updateBoard(boardVO, deleteFileNum);

@@ -36,8 +36,10 @@
 		<result column="ENAME" 				property="ename"/>
 		<result column="BOARD_PREV_NUM" 	property="boardPrevNum"/>
 		<result column="BOARD_PREV_TITLE" 	property="boardPrevTitle"/>
+		<result column="BOARD_PREV_PRIVATE" property="boardPrevPrivate"/>
 		<result column="BOARD_NEXT_NUM" 	property="boardNextNum"/>
 		<result column="BOARD_NEXT_TITLE" 	property="boardNextTitle"/>
+		<result column="BOARD_NEXT_PRIVATE" property="boardNextPrivate"/>
 		<result column="FILE_CNT" 			property="fileCnt"/>
 		<result column="REPLY_CNT" 			property="replyCnt"/>
 		<association property="boardMenuVO" 	resultMap="boardMenu"></association>
@@ -45,6 +47,7 @@
 		<collection property="boardFileList" 	resultMap="boardFile"></collection>
 		<collection property="replyList" 		resultMap="replyMapper.reply"></collection>
 	</resultMap>
+	
 	
 	<!-- 글 개수 조회 -->
 	<select id="getBoardCnt" resultType="int">
@@ -56,9 +59,19 @@
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
 		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
 		</if>
+		<if test='searchBoardVO != null and searchBoardVO.searchCate != null'>
+		AND BOARD.BOARD_CATE_CODE = #{searchBoardVO.searchCate}
+		</if>
 	</select>
 	
-	<!-- 공지사항 글 목록 조회 -->
+	<!-- 카테고리 조회 -->
+	<select id="getBoardCate" resultMap="boardCategory">
+		SELECT BOARD_CATE_CODE
+			, BOARD_CATE_NAME
+		FROM BOARD_CATEGORY
+	</select>
+	
+	<!--  글 목록 조회 -->
 	<!-- 상태값 1(등록) --> 
 	<select id="getBoardList" resultMap="board">
 		SELECT BOARD.BOARD_NUM
@@ -76,19 +89,25 @@
                 WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
 			, FILE_NUM
             , ORIGIN_FILE_NAME
-		FROM BOARD, EMP, BOARD_FILE
+            , BOARD_CATE_NAME
+            , IS_PRIVATE
+		FROM BOARD, EMP, BOARD_FILE, BOARD_CATEGORY CATE
 		WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 		AND BOARD_STATUS = 1
 		AND BOARD_WRITER = EMPNO
 		AND BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM (+)
+		AND BOARD.BOARD_CATE_CODE = CATE.BOARD_CATE_CODE (+)
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
 		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
+		</if>
+		<if test='searchBoardVO != null and searchBoardVO.searchCate != null'>
+		AND BOARD.BOARD_CATE_CODE = #{searchBoardVO.searchCate}
 		</if>
 		ORDER BY BOARD_DATE_ORDER DESC
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
-	<!-- 공지사항 중요글 목록 조회 -->
+	<!-- 중요글 목록 조회 -->
 	<select id="getBoardImportantList" resultMap="board">
 		SELECT BOARD.BOARD_NUM
 			, BOARD_TITLE
@@ -132,6 +151,13 @@
 			<if test="isImportant != null">
 			, IS_IMPORTANT
 			</if>
+			<if test="isPrivate != null">
+			, IS_PRIVATE
+			, BOARD_PW
+			</if>
+			<if test="boardCategoryVO != null and boardCategoryVO.boardCateCode != null">
+			, BOARD_CATE_CODE
+			</if>
 		) VALUES (
 			#{boardNum}
 			, #{boardTitle}
@@ -141,6 +167,13 @@
 			, #{boardStatus}
 			<if test="isImportant != null">
 			, #{isImportant}
+			</if>
+			<if test="isPrivate != null">
+			, #{isPrivate}
+			, #{boardPw}
+			</if>
+			<if test="boardCategoryVO != null and boardCategoryVO.boardCateCode != null">
+			, #{boardCategoryVO.boardCateCode}
 			</if>
 		)
 	</insert>
@@ -186,15 +219,22 @@
 				, IS_IMPORTANT
 				, ENAME
 				, BOARD_MENU_CODE
+				, CATE.BOARD_CATE_CODE
+				, BOARD_CATE_NAME
+				, IS_PRIVATE
+				, BOARD_PW
 				, (SELECT COUNT(REPLY_NUM)
                     FROM BOARD_REPLY
                     WHERE BOARD_NUM = #{boardNum}) REPLY_CNT
 	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
 	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
+	            , LAG(IS_PRIVATE, 1, 'N') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_PRIVATE
 	            , LEAD(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_NUM
 	            , LEAD(BOARD_TITLE, 1, '다음 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_TITLE
-			FROM BOARD, EMP
-			WHERE BOARD_WRITER = EMPNO)
+	            , LEAD(IS_PRIVATE, 1, 'N') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_NEXT_PRIVATE
+			FROM BOARD, EMP, BOARD_CATEGORY CATE
+			WHERE BOARD_WRITER = EMPNO
+            AND BOARD.BOARD_CATE_CODE = CATE.BOARD_CATE_CODE (+))
 		WHERE BOARD_NUM = #{boardNum}
 	</select>
 	
@@ -249,6 +289,16 @@
 			<if test="boardDate != null">
 			, BOARD_DATE = ${boardDate}
 			</if>
+			<if test="boardCategoryVO != null and boardCategoryVO.boardCateCode != null">
+			, BOARD_CATE_CODE = #{boardCategoryVO.boardCateCode}
+			</if>
+			, IS_PRIVATE = #{isPrivate}
+			<if test='isPrivate == "Y"'>
+			, BOARD_PW = #{boardPw}
+			</if>
+			<if test='isPrivate == "N"'>
+			, BOARD_PW = NULL
+			</if>
 		WHERE BOARD_NUM = #{boardNum}
 	</update>
 	
@@ -296,32 +346,15 @@
 		AND BOARD_MENU_CODE = #{boardMenuCode}
 	</select>
 	
+	<select id="checkBoardNum" resultType="String">
+		SELECT BOARD_NUM
+        FROM BOARD
+        WHERE BOARD_NUM = #{boardNum}
+        AND BOARD_PW = #{boardPw}
+	</select>
+	
 	
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

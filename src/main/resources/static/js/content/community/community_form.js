@@ -1,8 +1,25 @@
 
+//비밀글 체크박스 & 비밀번호 input 컨트롤
+init();
+
+function init() {
+	const isPrivate = document.querySelector('#isPrivate');
+	const boardPw = document.querySelector('#boardPw');
+	
+	isPrivate.addEventListener('change', function() {
+		if(this.checked == true) {
+			boardPw.disabled = false;
+		}
+		else {
+			boardPw.disabled = true;
+		}
+		
+	})
+}
 
 
 //정상 글 등록
-function regArchive() {
+function regCommunity() {
 	if(!formCheck()) {
 		return false;
 	}
@@ -13,13 +30,13 @@ function regArchive() {
 		const statusStr = `<input type="hidden" name="boardStatus" value="${1}">`;
 		hiddenDiv.insertAdjacentHTML('beforeend', statusStr);
 		
-		document.querySelector('#archiveForm').submit();
+		document.querySelector('#communityForm').submit();
 	}
 }
 
 
 //임시 저장 글 등록
-function tempRegArchive() {
+function tempRegCommunity() {
 	if(!formCheck()) {
 		return false;
 	}
@@ -41,11 +58,11 @@ function tempRegArchive() {
 		
 		
 		//폼 태그
-		const formData = new FormData(document.querySelector('#archiveForm'));
+		const formData = new FormData(document.querySelector('#communityForm'));
 		
 		//ajax start
 		$.ajax({
-			url: '/archive/tempRegArchive', //요청경로
+			url: '/community/tempRegCommunity', //요청경로
 			type: 'post',
 			async: true,
 			data: formData,
@@ -143,6 +160,9 @@ function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
+	const isPrivate = document.querySelector('#isPrivate').checked;
+	const boardPw = document.querySelector('#boardPw').value;
+	
 	
 	
 	if(boardTitle == '' || boardTitle == null) {
@@ -161,6 +181,13 @@ function formCheck() {
 				alert('파일을 첨부해주세요.');
 				return false;
 			}
+		}
+	}
+	
+	if(isPrivate == true) {
+		if(boardPw == '' || boardPw == null) {
+			alert('비밀번호를 입력해주세요.')
+			return false;
 		}
 	}
 	
@@ -223,7 +250,7 @@ function deleteFileInputDiv(deleteBtn) {
 function tempBoardList() {
 	//ajax start
 	$.ajax({
-		url: '/archive/tempBoardList', //요청경로
+		url: '/community/tempBoardList', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -312,11 +339,11 @@ function updateTempBoard(boardNum) {
 			}
 			
 			//폼 태그
-			const formData = new FormData(document.querySelector('#archiveForm'));
+			const formData = new FormData(document.querySelector('#communityForm'));
 			
 			//ajax start
 			$.ajax({
-				url: '/archive/tempRegArchive', //요청경로
+				url: '/community/tempRegCommunity', //요청경로
 				type: 'post',
 				async: true,
 				data: formData,
@@ -340,18 +367,32 @@ function updateTempBoard(boardNum) {
 function getTempBoard(boardNum) {
 	//ajax start
 	$.ajax({
-		url: '/archive/getTempDetail', //요청경로
+		url: '/community/getTempDetail', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		data: {'boardNum' : boardNum}, //필요한 데이터
 		success: function(result) {
 			const tempBoard = result;
+			console.log(tempBoard);
 			
 			$('#tempRegModal').modal('hide');
 			
 			document.querySelector('#boardTitle').value = tempBoard.boardTitle;
 			document.querySelector('#boardContent').value = tempBoard.boardContent;
+			document.querySelector('#boardCategory').value = tempBoard.boardCategoryVO.boardCateCode;
+			const isPrivate = document.querySelector('#isPrivate');
+			const boardPw = document.querySelector('#boardPw');
+			
+			if(tempBoard.isPrivate == 'Y') {
+				isPrivate.checked = true;
+				boardPw.disabled = false;
+				boardPw.value = tempBoard.boardPw;
+			}
+			else {
+				isPrivate.checked = false;
+				boardPw.disabled = true;
+			}
 			
 			const fileDivs = document.querySelectorAll('#fileDiv');
 			
@@ -359,7 +400,6 @@ function getTempBoard(boardNum) {
 				fileDiv.remove();
 			}
 			
-			const isImportant = document.querySelector('#isImportant');
 			
 			//hiddenDiv 비우고 boardNum, boardStatus 넣기
 			const hiddenDiv = document.querySelector('#hiddenDiv');
@@ -376,7 +416,7 @@ function getTempBoard(boardNum) {
 				let fileStr = '';
 				for(const file of tempBoard.boardFileList) {
 					fileStr += `<div class="mb-1">`;
-					fileStr += `<a href="/archive/download?fileNum=${file.fileNum}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
+					fileStr += `<a href="/community/download?fileNum=${file.fileNum}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
 					fileStr += `${file.originFileName}</a> (${file.fileSize}) `;
 					fileStr += `<button class="btn btn-primary btn-sm" type="button" onclick="deleteAttachedFile('${file.fileNum}', this);">삭제</button></div>`;
 				}
@@ -384,13 +424,6 @@ function getTempBoard(boardNum) {
 				const fileTd = document.querySelector('#fileTd');
 				fileTd.insertAdjacentHTML('beforeend', fileStr);
 				
-			}
-			
-			if(tempBoard.isImportant == 'Y') {
-				isImportant.checked = true;
-			}
-			else {
-				isImportant.checked = false;
 			}
 		},
 		error: function() {
@@ -421,7 +454,7 @@ function deleteBoard(boardNum, deleteBtn) {
 	if(confirm('정말 삭제하시겠습니까?')) {
 		//ajax start
 		$.ajax({
-			url: '/archive/tempDelete', //요청경로
+			url: '/community/tempDelete', //요청경로
 			type: 'post',
 			async: true,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -442,5 +475,7 @@ function deleteBoard(boardNum, deleteBtn) {
 		//ajax end
 	}
 }
+
+
 
 

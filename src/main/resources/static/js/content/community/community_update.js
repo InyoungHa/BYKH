@@ -1,10 +1,10 @@
 //정상 글 등록
-function updateNotice() {
+function updateCommunity() {
 	if(!formCheck()) {
 		return false;
 	}
 	else {
-		document.querySelector('#noticeUpdateForm').submit();
+		document.querySelector('#communityUpdateForm').submit();
 	}
 }
 

@@ -30,15 +30,21 @@
 		<div class="col">
 			<div class="row mb-2">
 				<div class="col fs-1 fw-bolder">
-					전사공지
+					커뮤니티
 				</div>
 			</div>
 		
 			<div class="row mb-2">
 				<div class="col d-grid d-flex justify-content-between">
 					<div class="text-secondary fs-6 align-self-end">전체 <span class="text-dark">[[${boardVO.totalDataCnt}]]</span>건</div>
-					<form action="/notice/list" method="get" id="noticeForm">
-						<div class="input-group" style="width: 20rem;">
+					<form action="/community/list" method="get" id="communityForm">
+						<div class="input-group" style="width: 25rem;">
+							<select class="form-select" name="searchBoardVO.searchCate">
+								<th:block th:each="boardCate : ${boardCateList}">
+								  <option th:value="${boardCate.boardCateCode}"
+								  		th:selected="${boardVO.searchBoardVO != null and boardVO.searchBoardVO.searchCate == boardCate.boardCateCode}">[[${boardCate.boardCateName}]]</option>
+								</th:block>
+							</select>
 							<select class="form-select" name="searchBoardVO.searchSelect">
 							  <option value="BOARD_TITLE" 
 							  		th:selected="${boardVO.searchBoardVO == null or (boardVO.searchBoardVO != null and boardVO.searchBoardVO.searchSelect == 'BOARD_TITLE')}">제목</option>
@@ -78,74 +84,52 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:if="${#lists.size(noticeImportantList) != 0}" th:each="important, state : ${noticeImportantList}"  class="table-light">
-								<td>
-									<span class="badge text-bg-success">중요</span>
-								</td>
-								<td class="text-start">
-									<a th:href="@{/notice/detail(boardNum=${important.boardNum})}" class="link-dark">
-									[[${important.boardTitle}]]
-									</a>
-									
-									<th:block th:if="${important.replyCnt != 0}">
-										<span class="fs-6 text-secondary" th:text="'[' + ${important.replyCnt} + ']'"></span>
-									</th:block>
-								</td>
-								<td>
-									<th:block th:if="${important.fileCnt != 0}">
-										<div class="dropdown">
-											<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
-											  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
-											</svg>
-										  <ul class="dropdown-menu dropdown-menu-end">
-											  <th:block th:each="file : ${important.boardFileList}">
-											    <li class="my-1">
-											    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
-											    </li>
-											  </th:block>
-										  </ul>
-										</div>
-									</th:block>
-								</td>
-								<td>[[${important.ename}]]</td>
-								<td>[[${important.boardDate}]]</td>
-								<td>[[${important.boardView}]]</td>
-							</tr>
-							<th:block th:if="${#lists.size(noticeList) == 0}">
+							<th:block th:if="${#lists.size(communityList) == 0}">
 								<tr>
 									<td colspan="6">등록된 게시글이 없습니다.</td>
 								</tr>						
 							</th:block>
-							<th:block th:unless="${#lists.size(noticeList) == 0}">
-								<tr th:each="notice, state : ${noticeList}">
+							<th:block th:unless="${#lists.size(communityList) == 0}">
+								<tr th:each="community, state : ${communityList}">
 									<td>[[${boardVO.totalDataCnt - ((boardVO.nowPage - 1) * boardVO.displayCnt + state.index)}]]</td>
 									<td class="text-start">
-										<a th:href="@{/notice/detail(boardNum=${notice.boardNum})}" class="link-dark">
-										[[${notice.boardTitle}]]
-										</a>
-										<th:block th:if="${notice.replyCnt != 0}">
-											<span class="fs-6 text-secondary" th:text="'[' + ${notice.replyCnt} + ']'"></span>
+										<span class="badge text-bg-light">[[${community.boardCategoryVO.boardCateName}]]</span>
+										<th:block th:if="${community.isPrivate == 'Y'}">
+											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+											  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+											</svg>
+											<a href="javascript:void(0)" th:onclick="isPrivateModal([[${community.boardNum}]])" class="link-dark" data-bs-toggle="modal" data-bs-target="#privateModal" id="privateModalBtn">
+												[[${community.boardTitle}]]
+											</a>
+										</th:block>
+										<th:block th:unless="${community.isPrivate == 'Y'}">
+											<a th:href="@{/community/detail(boardNum=${community.boardNum})}" class="link-dark">
+											[[${community.boardTitle}]]
+											</a>
+										</th:block>
+										<th:block th:if="${community.replyCnt != 0}">
+											<span class="fs-6 text-secondary" th:text="'[' + ${community.replyCnt} + ']'"></span>
 										</th:block>
 									</td>
 									<td>
-										<th:block th:if="${notice.fileCnt != 0}">
+										<th:block th:if="${community.fileCnt != 0}">
 											<div class="dropdown">
 												<svg xmlns="http://www.w3.org/2000/svg" role="button" data-bs-toggle="dropdown" aria-expanded="false" width="20" height="20" fill="currentColor" class="bi bi-paperclip dropdown-toggle" viewBox="0 0 16 16">
 												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z"/>
 												</svg>
 											  <ul class="dropdown-menu dropdown-menu-end">
-												  <th:block th:each="file : ${notice.boardFileList}">
+												  <th:block th:each="file : ${community.boardFileList}">
 												    <li class="my-1">
-												    	<a class="dropdown-item py-0" th:href="@{/notice/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
+												    	<a class="dropdown-item py-0" th:href="@{/community/download(fileNum=${file.fileNum})}">[[${file.originFileName}]]</a>
 												    </li>
 												  </th:block>
 											  </ul>
 											</div>
 										</th:block>
 									</td>
-									<td>[[${notice.ename}]]</td>
-									<td>[[${notice.boardDate}]]</td>
-									<td>[[${notice.boardView}]]</td>
+									<td>[[${community.ename}]]</td>
+									<td>[[${community.boardDate}]]</td>
+									<td>[[${community.boardView}]]</td>
 								</tr>
 							</th:block>
 						</tbody>
@@ -154,7 +138,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<input type="button" class="btn float-end" th:onclick="|location.href='@{/notice/regForm}'|" value="글쓰기">
+					<input type="button" class="btn float-end" th:onclick="|location.href='@{/community/regForm}'|" value="글쓰기">
 					<nav aria-label="Page navigation example">
 					  <ul class="pagination justify-content-center">
 					    <li class="page-item" th:classappend="${boardVO.prev} ? '' :  'disabled'">
@@ -187,11 +171,39 @@
 			</div>
 		</div>
 	</div>
+	
+	
+<!-- 비밀글 모달 -->
+<div class="modal fade" id="privateModal" tabindex="-1" aria-labelledby="privateModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 20rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="privateModal">비밀글</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-5">
+        <div class="row">
+        	<div class="col text-center">
+				<div class="fw-semibold mb-3">비밀글 기능으로 보호된 글입니다.</div>
+				<div class="mb-5">작성자와 관리자만 열람하실 수 있습니다. 본인이라면 비밀번호를 입력하세요.</div>
+				
+				<div><input type="hidden" id="boardNum"></div>
+				<div class="text-start"><span class="text-danger">*</span> 비밀번호</div>
+				<div class="input-group mb-3">
+				  <input type="password" class="form-control" name="boardPw" id="boardPw">
+				  <button class="btn" type="button" onclick="checkBoardPw()">확인</button>
+				</div>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </th:block>
 
 <!-- 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<script type="text/javascript" src="/js/content/notice/notice_list.js"></script>
+	<script type="text/javascript" src="/js/content/community/community_list.js"></script>
 </th:block>
 
 </html>

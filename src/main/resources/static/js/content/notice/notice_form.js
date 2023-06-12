@@ -3,7 +3,7 @@
 
 //정상 글 등록
 function regNotice() {
-	if(!noticeFormCheck()) {
+	if(!formCheck()) {
 		return false;
 	}
 	else {
@@ -20,7 +20,7 @@ function regNotice() {
 
 //임시 저장 글 등록
 function tempRegNotice() {
-	if(!noticeFormCheck()) {
+	if(!formCheck()) {
 		return false;
 	}
 	else {
@@ -139,7 +139,7 @@ function tempDeleteFileInputDiv(deleteBtn, fileNum) {
 
 
 //제목, 내용, 파일 첨부 유효성 체크
-function noticeFormCheck() {
+function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
@@ -168,7 +168,7 @@ function noticeFormCheck() {
 }
 
 //제목, 내용, 파일 비어있는지 확인
-function noticeFormNullCheck() {
+function formNullCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
@@ -288,11 +288,11 @@ function currentBoardAlert() {
 
 //임시저장함 글 가져오기
 function updateTempBoard(boardNum) {
-	if(noticeFormNullCheck()) {
+	if(formNullCheck()) {
 		getTempBoard(boardNum);
 	}
 	else if(confirm('작성 중인 내용을 임시저장하고 선택한 문서를 불러오시겠습니까?')) {
-		if(!noticeFormCheck()) {
+		if(!formCheck()) {
 			return false;
 		}
 		else {
@@ -359,6 +359,8 @@ function getTempBoard(boardNum) {
 				fileDiv.remove();
 			}
 			
+			const isImportant = document.querySelector('#isImportant');
+			
 			//hiddenDiv 비우고 boardNum, boardStatus 넣기
 			const hiddenDiv = document.querySelector('#hiddenDiv');
 			hiddenDiv.replaceChildren();
@@ -369,14 +371,12 @@ function getTempBoard(boardNum) {
 			
 			hiddenDiv.insertAdjacentHTML('afterbegin', tempStr);
 			
-			//파일 처리~~~~~~~~~~~~~~~~!!!!!!
-			console.log(tempBoard);
 				
 			if(tempBoard.boardFileList.length != 0) {
 				let fileStr = '';
 				for(const file of tempBoard.boardFileList) {
 					fileStr += `<div class="mb-1">`;
-					fileStr += `<a th:href="@{/notice/download(fileNum=${file.fileNum})}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
+					fileStr += `<a href="/notice/download?fileNum=${file.fileNum}" style="color: black; text-decoration:underline; text-underline-offset : 5px;">`;
 					fileStr += `${file.originFileName}</a> (${file.fileSize}) `;
 					fileStr += `<button class="btn btn-primary btn-sm" type="button" onclick="deleteAttachedFile('${file.fileNum}', this);">삭제</button></div>`;
 				}
@@ -384,6 +384,13 @@ function getTempBoard(boardNum) {
 				const fileTd = document.querySelector('#fileTd');
 				fileTd.insertAdjacentHTML('beforeend', fileStr);
 				
+			}
+			
+			if(tempBoard.isImportant == 'Y') {
+				isImportant.checked = true;
+			}
+			else {
+				isImportant.checked = false;
 			}
 		},
 		error: function() {
