@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
+	.numberBtn {
+		color: #466583;
+	}
+	
+	</style>
+
+</th:block>
+
+<th:block layout:fragment="content">
+
+
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+		<form th:action="@{/community/regCommunity}" method="post" id="communityForm" enctype="multipart/form-data">
+		
+		
+			<div class="row">
+				<div class="col">
+					<table class="table text-center align-middle table-group-divider">
+						<colgroup>
+							<col width="10%">
+							<col width="*">
+							<col width="20%">
+							<col width="10%">
+							<col width="10%">
+						</colgroup>
+						<tr>
+							<td class="table-light">제목</td>
+							<td>
+								<input type="text" class="form-control" name="boardTitle" id="boardTitle">
+							</td>
+							<td>
+								<div class="input-group">
+								  <div class="input-group-text gap-2">
+								  	<input class="form-check-input mt-0" type="checkbox" name="isPrivate" id="isPrivate" value="Y">
+								  	<label class="form-check-label" for="isPrivate">
+									    비밀글
+									</label>
+								  </div>
+								  <input type="password" class="form-control" name="boardPw" id="boardPw" disabled>
+								</div>
+							</td>
+							<td class="table-light">카테고리</td>
+							<td>
+								<select class="form-select" name="boardCategoryVO.boardCateCode" id="boardCategory">
+									<th:block th:each="boardCate : ${boardCateList}">
+									  <option th:value="${boardCate.boardCateCode}">[[${boardCate.boardCateName}]]</option>
+									</th:block>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td class="align-baseline table-light">내용</td>
+							<td colspan="4">
+								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td class="table-light">첨부파일</td>
+							<td colspan="4" class="text-start" id="fileTd">
+								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
+								<!-- 첨부파일 -->
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row px-2">
+				<div class="col d-grid gap-2 d-md-flex justify-content-md-end" id="btnDiv">
+					<div id="alertDiv"></div>
+					<div class="btn-group" role="group">
+					  <button type="button" class="btn myBtn" onclick="tempRegCommunity();">임시저장</button>
+					  <input type="button" class="btn myBtn numberBtn" th:onclick="tempBoardList()"
+					  			data-bs-toggle="modal" data-bs-target="#tempRegModal" id="tempModalBtn" th:value="${tempBoardCnt}">
+					</div>
+					<button class="btn" type="button" onclick="regCommunity();">등록</button>
+				</div>
+			</div>
+			
+			
+			<div class="row">
+				<div class="col" id="hiddenDiv"></div>
+				<input type="hidden" name="boardMenuVO.boardMenuCode" th:value="${boardMenuCode}">
+			</div>
+			
+		</form>
+		</div>
+	</div>
+	
+	
+	
+<!-- 임시 저장 모달 -->
+<div class="modal fade" id="tempRegModal" tabindex="-1" aria-labelledby="tempRegModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 40rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="tempRegModal">임시 저장함</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mt-3 mb-3">
+        <div class="row">
+        	<div class="col">
+				<table class="table text-center align-middle">
+					<colgroup>
+						<col width="*">
+						<col width="25%">
+						<col width="10%">
+					</colgroup>
+					
+					<tbody id="tempModalBody">
+						
+						
+					</tbody>
+				</table>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src="/js/content/community/community_form.js"></script>
+</th:block>
+
+</html>

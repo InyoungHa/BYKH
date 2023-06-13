@@ -11,4 +11,5 @@ public class SearchBoardVO {
 
 	private String searchSelect;
 	private String searchKeyword;
+	private String searchCate;
 }

@@ -65,12 +65,11 @@ public class SignServiceImpl implements SignService{
 	public void insertDocPurchaseOrder(SignDocVO signDocVO) {
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
-		//BUY
 		sqlsession.insert("signMapper.insertBuy", signDocVO.getDocPurchaseOrderVO().getBuyVO());
 		sqlsession.insert("signMapper.insertBuyDetails", signDocVO.getDocPurchaseOrderVO().getBuyVO());
-		//BUYDETAIL
 		sqlsession.insert("signMapper.insertDocPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 	}
+	
 	@Override
 	public int getNextBuyNo() {
 		return sqlsession.selectOne("signMapper.getNextBuyNo");
@@ -89,9 +88,13 @@ public class SignServiceImpl implements SignService{
 	}
 	@Override
 	public int updateSignStatus(SignDocVO signDocVO) {
-		System.out.println("!!!!!!!!!!!!!!!!updateSingStatusImpl 실행!!!!!!!!!!!!!!!!!!");
 		return sqlsession.update("signMapper.updateSignStatus", signDocVO);
 	}
+	@Override
+	public void delAnnualLeave(int docNo) {
+		sqlsession.delete("signMapper.delAnnualLeave", docNo);
+	}
+	
 	
 	
 	

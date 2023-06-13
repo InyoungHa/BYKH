@@ -1,7 +1,10 @@
 package com.bykh.groupware.calendar.controller;
 
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -55,17 +58,40 @@ public class CalendarController {
 	// 자원관리캘린더 일정추가
 	@ResponseBody
 	@RequestMapping("/resourceCalendarSave")
-	public void resourceCalendarSaveAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication) {
+	public void resourceCalendarSaveAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
 		
-		calendarService.deleteResourceSchedule(empno);
+		
+	
 
-		for (ResourceVO resourceVO : resourceVOs) {
-			resourceVO.setEmpno(empno);
-			calendarService.insertResourceSchedule(resourceVO);
+		for (ResourceVO resource : resourceVOs) {
+			resource.setEmpno(empno);
+			calendarService.insertResourceSchedule(resource);
 		}
 
+	}
+	
+	// 자원관리캘린더 일정(주/일) 업데이트
+	@ResponseBody
+	@RequestMapping("/resourceCalendarUpdate")
+	public int resourceCalendarUpdateAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());
+		
+		//방금 삽입한 code 조회
+		int scheduleCode = calendarService.getInsertScheduleCode();
+
+		for (ResourceVO resource : resourceVOs) {
+			resource.setEmpno(empno);
+			resource.setId(scheduleCode);
+			calendarService.updateResourceSchedule(resource);
+		}
+
+	
+		
+		return scheduleCode;
+		
 	}
 
 	// 자원관리캘린더 조회
@@ -77,6 +103,22 @@ public class CalendarController {
 
 		return calendarService.getAllResourceSchedules(empno);
 	}
+	
+	// 자원관리캘린더 일정제거
+		@ResponseBody
+		@RequestMapping("/deleteResourceSchedule")
+		public void resourceCalendarSaveAjax(Authentication authentication, ResourceVO resourceVO) {
+			User user = (User)authentication.getPrincipal();
+			int empno = Integer.parseInt(user.getUsername());
+				
+			  
+			  //empno값 resourceVO에 저장
+			  resourceVO.setEmpno(empno);
+
+
+				calendarService.deleteResourceSchedule(resourceVO);
+			
+		}
 
 	
 
