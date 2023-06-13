@@ -26,11 +26,18 @@ public interface EmpService {
 	//사원 이미지 등록
 	void insertEmpImg(EImgVO eImgVO);
 	
+	//사원 이미지 update
+	void updateEmpImg(EImgVO eImgVO);
+	
+	//사원 이미지 등록여부
+	EImgVO selectE_Img(int empno);
+	
 	//사원 상세 정보 수정
 	void updateEmpDetail(EmpVO empVO);
 	
 	//계정 상태 변경
 	void updateE_Account(EmpVO empVO);
+	
 	
 	
 	//계정 상태 변경 조회 쿼리

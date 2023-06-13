@@ -31,6 +31,15 @@ function checkBoardPw() {
 			data: {'boardNum' : boardNum, 'boardPw' : boardPw}, //필요한 데이터
 			success: function(result) {
 				if(result != '') {
+					//str = '';
+					//str += `<form id="test_form" method="post" action="/community/detail">`;					
+					//str += `<input type="hidden" name="boardNum" value="${boardNum}">`;					
+					//str += `</form>`;					
+					
+					//document.querySelector('#privateModal').insertAdjacentHTML('beforebegin', str);
+					//document.querySelector('#test_form').submit();
+					
+					
 					location.href = `/community/detail?boardNum=${boardNum}`;
 				}
 				else {
