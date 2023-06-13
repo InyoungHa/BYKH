@@ -156,7 +156,7 @@
 	<update id="updateEmpImg">
 		UPDATE E_IMG
 			SET 
-				IMG_CODE =#{imgCode},
+				IMG_CODE =(SELECT 'IMG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(IMG_CODE,5))), 0)+1 ,3,'0')FROM E_IMG),
 				ORIGIN_FILE_NAME=#{originFileName},
 				ATTACHED_FILE_NAME=#{attachedFileName}
 		WHERE EMPNO =#{empno}				
