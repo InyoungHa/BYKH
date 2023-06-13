@@ -6,71 +6,95 @@
 <th:block layout:fragment="content_css">
 	<!--연결해야하는 외부 css  -->
 	<!--<link rel="stylesheet" href=""> -->
+	  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </th:block>
 
 
 <th:block layout:fragment="content">
+ <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <style>
 body{
 background-color: #f6f8fa;
 }
 .mypage{
+border-radius: 0.5em;
 border:2px solid #ebe9ed;
 background-color: white;
 height: 220px;
 width: 350px;
-position: absolute; 
+  display:flex;
+  position:relative;
+  left: -120px; 
 }
+
 .attendance{
-height: 140px;
+border-radius: 0.5em;
+height: 150px;
 width: 350px;
-position: absolute; top:420px;
+display:flex;
+position: relative; top:-180px;
+right: 120px; 
 border:2px solid #ebe9ed;
 background-color: #ffffff;
 }
-.board{
-background-color: green;
-height: 180px;
-width: 350px;
-position: absolute; top:570px;
-}
 .quickMenu{
-background-color: red;
-height: 100px;
+border-radius: 0.5em;
+border:2px solid #ebe9ed;
+background-color: white;
+height: 170px;
 width: 350px;
-position: absolute; top:750px;
+display:flex;
+position: relative; top:-460px;
+right: 120px; 
 }
+.board{
+border-radius: 0.5em;
+border:2px solid #ebe9ed;
+background-color: white;
+height: 250px;
+width: 350px;
+position: absolute; top:1070px;
+}
+
 .notice{
-height: 222px;
-width: 700px;
-background-color: #5C8984;
-position: absolute; right:500px;
+border-radius: 0.5em;
+display:flex;
+position: relative; top:-220px;
+right: 120px; 
+border:2px solid #ebe9ed;
+background-color: #ffffff;
+height: 260px;
+width: 800px;
+left:290px;
 
 }
 .sign{
-height: 222px;
-width: 700px;
-background-color: #4C4C6D;
-position: absolute; top:500px; right:500px;
+border-radius: 0.5em;
+height: 370px;
+width: 800px;
+display:flex;
+border:2px solid #ebe9ed;
+background-color: #ffffff;
+position: relative; top:-290px; left:290px;
 }
 
 .toDoList{
-background-color: #B0DAFF;
-height: 225px;
+border-radius: 0.5em;
+border:2px solid #ebe9ed;
+background-color: #ffffff;
+height: 300px;
 width: 300px;
-position: absolute; right:150px; top:180px;
+display:flex;
+position: relative; right:-1150px; top:-1170px;
 }
-.data{
-background-color: #FF6969;
-height: 225px;
-width: 300px;
-position: absolute; right:150px; top:420px;
-}
+
+
+
 .calendar{
-background-color: #FFD95A;
+
 height: 225px;
 width: 300px;
-position: absolute; right:150px; top:660px;
+position: relative; right:-650px; top:-1105px;
 }
 
 .profile {
@@ -87,10 +111,85 @@ display:inline-block;
 margin-top:15px;
 margin-left: 30px;
 font-size: 25px;
-color: #146C94;
+color: #4c4c4c;
 font-weight: bold;
 
 }
+
+#calendar {
+  margin-left: auto;
+  margin-right: auto;
+  width: 320px;
+  font-family: "Lato", sans-serif;
+}
+#calendar_weekdays div {
+  display: inline-block;
+  vertical-align: top;
+}
+#calendar_content,
+#calendar_weekdays,
+#calendar_header {
+  position: relative;
+  width: 320px;
+  overflow: hidden;
+  float: left;
+  z-index: 10;
+}
+#calendar_weekdays div,
+#calendar_content div {
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  text-align: center;
+  background-color: #ffffff;
+  color: #787878;
+}
+#calendar_content {
+  -webkit-border-radius: 0px 0px 12px 12px;
+  -moz-border-radius: 0px 0px 12px 12px;
+  border-radius: 0px 0px 12px 12px;
+}
+#calendar_content div {
+  float: left;
+}
+#calendar_content div:hover {
+  background-color: #f8f8f8;
+}
+#calendar_content div.blank {
+  background-color: #e8e8e8;
+}
+#calendar_header,
+#calendar_content div.today {
+  zoom: 1;
+  filter: alpha(opacity=70);
+  opacity: 0.7;
+}
+#calendar_content div.today {
+  color: #ffffff;
+}
+#calendar_header {
+  width: 100%;
+  height: 37px;
+  text-align: center;
+  background-color: #E57C23;
+  padding: 8px 0;
+  -webkit-border-radius: 12px 12px 0px 0px;
+  -moz-border-radius: 12px 12px 0px 0px;
+  border-radius: 12px 12px 0px 0px;
+}
+#calendar_header h1 {
+  font-size: 1.5em;
+  color: #ffffff;
+  float: left;
+  width: 50%;
+}
+i[class^="icon-chevron"] {
+  color: #ffffff;
+  float: left;
+  width: 15%;
+  border-radius: 50%;
+}
+
 </style>
 <!--내정보 -->
 <span class="mypage">
@@ -98,30 +197,53 @@ font-weight: bold;
 <span> <img class="profile" src="/img/content/emp/YangDongGun.jpg"></span>
 <span style="font-size: 32px; padding-left: 212px; font-weight: bold;">[[${selectName.empVO.ename}]]</span><br>
 <span style="padding-left: 200px;">인사부 / [[${selectName.empVO.eJob}]]</span><br>
-<a><span style="width: 348px; height:30px;  display: inline-block; margin-top: 35px; text-align: center; border-top:2px solid #ebe9ed; padding-top: 10px;">내 정보 관리</span></a>
+<a id="pageMy2" th:href="@{/user/myPageForm}"><span style="width: 348px; height:30px;  display: inline-block; margin-top: 35px; text-align: center; border-top:2px solid #ebe9ed; padding-top: 10px; color: black; font-size: 20.5px;" id="pageMy">내 정보 관리</span></a>
 </span>
 
 </span> 
 
-<span class="notice">게시판</span>
-<span class="attendance">
-<span class="time">[[${attendanceVO.curDate}]]</span>
-<span style="margin-top: 15px; margin-left:20px; display: inline-block;">
+<span class="notice">공지게시판</span>
 
-<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 150px; height: 50px; background-color: #5d96ca;  font-weight: bold; border: 0px; font-size: 20px;">출근</button>
-<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 150px; height: 50px; background-color: #E06469;  font-weight: bold; border: 0px; font-size: 20px;">퇴근</button>
-</span>
-</span> 
+
+<div class="attendance">
+<div class="time">[[${attendanceVO.curDate}]]
+<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 135px; height: 50px; background-color: #457096;  font-weight: bold; border: 0px; font-size: 20px; margin-right: 5px; margin-top: 20px;">출근</button>
+<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 135px; height: 50px; background-color: #e03b42;  font-weight: bold; border: 0px; font-size: 20px; margin-top: 20px;">퇴근</button>
+</div>
+
+</div> 
 <span class="sign">전자결재</span>
-<span class="board">데시보드</span>
-<!-- 데시보드  예)  -->
-<!-- 메일/받은편지함      8 /16 건 -->
-<!-- 결재/결재할문서      3건-->
-<!-- 결재/결재완료        0건-->
-<span class="quickMenu">퀵메뉴</span>
+
+<div class="quickMenu" style="color: black; font-weight: bold; font-style: italic; font-size: 25px; padding-left: 20px; padding-top: 10px; flex-wrap: wrap; width: 350px;">
+<span>Quick Menu</span>
+
+<table style="margin-right: 50px; margin-bottom: 20px;">
+<tr>
+<td style="width: 100px; "><a th:href="@{/sign/signMain}"><input type="button" class="btn cl" value="결재현황" style="margin-left: 5px; background-color: #454545; border: 1px solid #454545;  "></a></td>
+<td style="width: 100px;"><a><input type="button" class="btn cl" value="조직도"  style="margin-left: 10px; background-color: #454545; border: 1px solid #454545; "></a></td>
+<td style="width: 100px;"><a th:href="@{/attendance/calender}"><input type="button" class="btn cl" value="근태캘린더" style="margin-left: 10px; background-color: #454545; border: 1px solid #454545;"></a></td>
+</tr>
+<tr>
+<td style="width: 100px;"><a th:href="@{/resource/reserve}"><input type="button" class="btn" value="자원예약" style="margin-left: 5px; background-color: #454545; border: 1px solid #454545;" ></a></td>
+<td style="width: 100px;"><a th:href="@{/community/list}"><input type="button" class="btn" value="커뮤니티" style="margin-left: 10px; background-color: #454545; border: 1px solid #454545;"></a></td>
+<td style="width: 100px;"><a th:href="@{/archive/list}" ><input type="button" class="btn" value="자료실" style="margin-left: 10px; background-color: #454545; border: 1px solid #454545;"></a></td>
+</tr>
+</table>
+
+
+
+
+</div>
 <span class="toDoList">toDo리스트</span>
-<span class="data">자료실</span>
-<span class="calendar">캘린더</span>
+
+<!-- 메인 캘린더 -->
+  <div id="calendar" class="calendar">
+    <div id="calendar_header"><i class="icon-chevron-left"></i>
+      <h1></h1><i class="icon-chevron-right"></i>
+    </div>
+    <div id="calendar_weekdays"></div>
+    <div id="calendar_content"></div>
+  </div>
 <!-- 퀵메뉴 예)  -->
 <!-- 메일쓰기 버튼 -->
 <!-- 회의실예약 버튼 -->

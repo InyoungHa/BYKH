@@ -228,10 +228,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 		//이벤트 드래그 드랍 후 저장 
 		eventReceive: function(info) {
-			console.log(info);
-				const event_info = info.event;
+			if (info.view.type === 'dayGridMonth') {
+				location.reload();
+			}
+			const event_info = info.event;
+
 			var events = [];
-			
 			const obj = {
 				title: event_info._def.title,
 				allDay: event_info._def.allDay,
@@ -239,11 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				end: event_info._instance.range.end
 			};
 			console.log(obj);
-			
-
 			events.push(obj);
-			
-		
 
 			var jsondata = JSON.stringify(events);
 			jsonEvent = JSON.parse(jsondata);
@@ -253,11 +251,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 
 			var jsondataUpdated = JSON.stringify(updatedEvents);
-			
+
 			console.log(jsondataUpdated);
-			
+
 			//ajax start
-				$.ajax({
+			$.ajax({
 				url: '/calendar/resourceCalendarSave', //요청경로
 				type: 'post',
 				async: false,
@@ -266,42 +264,31 @@ document.addEventListener('DOMContentLoaded', function() {
 				dataType: 'text',
 				success: function(result) {
 					//location.reload();
-					
+
 				},
 				error: function() {
 				}
 			});
-		
-				
-				
-				
-				
-				
-			
-			
-			
-
 		},
-	
+
 		//이벤트 일정 이동시
-		eventDrop: function(info){
-			console.log("@@@@@@@@@@@@@");
-			console.log(info.oldEvent);
+		eventDrop: function(info) {
 			const event_info = info.event;
 			var events = [];
-			
+
 			const obj = {
+				id: event_info._def.publicId,
 				title: event_info._def.title,
 				allDay: event_info._def.allDay,
 				start: event_info._instance.range.start,
 				end: event_info._instance.range.end
 			};
 			console.log(obj);
-			
-		
+
+
 			events.push(obj);
-			
-		
+
+
 
 			var jsondata = JSON.stringify(events);
 			jsonEvent = JSON.parse(jsondata);
@@ -311,19 +298,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 
 			var jsondataUpdated = JSON.stringify(updatedEvents);
-			
+
 			console.log(jsondataUpdated);
-			
+
 			//ajax start
-				$.ajax({
-				url: '/calendar/resourceCalendarUpdate', //요청경로
+			$.ajax({
+				url: '/calendar/resourceCalendarUpdate2', //요청경로
 				type: 'post',
 				async: false,
 				contentType: 'application/json; charset=UTF-8',
 				data: jsondataUpdated,
 				dataType: 'text',
 				success: function(result) {
-				
+
 				},
 				error: function() {
 				}
@@ -331,55 +318,53 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 
 		//주 일 시간 대 변경 업데이트
-		eventResize: function(info){	
-			  
-				
-				
-			const event_info = info.event;
-			var events = [];
+		eventResize: function(info) {
+			if (info.view.type === 'timeGridWeek' || info.view.type === 'timeGridDay') {
 			
-			const obj = {
-				title: event_info._def.title,
-				allDay: event_info._def.allDay,
-				start: event_info._instance.range.start,
-				end: event_info._instance.range.end,
-				id: event_info._def.publicId	
-			};
-			console.log(obj);
-			
+				const event_info = info.event;
+				var events = [];
 
-			events.push(obj);
-			
-		
+				const obj = {
+					title: event_info._def.title,
+					allDay: event_info._def.allDay,
+					start: event_info._instance.range.start,
+					end: event_info._instance.range.end,
+					id: event_info._def.publicId
+				};
+				console.log(obj);
 
-			var jsondata = JSON.stringify(events);
-			jsonEvent = JSON.parse(jsondata);
 
-			var updatedEvents = jsonEvent.map(function(event) {
-				return event;
-			});
+				events.push(obj);
 
-			var jsondataUpdated = JSON.stringify(updatedEvents);
-			
-			console.log(jsondataUpdated);
-			
-			//ajax start
+
+
+				var jsondata = JSON.stringify(events);
+				jsonEvent = JSON.parse(jsondata);
+
+				var updatedEvents = jsonEvent.map(function(event) {
+					return event;
+				});
+
+				var jsondataUpdated = JSON.stringify(updatedEvents);
+
+				console.log(jsondataUpdated);
+
+				//ajax start
 				$.ajax({
-				url: '/calendar/resourceCalendarUpdate', //요청경로
-				type: 'post',
-				async: false,
-				contentType: 'application/json; charset=UTF-8',
-				data: jsondataUpdated,
-				dataType: 'text',
-				success: function(result) {
-					alert(result);
-				
-				},
-				error: function() {
-				}
-			});
-						
-				
+					url: '/calendar/resourceCalendarUpdate', //요청경로
+					type: 'post',
+					async: false,
+					contentType: 'application/json; charset=UTF-8',
+					data: jsondataUpdated,
+					dataType: 'text',
+					success: function(result) {
+						location.reload();
+					},
+					error: function() {
+					}
+				});
+
+			}
 		},
 
 		
@@ -387,28 +372,15 @@ document.addEventListener('DOMContentLoaded', function() {
 		eventDragStop: function(info) {
 		const id = info.event.id;
 		console.log(id);
-			//ajax start
-			$.ajax({
-				url: '/calendar/deleteResourceSchedule', //요청경로
-				type: 'post',
-				async: false,
-				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-				data: {
-					id: id
-				},
-				success: function(result) {
-			
-					
-				},
-				error: function() {
-				}
-			});
+	
 			
 			
 			
 			var jsEvent = info.jsEvent;
 
 			if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+				
+				
 				calendar.getEventById(info.event.id).remove();
 				var eventElement = document.createElement('div');
 				externalEventsEl.appendChild(eventElement);
@@ -420,6 +392,23 @@ document.addEventListener('DOMContentLoaded', function() {
 						stick: true
 					}));
 				});
+							//ajax start
+			$.ajax({
+				url: '/calendar/deleteResourceSchedule', //요청경로
+				type: 'post',
+				async: false,
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				data: {
+					id: id
+				},
+				success: function(result) {
+					location.reload();			
+				},
+				error: function() {
+				}
+			});
+				
+				
 			}
 		}
 	});

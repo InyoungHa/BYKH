@@ -167,20 +167,20 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 	TO_CHAR(GO_WORK, 'D') NOT IN (1, 7)
 	AND TO_CHAR(GO_WORK, 'YYYY-MM-DD')
 	NOT IN (
-	'2023-01-01', -- 신정
-	'2023-02-16', -- 설날
-	'2023-02-17', -- 설날
-	'2023-02-18', -- 설날
-	'2023-03-01', -- 삼일절
-	'2023-05-05', -- 어린이날
-	'2023-05-09', -- 석가탄신일
-	'2023-06-06', -- 현충일
-	'2023-08-15', -- 광복절
-	'2023-09-14', -- 추석
-	'2023-09-15', -- 추석
-	'2023-09-16', -- 추석
-	'2023-10-03', -- 개천절
-	'2023-10-09' -- 한글날
+	'2023-01-01', 
+	'2023-02-16', 
+	'2023-02-17', 
+	'2023-02-18', 
+	'2023-03-01', 
+	'2023-05-05', 
+	'2023-05-09', 
+	'2023-06-06', 
+	'2023-08-15', 
+	'2023-09-14', 
+	'2023-09-15', 
+	'2023-09-16', 
+	'2023-10-03', 
+	'2023-10-09' 
 	)
 	AND EMPNO = #{empno}
 	</select>
@@ -231,9 +231,13 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 	SELECT EVENT_NAME,
 	TO_CHAR(START_DATE, 'YYYY-MM-DD(DY) HH24:MI')AS START_DAY,
 	TO_CHAR(END_DATE, 'YYYY-MM-DD(DY) HH24:MI')AS END_DAY,
-	ROUND((END_DATE - START_DATE) * 24, 2) AS TOTAL_DURATION
+	ROUND((END_DATE - START_DATE) * 24, 2) AS TOTAL_DURATION,
+	PARTICIPANT,
+	RESOURCE_CONTENT
 	FROM SCHEDUL_FOR_RESOURCE
 	WHERE EMPNO = #{empno}
+	ORDER BY START_DAY DESC
+	FETCH FIRST 5 ROW ONLY
 </select>
 		
 <!-- 자원디테일 내역 저장  -->		

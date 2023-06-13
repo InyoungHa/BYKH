@@ -56,15 +56,31 @@ SELECT SCHEDULE_CODE
 DELETE FROM SCHEDUL_FOR_RESOURCE WHERE EMPNO = #{empno} AND SCHEDULE_CODE = #{id}
 </delete>
 	
-	
+		
 <!-- 자원관리 캘린더 일정추가 -->	
 <insert id="insertResourceSchedule">
-INSERT INTO SCHEDUL_FOR_RESOURCE (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO)
-VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno})
+INSERT INTO SCHEDUL_FOR_RESOURCE (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO, SCHEDULE_CODE)
+VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno}, #{id})
 </insert>
 
-<!-- 자원관리 캘린더 일정(주/일) 업데이트 -->
+<!-- 자원관리 캘린더 일정(월) 업데이트 -->
 <update id="resourceCalendarUpdate">
+	MERGE INTO SCHEDUL_FOR_RESOURCE
+USING DUAL
+ON (EMPNO = #{empno} AND SCHEDULE_CODE = #{id})
+WHEN MATCHED THEN
+  UPDATE SET
+    EVENT_NAME = #{title},
+    START_DATE = #{start},
+    END_DATE = #{end},
+    ALLDAY = #{allDay}
+WHEN NOT MATCHED THEN
+  INSERT (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO)
+  VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno})
+</update>
+
+<!-- 자원관리 캘린더 일정(주/일) 업데이트 -->
+<update id="resourceCalendarUpdate2">
 	MERGE INTO SCHEDUL_FOR_RESOURCE
 USING DUAL
 ON (EMPNO = #{empno} AND SCHEDULE_CODE = #{id})
@@ -97,7 +113,7 @@ WHERE EMPNO = #{empno}
 	UPDATE SCHEDUL_FOR_RESOURCE SET 
 		PARTICIPANT = #{participant},
 		RESOURCE_CONTENT = #{resourceContent}
-		WHERE  EMPNO = #{empno} AND SCHEDULE_CODE = #{id}
+		WHERE EMPNO = #{empno} AND SCHEDULE_CODE = #{id}
 </update>
 
 
@@ -105,7 +121,7 @@ WHERE EMPNO = #{empno}
 <!--자원관리 캘린더 디테일 내용 조회 -->
 <select id="selectCalendarDetail" resultMap="resourceCal">
 		SELECT PARTICIPANT, RESOURCE_CONTENT FROM SCHEDUL_FOR_RESOURCE
-		WHERE SCHEDULE_CODE = #{id}
+		WHERE SCHEDULE_CODE = #{id} AND EMPNO = #{empno}
 </select>
 	
 <select id="getLastSchedulCode" resultType="int">

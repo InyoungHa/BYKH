@@ -2,7 +2,7 @@
  function printArea(){
  var initBody = document.body.innerHTML;
     window.onbeforeprint = function(){
-        document.body.innerHTML = document.getElementById("bottomBox").innerHTML;
+        document.body.innerHTML = document.getElementById("modalBody").innerHTML;
     }
     window.onafterprint = function(){
         document.body.innerHTML = initBody;

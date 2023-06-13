@@ -44,9 +44,13 @@ public class ResourceServiceImpl implements ResourceService {
 
 		//자원관리 캘린더 상세정보 조회
 		@Override
-		public List<ResourceVO> selectCalendarDetail(int id) {
-			return sqlSession.selectList("calendarMapper.selectCalendarDetail", id);
+		public List<ResourceVO> selectCalendarDetail(ResourceVO resourceVO) {
+			return sqlSession.selectList("calendarMapper.selectCalendarDetail", resourceVO);
 		}
+
+
+
+		
 
 
 
