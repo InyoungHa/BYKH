@@ -254,6 +254,11 @@ function showSignDocModal(clickTag){
 				str += `
 			<div class="row">
 			<div class="col-8" style="border: 1px solid #dee2e6;">
+			<div class="row mt-3 mb-3">
+								<div class="col text-center">
+									<h2>구매신청서</h2>
+								</div>
+							</div>
 			<div class="row mb-3">
 				<div class="col-7">
 					<table class="table table-bordered text-center sgn-info-table">

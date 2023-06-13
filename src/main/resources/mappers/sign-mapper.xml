@@ -263,7 +263,7 @@
 			    , SGN_ORDER
 			    , APPROVER_NO
 			) VALUES(
-			    ${signVOList[0].docNo}
+			    ${docNo}
 			    , ${i+1}
 			    , ${sign.approverNo}
 			)
@@ -375,6 +375,7 @@
 		AND BUY.BUY_NO = BD.BUY_NO
 		AND BD.ITEM_NO = ITEM.ITEM_NO
 		AND DOC.DOC_NO = ${docNo}
+		ORDER BY BUY_DETAIL_NO
 	</select>
 	
 	<select id="getItemList" resultMap="item">
@@ -386,7 +387,7 @@
 		ORDER BY ITEM_NO
 	</select>
 	
-	<!-- 구매신청서 삭제 -->
+	<!-- 구매신청서 삭제  -->
 	<delete id="delPurchaseOrder">
 		BEGIN
 		    DELETE FROM BUY_DETAIL WHERE BUY_NO = (SELECT BUY_NO FROM BUY WHERE DOC_NO = ${docNo});
@@ -394,10 +395,16 @@
             DELETE FROM DOC_PURCHASE_ORDER WHERE DOC_NO = ${docNo};
 		    DELETE FROM SGN WHERE DOC_NO = ${docNo};
 		    DELETE FROM SGN_DOC WHERE DOC_NO = ${docNo};
-		END
+		END;
 	</delete>
-	
-	
+	<!-- 연차신청서 삭제 -->
+	<delete id="delAnnualLeave">
+		BEGIN
+		    DELETE FROM DOC_ANNUAL_LEAVE WHERE DOC_NO = #{docNo};
+		    DELETE FROM SGN WHERE DOC_NO = #{docNo};
+		    DELETE FROM SGN_DOC WHERE DOC_NO = #{docNo};
+		END;
+	</delete>
 	
 </mapper>
 
