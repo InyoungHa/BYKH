@@ -71,7 +71,8 @@
 							<col width="5%">
 							<col width="10%">
 							<col width="20%">
-							<col width="10%">
+							<col width="5%">
+							<col width="8%">
 						</colgroup>
 						<thead>
 							<tr>
@@ -80,13 +81,14 @@
 								<th>첨부</th>
 								<th>작성자</th>
 								<th>작성일</th>
+								<th>추천</th>
 								<th>조회수</th>
 							</tr>
 						</thead>
 						<tbody>
 							<th:block th:if="${#lists.size(communityList) == 0}">
 								<tr>
-									<td colspan="6">등록된 게시글이 없습니다.</td>
+									<td colspan="7">등록된 게시글이 없습니다.</td>
 								</tr>						
 							</th:block>
 							<th:block th:unless="${#lists.size(communityList) == 0}">
@@ -129,6 +131,7 @@
 									</td>
 									<td>[[${community.ename}]]</td>
 									<td>[[${community.boardDate}]]</td>
+									<td>[[${community.likeCnt}]]</td>
 									<td>[[${community.boardView}]]</td>
 								</tr>
 							</th:block>

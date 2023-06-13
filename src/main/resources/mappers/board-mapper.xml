@@ -32,7 +32,6 @@
 		<result column="IS_IMPORTANT" 		property="isImportant"/>
 		<result column="IS_PRIVATE" 		property="isPrivate"/>
 		<result column="BOARD_PW" 			property="boardPw"/>
-		<result column="BOARD_LIKE" 		property="boardLike"/>
 		<result column="ENAME" 				property="ename"/>
 		<result column="BOARD_PREV_NUM" 	property="boardPrevNum"/>
 		<result column="BOARD_PREV_TITLE" 	property="boardPrevTitle"/>
@@ -42,10 +41,17 @@
 		<result column="BOARD_NEXT_PRIVATE" property="boardNextPrivate"/>
 		<result column="FILE_CNT" 			property="fileCnt"/>
 		<result column="REPLY_CNT" 			property="replyCnt"/>
+		<result column="LIKE_CNT" 			property="likeCnt"/>
 		<association property="boardMenuVO" 	resultMap="boardMenu"></association>
 		<association property="boardCategoryVO" resultMap="boardCategory"></association>
 		<collection property="boardFileList" 	resultMap="boardFile"></collection>
 		<collection property="replyList" 		resultMap="replyMapper.reply"></collection>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.community.vo.BoardLikeVO" id="boardLike">
+		<id 	column="LIKE_NUM" 	property="likeNum"/>
+		<result column="LIKE_USER" 	property="likeUser"/>
+		<result column="BOARD_NUM" 	property="boardNum"/>
 	</resultMap>
 	
 	
@@ -87,6 +93,9 @@
 			, (SELECT COUNT(REPLY_NUM)
                 FROM BOARD_REPLY
                 WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
+			, (SELECT COUNT(LIKE_NUM)
+                FROM BOARD_LIKE
+                WHERE BOARD_NUM = BOARD.BOARD_NUM) LIKE_CNT
 			, FILE_NUM
             , ORIGIN_FILE_NAME
             , BOARD_CATE_NAME
@@ -226,6 +235,9 @@
 				, (SELECT COUNT(REPLY_NUM)
                     FROM BOARD_REPLY
                     WHERE BOARD_NUM = #{boardNum}) REPLY_CNT
+                , (SELECT COUNT(LIKE_NUM)
+					FROM BOARD_LIKE
+					WHERE BOARD_NUM = #{boardNum}) LIKE_CNT
 	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
 	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
 	            , LAG(IS_PRIVATE, 1, 'N') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_PRIVATE
@@ -353,7 +365,34 @@
         AND BOARD_PW = #{boardPw}
 	</select>
 	
+	<!-- 좋아요 추가 -->
+	<insert id="insertBoardLike">
+		INSERT INTO BOARD_LIKE (
+			LIKE_NUM
+			, LIKE_USER
+			, BOARD_NUM
+		) VALUES (
+			(SELECT 'LIKE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(LIKE_NUM, 6))), 0) + 1, 3, '0')
+			FROM BOARD_LIKE)
+			, #{likeUser}
+			, #{boardNum}
+		)
+	</insert>
 	
+	<!-- 좋아요 눌렀는지 체크 -->
+	<select id="getLikeCheck" resultType="boolean">
+		SELECT COUNT(LIKE_NUM)
+        FROM BOARD_LIKE
+        WHERE BOARD_NUM = #{boardNum}
+        AND LIKE_USER = #{likeUser}
+	</select>
+	
+	<!-- 좋아요 취소 -->
+	<delete id="deleteBoardLike">
+		DELETE BOARD_LIKE
+		WHERE BOARD_NUM = #{boardNum}
+		AND LIKE_USER = #{likeUser}
+	</delete>
 </mapper>
 
 

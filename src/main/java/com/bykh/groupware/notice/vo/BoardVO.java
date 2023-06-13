@@ -27,7 +27,6 @@ public class BoardVO extends PageVO {
 	private String isImportant;
 	private String isPrivate;
 	private String boardPw;
-	private int boardLike;
 	
 	private BoardMenuVO boardMenuVO;
 	private BoardCategoryVO boardCategoryVO;
@@ -44,6 +43,7 @@ public class BoardVO extends PageVO {
 	private String boardNextPrivate;
 	private int fileCnt;
 	private int replyCnt;
+	private int likeCnt;
 	
 	private SearchBoardVO searchBoardVO;
 	

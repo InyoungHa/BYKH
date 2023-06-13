@@ -31,6 +31,7 @@
 						<colgroup>
 							<col width="10%">
 							<col width="*">
+							<col width="20%">
 							<col width="10%">
 							<col width="10%">
 						</colgroup>
@@ -38,6 +39,19 @@
 							<td class="table-light">제목</td>
 							<td>
 								<input type="text" class="form-control" name="boardTitle" id="boardTitle" th:value="${community.boardTitle}">
+							</td>
+							<td>
+								<div class="input-group">
+								  <div class="input-group-text gap-2">
+								  	<input class="form-check-input mt-0" type="checkbox" name="isPrivate" id="isPrivate" value="Y"
+								  			th:checked="${community.isPrivate == 'Y'}">
+								  	<label class="form-check-label" for="isPrivate">
+									    비밀글
+									</label>
+								  </div>
+								  <input type="password" class="form-control" name="boardPw" id="boardPw" placeholder="비밀번호" 
+								  			th:disabled="${community.isPrivate == 'N'}" th:value="${community.isPrivate == 'Y' ? community.boardPw: ''}">
+								</div>
 							</td>
 							<td class="table-light">카테고리</td>
 							<td>
@@ -51,13 +65,13 @@
 						</tr>
 						<tr>
 							<td class="align-baseline table-light">내용</td>
-							<td colspan="3">
+							<td colspan="4">
 								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent">[[${community.boardContent}]]</textarea>
 							</td>
 						</tr>
 						<tr>
 							<td class="table-light">첨부파일</td>
-							<td colspan="3" class="text-start">
+							<td colspan="4" class="text-start">
 								<button type="button" class="btn btn-primary btn-sm" onclick="addFileInputDiv(this);">파일 추가</button>
 								<div class="mb-1" th:if="${#lists.size(community.boardFileList) != 0}"
 											th:each="file : ${community.boardFileList}">
