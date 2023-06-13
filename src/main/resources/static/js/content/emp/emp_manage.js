@@ -641,7 +641,7 @@ function draw_change_account_modal(empno, eStatus, eAccount){
 	str += 		'</div>';
 	str += 	'</div>';
 	
-	modal_body_tag.insertAdjacentHTML('beforebegin', str);
+	modal_body_tag.insertAdjacentHTML('afterbegin', str);
 	
 }
 

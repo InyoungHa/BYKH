@@ -53,6 +53,7 @@
 			, ENAME
 		FROM EMP
 		WHERE EMPNO = #{empno}
+		AND E_ACCOUNT =1
 	</select>
 	
 	
@@ -128,7 +129,8 @@
 			, E_STATUS
 		FROM EMP EMP, DEPT DEPT
 		WHERE EMP.DEPTNO = DEPT.DEPTNO
-		AND EMPNO = #{empno}		
+		AND EMPNO = #{empno}
+		AND ROWNUM = 1		
 	</select>
 	 <!-- 		,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME-->
 
@@ -149,6 +151,27 @@
 				, #{empno}
 			)
 	</insert>
+	
+	<!-- 사원 이미지 update  -->
+	<update id="updateEmpImg">
+		UPDATE E_IMG
+			SET 
+				IMG_CODE =#{imgCode},
+				ORIGIN_FILE_NAME=#{originFileName},
+				ATTACHED_FILE_NAME=#{attachedFileName}
+		WHERE EMPNO =#{empno}				
+	</update>
+	
+	<!--이미지 등록 여부 확인  -->
+	<select id="selectE_Img" resultMap="eImg">
+		SELECT IMG_CODE,
+			EMPNO,
+			ORIGIN_FILE_NAME,
+			ATTACHED_FILE_NAME
+		FROM E_IMG
+		WHERE EMPNO =#{empno}
+	
+	</select>
 	
 	<!--상세 사원 정보 등록  -->
 	<update id="updateEmpDetail">

@@ -1,7 +1,11 @@
 package com.bykh.groupware.emp.vo;
 
+
+
+import com.bykh.groupware.emp.service.EmpService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -10,6 +14,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class EImgVO {
+	@Resource(name="empService")
+	private EmpService empService;
+	
+	
 	private String imgCode;
 	private int empno;
 	
@@ -18,4 +26,9 @@ public class EImgVO {
 	
 	@JsonProperty("attached_file_name")
 	private String attachedFileName;
+	
+
 }
+
+
+
