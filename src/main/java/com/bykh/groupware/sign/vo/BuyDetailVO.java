@@ -1,5 +1,7 @@
 package com.bykh.groupware.sign.vo;
 
+import com.bykh.groupware.mro.vo.ItemVO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
