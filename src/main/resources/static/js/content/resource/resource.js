@@ -67,9 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 		var id = info.event._def.publicId;
-		console.log("@@@@@@@@@");
-		console.log(id);
-				console.log(id);
 				//ajax start
 				$.ajax({
 					url: '/resource/selectCalendarDetail', //요청경로
@@ -80,15 +77,11 @@ document.addEventListener('DOMContentLoaded', function() {
 						'id': id
 					}, //HTML에받는  데이터
 					success: function(result) {
-							console.log("!!!!!!!!!");
-						 	console.log(result);
 						var firstObject = result[0];
 						var participant = firstObject.participant;
 						var resourceContent = firstObject.resourceContent;
 						$('#participant').val(participant);
 						$('#resourceContent').val(resourceContent);
-						console.log(participant);
-						console.log(resourceContent);
 					},
 					error: function() {
 						alert('실패');

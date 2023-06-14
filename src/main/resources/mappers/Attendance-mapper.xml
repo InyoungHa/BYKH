@@ -20,6 +20,8 @@
 		<result column="WORKING_TIME" 	property="workingTime"/>
 		<result column="OUT_TIME" 	property="outTime"/>
 		<result column="EMPNO" property="empno"/>
+		<result column="FIX_OVER_TIME" property="fixOverTime"/>
+		<result column="CAN_OVER_TIME" property="canOverTime"/>	
 		<association property="empVO" resultMap="empMapper.emp"></association>
 	</resultMap>
 	
@@ -44,8 +46,8 @@
 
 	<!-- 회원정보 조회 -->
 	<select id="selectName" resultMap="att">
-	SELECT ENAME, E_JOB FROM EMP
-	WHERE EMPNO = #{empno}
+		SELECT ENAME, E_JOB FROM EMP
+		WHERE EMPNO = #{empno}
 	</select>
 	
 	<!--ATT_CODE 최신 첫번쨰 조회  -->
@@ -63,30 +65,28 @@
 
 	<!--출근시간 저장 -->
 	<insert id="goWork">
-	INSERT INTO ATTENDANCE (
-	ATT_CODE,
-	GO_WORK,
-	EMPNO
-	)
-	SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 5))), 0) + 1, 3, '0'),
-	SYSDATE,
-	#{empno}
-	FROM ATTENDANCE
-
+		INSERT INTO ATTENDANCE (
+		ATT_CODE,
+		GO_WORK,
+		EMPNO
+		)
+		SELECT 'ATT_' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(ATT_CODE, 5))), 0) + 1, 3, '0'),
+		SYSDATE,
+		#{empno}
+		FROM ATTENDANCE
 	</insert>
 
 	<!--퇴근시간 저장(NULL -> SYSDATE로 업데이트) -->
 	<update id="outWork">
-	UPDATE ATTENDANCE
-	SET OUT_WORK = SYSDATE,
-	WORKING_STATUS = CASE
-	WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2
-	WHEN GO_WORK IS NULL THEN 3
-	ELSE 1
-	END
-	WHERE ATT_CODE = #{attCode}
-	AND EMPNO = #{empno}
-	
+		UPDATE ATTENDANCE
+		SET OUT_WORK = SYSDATE,
+		WORKING_STATUS = CASE
+		WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2
+		WHEN GO_WORK IS NULL THEN 3
+		ELSE 1
+		END
+		WHERE ATT_CODE = #{attCode}
+		AND EMPNO = #{empno}
 	</update>
 
 
@@ -114,21 +114,19 @@
 
 	<!-- 지각 횟수 조회 -->
 	<select id="selectLateCount" resultMap="att">
-SELECT COUNT(*) AS LATE_COUNT
-FROM ATTENDANCE
-WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
-    AND EMPNO = #{empno}
-    AND TRUNC(GO_WORK) = TRUNC(SYSDATE)
-    AND ROWNUM = 1
+		SELECT COUNT(*) AS LATE_COUNT
+		FROM ATTENDANCE
+		WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
+	    AND EMPNO = #{empno}
+	    AND ROWNUM = 1
 	</select>
-
 
 
 	<!-- 근무일수 조회 -->
 	<select id="checkDays" resultMap="att">
-	 SELECT COUNT(DISTINCT TO_CHAR(GO_WORK, 'YYYY-MM-DD')) AS WORKING_DAYS
-  	FROM ATTENDANCE
-  	WHERE GO_WORK >= TRUNC(SYSDATE) AND EMPNO = #{empno}
+		SELECT COUNT(DISTINCT TO_CHAR(GO_WORK, 'YYYY-MM-DD')) AS WORKING_DAYS
+	  	FROM ATTENDANCE
+	  	WHERE  EMPNO = #{empno}
 	</select>
 	
 
@@ -143,87 +141,98 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 		
 	<!-- 연장근무시간 조회 -->
 	<select id="findOverTime" resultMap="att">
-	SELECT ROUND(SUM(
-	CASE
-	WHEN OUT_WORK - GO_WORK > (FIX_TIME - TRUNC(FIX_TIME)) THEN OUT_WORK -
-	GO_WORK - (FIX_TIME - TRUNC(FIX_TIME))
-	ELSE 0
-	END) * 24) AS OVER_TIME
-	FROM ATTENDANCE
-	WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
-	AND EMPNO = #{empno} 
+		SELECT ROUND(SUM(
+		CASE
+		WHEN OUT_WORK - GO_WORK > (FIX_TIME - TRUNC(FIX_TIME)) THEN OUT_WORK -
+		GO_WORK - (FIX_TIME - TRUNC(FIX_TIME))
+		ELSE 0
+		END) * 24) AS OVER_TIME
+		FROM ATTENDANCE
+		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+		AND EMPNO = #{empno} 
 	</select>
 
+	<!-- 연장근무 가능시간 조회 -->
+	<select id="findCanOverTime" resultMap="att">
+		SELECT 12- ROUND(SUM(
+		CASE
+		WHEN OUT_WORK - GO_WORK > (FIX_TIME - TRUNC(FIX_TIME)) THEN OUT_WORK -
+		GO_WORK - (FIX_TIME - TRUNC(FIX_TIME))
+		ELSE 0
+		END) * 24) AS CAN_OVER_TIME
+		FROM ATTENDANCE
+		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+		AND EMPNO = #{empno}
+	</select>
 
 
 	<!-- 결근 횟수 조회 -->
 	<select id="findLateCount" resultMap="att">
-	SELECT COUNT(*) AS LATE_COUNT
-	FROM ATTENDANCE
-	WHERE TRUNC(GO_WORK) = TRUNC(SYSDATE) AND GO_WORK IS NULL
-	AND
-	TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
-	AND
-	TO_CHAR(GO_WORK, 'D') NOT IN (1, 7)
-	AND TO_CHAR(GO_WORK, 'YYYY-MM-DD')
-	NOT IN (
-	'2023-01-01', 
-	'2023-02-16', 
-	'2023-02-17', 
-	'2023-02-18', 
-	'2023-03-01', 
-	'2023-05-05', 
-	'2023-05-09', 
-	'2023-06-06', 
-	'2023-08-15', 
-	'2023-09-14', 
-	'2023-09-15', 
-	'2023-09-16', 
-	'2023-10-03', 
-	'2023-10-09' 
-	)
-	AND EMPNO = #{empno}
+		SELECT COUNT(*) AS LATE_COUNT
+		FROM ATTENDANCE
+		WHERE TRUNC(GO_WORK) = TRUNC(SYSDATE) AND GO_WORK IS NULL
+		AND
+		TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+		AND
+		TO_CHAR(GO_WORK, 'D') NOT IN (1, 7)
+		AND TO_CHAR(GO_WORK, 'YYYY-MM-DD')
+		NOT IN (
+		'2023-01-01', 
+		'2023-02-16', 
+		'2023-02-17', 
+		'2023-02-18', 
+		'2023-03-01', 
+		'2023-05-05', 
+		'2023-05-09', 
+		'2023-06-06', 
+		'2023-08-15', 
+		'2023-09-14', 
+		'2023-09-15', 
+		'2023-09-16', 
+		'2023-10-03', 
+		'2023-10-09' 
+		)
+		AND EMPNO = #{empno}
 	</select>
 
 
 	<!--출퇴근 기록 게시판 최근 5일 -->
 	<select id="workingBoard" resultMap="att">
-	SELECT
-	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
-	TO_CHAR(GO_WORK, 'DY')
-	AS DAY,
-	TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
-	TO_CHAR(OUT_WORK,
-	'HH24:MI') AS OUT_TIME,
-	CASE
-	WHEN WORKING_STATUS = 1 THEN '정상출근'
-	WHEN WORKING_STATUS = 2 THEN '지각'
-	WHEN WORKING_STATUS = 3 THEN '결근'
-	END AS WORKING_STATUS
-	FROM ATTENDANCE
-	WHERE EMPNO = #{empno}
-	ORDER BY GO_WORK DESC
-	FETCH FIRST 5 ROW ONLY
-
+		SELECT
+		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+		TO_CHAR(GO_WORK, 'DY')
+		AS DAY,
+		TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+		TO_CHAR(OUT_WORK,
+		'HH24:MI') AS OUT_TIME,
+		CASE
+		WHEN WORKING_STATUS = 1 THEN '정상출근'
+		WHEN WORKING_STATUS = 2 THEN '지각'
+		WHEN WORKING_STATUS = 3 THEN '결근'
+		END AS WORKING_STATUS
+		FROM ATTENDANCE
+		WHERE EMPNO = #{empno}
+		ORDER BY GO_WORK DESC
+		FETCH FIRST 5 ROW ONLY
 	</select>
 	
     <!--출퇴근 기록 게시판 전체 -->
 	<select id="workingBoardAll" resultMap="att">
-	SELECT
-	TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
-	TO_CHAR(GO_WORK, 'DY')
-	AS DAY,
-	TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
-	TO_CHAR(OUT_WORK,
-	'HH24:MI') AS OUT_TIME,
-	CASE
-	WHEN WORKING_STATUS = 1 THEN '정상출근'
-	WHEN WORKING_STATUS = 2 THEN '지각'
-	WHEN WORKING_STATUS = 3 THEN '결근'
-	END AS WORKING_STATUS
-	FROM ATTENDANCE
-	WHERE EMPNO = #{empno}
-	ORDER BY GO_WORK DESC
+		SELECT
+		TO_CHAR(GO_WORK, 'YYYY-MM-DD') AS WORKING,
+		TO_CHAR(GO_WORK, 'DY')
+		AS DAY,
+		TO_CHAR(GO_WORK, 'HH24:MI') AS WORKING_TIME,
+		TO_CHAR(OUT_WORK,
+		'HH24:MI') AS OUT_TIME,
+		CASE
+		WHEN WORKING_STATUS = 1 THEN '정상출근'
+		WHEN WORKING_STATUS = 2 THEN '지각'
+		WHEN WORKING_STATUS = 3 THEN '결근'
+		END AS WORKING_STATUS
+		FROM ATTENDANCE
+		WHERE EMPNO = #{empno}
+		ORDER BY GO_WORK DESC
 	</select>
 	
 <!--자원조회내역 -->
@@ -250,15 +259,15 @@ WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
 
 <!-- ID조회 -->
 <select id="selectId" resultMap="resourceCal">
-SELECT SCHEDULE_CODE FROM SCHEDUL_FOR_RESOURCE  WHERE EMPNO = #{empno}
+	SELECT SCHEDULE_CODE FROM SCHEDUL_FOR_RESOURCE  WHERE EMPNO = #{empno}
 </select>
 
 <!-- 자원디테일 내역 조회  -->
 <select id="resourceDetail" resultMap="resourceCal">
-SELECT PARTICIPANT
-, RESOURCE_CONTENT 
-FROM SCHEDUL_FOR_RESOURCE
-WHERE EMPNO = #{empno}
+	SELECT PARTICIPANT
+	, RESOURCE_CONTENT 
+	FROM SCHEDUL_FOR_RESOURCE
+	WHERE EMPNO = #{empno}
 </select>
 
 

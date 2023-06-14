@@ -157,3 +157,45 @@ $(function () {
   });
 });
 
+
+//메인 todoList
+$(document).ready(function () {
+  $("#button").click(function () {
+    var toAdd = $("input[name=ListItem]").val();
+    $("ol").append("<li>" + toAdd + "</li>");
+    
+	  //ajax start
+	  $.ajax({
+		  url: '/user/insertToDoList', //요청경로
+		  type: 'post',
+		  async: true,
+		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		  data: {'toDoContent': toAdd}, //HTML에받는  데이터
+		  success: function(result) {
+			  alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
+		  },
+		  error: function() {
+			  alert('실패');
+		  }
+	  });
+//ajax end
+
+    
+  });
+
+  $("input[name=ListItem]").keyup(function (event) {
+    if (event.keyCode == 13) {
+      $("#button").click();
+    }
+  });
+
+  $(document).on("dblclick", "li", function () {
+    $(this).toggleClass("strike").fadeOut("slow");
+  });
+
+  $("input").focus(function () {
+    $(this).val("");
+  });
+
+  $("ol").sortable();
+});

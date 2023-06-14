@@ -14,7 +14,7 @@
  <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 <style>
 body{
-background-color: #f6f8fa;
+background-color: #f2f3f9;
 }
 .mypage{
 border-radius: 0.5em;
@@ -25,6 +25,7 @@ width: 350px;
   display:flex;
   position:relative;
   left: -120px; 
+  top:-30px;
 }
 
 .attendance{
@@ -32,7 +33,7 @@ border-radius: 0.5em;
 height: 150px;
 width: 350px;
 display:flex;
-position: relative; top:-180px;
+position: relative; top:-350px;
 right: 120px; 
 border:2px solid #ebe9ed;
 background-color: #ffffff;
@@ -44,7 +45,7 @@ background-color: white;
 height: 170px;
 width: 350px;
 display:flex;
-position: relative; top:-460px;
+position: relative; top:-670px;
 right: 120px; 
 }
 .board{
@@ -59,34 +60,25 @@ position: absolute; top:1070px;
 .notice{
 border-radius: 0.5em;
 display:flex;
-position: relative; top:-220px;
+position: relative; top:-290px;
 right: 120px; 
 border:2px solid #ebe9ed;
 background-color: #ffffff;
-height: 260px;
+height: 350px;
 width: 800px;
 left:290px;
 
 }
 .sign{
 border-radius: 0.5em;
-height: 370px;
+height: 350px;
 width: 800px;
 display:flex;
 border:2px solid #ebe9ed;
 background-color: #ffffff;
-position: relative; top:-290px; left:290px;
+position: relative; top:-400px; left:290px;
 }
 
-.toDoList{
-border-radius: 0.5em;
-border:2px solid #ebe9ed;
-background-color: #ffffff;
-height: 300px;
-width: 300px;
-display:flex;
-position: relative; right:-1150px; top:-1170px;
-}
 
 
 
@@ -94,7 +86,9 @@ position: relative; right:-1150px; top:-1170px;
 
 height: 225px;
 width: 300px;
-position: relative; right:-650px; top:-1105px;
+position: relative; right:-650px; top:-1270px;
+display: flex;
+flex-wrap: wrap;
 }
 
 .profile {
@@ -190,6 +184,90 @@ i[class^="icon-chevron"] {
   border-radius: 50%;
 }
 
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400);
+
+.toDoList{
+border-radius: 0.7em;
+border:2px solid #ebe9ed;
+height: 300px;
+width: 300px;
+display:flex;
+flex-wrap: wrap;
+position: relative; right:-1145px; top:-1310px;
+ background-color: #fff4e8;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400);
+
+
+
+.container1 {
+	border-radius: 0.7em;
+  margin: 0 auto;
+  margin-top: 40px;
+  background: white;
+  background-color: #fff4e8;
+  flex-wrap: wrap;
+
+}
+
+form {
+  display: inline-block;
+  
+}
+
+.input {
+	margin-top:40px;
+  padding: 4px 15px 4px 5px;
+  	flex-grow:1;
+	border:none;
+	padding:0 1.5em;
+	font-size:initial;
+  	width: 300px;
+	height: 40px;
+  
+}
+
+#button {
+  display: inline-block;
+  background-color: #fc999b;
+  color: #ffffff;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+  padding: 5px 15px;
+  width: 100%;
+}
+
+#button:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+ol {
+  padding-left: 20px;
+  
+}
+
+ol li {
+  padding: 5px;
+  color: #000;
+
+}
+
+ol li:nth-child(even) {
+  background: #dfdfdf;
+}
+
+.strike {
+  text-decoration: line-through;
+
+}
+
+li:hover {
+  cursor: pointer;
+}
+
 </style>
 <!--내정보 -->
 <span class="mypage">
@@ -201,7 +279,6 @@ i[class^="icon-chevron"] {
 </span>
 
 </span> 
-
 <span class="notice">공지게시판</span>
 
 
@@ -234,7 +311,21 @@ i[class^="icon-chevron"] {
 
 
 </div>
-<span class="toDoList">toDo리스트</span>
+<div class="toDoList">
+<div class="container1" >
+    <h2 style="font-weight: bold; color: #ffac6b; text-align: center; font-size: 38px;">ToDoList</h2>
+
+	 <ol style="margin-left: 5px;"></ol>
+    <form name="toDoList">
+      <input type="text" name="ListItem"  class="input"/>
+    </form>
+    <div id="button">Add</div>
+        <p><em style="font-size: 14px;">더블클릭시 제거가능합니다.</em></p>
+    <br />
+   
+
+</div>
+</div>
 
 <!-- 메인 캘린더 -->
   <div id="calendar" class="calendar">

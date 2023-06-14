@@ -75,7 +75,23 @@ public class AttendanceController {
 
 	// 근태관리 연장근무관리 페이지
 	@GetMapping("/overTime")
-	public String overTime() {
+	public String overTime(AttendanceVO attendanceVO, Model model, Authentication authentication) {
+		String nowDate = DateUtil.getNowDateToString(); //오늘날짜설정	
+		if(attendanceVO.getCurDate() == null) {
+			attendanceVO.setCurDate(nowDate);
+		}	
+		
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());
+		
+		//이름 조회
+		model.addAttribute("selectName",attendanceService.selectName(empno));
+		
+		//총 연장근무시간 조회
+		model.addAttribute("findOverTime",attendanceService.findOverTime(empno));
+		
+		//연장근무 가능시간 조회
+		model.addAttribute("findCanOverTime", attendanceService.findCanOverTime(empno));
 
 		return "content/attendance/overTime";
 	}
