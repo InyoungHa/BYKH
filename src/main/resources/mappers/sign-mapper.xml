@@ -57,13 +57,7 @@
 		
 	</resultMap>
 	
-	<!-- 아이템 테이블 -->
-	<resultMap type="com.bykh.groupware.sign.vo.ItemVO" id="item">
-		<id column="ITEM_NO"				property="itemNo"/>
-		<result column="ITEM_NAME"			property="itemName"/>
-		<result column="ITEM_PRICE"			property="itemPrice"/>
-		<result column="REG_DATE" 			property="regDate"/>
-	</resultMap>
+	
 	
 	<!-- 구매 테이블 -->
 	<resultMap type="com.bykh.groupware.sign.vo.BuyVO" id="buy">
@@ -82,7 +76,7 @@
 		<result column="ITEM_NO"			property="itemNo"/>
 		<result column="BUY_CNT" 			property="buyCnt"/>
 		<result column="BUY_DETAIL_PRICE" 	property="buyDetailPrice"/>
-		<association property="itemVO" resultMap="item"></association>
+		<association property="itemVO" resultMap="mroMapper.item"></association>
 	</resultMap>
 	
 	
@@ -378,7 +372,7 @@
 		ORDER BY BUY_DETAIL_NO
 	</select>
 	
-	<select id="getItemList" resultMap="item">
+	<select id="getItemList" resultMap="mroMapper.item">
 		SELECT 
 			ITEM_NO
 			, ITEM_NAME
