@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.page-link {
+		color: black;
+	}
+	.active>.page-link, .page-link.active {
+	    background-color: #22415f;
+	    border-color: #22415f;
+	}
+	</style>
+
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+			<div class="row mb-5">
+				<div class="col fs-1 fw-bolder">
+					신고 글 관리
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col">
+				<table class="table text-center align-middle table-group-divider table-hover">
+						<colgroup>
+							<col width="5%">
+							<col width="10%">
+							<col width="20%">
+							<col width="10%">
+							<col width="*">
+							<col width="10%">
+						</colgroup>
+						<thead>
+							<tr>
+								<th>번호</th>
+								<th>신고자</th>
+								<th>신고 사유</th>
+								<th>신고일</th>
+								<th>신고글</th>
+								<th>처리</th>
+							</tr>
+						</thead>
+						<tbody>
+							<th:block th:if="${#lists.size(reportList) == 0}">
+								<tr>
+									<td colspan="6">신고된 게시글이 없습니다.</td>
+								</tr>						
+							</th:block>
+							<th:block th:unless="${#lists.size(reportList) == 0}">
+								<tr th:each="report, state : ${reportList}"  class="table-light">
+									<td>[[${boardVO.totalDataCnt - ((boardVO.nowPage - 1) * boardVO.displayCnt + state.index)}]]</td>
+									<td>[[${report.ename}]]</td>
+									<td>[[${report.reportReason}]]</td>
+									<td class="fs-6">[[${report.reportDate}]]</td>
+									<td>
+										<a href="javascript:void(0)" th:onclick="getReportBoard([[${report.boardNum}]])" class="link-dark" 
+											data-bs-toggle="modal" data-bs-target="#boardModal" id="boardModalBtn" style="text-decoration:underline; text-underline-offset : 5px;">
+											[[${report.boardTitle}]]
+										</a>
+									</td>
+									<td class="col d-grid gap-1">
+										<input type="button" class="btn" th:onclick="deleteBoard([[${report.boardNum}]])" value="글 삭제">
+										<input type="button" class="btn" th:onclick="deleteReport([[${report.reportNum}]], [[${report.boardNum}]])" value="신고 취소">
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col">
+					<nav aria-label="Page navigation example">
+					  <ul class="pagination justify-content-center">
+					    <li class="page-item" th:classappend="${boardVO.prev} ? '' :  'disabled'">
+					      <button class="page-link" th:onclick="|location.href='@{/community/report(pageNum=${boardVO.beginPage-1})}'|" aria-label="Previous">
+					        <span aria-hidden="true">
+					        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+								</svg>
+					        </span>
+					      </button>
+					    </li>
+					    <th:block th:each="pageNum : ${#numbers.sequence(boardVO.beginPage, boardVO.endPage)}">
+						    <li class="page-item" th:classappend="${boardVO.nowPage == pageNum} ? 'active' : ''">
+						    	<button class="page-link" th:onclick="|location.href='@{/community/report(pageNum=${pageNum})}'|">[[${pageNum}]]</button>
+						    </li>
+					    </th:block>
+					    <li class="page-item" th:classappend="${boardVO.next} ? '' :  'disabled'">
+					      <button class="page-link" th:onclick="|location.href='@{/community/report(pageNum=${boardVO.endPage+1})}'|" aria-label="Next">
+					        <span aria-hidden="true">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+								  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+								</svg>
+							</span>
+					      </button>
+					    </li>
+					  </ul>
+					</nav>
+					  
+				</div>
+			</div>
+			
+			
+		</div>
+	</div>
+	
+	
+
+
+<!-- 글 신고 모달 -->
+<div class="modal fade" id="boardModal" tabindex="-1" aria-labelledby="boardModal" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content" style="min-height: 20rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="boardModal">신고 글 정보</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-5 mt-4">
+      	<div class="row mb-3">
+      		<div class="col text-end">
+      			<a class="link-dark" id="reportBoardLink">해당 글로 이동
+      			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right mt-0" viewBox="0 1 16 16">
+				  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+				  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+				</svg>
+      			</a>
+      		</div>
+      	</div>
+        <div class="row">
+        	<div class="col">
+				<table class="table text-center align-middle table-group-divider">
+					<colgroup>
+						<col width="10%">
+						<col width="*">
+						<col width="10%">
+						<col width="10%">
+					</colgroup>
+					<tbody id="boardTableBody">
+					
+					</tbody>
+				</table>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src="/js/content/community/community_report.js"></script>
+</th:block>
+
+</html>

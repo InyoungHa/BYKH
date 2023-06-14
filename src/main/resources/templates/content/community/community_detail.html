@@ -18,6 +18,21 @@
 		background-color: #FF1493;
 		border: 0.3px solid #FF1493;
 	}
+	.reportBtn {
+		color: #dc3545;
+		background-color: white;
+		border: 0.3px solid #dfe0e1;
+	}
+	.reportBtn:hover {
+		color: white;
+		background-color: #dc3545;
+		border: 0.3px solid #dc3545;
+	}
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
 	</style>
 </th:block>
 
@@ -99,6 +114,29 @@
 											<span id="likeCnt">[[${community.likeCnt}]]</span>
 										</button>
 									</th:block>
+									<th:block th:if="${reportCheck}">
+										<button type="button" class="btn reportBtn rounded-5 btn-lg" id="reportBtn" onclick="reportAlert();">
+											<span id="reportIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+												  <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+												  <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+												</svg>
+											</span>
+											<span>신고</span>
+										</button>
+									</th:block>
+									<th:block th:unless="${reportCheck}">
+										<button type="button" class="btn reportBtn rounded-5 btn-lg" id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">
+											<span id="reportIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+												  <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+												  <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+												</svg>
+											</span>
+											<span>신고</span>
+										</button>
+									</th:block>
+									
 								</div>
 							</td>
 						</tr>
@@ -218,6 +256,72 @@
 	
 	
 	
+<!-- 글 신고 모달 -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 20rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="reportModal">신고</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-4">
+        <div class="row">
+        	<div class="col text-center">
+				<div class="fs-6 mb-5">게시물 신고는 이용수칙에 맞지 않는 글을 신고하는 기능이며, 반대 의견을 표시하는 것이 아닙니다.<br>허위 신고의 경우 신고자가 제재받을 수 있음을 유념해주세요.</div>
+				<div class="text-start fw-semibold mb-3">신고 사유</div>
+				<form action="/community/reportBoard" method="post" id="reportForm">
+				<div class="row mb-5">
+					<div class="col text-start">
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="영리목적/홍보성">
+							<label class="form-check-label"> 영리목적/홍보성</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="불법정보">
+							<label class="form-check-label"> 불법정보</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="욕설/인신공격">
+							<label class="form-check-label"> 욕설/인신공격</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="같은 내용 반복(도배)">
+							<label class="form-check-label"> 같은 내용 반복(도배)</label>
+						</div>
+					</div>
+					<div class="col text-start">
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="개인정보노출">
+							<label class="form-check-label"> 개인정보노출</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="음란성/선정성">
+							<label class="form-check-label"> 음란성/선정성</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="저작권침해">
+							<label class="form-check-label"> 저작권침해</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="기타">
+							<label class="form-check-label"> 기타</label>
+						</div>
+						<input type="hidden" name="boardNum" th:value="${community.boardNum}">
+					</div>
+				</div>
+				</form>
+				<div class="gap-2">
+					<button type="button" class="btn" onclick="reportBoard()">확인</button>
+					<button type="button" class="btn myBtn" data-bs-dismiss="modal" aria-label="Close">취소</button>
+				</div>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
 <!-- 비밀글 모달 -->
 <div class="modal fade" id="privateModal" tabindex="-1" aria-labelledby="privateModal" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -244,6 +348,7 @@
     </div>
   </div>
 </div>
+
 </th:block>
 
 <!-- 외부 js 파일 -->
