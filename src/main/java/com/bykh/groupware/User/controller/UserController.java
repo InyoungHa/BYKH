@@ -51,7 +51,7 @@ public class UserController {
 		//이름 조회
 		model.addAttribute("selectName",attendanceService.selectName(empno));
 		
-		return "content/main";
+		return "content/user/main";
 	}
 	
 	//마이 페이지로 이동
@@ -103,7 +103,7 @@ public class UserController {
 		
 		
 		
-		return "content/myPage";
+		return "content/user/myPage";
 	}
 	
 	@ResponseBody
@@ -166,6 +166,16 @@ public class UserController {
 
 		empService.updateSelfEmpDetail(empVO);				
 	}
+	
+	
+	//지도 페이지로 이동
+	@GetMapping("/branchMap")
+	public String branchMap(Model model) {
+		model.addAttribute("branchLocationList", deptService.selectBranchLocation());
+		return "content/user/branchMap";
+	}
+	
+
 	
 
 }

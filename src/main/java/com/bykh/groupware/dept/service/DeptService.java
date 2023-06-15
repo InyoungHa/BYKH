@@ -2,7 +2,11 @@ package com.bykh.groupware.dept.service;
 
 import java.util.List;
 
+import com.bykh.groupware.dept.vo.BranchLocationInfoVO;
 import com.bykh.groupware.dept.vo.DeptVO;
+import com.bykh.groupware.dept.vo.OrgDeptVO;
+import com.bykh.groupware.dept.vo.OrganizationVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 
 
 public interface DeptService {
@@ -25,4 +29,13 @@ public interface DeptService {
 	
 	//부서 사용 여부 변경
 	int updateIsUse(int deptno);
+	
+	//부서의 지역을 중복없이 조회
+	List<OrganizationVO> getLocList();
+	List<OrgDeptVO> getDeptListForOrg(String loc);
+	List<EmpVO> getEmpListForOrg(int deptno);
+	
+	
+	//회사 지도 조회
+	List<BranchLocationInfoVO> selectBranchLocation();
 }
