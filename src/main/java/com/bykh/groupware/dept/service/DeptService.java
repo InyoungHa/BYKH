@@ -37,5 +37,5 @@ public interface DeptService {
 	
 	
 	//회사 지도 조회
-	List<BranchLocationInfoVO> selectBranchLocation();
+	BranchLocationInfoVO selectBranchLocation(String branchCode);
 }

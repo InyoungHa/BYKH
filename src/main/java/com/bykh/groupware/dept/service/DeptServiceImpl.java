@@ -82,9 +82,9 @@ public class DeptServiceImpl implements DeptService{
 
 
 	@Override //회사 지도 조회
-	public List<BranchLocationInfoVO> selectBranchLocation() {
+	public BranchLocationInfoVO selectBranchLocation(String branchCode) {
 	
-		return sqlSession.selectList("deptMapper.selectBranchLocation");
+		return sqlSession.selectOne("deptMapper.selectBranchLocation", branchCode);
 	}
 
 

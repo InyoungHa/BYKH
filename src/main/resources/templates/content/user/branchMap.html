@@ -22,65 +22,45 @@
 a{
 	cursor: pointer;
 }
+li.active {
+  background-color: #f2f2f2;
+}
+
+.mapTable table th {
+  background-color: #f2f2f2; /* 원하는 회색 배경 색상으로 변경 */
+}
+
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
 
 
 </style>
-	<h1>지도</h1>
+	<label class="page_title">지사 위치 정보</label>	
 	<div class="row">
 		<div class="col">
 			<div class="row header"> <!--total -->			
-				<div class="col">
+				<div class="col mb-3">
 					<ul class="nav nav-tabs">
-						<li class="nav-item"><a >서울 본사</a> </li>
-						<li class="nav-item">
-							<a >인천 지원</a>
-						</li>
-						<li class="nav-item">
-							<a>부산 지원</a>
-						</li>
-						<li class="nav-item">
-							<a>여수 지원</a>
-						</li>
+						<li class="nav-item"><a th:onclick="changeMap();" id="001">서울 본사</a></li>
+						<li class="nav-item"><a th:onclick="changeMap();" id="002">인천 지원</a></li>
+						<li class="nav-item"><a th:onclick="changeMap();" id="003">부산 지원</a></li>
+						<li class="nav-item" style="margin-bottom:0 auto;"><a th:onclick="changeMap();" id="004">여수 지원</a></li>
 					</ul>
-				</div>
-				<div class="col">
-					<th:block th:each="branchLocation:${branchLocationList}">
-					<!-- <input type="hidden" id=""> -->
-					<table>
-						<tbody>
-							<tr>
-								<th>주소</th>
-								<td>[[${branchLocation.branchAddr}]]</td>
-							</tr>
-							<tr>
-								<th>버스</th>
-								<td>[[${branchLocation.byWayBus}]]</td>
-							</tr>
-							<tr>
-								<th>지하철</th>
-								<td>[[${branchLocation.byWaySubway}]]</td>
-							</tr>
-							<tr>								
-								<td colspan="2">									
-									<div id="map" style="width: 100%; height: 350px;"></div>									
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					</th:block>
-					
+				</div>				
+			<div class="row mb-3">
+				<div class="col mapTable">
 				</div>			
-				
-			</div>
+			</div>		
 		</div>
-		<div class="row">
-			<div class="col">
-				
-			</div>
-		</div>
-		<div class="row"></div>
-	</div>
 	
+		</div>
+	</div>
+
 	
 	
 	

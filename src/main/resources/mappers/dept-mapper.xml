@@ -104,6 +104,7 @@
 		)
 	</select>
 	
+	<!--지역별 부서 리스트 -->
 	<select id="getDeptListForOrg" resultMap="orgDept">
 		SELECT DEPTNO
 			, DENAME 
@@ -111,17 +112,19 @@
 		WHERE LOC = #{loc}
 	</select>
 	
+	<!--부서별 사원 리스트  -->
 	<select id="getEmpListForOrg" resultMap="empMapper.emp">
 		SELECT EMPNO
 		    , ENAME
 		    , E_JOB
 		    , PHONE_TEL
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
 		FROM EMP
 		WHERE DEPTNO = #{deptno}
 	</select>
 
 
-	<!-- 지도 검색  -->
+	<!-- 지사 지도 검색  -->
 	<select id="selectBranchLocation" resultMap="branchInfo">
 		SELECT BRANCH_CODE,
 				BRANCH_ADDR,
@@ -129,8 +132,10 @@
 				BY_WAY_SUBWAY,
 				LATITUDE,
 				LONGITUDE
-		FROM BRANCH_LOCATION_INFO				
+		FROM BRANCH_LOCATION_INFO	
+		WHERE BRANCH_CODE=#{branchCode}			
 	</select>
+	
 	
 </mapper>
 

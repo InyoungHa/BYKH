@@ -13,59 +13,74 @@
 
 
 <th:block layout:fragment="content">
-	<h3>조직도 화면</h3>
+<style>
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
 
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-    <div class="container">       
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+ .menu a{
+ 	cursor:pointer;
+ }
+ .menu .hide{
+ 	display:none;
+ }
+ 
 
-<div class="container">
+</style>
 
-    <div class="row">
-        <div class="col mt-5">
+<label class="page_title">조직도</label>
 
-            <table id="treeTable" class="table">
-                <thead>
-                <tr>
-                    <th>First Name</th>
-                    <th>URL</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                
-            </table>
-
-        </div>
-    </div>
-
+<div class="row">	
+	<div class="col-4 " style="border: 1px solid black;" id="toggle_org">
+		<div class="row">
+			<div class="col">
+				<div>
+					<ul>
+					<th:block th:each="organization : ${organizationList}">
+						<li class="menu">
+							<a><img src="/img/folder.png"width="30px;"/>[[${organization.loc}]]</a>
+							<ul class="hide">
+								<th:block th:each="dept : ${organization.orgDeptList}">
+									<li class="menu" style="padding-left: 50px;" th:onclick="detailDept([[${dept.deptno}]]);"><a id="dename">[[${dept.dename}]]</a>
+											<ul class="hide emp">
+												<th:block th:each="emp : ${dept.empList}">
+													<li style="padding-left: 50px;">[[${emp.ename}]]/[[${emp.eJob}]]</li>												
+												</th:block>
+											</ul>
+									</li>
+								</th:block>								
+							</ul>
+						</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>		
+		</div>
+	</div>
+	<div class="col-7">
+		<div class="row">
+			<div id="deptEmpListTable"></div>
+		</div>
+	</div>
 </div>
- 
- 
- 
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
  
  
  
