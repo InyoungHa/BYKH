@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import com.bykh.groupware.emp.service.EmpService;
@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 //로그인 실패시 자동으로 실행되는 클래스
@@ -26,6 +27,15 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		           	Authentication authentication) throws IOException, ServletException {
 	
 		System.out.println("success handler 실행~");
+		
+		//헤더 정보
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		HttpSession session = request.getSession();
+		
+		session.setAttribute("userInfo", empService.selectEmpDetail(loginEmpno));
+				
 		/*
 		 * User user=(User)authentication.getPrincipal(); user.getUsername();
 		 * 

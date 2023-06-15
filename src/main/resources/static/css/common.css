@@ -8,6 +8,13 @@
     font-style: normal;
 }
 
+.header {
+	font-family: 'NanumSquareNeo-Variable';
+	font-size: 20px;
+	background-color:#1e2b37;
+	height: 100px;
+	width: 100%;
+}
 
 
 /*모든 css는 admin_layout.html의 container class에 적용하겠다.*/
