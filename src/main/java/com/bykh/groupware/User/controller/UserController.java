@@ -65,7 +65,7 @@ public class UserController {
 		//ToDoList 조회
 		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
-		return "content/main";
+		return "content/user/main";
 
 	}
 	
