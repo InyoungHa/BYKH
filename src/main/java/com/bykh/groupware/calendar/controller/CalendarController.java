@@ -1,10 +1,7 @@
 package com.bykh.groupware.calendar.controller;
 
-import java.sql.ResultSet;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;

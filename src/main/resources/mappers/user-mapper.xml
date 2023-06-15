@@ -24,8 +24,20 @@ INSERT INTO TO_DO_LIST (
 		)
 </insert>
 
+<!-- ToDoList 내용 조회 -->
+<select id="selectToDoList" resultMap="user">
+SELECT * FROM TO_DO_LIST WHERE EMPNO = #{empno}
+</select>
 
+<!-- TODO코드 조회  -->
+<select id="selectToDoCode" resultMap="user">
+SELECT TO_DO_CODE FROM TO_DO_LIST
+</select>
 
+<!-- ToDoList 삭제 -->
+<delete id="deleteToDoList">
+DELETE TO_DO_LIST WHERE TO_DO_CONTENT = #{toDoContent} AND EMPNO = #{empno}
+</delete>
 
 
 

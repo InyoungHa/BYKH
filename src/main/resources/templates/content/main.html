@@ -315,9 +315,14 @@ li:hover {
 <div class="container1" >
     <h2 style="font-weight: bold; color: #ffac6b; text-align: center; font-size: 38px;">ToDoList</h2>
 
-	 <ol style="margin-left: 5px;"></ol>
+	 <ol style="margin-left: 5px;">
+	 <li th:each="toDoCotent : ${toDoCotent}">
+	 	[[${toDoCotent.toDoContent}]]
+	 </li>
+	 </ol>
     <form name="toDoList">
-      <input type="text" name="ListItem"  class="input"/>
+  
+    <input type="text" name="ListItem"  class="input"/>
     </form>
     <div id="button">Add</div>
         <p><em style="font-size: 14px;">더블클릭시 제거가능합니다.</em></p>
