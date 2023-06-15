@@ -50,6 +50,7 @@
 		ORDER BY IS_USE DESC, REG_DATE
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
+
 	<select id="getItemCntForMroManage" resultType="int">
 		SELECT 
 			COUNT(ITEM.ITEM_NO)
@@ -61,6 +62,21 @@
 		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
 		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
 		</if>		
+	</select>
+	
+		<select id="getItemListForEmp" resultMap="item">
+		SELECT 
+			ITEM_NO
+			, ITEM_NAME
+			, ITEM_PRICE
+			, ITEM_CNT
+			, ITEM.CATE_NO
+			, CATE_NAME
+		FROM ITEM, ITEM_CATEGORY CATE
+		WHERE ITEM.CATE_NO = CATE.CATE_NO
+		AND IS_USE = 'Y'
+		ORDER BY REG_DATE
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
 	<update id="updateItem">

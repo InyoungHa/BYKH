@@ -10,7 +10,53 @@
 </th:block>
 
 <th:block layout:fragment="content">
-   <!-- html 코드 작성 -->
+	<div class="row">
+		<div class="col-7">
+			<div class="row">
+				<div class="col">
+					<h2>상품 목록</h2>   
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<table class="table table-hover table-bordered text-center">
+						<thead>
+							<tr>
+								<td>No.</td>
+								<td>분류</td>
+								<td>상품명</td>
+								<td>가격</td>
+								<td>수량</td>
+							</tr>
+						</thead>
+						<tbody>
+							<th:block th:if="#arrays.length(itemList) != 0">
+								<tr>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+							</th:block>
+							<th:block th:if="#arrays.length(itemList) == 0">
+								<tr>
+									<td>구매할 수 있는 상품이 없습니다.</td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-5">
+			<div class="row">
+				<div class="col">
+					<h2>구매 목록</h2>
+				</div>
+			</div>
+		</div>
+	</div>
 </th:block>
 
 <!-- 연결해야할 외부 js 파일 -->
