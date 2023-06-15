@@ -158,21 +158,20 @@ $(function () {
 });
 
 
-//메인 todoList
+//메인 todoList 
 $(document).ready(function () {
   $("#button").click(function () {
-    var toAdd = $("input[name=ListItem]").val();
-    $("ol").append("<li>" + toAdd + "</li>");
-    
+    var toDoContent = $("input[name=ListItem]").val();
+    $("ol").append("<li>" + toDoContent + "</li>");
+    //toDolist 저장
 	  //ajax start
 	  $.ajax({
 		  url: '/user/insertToDoList', //요청경로
 		  type: 'post',
 		  async: true,
 		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		  data: {'toDoContent': toAdd}, //HTML에받는  데이터
+		  data: {'toDoContent': toDoContent}, //HTML에받는  데이터
 		  success: function(result) {
-			  alert('ajax 통신 성공'); //컨트롤러 결과값이 RESULT에담김
 		  },
 		  error: function() {
 			  alert('실패');
@@ -189,8 +188,25 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on("dblclick", "li", function () {
+  $(document).on("dblclick", "li", function (toDoContent) {
     $(this).toggleClass("strike").fadeOut("slow");
+	var toDoContent = $(this).text(); // 더블클릭한 항목의 텍스트를 .
+     //toDolist 삭제	
+     //ajax start
+	  $.ajax({
+		  url: '/user/deleteToDoList', //요청경로
+		  type: 'post',
+		  async: true,
+		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		  data: {'toDoContent': toDoContent}, //HTML에받는  데이터
+		  success: function(result) {
+			alert(1);
+		  },
+		  error: function() {
+			  alert('실패');
+		  }
+	  });
+    
   });
 
   $("input").focus(function () {
