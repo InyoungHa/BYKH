@@ -45,8 +45,8 @@ public class MroServiceImpl implements MroService{
 	}
 
 	@Override
-	public List<ItemVO> getItemListForEmp() {
-		return sqlSession.selectList("mroMapper.getItemListForEmp");
+	public List<ItemVO> getItemListForEmp(ItemVO itemVO) {
+		return sqlSession.selectList("mroMapper.getItemListForEmp", itemVO);
 	}
 
 	

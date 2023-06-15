@@ -8,7 +8,7 @@ import com.bykh.groupware.mro.vo.ItemVO;
 public interface MroService {
 	List<CategoryVO> getCateList();
 	List<ItemVO> getItemListForAdmin(ItemVO itemVO);
-	List<ItemVO> getItemListForEmp();
+	List<ItemVO> getItemListForEmp(ItemVO itemVO);
 	int updateItem(ItemVO itemVO);
 	int delItem(int itemNo);
 	int addItem(ItemVO itemVO);

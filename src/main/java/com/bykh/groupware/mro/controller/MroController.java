@@ -42,9 +42,10 @@ public class MroController {
 		return "redirect:/mro/mroManage";
 	}
 	
-	@GetMapping("mroEmp")
-	public String mroEmp(Model model){
-		model.addAttribute("itemList", mroService.getItemListForEmp());
+	@RequestMapping("/mroEmp")
+	public String mroEmp(Model model, ItemVO itemVO){
+		model.addAttribute("itemList", mroService.getItemListForEmp(itemVO));
+		model.addAttribute("cateList", mroService.getCateList());
 		return "content/mro/mro_emp";
 	}
 	

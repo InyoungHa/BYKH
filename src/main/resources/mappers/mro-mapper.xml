@@ -41,12 +41,12 @@
 			, CATE_NAME
 		FROM ITEM, ITEM_CATEGORY CATE
 		WHERE ITEM.CATE_NO = CATE.CATE_NO
-		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
-		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
-		</if>
 		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
 		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
 		</if>		
+		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
+		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
+		</if>
 		ORDER BY IS_USE DESC, REG_DATE
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
@@ -64,7 +64,7 @@
 		</if>		
 	</select>
 	
-		<select id="getItemListForEmp" resultMap="item">
+	<select id="getItemListForEmp" resultMap="item">
 		SELECT 
 			ITEM_NO
 			, ITEM_NAME
@@ -75,8 +75,13 @@
 		FROM ITEM, ITEM_CATEGORY CATE
 		WHERE ITEM.CATE_NO = CATE.CATE_NO
 		AND IS_USE = 'Y'
-		ORDER BY REG_DATE
-		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
+		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
+		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
+		</if>
+		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
+		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
+		</if>
+		ORDER BY CATE_NO, REG_DATE
 	</select>
 	
 	<update id="updateItem">
