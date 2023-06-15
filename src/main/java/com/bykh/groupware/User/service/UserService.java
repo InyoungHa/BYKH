@@ -16,7 +16,7 @@ public interface UserService {
 	void deleteToDoList(UserVO userVO);
 	
 	//toDo코드 조회
-	List<UserVO> selectToDoCode();
+	String selectToDoCode();
 	
 }
 

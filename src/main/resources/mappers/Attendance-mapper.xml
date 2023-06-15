@@ -39,9 +39,22 @@
 		<result column="EMPNO" property="empno"/>
 	</resultMap>
 	
+	<resultMap type="com.bykh.groupware.sign.vo.DocAnnualLeaveVO" id="leave">
+		<id column="DAL_NO" property="dalNo"/>
+		<result column="DOC_NO" property="docNo"/>
+		<result column="DAL_TYPE" property="dalType"/>
+		<result column="START_DATE" property="startDate"/>
+		<result column="END_DATE" property="endDate"/>
+		<result column="START_TIME" property="startTime"/>
+		<result column="END_TIME" property="endTime"/>
+		<result column="LEAVE_DAYS" property="leaveDays"/>
+		<result column="LEAVE_REASON" property="leaveReason"/>
+		<result column="COUNT_VACATION" property="countVacation"/>
+		<result column="COUNT_HALF_VACATION" property="countHalfVacation"/>
+		<result column="ALL_VACATION" property="allVacation"/>
+	</resultMap>
+	
 
-	
-	
 	
 
 	<!-- 회원정보 조회 -->
@@ -270,6 +283,76 @@
 	WHERE EMPNO = #{empno}
 </select>
 
+
+
+<!-- 이번달 사용한 연차개수 -->
+<select id="selectCountVacation" resultMap="leave">
+	SELECT COUNT(*) AS COUNT_VACATION
+	FROM DOC_ANNUAL_LEAVE AL , SGN_DOC SC
+	WHERE AL.DOC_NO = SC.DOC_NO
+	AND DAL_TYPE = '연차'
+	AND TO_CHAR(START_DATE, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	AND SC.WRITER_NO = #{writerNo}
+</select>
+
+<!-- 이번달 사용한 반차개수 -->
+<select id="selectCountHalfVacation" resultMap="leave">
+	SELECT COUNT(*) AS COUNT_HALF_VACATION
+	FROM DOC_ANNUAL_LEAVE AL , SGN_DOC SC
+	WHERE AL.DOC_NO = SC.DOC_NO
+	AND DAL_TYPE = '반차'
+	AND TO_CHAR(START_DATE, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+	AND SC.WRITER_NO = #{writerNo}
+</select>
+
+<!-- 이번달 사용한 총 휴가개수 -->
+<select id="selectAllVacation" resultMap="leave">
+	SELECT 
+    SUM(CASE WHEN DAL_TYPE = '반차' THEN 0.5 ELSE 1 END) AS ALL_VACATION
+FROM 
+    DOC_ANNUAL_LEAVE AL, SGN_DOC SC
+WHERE 
+    AL.DOC_NO = SC.DOC_NO
+    AND SC.WRITER_NO = #{writerNo}
+    AND TO_CHAR(START_DATE, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+</select>
+
+
+<!--이번달 휴가사용내역 조회 최근5회  -->
+<select id="selectListVacation"  resultMap="leave">
+SELECT
+	DAL_TYPE,
+    TO_CHAR(START_DATE, 'YYYY/MM/DD') AS START_DATE,
+    TO_CHAR(END_DATE, 'MM/DD') AS END_DATE,
+    CASE WHEN DAL_TYPE = '연차' THEN '' ELSE TO_CHAR(START_TIME) END AS START_TIME,
+    CASE WHEN DAL_TYPE = '연차' THEN '' ELSE TO_CHAR(END_TIME) END AS END_TIME,
+    LEAVE_REASON
+FROM
+    DOC_ANNUAL_LEAVE AL, SGN_DOC SC
+WHERE
+    AL.DOC_NO = SC.DOC_NO
+    AND TO_CHAR(START_DATE, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+    AND SC.WRITER_NO = #{writerNo}
+    ORDER BY START_DATE DESC
+	FETCH FIRST 5 ROW ONLY
+</select>
+
+<!--이번달 휴가사용내역 조회 전체  -->
+<select id="selectListVacation2"  resultMap="leave">
+SELECT
+	DAL_TYPE,
+    TO_CHAR(START_DATE, 'YYYY/MM/DD') AS START_DATE,
+    TO_CHAR(END_DATE, 'MM/DD') AS END_DATE,
+    CASE WHEN DAL_TYPE = '연차' THEN '' ELSE TO_CHAR(START_TIME) END AS START_TIME,
+    CASE WHEN DAL_TYPE = '연차' THEN '' ELSE TO_CHAR(END_TIME) END AS END_TIME,
+    LEAVE_REASON
+FROM
+    DOC_ANNUAL_LEAVE AL, SGN_DOC SC
+WHERE
+    AL.DOC_NO = SC.DOC_NO
+    AND TO_CHAR(START_DATE, 'YYYYMM') = TO_CHAR(SYSDATE, 'YYYYMM')
+    AND SC.WRITER_NO = #{writerNo}
+</select>
 
 </mapper>
 

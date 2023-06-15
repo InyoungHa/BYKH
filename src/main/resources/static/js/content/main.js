@@ -36,11 +36,11 @@ $(function () {
       }
     }
     var y = o[n - 1];
-    a.css("background-color", "#025464")
+    a.css("background-color", "#fff5e4")
       .find("h1")
       .text(i[n - 1] + " " + t);
     f.find("div").css("color", "79E0EE");
-    l.find(".today").css("background-color", "#025464");
+    l.find(".today").css("background-color", "#fff5e9");
     d();
   }
   function h() {
@@ -64,11 +64,11 @@ $(function () {
       .find("div")
       .css({
         width: e / 7 + "px",
-        height: e / 7 + "px",
+        height: e / 6.1 + "px",
         "line-height": e / 7 + "px"
       });
     n.find("#calendar_header")
-      .css({ height: e * (1 / 7) + "px" })
+      .css({ height: e * (1 / 5.5) + "px" })
       .find('i[class^="icon-chevron"]')
       .css("line-height", e * (1 / 7) + "px");
   }
@@ -162,7 +162,7 @@ $(function () {
 $(document).ready(function () {
   $("#button").click(function () {
     var toDoContent = $("input[name=ListItem]").val();
-    $("ol").append("<li>" + toDoContent + "</li>");
+    $("li").append("<li>" + toDoContent + "</li>");
     //toDolist 저장
 	  //ajax start
 	  $.ajax({
@@ -172,13 +172,17 @@ $(document).ready(function () {
 		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		  data: {'toDoContent': toDoContent}, //HTML에받는  데이터
 		  success: function(result) {
+
+			location.reload();
 		  },
 		  error: function() {
 			  alert('실패');
 		  }
 	  });
 //ajax end
-
+ 
+    			var todoList = document.getElementById("toDoList");
+	todoList.scrollTop = todoList.scrollHeight;
     
   });
 
@@ -188,19 +192,19 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on("dblclick", "li", function (toDoContent) {
+  $(document).on("dblclick", "li", function () {
     $(this).toggleClass("strike").fadeOut("slow");
-	var toDoContent = $(this).text(); // 더블클릭한 항목의 텍스트를 .
+    var toDoCode = $(this).data("to-do-code");
      //toDolist 삭제	
      //ajax start
 	  $.ajax({
 		  url: '/user/deleteToDoList', //요청경로
 		  type: 'post',
-		  async: true,
+		  async: false,
 		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		  data: {'toDoContent': toDoContent}, //HTML에받는  데이터
+		  data: {'toDoCode': toDoCode}, //HTML에받는  데이터
 		  success: function(result) {
-			alert(1);
+			
 		  },
 		  error: function() {
 			  alert('실패');
@@ -213,5 +217,7 @@ $(document).ready(function () {
     $(this).val("");
   });
 
-  $("ol").sortable();
+
 });
+
+   

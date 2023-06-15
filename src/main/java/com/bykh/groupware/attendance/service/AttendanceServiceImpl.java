@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 
 @Service("attendanceService")
 public class AttendanceServiceImpl implements AttendanceService {
@@ -101,7 +102,36 @@ public class AttendanceServiceImpl implements AttendanceService {
 		return sqlSession.selectList("attendanceMapper.workingBoardAll", empno);
 	}
 
+	// 이번달 사용한 연차개수 
+	@Override
+	public DocAnnualLeaveVO selectCountVacation(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectCountVacation", empno);
+	}
 
+	// 이번달 사용한 반차개수 
+	@Override
+	public DocAnnualLeaveVO selectCountHalfVacation(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectCountHalfVacation", empno);
+	}
+
+	//이번달 총휴가 개수
+	@Override
+	public DocAnnualLeaveVO selectAllVacation(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectAllVacation", empno);
+	}
+	
+	//휴가사용내역 테이블 조회 (최신5회)
+	@Override
+	public List<DocAnnualLeaveVO> selectListVacation(int empno) {
+		return sqlSession.selectList("attendanceMapper.selectListVacation", empno);
+	}
+
+
+	//휴가사용내역 테이블 조회 (전체)
+	@Override
+	public List<DocAnnualLeaveVO> selectListVacation2(int empno) {
+		return sqlSession.selectList("attendanceMapper.selectListVacation", empno);
+	}
 
 	
 

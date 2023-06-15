@@ -36,7 +36,7 @@ SELECT TO_DO_CODE FROM TO_DO_LIST
 
 <!-- ToDoList 삭제 -->
 <delete id="deleteToDoList">
-DELETE TO_DO_LIST WHERE TO_DO_CONTENT = #{toDoContent} AND EMPNO = #{empno}
+DELETE TO_DO_LIST WHERE TO_DO_CODE = #{toDoCode} AND EMPNO = #{empno}
 </delete>
 
 

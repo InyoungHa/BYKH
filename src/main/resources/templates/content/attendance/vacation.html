@@ -93,10 +93,73 @@
 margin-right: 10px;
 }
 
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  max-height:32rem;
+	width:1100px;
+	overflow-y:auto;	
+	margin-bottom: 2px;
+
+}
+@media print {
+    html, body { width: 210mm; height: 297mm; }
+    table { page-break-inside:auto; }
+    tr    { page-break-inside:avoid; page-break-after:auto; }
+    thead { display:table-header-group; }
+    tfoot { display:table-footer-group; }
+}
+.modal-content::-webkit-scrollbar {
+        width: 10px;  /* 스크롤바의 너비 */
+      }
+      .modal-content::-webkit-scrollbar-thumb {
+        height: 5%; /* 스크롤바의 길이 */
+        background: #b7b7b7; /* 스크롤바의 색상 */
+      
+      	border-top:1px solid #3b3f2c; 
+    		border-bottom:1px solid #3b3f2c;
+    		text-align:center;
+    		color:#666; 
+    		background:#ecf5fc; 
+    		font-weight:bold;
+        height: 30px; /* header-bg height값 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+      
+              overflow-x: hidden;
+        overflow-y: auto;
+        height: 5%;
+        
+        border-radius: 10px;
+       
+                position: relative;
+        padding-top: 30px; /* header-bg height값 */
+        
+               width: 100%;
+        border-collapse: collapse;
+                position: absolute;
+        top: 0;
+        width: inherit;
+        line-height: 30px; /* header-bg height값 */
+        border-left:1px solid; border-color:#9b9f2c #c4c4c4;
+        
+             border-bottom: 1px solid #DDD;
+				height:30px; padding:8px 10px 2px;
+        text-align:center;
+        color:#666;
+        
+          border-left: none;
+      }
 </style>
 
 
-	<div class="commute">김정운님의 2023년 휴가</div>
+	<div class="commute">[[${selectName.empVO.ename}]]님의 [[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 휴가</div>
 	<!-- 출퇴근 -->
 	<div class="headVacation">
 		<div class="imageContainer">
@@ -106,27 +169,27 @@ margin-right: 10px;
 					<td>총 휴가</td>
 				</tr>
 				<tr>
-					<td>13일</td>
+					<td>15일</td>
 				</tr>
 			</table>
-			<span style="padding-left: 50px;"> <img src="/img/icons8-check-100.png" style="padding-left: 40px; border-left: 3px solid #d1d1d1;">
+			<span style="padding-left: 100px;"> <img src="/img/icons8-check-100.png" style="padding-left: 40px; border-left: 3px solid #d1d1d1;">
 			</span>
 			<table class="vacationBox">
 				<tr>
 					<td>사용 휴가</td>
 				</tr>
 				<tr>
-					<td>8일</td>
+					<td>[[${allVacation.allVacation}]]일</td>
 				</tr>
 			</table>
 
-			<span style="padding-left: 50px;"> <img src="/img/icons8-vacation-100.png" style="padding-left: 40px; border-left: 3px solid #d1d1d1;"></span>
+			<span style="padding-left: 100px;"> <img src="/img/icons8-vacation-100.png" style="padding-left: 40px; border-left: 3px solid #d1d1d1;"></span>
 			<table class="vacationBox">
 				<tr>
 					<td>잔여 휴가</td>
 				</tr>
 				<tr>
-					<td>5일</td>
+					<td>[[${15-allVacation.allVacation}]]일</td>
 				</tr>
 			</table>
 		</div>
@@ -139,38 +202,91 @@ margin-right: 10px;
 	<!--출퇴근기록 테이블 box -->
 	<div class="bottomBox">
 		<div class="bottomTitle">
-			2023년 김정운님의 휴가사용내역
-		<input type="button" class="btn" style="color: white;" th:onclick="|location.href='@{/attendance/vacationRequest}'|" value="휴가 신청">
+			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 휴가사용내역 (최신 5회)
+		<input type="button" class="btn" style="color: white;" th:onclick="|location.href='@{/sign/annualLeaveForm}'|" value="휴가 신청">
 
 		</div>
 
 		<table class="bottomTable">
 			<thead class="bottomThead">
 				<tr>
-					<td>휴가신청일자</td>
-					<td>휴가종류</td>
+					<td>NO</td>
+					<td>휴가일자</td>
+					<td>종류</td>
+					<td>시간</td>
 					<td>사유</td>
-					<td>휴가사용기간</td>
-					<td>차감일수</td>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				<tr>
+				<tr th:each="vacList, detailState : ${vacList}">
+				    <td>[[${detailState.index + 1}]]</td>
+				    <td>[[${vacList.startDate}]]~[[${vacList.endDate}]]</td>
+				    <td>[[${vacList.dalType}]]</td>
+				    <td th:unless="${vacList.dalType == '연차'}">[[${vacList.startTime}]]시 ~ [[${vacList.endTime}]]시</td>
+				    <td th:if="${vacList.dalType == '연차'}"></td>
+				    <td>[[${vacList.leaveReason}]]</td>
+				</tr>
+
 			</tbody>
 		</table>
+			<input  data-bs-toggle="modal" data-bs-target="#findAll"  type="button" class="btn all" value="전체보기" style="margin-top: 10px; margin-left:580px;"> 
+	</div>
+	
+
+
+	<!-- modal 추가 -->
+	<div class="modal fade" id="findAll" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel"
+						style="font-weight: bold;">휴가사용내역 (전체)</h5>
+				</div>
+				<div class="modal-body" id="modalBody">
+					<div class="form-group">
+						<table class="bottomTable">
+							<thead class="bottomThead">
+								<tr>
+									<td>NO</td>
+									<td>휴가일자</td>
+									<td>종류</td>
+									<td>시간</td>
+									<td>사유</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="vacList2, detailState : ${vacList2}">
+									<td>[[${detailState.index + 1}]]</td>
+									<td>[[${vacList2.startDate}]]~[[${vacList2.endDate}]]</td>
+									<td>[[${vacList2.dalType}]]</td>
+									<td th:unless="${vacList2.dalType == '연차'}">[[${vacList2.startTime}]]시
+										~ [[${vacList2.endTime}]]시</td>
+									<td th:if="${vacList2.dalType == '연차'}"></td>
+									<td>[[${vacList2.leaveReason}]]</td>
+								</tr>
+
+							</tbody>
+						</table>
+
+						<br>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn" value="인쇄하기" id="print"
+						onclick="printArea()"
+						style="margin-top: 10px; margin-right: 510px;" />
+				</div>
+
+			</div>
+		</div>
 	</div>
 
 </th:block>
 
 <th:block layout:fragment="content_js">
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
-	
+<script type="text/javascript" src="/js/content/resource/reservationList.js"></script>
 	<!--연결해야하는 외부 js  -->
 	<script type="text/javascript" src="/js/content/admin/cate_manage.js"></script>
 </th:block>

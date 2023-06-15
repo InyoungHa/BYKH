@@ -17,5 +17,7 @@ public class DocAnnualLeaveVO {
 	private int endTime;
 	private int leaveDays;
 	private String leaveReason;
-	
+	private int countVacation; //정운 컬럼추가함.
+	private int countHalfVacation;// 정운 컬럼추가함.
+	private double allVacation; //정운 컬럼추가
 }

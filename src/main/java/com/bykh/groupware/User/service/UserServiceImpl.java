@@ -35,8 +35,8 @@ public class UserServiceImpl implements UserService {
 
 	//ToDoCode 조회
 	@Override
-	public List<UserVO> selectToDoCode() {
-		return sqlSession.selectList("userMapper.selectToDoCode");
+	public String selectToDoCode() {
+		return sqlSession.selectOne("userMapper.selectToDoCode");
 	}
 
 
