@@ -39,6 +39,11 @@ public class MroServiceImpl implements MroService{
 		return sqlSession.insert("mroMapper.addItem", itemVO);
 	}
 
+	@Override
+	public int getItemCntForMroManage(ItemVO itemVO) {
+		return sqlSession.selectOne("mroMapper.getItemCntForMroManage", itemVO);
+	}
+
 	
 	
 	

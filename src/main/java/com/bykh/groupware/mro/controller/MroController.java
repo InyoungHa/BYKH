@@ -19,10 +19,17 @@ public class MroController {
 	
 	@RequestMapping("/mroManage")
 	public String mroManage(Model model, ItemVO itemVO) {
-		if(itemVO.getSearchItemVO() != null) {
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
-			System.out.println(itemVO.getSearchItemVO().getSearchCateNo());			
-		}
+		
+		//페이지 정보 세팅
+		itemVO.setTotalDataCnt(mroService.getItemCntForMroManage(itemVO));
+		itemVO.setNowPage(itemVO.getNowPage());
+		itemVO.setPageInfo();
+		
+		
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("offsetCnt = " + itemVO.getOffsetCnt());
+		System.out.println("displayCnt = " + itemVO.getDisplayCnt());
+		System.out.println("beginPage = " + itemVO.getBeginPage());
 		model.addAttribute("itemList", mroService.getItemListForAdmin(itemVO));
 		model.addAttribute("cateList", mroService.getCateList());
 		return "content/mro/mro_manage";
