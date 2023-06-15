@@ -147,6 +147,7 @@
   top: 65px;
   left: 1663px;
 }
+
 .modal-content {
   position: fixed;
   top: 50%;
@@ -160,7 +161,13 @@
 	margin-bottom: 2px;
 
 }
-
+@media print {
+    html, body { width: 210mm; height: 297mm; }
+    table { page-break-inside:auto; }
+    tr    { page-break-inside:avoid; page-break-after:auto; }
+    thead { display:table-header-group; }
+    tfoot { display:table-footer-group; }
+}
 .modal-content::-webkit-scrollbar {
         width: 10px;  /* 스크롤바의 너비 */
       }
@@ -328,7 +335,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">출퇴근 기록 (전체)</h5>        
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modalBody">
                     <div class="form-group">
 						<table class="bottomTable">
 							<thead class="bottomThead">
@@ -356,10 +363,8 @@
 						<br>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"><input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top:10px; margin-right: 480px;" /></div>
                 
-                </div>
-    
             </div>
         </div>
     </div>
@@ -368,10 +373,12 @@
 	
 </th:block>
 
-
 <th:block layout:fragment="content_js">
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
-	<!--연결해야하는 외부 js  -->
-	<script type="text/javascript" src="/js/content/admin/cate_manage.js"></script>
+	
+<script type="text/javascript" src="/js/content/resource/reservationList.js"></script>
+  <!-- jquery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </th:block>
+
 </html>

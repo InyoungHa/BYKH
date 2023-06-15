@@ -7,7 +7,33 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
-
+	<style>
+	.likeBtn {
+		color: #FF1493;
+		background-color: white;
+		border: 0.3px solid #dfe0e1;
+	}
+	.likeBtn:hover {
+		color : white;
+		background-color: #FF1493;
+		border: 0.3px solid #FF1493;
+	}
+	.reportBtn {
+		color: #dc3545;
+		background-color: white;
+		border: 0.3px solid #dfe0e1;
+	}
+	.reportBtn:hover {
+		color: white;
+		background-color: #dc3545;
+		border: 0.3px solid #dc3545;
+	}
+	.myBtn {
+	color:black;
+	background-color: #f8f9fa;
+	border: 0.3px solid #466583;
+	}
+	</style>
 </th:block>
 
 <th:block layout:fragment="content">
@@ -60,9 +86,58 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
+						<tr class="border-white">
 							<td colspan="4" class="text-start align-baseline">
 								<div style="min-height: 20rem">[[${community.boardContent}]]</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="4" class="text-center">
+								<div>
+									<th:block th:if="${likeCheck}">
+										<button type="button" class="btn likeBtn rounded-5 btn-lg" id="likeBtn" th:onclick="deleteBoardLike([[${community.boardNum}]])">
+											<span id="heartIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+												  <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+												</svg>
+											</span>
+										<span id="likeCnt">[[${community.likeCnt}]]</span>
+										</button>
+									</th:block>
+									<th:block th:unless="${likeCheck}">
+										<button type="button" class="btn likeBtn rounded-5 btn-lg" id="likeBtn" th:onclick="insertBoardLike([[${community.boardNum}]])">
+											<span id="heartIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+												  <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+												</svg>
+											</span>
+											<span id="likeCnt">[[${community.likeCnt}]]</span>
+										</button>
+									</th:block>
+									<th:block th:if="${reportCheck}">
+										<button type="button" class="btn reportBtn rounded-5 btn-lg" id="reportBtn" onclick="reportAlert();">
+											<span id="reportIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+												  <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+												  <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+												</svg>
+											</span>
+											<span>신고</span>
+										</button>
+									</th:block>
+									<th:block th:unless="${reportCheck}">
+										<button type="button" class="btn reportBtn rounded-5 btn-lg" id="reportBtn" data-bs-toggle="modal" data-bs-target="#reportModal">
+											<span id="reportIcon">
+												<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-exclamation-triangle" viewBox="0 0 16 16">
+												  <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+												  <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+												</svg>
+											</span>
+											<span>신고</span>
+										</button>
+									</th:block>
+									
+								</div>
 							</td>
 						</tr>
 						<tr class="table-group-divider">
@@ -181,6 +256,72 @@
 	
 	
 	
+<!-- 글 신고 모달 -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" style="min-height: 20rem;">
+      <div class="modal-header">
+      	<h1 class="modal-title fs-5" id="reportModal">신고</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body m-4">
+        <div class="row">
+        	<div class="col text-center">
+				<div class="fs-6 mb-5">게시물 신고는 이용수칙에 맞지 않는 글을 신고하는 기능이며, 반대 의견을 표시하는 것이 아닙니다.<br>허위 신고의 경우 신고자가 제재받을 수 있음을 유념해주세요.</div>
+				<div class="text-start fw-semibold mb-3">신고 사유</div>
+				<form action="/community/reportBoard" method="post" id="reportForm">
+				<div class="row mb-5">
+					<div class="col text-start">
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="영리목적/홍보성">
+							<label class="form-check-label"> 영리목적/홍보성</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="불법정보">
+							<label class="form-check-label"> 불법정보</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="욕설/인신공격">
+							<label class="form-check-label"> 욕설/인신공격</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="같은 내용 반복(도배)">
+							<label class="form-check-label"> 같은 내용 반복(도배)</label>
+						</div>
+					</div>
+					<div class="col text-start">
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="개인정보노출">
+							<label class="form-check-label"> 개인정보노출</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="음란성/선정성">
+							<label class="form-check-label"> 음란성/선정성</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="저작권침해">
+							<label class="form-check-label"> 저작권침해</label>
+						</div>
+						<div class="form-check my-1">
+							<input class="form-check-input" type="radio" name="reportReason" value="기타">
+							<label class="form-check-label"> 기타</label>
+						</div>
+						<input type="hidden" name="boardNum" th:value="${community.boardNum}">
+					</div>
+				</div>
+				</form>
+				<div class="gap-2">
+					<button type="button" class="btn" onclick="reportBoard()">확인</button>
+					<button type="button" class="btn myBtn" data-bs-dismiss="modal" aria-label="Close">취소</button>
+				</div>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+	
+	
 <!-- 비밀글 모달 -->
 <div class="modal fade" id="privateModal" tabindex="-1" aria-labelledby="privateModal" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -207,6 +348,7 @@
     </div>
   </div>
 </div>
+
 </th:block>
 
 <!-- 외부 js 파일 -->

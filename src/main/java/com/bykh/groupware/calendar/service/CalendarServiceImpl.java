@@ -49,10 +49,15 @@ public class CalendarServiceImpl implements CalendarService {
 		sqlSession.insert("calendarMapper.insertResourceSchedule", resourceVO);
 	}
 	
-	//자원관리 캘린더 일정(주/일)업데이트
+	//자원관리 캘린더 일정(월)업데이트
 	@Override
 	public void updateResourceSchedule(ResourceVO resourceVO) {
 		sqlSession.update("calendarMapper.resourceCalendarUpdate", resourceVO);
+	}
+	//자원관리 캘린더 일정(주/일)업데이트
+	@Override
+	public void updateResourceSchedule2(ResourceVO resourceVO) {
+		sqlSession.update("calendarMapper.resourceCalendarUpdate2", resourceVO);
 	}
 	
 	//자원관리 캘린더 일정조회
@@ -72,6 +77,9 @@ public class CalendarServiceImpl implements CalendarService {
 	public int getInsertScheduleCode() {
 		return sqlSession.selectOne("calendarMapper.getLastSchedulCode");
 	}
+
+
+
 	
 
 

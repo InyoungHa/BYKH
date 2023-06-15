@@ -39,7 +39,7 @@
 					</span> -->
 			</span>
 			<span sec:authorize="isAuthenticated()">
-				<a style="color: white; margin-right: 40px;" th:href="@{/user/myPageForm}">[[${#authentication.name}]]님 정보  |</a><!-- 프로필 아이콘으로 대체 아이콘 누르면 드롭다운메뉴 실행 예정 -->
+				<a style="color: white; margin-right: 40px;" th:href="@{/user/myPageForm}">[[${#authentication.name}]]님 정보  |</a>
 				<a style=" color: white; margin-right: 40px;" th:href="@{/user/logout}">LOGOUT</a><!-- 로그아웃 실행시 로그인페이지이동 예정 -->
 			
 			</span> 

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<mapper namespace="mroMapper">
+	<!-- 아이템 테이블 -->
+	<resultMap type="com.bykh.groupware.mro.vo.ItemVO" id="item">
+		<id column="ITEM_NO"				property="itemNo"/>
+		<result column="CATE_NO"			property="cateNo"/>
+		<result column="ITEM_NAME"			property="itemName"/>
+		<result column="ITEM_PRICE"			property="itemPrice"/>
+		<result column="ITEM_CNT"			property="itemCnt"/>
+		<result column="IS_USE"				property="isUse"/>
+		<result column="REG_DATE" 			property="regDate"/>
+		<result column="UPDATE_DATE" 		property="updateDate"/>
+		<association property="categoryVO" 	resultMap="cate"></association>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.mro.vo.CategoryVO" id="cate">
+		<id column="CATE_NO" property="cateNo"/>
+		<result column="CATE_NAME" property="cateName"/>
+	</resultMap>
+	
+	<select id="getCateList" resultMap="cate">
+		SELECT
+			CATE_NO
+			, CATE_NAME
+		FROM ITEM_CATEGORY
+	</select>
+	
+	<select id="getItemListForAdmin" resultMap="item">
+		SELECT 
+			ITEM_NO
+			, ITEM_NAME
+			, ITEM_PRICE
+			, ITEM_CNT
+			, IS_USE
+			, TO_CHAR(REG_DATE, 'YYYY-MM-DD') REG_DATE
+			, TO_CHAR(UPDATE_DATE, 'YYYY-MM-DD') UPDATE_DATE
+			, ITEM.CATE_NO
+			, CATE_NAME
+		FROM ITEM, ITEM_CATEGORY CATE
+		WHERE ITEM.CATE_NO = CATE.CATE_NO
+		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
+		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
+		</if>
+		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
+		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
+		</if>		
+		ORDER BY IS_USE DESC, REG_DATE
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
+	</select>
+	<select id="getItemCntForMroManage" resultType="int">
+		SELECT 
+			COUNT(ITEM.ITEM_NO)
+		FROM ITEM, ITEM_CATEGORY CATE
+		WHERE ITEM.CATE_NO = CATE.CATE_NO
+		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
+		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
+		</if>
+		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
+		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
+		</if>		
+	</select>
+	
+	<update id="updateItem">
+		UPDATE ITEM
+		SET	
+			CATE_NO = #{cateNo}
+			, ITEM_NAME = #{itemName}
+			, ITEM_PRICE = #{itemPrice}
+			, ITEM_CNT = #{itemCnt}
+			, IS_USE = #{isUse}
+			, UPDATE_DATE = SYSDATE
+		WHERE ITEM_NO = #{itemNo}
+	</update>
+	
+	<delete id="delItem">
+		DELETE ITEM
+		WHERE ITEM_NO = #{itemNo}
+	</delete>
+	
+	<insert id="addItem">
+		INSERT INTO ITEM (
+		    ITEM_NO
+		    , CATE_NO
+		    , ITEM_NAME
+		    , ITEM_PRICE
+		    , ITEM_CNT
+		    , IS_USE
+		)
+		VALUES(
+		    (SELECT NVL(MAX(ITEM_NO), 0)+1 FROM ITEM)
+		    , #{categoryVO.cateNo}
+		    , #{itemName}
+		    , #{itemPrice}
+		    , #{itemCnt}
+		    , #{isUse}
+		)
+		
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

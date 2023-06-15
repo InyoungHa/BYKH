@@ -38,6 +38,9 @@ public interface AttendanceService {
 	//총연장근무시간 조회(한달)
 	AttendanceVO findOverTime(int empno);
 	
+	//연장근무가능시간 조회 
+	AttendanceVO findCanOverTime(int empno);
+	
 	//결근 횟수조회(한달)
 	AttendanceVO findLateCount(int empno);
 	

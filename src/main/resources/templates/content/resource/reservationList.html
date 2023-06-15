@@ -35,7 +35,7 @@ body {
 	.bottomBox {
 
 	  margin-top: 15px;
-	  height: 400px;
+	  height: 450px;
 	  background-color: #fffeff;
 	  border: solid #ebeaed;
 	}
@@ -89,6 +89,64 @@ margin-right: 10px;
     thead { display:table-header-group; }
     tfoot { display:table-footer-group; }
 }
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  max-height:32rem;
+	width:1100px;
+	overflow-y:auto;	
+	margin-bottom: 2px;
+
+}
+
+.modal-content::-webkit-scrollbar {
+        width: 10px;  /* 스크롤바의 너비 */
+      }
+      .modal-content::-webkit-scrollbar-thumb {
+        height: 5%; /* 스크롤바의 길이 */
+        background: #b7b7b7; /* 스크롤바의 색상 */
+      
+      	border-top:1px solid #3b3f2c; 
+    		border-bottom:1px solid #3b3f2c;
+    		text-align:center;
+    		color:#666; 
+    		background:#ecf5fc; 
+    		font-weight:bold;
+        height: 30px; /* header-bg height값 */
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+      
+              overflow-x: hidden;
+        overflow-y: auto;
+        height: 5%;
+        
+        border-radius: 10px;
+       
+                position: relative;
+        padding-top: 30px; /* header-bg height값 */
+        
+               width: 100%;
+        border-collapse: collapse;
+                position: absolute;
+        top: 0;
+        width: inherit;
+        line-height: 30px; /* header-bg height값 */
+        border-left:1px solid; border-color:#9b9f2c #c4c4c4;
+        
+             border-bottom: 1px solid #DDD;
+				height:30px; padding:8px 10px 2px;
+        text-align:center;
+        color:#666;
+        
+          border-left: none;
+      }
+
 
 </style>
 	
@@ -97,15 +155,15 @@ margin-right: 10px;
 	<!--출퇴근기록 테이블 box -->
 	<div class="bottomBox" id="bottomBox">
 		<div class="bottomTitle" style="margin-bottom: 30px; font-weight: bold; font-size: 22px;">
-			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 자원예약내역
+			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 자원예약내역 (최근5회)
 		</div>
 		<table class="bottomTable">
 		<colgroup>
 			<col width="20%">
 			<col width="20%">
 			<col width="*">
-			<col width="15%">
-			<col width="15%">
+			<col width="14%">
+			<col width="14%">
 		</colgroup>
 			<thead class="bottomThead" >
 				<tr style="text-align: center; font-weight: bold;">
@@ -123,19 +181,72 @@ margin-right: 10px;
 					<td>[[${resList.endDay}]]</td>
 					<td>[[${resList.totalDuration}]]</td>
 					<td>[[${resList.title}]]</td>		
-					<td></td>
-					<td></td>		
+					<td>[[${resList.participant}]]</td>
+					<td>[[${resList.resourceContent}]]</td>		
 	
 				</tr>			
 			</tbody>
 		</table>	
 		
 	</div>
-	<div style="margin-left:570px;">
+	<div style="margin-left:535px;">
 
-	<input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top:10px;" />
-	</div>
 	
+	<input  data-bs-toggle="modal" data-bs-target="#findAll"  type="button" class="btn all" value="전체보기"  style="margin-top:10px; margin-left: 45px;"> 
+	</div>
+	 <!-- modal 추가 -->
+	<div class="modal fade" id="findAll" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">자원예약내역 (전체)</h5>
+				</div>
+				<div class="modal-body" id="modalBody">
+					<div class="form-group">
+						<table class="bottomTable">
+							<colgroup>
+								<col width="20%">
+								<col width="20%">
+								<col width="*">
+								<col width="14%">
+								<col width="14%">
+							</colgroup>
+							<thead class="bottomThead">
+								<tr style="text-align: center; font-weight: bold;">
+									<td>시작일자</td>
+									<td>종료일자</td>
+									<td>소요시간</td>
+									<td>자원명</td>
+									<td>참석자</td>
+									<td>사유</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="resList : ${resList}" style="text-align: center;">
+									<td>[[${resList.startDay}]]</td>
+									<td>[[${resList.endDay}]]</td>
+									<td>[[${resList.totalDuration}]]</td>
+									<td>[[${resList.title}]]</td>
+									<td>[[${resList.participant}]]</td>
+									<td>[[${resList.resourceContent}]]</td>
+
+								</tr>
+							</tbody>
+						</table>
+
+						<br>
+					</div>
+				</div>
+				<div class="modal-footer"><input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top:10px; margin-right: 500px;" /></div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+
 </th:block>
 </th:block>
 

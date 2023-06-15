@@ -1,10 +1,7 @@
 package com.bykh.groupware.calendar.controller;
 
-import java.sql.ResultSet;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.ibatis.annotations.ResultMap;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -71,28 +68,43 @@ public class CalendarController {
 		}
 
 	}
-	
-	// 자원관리캘린더 일정(주/일) 업데이트
-	@ResponseBody
-	@RequestMapping("/resourceCalendarUpdate")
-	public int resourceCalendarUpdateAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
-		User user = (User)authentication.getPrincipal();
-		int empno = Integer.parseInt(user.getUsername());
-		
-		//방금 삽입한 code 조회
-		int scheduleCode = calendarService.getInsertScheduleCode();
+	// 자원관리캘린더 일정 이동시 업데이트
+		@ResponseBody
+		@RequestMapping("/resourceCalendarUpdate2")
+		public void resourceCalendarUpdateAjax2(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
+			User user = (User)authentication.getPrincipal();
+			int empno = Integer.parseInt(user.getUsername());
+			
 
-		for (ResourceVO resource : resourceVOs) {
-			resource.setEmpno(empno);
-			resource.setId(scheduleCode);
-			calendarService.updateResourceSchedule(resource);
+			for (ResourceVO resource : resourceVOs) {
+				resource.setEmpno(empno);
+
+				calendarService.updateResourceSchedule2(resource);
+			}		
 		}
 
 	
-		
-		return scheduleCode;
-		
-	}
+	//자원관리캘린더 일정(주/일) 업데이트
+		@ResponseBody
+		@RequestMapping("/resourceCalendarUpdate")
+		public int resourceCalendarUpdateAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
+			User user = (User)authentication.getPrincipal();
+			int empno = Integer.parseInt(user.getUsername());
+
+			//방금 삽입한 code 조회
+			int scheduleCode = calendarService.getInsertScheduleCode();
+
+			for (ResourceVO resource : resourceVOs) {
+				resource.setEmpno(empno);
+				resource.setId(scheduleCode);
+				calendarService.updateResourceSchedule2(resource);
+			}
+
+
+
+			return scheduleCode;
+
+		}
 
 	// 자원관리캘린더 조회
 	@ResponseBody
@@ -116,7 +128,7 @@ public class CalendarController {
 			  resourceVO.setEmpno(empno);
 
 
-				calendarService.deleteResourceSchedule(resourceVO);
+			calendarService.deleteResourceSchedule(resourceVO);
 			
 		}
 

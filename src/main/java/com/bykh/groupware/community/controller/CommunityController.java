@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.community.service.CommunityService;
+import com.bykh.groupware.community.vo.BoardLikeVO;
+import com.bykh.groupware.community.vo.BoardReportVO;
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardMenuVO;
@@ -55,6 +57,9 @@ public class CommunityController {
 		
 		//전체 글 목록 조회
 		model.addAttribute("communityList", noticeService.getBoardList(boardVO));
+		
+		//인기글 목록 조회
+		model.addAttribute("hotList", communityService.getBoardHotList(boardVO));
 		
 		//카테고리 목록 조회
 		model.addAttribute("boardCateList", communityService.getBoardCate());
@@ -159,7 +164,24 @@ public class CommunityController {
 	
 	//글 상세 조회
 	@GetMapping("/detail")
-	public String communityDetail(BoardVO boardVO, Model model) {
+	public String communityDetail(BoardVO boardVO, Model model, Authentication authentication) {
+		//현재 로그인 중인 사용자가 좋아요 눌렀는지
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		BoardLikeVO boardLikeVO = new BoardLikeVO();
+		boardLikeVO.setBoardNum(boardVO.getBoardNum());
+		boardLikeVO.setLikeUser(loginEmpno);
+		
+		model.addAttribute("likeCheck", communityService.getLikeCheck(boardLikeVO));
+		
+		//현재 로그인 중인 사용자가 이미 신고한 글인지
+		BoardReportVO boardReportVO = new BoardReportVO();
+		boardReportVO.setBoardNum(boardVO.getBoardNum());
+		boardReportVO.setReportUser(loginEmpno);
+		
+		model.addAttribute("reportCheck", communityService.getReportCheck(boardReportVO));
+		
 		//상세 조회 + 조회수 증가 (글 + 첨부파일 + 댓글)
 		model.addAttribute("community", noticeService.getBoardDetail(boardVO));
 		
@@ -228,8 +250,84 @@ public class CommunityController {
 	public String checkBoardPw(BoardVO boardVO) {
 		return communityService.checkBoardNum(boardVO);
 	}
-		
 	
+	//좋아요 추가
+	@ResponseBody
+	@PostMapping("/insertBoardLike")
+	public void insertBoardLike(BoardLikeVO boardLikeVO, Authentication authentication) {
+		//좋아요 누른 사용자
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		boardLikeVO.setLikeUser(loginEmpno);
+		
+		communityService.insertBoardLike(boardLikeVO);
+	}
+	
+	//좋아요 취소
+	@ResponseBody
+	@PostMapping("/deleteBoardLike")
+	public void deleteBoardLike(BoardLikeVO boardLikeVO, Authentication authentication) {
+		//좋아요 누른 사용자
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		boardLikeVO.setLikeUser(loginEmpno);
+		
+		communityService.deleteBoardLike(boardLikeVO);
+	}
+	
+	//신고
+	@ResponseBody
+	@PostMapping("/reportBoard")
+	public void reportBoard(BoardReportVO boardReportVO, Authentication authentication) {
+		//신고자
+		User user = (User) authentication.getPrincipal();
+		int loginEmpno = Integer.parseInt(user.getUsername());
+		
+		boardReportVO.setReportUser(loginEmpno);
+		
+		communityService.reportBoard(boardReportVO);
+	}
+	
+	//신고 글 관리 페이지
+	@GetMapping("/report")
+	public String reportList(Model model, BoardVO boardVO) {
+		//전체 데이터 수
+		boardVO.setTotalDataCnt(communityService.getReportListCnt());
+		
+		//페이지 정보 세팅
+		boardVO.setPageInfo();
+		
+		//신고글 리스트
+		model.addAttribute("reportList", communityService.getReportList(boardVO));
+		
+		
+		return "content/community/community_report";
+	}
+	
+	//신고글 정보 조회
+	@ResponseBody
+	@PostMapping("/getReportBoard")
+	public BoardVO getReportBoard(BoardVO boardVO) {
+		return noticeService.getBoardDetailForUpdate(boardVO);
+	}
+	
+	//신고 글 삭제
+	@GetMapping("/deleteReportBoard")
+	public String deleteReportBoard(BoardVO boardVO) {
+		noticeService.deleteBoard(boardVO);
+		
+		return "redirect:/community/report";
+	}
+	
+	//신고 삭제
+	@GetMapping("/deleteReport")
+	public String deleteReport(BoardReportVO boardReportVO) {
+		communityService.deleteReport(boardReportVO);
+		
+		return "redirect:/community/report";
+	}
 	
 	
 	

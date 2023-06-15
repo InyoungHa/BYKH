@@ -32,7 +32,6 @@
 		<result column="IS_IMPORTANT" 		property="isImportant"/>
 		<result column="IS_PRIVATE" 		property="isPrivate"/>
 		<result column="BOARD_PW" 			property="boardPw"/>
-		<result column="BOARD_LIKE" 		property="boardLike"/>
 		<result column="ENAME" 				property="ename"/>
 		<result column="BOARD_PREV_NUM" 	property="boardPrevNum"/>
 		<result column="BOARD_PREV_TITLE" 	property="boardPrevTitle"/>
@@ -42,10 +41,27 @@
 		<result column="BOARD_NEXT_PRIVATE" property="boardNextPrivate"/>
 		<result column="FILE_CNT" 			property="fileCnt"/>
 		<result column="REPLY_CNT" 			property="replyCnt"/>
+		<result column="LIKE_CNT" 			property="likeCnt"/>
 		<association property="boardMenuVO" 	resultMap="boardMenu"></association>
 		<association property="boardCategoryVO" resultMap="boardCategory"></association>
 		<collection property="boardFileList" 	resultMap="boardFile"></collection>
 		<collection property="replyList" 		resultMap="replyMapper.reply"></collection>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.community.vo.BoardLikeVO" id="boardLike">
+		<id 	column="LIKE_NUM" 	property="likeNum"/>
+		<result column="LIKE_USER" 	property="likeUser"/>
+		<result column="BOARD_NUM" 	property="boardNum"/>
+	</resultMap>
+	
+	<resultMap type="com.bykh.groupware.community.vo.BoardReportVO" id="boardReport">
+		<id 	column="REPORT_NUM" 	property="reportNum"/>
+		<result column="REPORT_USER" 	property="reportUser"/>
+		<result column="REPORT_REASON" 	property="reportReason"/>
+		<result column="REPORT_DATE" 	property="reportDate"/>
+		<result column="BOARD_NUM" 		property="boardNum"/>
+		<result column="ENAME" 			property="ename"/>
+		<result column="BOARD_TITLE" 	property="boardTitle"/>
 	</resultMap>
 	
 	
@@ -62,6 +78,12 @@
 		<if test='searchBoardVO != null and searchBoardVO.searchCate != null'>
 		AND BOARD.BOARD_CATE_CODE = #{searchBoardVO.searchCate}
 		</if>
+	</select>
+	
+	<!-- 신고 개수 조회 -->
+	<select id="getReportListCnt" resultType="int">
+		SELECT COUNT(REPORT_NUM)
+		FROM BOARD_REPORT
 	</select>
 	
 	<!-- 카테고리 조회 -->
@@ -87,6 +109,9 @@
 			, (SELECT COUNT(REPLY_NUM)
                 FROM BOARD_REPLY
                 WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
+			, (SELECT COUNT(LIKE_NUM)
+                FROM BOARD_LIKE
+                WHERE BOARD_NUM = BOARD.BOARD_NUM) LIKE_CNT
 			, FILE_NUM
             , ORIGIN_FILE_NAME
             , BOARD_CATE_NAME
@@ -131,6 +156,41 @@
 		AND BOARD_WRITER = EMPNO
 		AND BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM (+)
 		ORDER BY BOARD_DATE_ORDER DESC
+	</select>
+	
+	<!-- 인기글 목록 조회 -->
+	<select id="getBoardHotList" resultMap="board">
+		SELECT * FROM (
+			SELECT BOARD.BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_WRITER
+				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD') BOARD_DATE
+				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI:SS') BOARD_DATE_ORDER
+				, BOARD_VIEW
+			    , ENAME
+			    , (SELECT COUNT(FILE_NUM) 
+					FROM BOARD_FILE
+					WHERE BOARD_NUM = BOARD.BOARD_NUM) FILE_CNT
+				, (SELECT COUNT(REPLY_NUM)
+	                FROM BOARD_REPLY
+	                WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
+	            , (SELECT COUNT(LIKE_NUM)
+	                FROM BOARD_LIKE
+	                WHERE BOARD_NUM = BOARD.BOARD_NUM) LIKE_CNT
+				, FILE_NUM
+	            , ORIGIN_FILE_NAME
+	            , BOARD_CATE_NAME
+            	, IS_PRIVATE
+			FROM BOARD, EMP, BOARD_FILE, BOARD_CATEGORY CATE
+			WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
+			AND BOARD_STATUS = 1
+			AND BOARD_WRITER = EMPNO
+			AND BOARD.BOARD_NUM = BOARD_FILE.BOARD_NUM (+)
+			AND BOARD.BOARD_CATE_CODE = CATE.BOARD_CATE_CODE (+)
+			AND IS_PRIVATE = 'N'
+			ORDER BY LIKE_CNT DESC, BOARD_VIEW DESC
+		)
+		WHERE ROWNUM  &lt;= 3
 	</select>
 	
 	<!-- 다음으로 들어갈 글 번호 조회 -->
@@ -226,6 +286,9 @@
 				, (SELECT COUNT(REPLY_NUM)
                     FROM BOARD_REPLY
                     WHERE BOARD_NUM = #{boardNum}) REPLY_CNT
+                , (SELECT COUNT(LIKE_NUM)
+					FROM BOARD_LIKE
+					WHERE BOARD_NUM = #{boardNum}) LIKE_CNT
 	            , LAG(BOARD_NUM, 1, 'BOARD_000') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_NUM
 	            , LAG(BOARD_TITLE, 1, '이전 글이 없습니다.') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_TITLE
 	            , LAG(IS_PRIVATE, 1, 'N') OVER(PARTITION BY BOARD_MENU_CODE ORDER BY BOARD_NUM) AS BOARD_PREV_PRIVATE
@@ -346,6 +409,7 @@
 		AND BOARD_MENU_CODE = #{boardMenuCode}
 	</select>
 	
+	<!-- 비밀글 체크 -->
 	<select id="checkBoardNum" resultType="String">
 		SELECT BOARD_NUM
         FROM BOARD
@@ -353,6 +417,102 @@
         AND BOARD_PW = #{boardPw}
 	</select>
 	
+	<!-- 좋아요 추가 -->
+	<insert id="insertBoardLike">
+		INSERT INTO BOARD_LIKE (
+			LIKE_NUM
+			, LIKE_USER
+			, BOARD_NUM
+		) VALUES (
+			(SELECT 'LIKE_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(LIKE_NUM, 6))), 0) + 1, 3, '0')
+			FROM BOARD_LIKE)
+			, #{likeUser}
+			, #{boardNum}
+		)
+	</insert>
+	
+	<!-- 좋아요 눌렀는지 체크 -->
+	<select id="getLikeCheck" resultType="boolean">
+		SELECT COUNT(LIKE_NUM)
+        FROM BOARD_LIKE
+        WHERE BOARD_NUM = #{boardNum}
+        AND LIKE_USER = #{likeUser}
+	</select>
+	
+	<!-- 좋아요 취소 -->
+	<delete id="deleteBoardLike">
+		DELETE BOARD_LIKE
+		WHERE BOARD_NUM = #{boardNum}
+		AND LIKE_USER = #{likeUser}
+	</delete>
+	
+	<!-- 신고 -->
+	<insert id="reportBoard">
+		INSERT INTO BOARD_REPORT (
+			REPORT_NUM
+			, REPORT_USER
+			, REPORT_REASON
+			, BOARD_NUM
+		) VALUES (
+			(SELECT 'REPORT_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(REPORT_NUM, 8))), 0) + 1, 3, '0')
+				FROM BOARD_REPORT)
+			, #{reportUser}
+			, #{reportReason}
+			, #{boardNum}
+		)
+	</insert>
+	
+	<!-- 신고 건수 5번인지 확인 -->
+	<select id="getReportCnt" resultType="int">
+		SELECT COUNT(REPORT_NUM)
+		FROM BOARD_REPORT
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<!-- 신고 누적 5개 글 이동 -->
+	<update id="updateReportBoard">
+		UPDATE BOARD
+		SET BOARD_STATUS = 3
+		WHERE BOARD_NUM = #{boardNum}
+	</update>
+	
+	<!-- 블라인드 해제 -->
+	<update id="releaseReportBoard">
+		UPDATE BOARD
+		SET BOARD_STATUS = 1
+		WHERE BOARD_NUM = #{boardNum}
+	</update>
+	
+	<!-- 신고했는지 체크 -->
+	<select id="getReportCheck" resultType="boolean">
+		SELECT COUNT(REPORT_NUM)
+		FROM BOARD_REPORT
+		WHERE BOARD_NUM = #{boardNum}
+		AND REPORT_USER = #{reportUser}
+	</select>
+	
+	<!-- 신고 리스트 -->
+	<select id="getReportList" resultMap="boardReport">
+		SELECT REPORT_NUM
+		    , REPORT_USER
+		    , ENAME
+		    , REPORT_REASON
+		    , REPORT_DATE
+		    , BOARD_TITLE
+		    , BOARD.BOARD_NUM BOARD_NUM
+		FROM BOARD_REPORT, BOARD, EMP
+		WHERE BOARD_REPORT.BOARD_NUM = BOARD.BOARD_NUM
+		AND REPORT_USER = EMPNO
+		ORDER BY REPORT_NUM DESC
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
+	</select>
+	
+	
+	<!-- 신고 삭제 -->
+	<delete id="deleteReport">
+		DELETE BOARD_REPORT
+		WHERE REPORT_NUM = #{reportNum}
+	</delete>
 	
 </mapper>
 

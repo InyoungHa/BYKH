@@ -1,3 +1,22 @@
+//비밀글 체크박스 & 비밀번호 input 컨트롤
+init();
+
+function init() {
+	const isPrivate = document.querySelector('#isPrivate');
+	const boardPw = document.querySelector('#boardPw');
+	
+	isPrivate.addEventListener('change', function() {
+		if(this.checked == true) {
+			boardPw.disabled = false;
+		}
+		else {
+			boardPw.disabled = true;
+		}
+		
+	})
+}
+
+
 //정상 글 등록
 function updateCommunity() {
 	if(!formCheck()) {
@@ -14,6 +33,8 @@ function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
 	const boardContent = document.querySelector('#boardContent').value;
 	const fileInputList = document.querySelectorAll('#fileInput');
+	const isPrivate = document.querySelector('#isPrivate').checked;
+	const boardPw = document.querySelector('#boardPw').value;
 
 	
 	if(boardTitle == '' || boardTitle == null) {
@@ -32,6 +53,13 @@ function formCheck() {
 				alert('파일을 첨부해주세요.');
 				return false;
 			}
+		}
+	}
+	
+	if(isPrivate == true) {
+		if(boardPw == '' || boardPw == null) {
+			alert('비밀번호를 입력해주세요.')
+			return false;
 		}
 	}
 	

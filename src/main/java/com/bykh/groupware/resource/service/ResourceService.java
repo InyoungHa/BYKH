@@ -19,7 +19,7 @@ public interface ResourceService {
 	void insertScheduleDetail(ResourceVO resourceVO);
 
 	//자원관리 캘린더 상세 정보 조회
-	List<ResourceVO> selectCalendarDetail(int id);
+	List<ResourceVO> selectCalendarDetail(ResourceVO resourceVO);
 	
 
 }

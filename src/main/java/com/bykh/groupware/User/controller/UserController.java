@@ -1,5 +1,8 @@
 package com.bykh.groupware.User.controller;
 
+
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -7,15 +10,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bykh.groupware.User.service.UserService;
+import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
+import com.bykh.groupware.calendar.vo.CalendarVO;
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.resource.vo.ResourceVO;
 import com.bykh.groupware.util.DateUtil;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -30,6 +38,8 @@ public class UserController {
 	private  EmpService empService;
 	@Resource(name="deptService")
 	private DeptService deptService;
+	@Resource(name="userService")
+	private UserService userService;
 	
 	//로그인 페이지
 	@GetMapping("/log")
@@ -45,13 +55,47 @@ public class UserController {
 			attendanceVO.setCurDate(nowDate);
 		}	
 		
+		
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
-		
+				
 		//이름 조회
 		model.addAttribute("selectName",attendanceService.selectName(empno));
+
+		//ToDoList 조회
+		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
-		return "content/user/main";
+		return "content/main";
+
+	}
+	
+	//toDOList 저장
+	@ResponseBody
+	@PostMapping("/insertToDoList")
+	public void insertToDoList(@RequestParam String toDoContent,  Authentication authentication, UserVO userVO) {
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());	
+		userVO.setEmpno(empno);
+		userVO.setToDoContent(toDoContent);
+		
+	
+		 userService.insertToDoList(userVO);
+		 
+		 
+	}
+		
+
+	//toDoList 삭제
+	@ResponseBody
+	@PostMapping("/deleteToDoList")
+	public void deleteToDoList(String toDoContent,  Authentication authentication, UserVO userVO) {
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());	
+		userVO.setEmpno(empno);
+		userVO.setToDoContent(toDoContent);
+		
+		
+		 userService.deleteToDoList(userVO);
 	}
 	
 	//마이 페이지로 이동

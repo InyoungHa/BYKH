@@ -75,6 +75,13 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public AttendanceVO findOverTime(int empno) {
 		return sqlSession.selectOne("attendanceMapper.findOverTime", empno);
 	}
+	
+	//연장근무가능시간 조회
+	@Override
+	public AttendanceVO findCanOverTime(int empno) {
+		return sqlSession.selectOne("attendanceMapper.findCanOverTime", empno);
+	}
+	
 
 	//결근 횟수 조회
 	@Override
@@ -93,6 +100,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public List<AttendanceVO> workingBoardAll(int empno) {
 		return sqlSession.selectList("attendanceMapper.workingBoardAll", empno);
 	}
+
+
 
 	
 
