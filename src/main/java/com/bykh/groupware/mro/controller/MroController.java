@@ -25,11 +25,6 @@ public class MroController {
 		itemVO.setNowPage(itemVO.getNowPage());
 		itemVO.setPageInfo();
 		
-		
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("offsetCnt = " + itemVO.getOffsetCnt());
-		System.out.println("displayCnt = " + itemVO.getDisplayCnt());
-		System.out.println("beginPage = " + itemVO.getBeginPage());
 		model.addAttribute("itemList", mroService.getItemListForAdmin(itemVO));
 		model.addAttribute("cateList", mroService.getCateList());
 		return "content/mro/mro_manage";
@@ -45,6 +40,12 @@ public class MroController {
 	public String updateItem(ItemVO itemVO) {
 		mroService.updateItem(itemVO);
 		return "redirect:/mro/mroManage";
+	}
+	
+	@GetMapping("mroEmp")
+	public String mroEmp(Model model){
+		model.addAttribute("itemList", mroService.getItemListForEmp());
+		return "content/mro/mro_emp";
 	}
 	
 }
