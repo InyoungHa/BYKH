@@ -171,7 +171,7 @@ public class UserController {
 	//지도 페이지로 이동
 	@GetMapping("/branchMap")
 	public String branchMap(Model model) {
-		model.addAttribute("branchLocationList", deptService.selectBranchLocation());
+		//model.addAttribute("branchLocationList", deptService.selectBranchLocation());
 		return "content/user/branchMap";
 	}
 	
