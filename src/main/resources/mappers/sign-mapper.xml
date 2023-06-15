@@ -298,6 +298,7 @@
         AND DOC.WRITER_NO = EMP.EMPNO
         AND EMP.DEPTNO = DEPT.DEPTNO
 		AND DOC.DOC_NO = ${docNo}
+		
 	</select>
 	<!-- '결재' / '반려' 버튼 클릭 시 실행 -->
 	<update id="updateSignResult">

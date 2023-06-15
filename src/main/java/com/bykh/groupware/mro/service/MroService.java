@@ -11,4 +11,5 @@ public interface MroService {
 	int updateItem(ItemVO itemVO);
 	int delItem(int itemNo);
 	int addItem(ItemVO itemVO);
+	int getItemCntForMroManage(ItemVO itemVO);
 }

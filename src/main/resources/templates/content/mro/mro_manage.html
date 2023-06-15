@@ -20,7 +20,7 @@
 			</div>
 			<div class="row mb-3">
 				<div class="col-2">
-					<select class="form-select" onchange="getItemInCate(this);">
+					<select class="form-select select-cate" onchange="getItemInCate(this);">
 						<option value="0" th:selected="${itemVO.searchItemVO == null or itemVO.searchItemVO.searchCateNo == 0}">카테고리 선택</option>
 						<th:block th:each="cate : ${cateList}">
 							<option th:value="${cate.cateNo}" 
@@ -31,12 +31,14 @@
 					</select>
 				</div>
 				<div class="col-2">
-					<form action="/mro/mroManage" method="post">
-					<div class="input-group">
-						<input type="text" class="form-control" placeholder="상품명"
-							aria-describedby="search-btn" name="searchItemVO.searchItemName">
-						<button class="btn" type="submit" id="search-btn">검색</button>
-					</div>
+					<form action="/mro/mroManage" method="post" id="searchForm">
+						<input type="hidden" th:value="${itemVO.nowPage}" name="nowPage" id="nowPage">
+						<input type="hidden" value="0" name="searchItemVO.searchCateNo" id="search-cate-no">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="상품명"
+								aria-describedby="search-btn" name="searchItemVO.searchItemName">
+							<button class="btn" type="submit" id="search-btn">검색</button>
+						</div>
 					</form>
 				</div>
 				<div class="offset-7 col-1">
@@ -94,6 +96,37 @@
 							</th:block>
 						</tbody>
 					</table>
+				</div>
+			</div>
+			
+			<div class="row justify-content-center">
+				<div class="col-3">
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<li th:class="${itemVO.prev ? 'page-item' : 'page-item disabled'}">
+								<a class="page-link" aria-label="Previous"
+									href="javascript:void(0);"
+									th:onclick="getOrderListPage([[${itemVO.beginPage - 1}]]);">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li class="page-item"
+								th:each="pageNum : ${#numbers.sequence(itemVO.beginPage, itemVO.endPage)}">
+								<a
+								th:class="${pageNum == itemVO.nowPage ? 'page-link active' : 'page-link'}"
+								href="javascript:void(0);"
+								th:onclick="getOrderListPage([[${pageNum}]]);">
+									[[${pageNum}]] </a>
+							</li>
+							<li th:class="${itemVO.next ? 'page-item' : 'page-item disabled'}">
+								<a class="page-link" aria-label="Next"
+									href="javascript:void(0);"
+									th:onclick="getOrderListPage([[${itemVO.endPage + 1}]]);">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
 				</div>
 			</div>
 		</div>

@@ -7,7 +7,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ItemVO {
+public class ItemVO extends SearchItemVO{
+	
 	private int itemNo;
 	private int cateNo;
 	private String itemName;

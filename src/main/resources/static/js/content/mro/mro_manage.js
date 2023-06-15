@@ -33,3 +33,11 @@ function showUpdateItemModal(clickTag){
 	
 	ItemModal.show();
 }
+
+//페이지 버튼 클릭 시 실행
+function getOrderListPage(nowPage){
+	document.querySelector('#nowPage').value = nowPage;
+	document.querySelector('#search-cate-no').value = document.querySelector('.select-cate').value;
+	const searchForm = document.querySelector('#searchForm');
+	searchForm.submit();
+}

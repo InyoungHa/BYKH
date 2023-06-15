@@ -48,6 +48,19 @@
 		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
 		</if>		
 		ORDER BY IS_USE DESC, REG_DATE
+		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
+	</select>
+	<select id="getItemCntForMroManage" resultType="int">
+		SELECT 
+			COUNT(ITEM.ITEM_NO)
+		FROM ITEM, ITEM_CATEGORY CATE
+		WHERE ITEM.CATE_NO = CATE.CATE_NO
+		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
+		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
+		</if>
+		<if test="searchItemVO != null and searchItemVO.searchCateNo != 0">
+		AND ITEM.CATE_NO = #{searchItemVO.searchCateNo}
+		</if>		
 	</select>
 	
 	<update id="updateItem">
