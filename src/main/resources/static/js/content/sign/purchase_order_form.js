@@ -465,29 +465,5 @@ document.addEventListener('addItemFinished', function(e) {
 
 });
 
-/*
 //시간 남으면 추가(addItem테이블에 추가된 tr이 없을 때마다 안내멘트 출력)
-//addItem 테이블의 tbody가 변경될 때마다 tr 개수를 카운트
-const addItemTbody = document.querySelector('.addItemTable tbody');
 
-function mutationCallback(mutations) {
-	mutations.forEach(function(mutation) {
-		//tbody 내용 변경이 변경되었다면
-		if (mutation.type === 'childList') {
-			//addItem 테이블의 tr 개수가 0개면 tr 추가, 아니면 삭제
-			const addItemTrList = addItemTbody.querySelectorAll('tr');
-			let str = ``;
-			if(addItemTrList == 0){
-				str += `
-					<tr class="message">
-						<td colspan="2">추가된 품목이 없습니다.</td>
-					</tr>
-				`;
-			}
-		}
-	});
-}
-
-const observer = new MutationObserver(mutationCallback);
-observer.observe(addItemTbody, { childList: true });
-*/

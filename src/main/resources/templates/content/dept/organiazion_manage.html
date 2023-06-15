@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+<link rel="stylesheet" href="/css/dept/organization_manage.css"> -->
+
+</th:block>
+
+
+
+<th:block layout:fragment="content">
+<style>
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+ .menu a{
+ 	cursor:pointer;
+ }
+ .menu .hide{
+ 	display:none;
+ }
+ 
+
+</style>
+
+<label class="page_title">조직도</label>
+
+<div class="row">	
+	<div class="col-4 " style="border: 1px solid black;" id="toggle_org">
+		<div class="row">
+			<div class="col">
+				<div>
+					<ul>
+					<th:block th:each="organization : ${organizationList}">
+						<li class="menu">
+							<a><img src="/img/folder.png"width="30px;"/>[[${organization.loc}]]</a>
+							<ul class="hide">
+								<th:block th:each="dept : ${organization.orgDeptList}">
+									<li class="menu" style="padding-left: 50px;" th:onclick="detailDept([[${dept.deptno}]]);"><a id="dename">[[${dept.dename}]]</a>
+											<ul class="hide emp">
+												<th:block th:each="emp : ${dept.empList}">
+													<li style="padding-left: 50px;">[[${emp.ename}]]/[[${emp.eJob}]]</li>												
+												</th:block>
+											</ul>
+									</li>
+								</th:block>								
+							</ul>
+						</li>
+						</th:block>
+					</ul>
+				</div>
+			</div>		
+		</div>
+	</div>
+	<div class="col-7">
+		<div class="row">
+			<div id="deptEmpListTable"></div>
+		</div>
+	</div>
+</div>
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+ 
+ 
+ 
+ 
+
+</th:block>
+
+<th:block layout:fragment="content_js">
+	<!--연결해야하는 외부 js  -->
+ <script type="text/javascript" src="/js/content/dept/organization_manage.js"></script> -->
+
+</th:block>
+
+</html>

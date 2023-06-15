@@ -18,28 +18,26 @@
 				</div>
 
 			</div>
+					<form action="/mro/mroManage" method="post" id="searchForm">
 			<div class="row mb-3">
 				<div class="col-2">
-					<select class="form-select select-cate" onchange="getItemInCate(this);">
+					<select class="form-select select-cate"  name="searchItemVO.searchCateNo">
 						<option value="0" th:selected="${itemVO.searchItemVO == null or itemVO.searchItemVO.searchCateNo == 0}">카테고리 선택</option>
 						<th:block th:each="cate : ${cateList}">
 							<option th:value="${cate.cateNo}" 
 							th:selected="${itemVO.searchItemVO != null and itemVO.searchItemVO.searchCateNo == cate.cateNo}">
 							[[${cate.cateName}]]</option>
-							
 						</th:block>
 					</select>
 				</div>
 				<div class="col-2">
-					<form action="/mro/mroManage" method="post" id="searchForm">
 						<input type="hidden" th:value="${itemVO.nowPage}" name="nowPage" id="nowPage">
-						<input type="hidden" value="0" name="searchItemVO.searchCateNo" id="search-cate-no">
+						<!-- <input type="hidden" value="0" name="searchItemVO.searchCateNo" id="search-cate-no"> -->
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="상품명"
 								aria-describedby="search-btn" name="searchItemVO.searchItemName">
 							<button class="btn" type="submit" id="search-btn">검색</button>
 						</div>
-					</form>
 				</div>
 				<div class="offset-7 col-1">
 					<div class="d-grid">
@@ -49,6 +47,7 @@
 					</div>
 				</div>
 			</div>
+					</form>
 			<div class="row">
 				<div class="col">
 					<table class="table table-hover table-bordered text-center">

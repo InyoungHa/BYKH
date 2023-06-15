@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bykh.groupware.community.service.CommunityService;
 import com.bykh.groupware.community.vo.BoardLikeVO;
 import com.bykh.groupware.community.vo.BoardReportVO;
+import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.notice.service.NoticeService;
 import com.bykh.groupware.notice.vo.BoardFileVO;
 import com.bykh.groupware.notice.vo.BoardMenuVO;
@@ -39,6 +40,9 @@ public class CommunityController {
 	
 	@Resource(name = "noticeService")
 	private NoticeService noticeService;
+	
+	@Resource(name = "empService")
+	private EmpService empService;
 	
 	
 	//게시판 목록

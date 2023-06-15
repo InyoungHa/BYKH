@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.dept.vo.DeptVO;
-
+import com.bykh.groupware.dept.vo.OrgDeptVO;
+import com.bykh.groupware.dept.vo.OrganizationVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 
 import jakarta.annotation.Resource;
 
@@ -77,4 +79,74 @@ public class DeptController {
 		return deptService.updateIsUse(deptno);
 	}
 
+	//조직도 페이지로 이동
+	@GetMapping("/organizationManage")
+	public String organizationManage(Model model) {
+		
+		
+		 //지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();
+		 
+		 //모든 지역 정보를 조회 
+		for(int i = 0 ; i < organizationList.size() ; i++) {
+			OrganizationVO organizationVO = organizationList.get(i);
+		  
+			 //지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+		  
+			//모든 부서에 포함된 모든 직원 조회 
+			for (int j = 0; j < deptList.size(); j++) {
+				int deptno = deptList.get(j).getDeptno();
+				List<EmpVO> empList = deptService.getEmpListForOrg(deptno);
+				deptList.get(j).setEmpList(empList);
+			}
+			organizationList.get(i).setOrgDeptList(deptList);
+		}
+		
+		//데이터 조회
+		//System.out.println(organizationList.toString());
+		
+		model.addAttribute("organizationList", organizationList);
+		
+		
+		
+		return "content/dept/organiazion_manage";
+	}
+
+	//조직도 페이지 사원 정보 띄우기 ajax
+	@ResponseBody
+	@PostMapping("/getDeptEmpAjax")
+	public List<EmpVO> getDeptEmpAjax(int deptno) {
+		
+		return deptService.getEmpListForOrg(deptno);
+	}
+	
+
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

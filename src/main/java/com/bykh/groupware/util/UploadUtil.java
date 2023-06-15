@@ -93,6 +93,8 @@ public class UploadUtil {
 	        String uuid = UUID.randomUUID().toString();
 	        String extension = originFileName.substring(originFileName.lastIndexOf("."));
 	        String attachedFileName = uuid + extension;
+	        
+	    
 
 	        try {
 	            File file = new File(ConstVariable.UPLOAD_PATH + attachedFileName);

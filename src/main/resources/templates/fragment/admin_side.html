@@ -239,7 +239,7 @@ li:last-child {
 	   						<!-- li 글자 길면 짤리니 주의 ! -->
 			    				<li class="nav-item"><a  aria-current="page" th:href="@{/emp/empManage}">사원관리</a></li>
 			    				<li class="nav-item"><a aria-current="page" th:href="@{/dept/deptManage}">부서관리</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">조직도</a></li>
+			    				<li class="nav-item"><a aria-current="page" th:href="@{/dept/organizationManage}">조직도</a></li>
 	 						</ul>
 						</div>             	
  					</div>      
@@ -247,7 +247,7 @@ li:last-child {
                    
 	
  					
-	                <a href="#" class="nav__link">
+	                <a th:href="@{/user/organizationMap}" class="nav__link">
 	                     <ion-icon name="people-outline"></ion-icon>
 	                     <span class="nav_name">조직도</span>
 	                </a>   
@@ -286,6 +286,10 @@ li:last-child {
 	                   <a th:href="@{/archive/list}" class="nav__link">
 	                    <ion-icon name="briefcase-outline"></ion-icon>
 	                    <span class="nav_name">자료실</span>
+	                </a>
+	                   <a th:href="@{/user/branchMap}" class="nav__link">
+	                    <ion-icon name="briefcase-outline"></ion-icon>
+	                    <span class="nav_name">지사 위치</span>
 	                </a>
 	                
                   </div>

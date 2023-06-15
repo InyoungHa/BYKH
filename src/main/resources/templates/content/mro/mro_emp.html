@@ -7,15 +7,144 @@
 <!-- 연결해야할 외부 css 파일 -->
 <th:block layout:fragment="content_css">
    	<!-- <link rel="stylesheet" href="/"> -->
+   	<style type="text/css">
+   		.my-scroll{
+   			max-height: 40rem;
+   			overflow-y: auto;
+   			padding-right: 0px;
+   		}
+   		.my-scroll::-webkit-scrollbar {
+			width: 8px; /* 스크롤바의 너비 */
+		}
+		.my-scroll::-webkit-scrollbar-thumb {
+			height: 30%; /* 스크롤바의 길이 */
+			background: #b7b7b7; /* 스크롤바의 색상 */
+			border-radius: 10px;
+		}
+		
+		.my-scroll::-webkit-scrollbar-track {
+			background: #84848447; /*스크롤바 뒷 배경 색상*/
+		}
+		
+		.item-table, .buy-table, .item-table input[type='number'], .item-table input[type='button']{
+			font-size: 0.85rem;
+		}
+		
+   	</style>
 </th:block>
 
 <th:block layout:fragment="content">
-   <!-- html 코드 작성 -->
+	<div class="row">
+		<div class="col-8">
+			<form action="/mro/mroEmp" method="post">
+				<div class="row">
+					<div class="col-3">
+						<h2>상품 목록</h2>   
+					</div>
+					<div class="offset-1 col-4">
+						<select class="form-select select-cate" onchange="getItemInCate(this);" name="searchItemVO.searchCateNo">
+							<option value="0" th:selected="${itemVO.searchItemVO == null or itemVO.searchItemVO.searchCateNo == 0}">카테고리 선택</option>
+							<th:block th:each="cate : ${cateList}">
+								<option th:value="${cate.cateNo}" 
+								th:selected="${itemVO.searchItemVO != null and itemVO.searchItemVO.searchCateNo == cate.cateNo}">
+								[[${cate.cateName}]]</option>
+							</th:block>
+						</select>
+					</div>
+					<div class="col-4">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="상품명"
+								aria-describedby="search-btn" name="searchItemVO.searchItemName">
+							<button class="btn" type="submit" id="search-btn">검색</button>
+						</div>
+					</div>
+				</div>
+			</form>
+			<div class="row">
+				<div class="col my-scroll" >
+					<table class="table table-hover table-bordered text-center my-scroll item-table">
+						<thead>
+							<tr>
+								<td>No.</td>
+								<td>분류</td>
+								<td>상품명</td>
+								<td>가격</td>
+								<td>수량</td>
+								<td>총 가격</td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody>
+							<th:block th:if="${#arrays.length(itemList) != 0}">
+								<tr th:each="item, status : ${itemList}">
+									<td>[[${status.size - status.index}]]</td>
+									<td>[[${item.categoryVO.cateName}]]</td>
+									<td th:data-item-no="${item.itemNo}">[[${item.itemName}]]</td>
+									<td>[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
+									<td th:data-item-cnt="${item.itemCnt}">
+										<input type="number" class="form-select" value="1" min="1" th:max="${item.itemCnt}" 
+										onchange="setTotalPrice(this);" onkeyup="setTotalPrice(this);">
+									</td>
+									<td th:data-total-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
+									<td>
+										<input type="button" class="btn" value="추가" onclick="addBuyTable(this);">
+									</td>
+								</tr>
+							</th:block>
+							<th:block th:if="${#arrays.length(itemList) == 0}">
+								<tr>
+									<td>구매할 수 있는 상품이 없습니다.</td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="row">
+				<div class="col-6">
+					<h2>구매 목록</h2>
+				</div>
+				<div class="offset-4 col-2">
+					<div class="d-grid">
+					<button class="btn">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
+						  <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"/>
+						  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+						  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+						</svg>
+					</button>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<table class="table table-hover table-bordered text-center buy-table">
+						<colgroup>
+							<col width="*">
+							<col width="15%">
+							<col width="25%">
+						</colgroup>
+						<thead>
+							<tr>
+								<td>상품명</td>
+								<td>수량</td>
+								<td>총 가격</td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 </th:block>
 
 <!-- 연결해야할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
-	<!-- <script type="text/javascript" src="/"></script> -->
+	<script type="text/javascript" src="/js/content/mro/mro_emp.js"></script>
 </th:block>
 
 </html>

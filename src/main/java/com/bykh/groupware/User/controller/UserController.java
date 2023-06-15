@@ -18,6 +18,9 @@ import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
 import com.bykh.groupware.dept.service.DeptService;
+import com.bykh.groupware.dept.vo.BranchLocationInfoVO;
+import com.bykh.groupware.dept.vo.OrgDeptVO;
+import com.bykh.groupware.dept.vo.OrganizationVO;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
@@ -58,11 +61,12 @@ public class UserController {
 				
 		//이름 조회
 		model.addAttribute("selectName",attendanceService.selectName(empno));
-		
+
 		//ToDoList 조회
 		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
-		return "content/main";
+		return "content/user/main";
+
 	}
 	
 	//toDOList 저장
@@ -142,7 +146,7 @@ public class UserController {
 		
 		
 		
-		return "content/myPage";
+		return "content/user/myPage";
 	}
 	
 	@ResponseBody
@@ -205,6 +209,55 @@ public class UserController {
 
 		empService.updateSelfEmpDetail(empVO);				
 	}
+	
+	
+	//지도 페이지로 이동
+	@GetMapping("/branchMap")
+	public String branchMap(Model model) {
+		
+		return "content/user/branchMap";
+	}
+	
+	@ResponseBody //테이블_ 지도 그리기
+	@PostMapping("/getBranchInfoAjax")
+	public BranchLocationInfoVO getBranchInfoAjax(String branchCode) {
+		System.out.println(deptService.selectBranchLocation(branchCode));
+		
+		return deptService.selectBranchLocation(branchCode);
+		
+	}
+	
+	//사원용 조직도
+	@GetMapping("/organizationMap")
+	public String organizationMap(Model model) {
+		 //지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();
+		 
+		 //모든 지역 정보를 조회 
+		for(int i = 0 ; i < organizationList.size() ; i++) {
+			OrganizationVO organizationVO = organizationList.get(i);
+		  
+			 //지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+		  
+			//모든 부서에 포함된 모든 직원 조회 
+			for (int j = 0; j < deptList.size(); j++) {
+				int deptno = deptList.get(j).getDeptno();
+				List<EmpVO> empList = deptService.getEmpListForOrg(deptno);
+				deptList.get(j).setEmpList(empList);
+			}
+			organizationList.get(i).setOrgDeptList(deptList);
+		}
+		
+		//데이터 조회
+		//System.out.println(organizationList.toString());
+		
+		model.addAttribute("organizationList", organizationList);
+		
+		return "content/user/organizationMap";
+	}
+	
+
 	
 
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+   layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+	<!--<link rel="stylesheet" href=""> -->
+</th:block>
+
+<th:block layout:fragment="content">
+<style>
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+</style>
+
+<label class="page_title">조직도(사원)</label>
+
+</th:block>
+
+<th:block layout:fragment="content_js">
+
+	<script type="text/javascript" src="/js/content/user/organizationMap.js"></script> -->
+</th:block>
+
+</html>

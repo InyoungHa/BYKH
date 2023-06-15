@@ -6,7 +6,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bykh.groupware.dept.vo.BranchLocationInfoVO;
 import com.bykh.groupware.dept.vo.DeptVO;
+import com.bykh.groupware.dept.vo.OrgDeptVO;
+import com.bykh.groupware.dept.vo.OrganizationVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 
 
 @Service("deptService")
@@ -52,6 +56,35 @@ public class DeptServiceImpl implements DeptService{
 	public int updateIsUse(int deptno) {
 		
 		return sqlSession.update("deptMapper.updateIsUse",deptno);
+	}
+
+
+
+	@Override
+	public List<OrganizationVO> getLocList() {
+		return sqlSession.selectList("deptMapper.getLocList");
+	}
+
+
+
+	@Override
+	public List<OrgDeptVO> getDeptListForOrg(String loc) {
+		return sqlSession.selectList("deptMapper.getDeptListForOrg", loc);
+	}
+
+
+
+	@Override
+	public List<EmpVO> getEmpListForOrg(int deptno) {
+		return sqlSession.selectList("deptMapper.getEmpListForOrg", deptno);
+	}
+
+
+
+	@Override //회사 지도 조회
+	public BranchLocationInfoVO selectBranchLocation(String branchCode) {
+	
+		return sqlSession.selectOne("deptMapper.selectBranchLocation", branchCode);
 	}
 
 

@@ -18,6 +18,7 @@
 				<div class="col text-center">
 					<!-- <input type="hidden" value="1" name="docAnnualLeaveVO.dtNo" class="dtNo"> -->
 					<input type="hidden" value="1" name="sgnStatus" class="sgnStatus">
+					<input type="hidden" th:value="${docAnnualLeave != null ? docAnnualLeave.docNo : 0}" name="docNo" class="">
 					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
 					<input type="hidden" th:value="연차신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
@@ -152,9 +153,8 @@
 								<td>휴가 사유</td>
 								<td>
 									<textarea class="full-width-textarea" name="docAnnualLeaveVO.leaveReason"
-									th:attr="value=${docAnnualLeave != null and docAnnualLeave.leaveReason != null
-									? docAnnualLeave.leaveReason : ''}">
-									</textarea>
+									>[[${docAnnualLeave != null and docAnnualLeave.leaveReason != null
+									? docAnnualLeave.leaveReason : ''}]]</textarea>
 								</td>
 							</tr>
 							<tr>

@@ -12,6 +12,31 @@
 
 	</resultMap>
 	
+	<!--지역데이터 _ 조직도 -->
+	<resultMap type="com.bykh.groupware.dept.vo.OrganizationVO" id="organization">
+		<result column="LOC" 					property="loc"/>
+	</resultMap>
+	
+	<!--부서데이터 _ 조직도 -->
+	<resultMap type="com.bykh.groupware.dept.vo.OrgDeptVO" id="orgDept">
+		<result column="DEPTNO" 					property="deptno"/>
+		<result column="DENAME" 					property="dename"/>
+	</resultMap>
+	
+	<!--지도 테이블 -->
+	<resultMap type="com.bykh.groupware.dept.vo.BranchLocationInfoVO" id="branchInfo">
+		<id column="BRANCH_CODE" 					property="branchCode"/>
+		<result column="BRANCH_ADDR" 				property="branchAddr"/>
+		<result column="BY_WAY_BUS"					property="byWayBus"/>
+		<result column="BY_WAY_SUBWAY"				property="byWaySubway"/>
+		<result column="LATITUDE"					property="latitude"/>
+		<result column="LONGITUDE"					property="longitude"/>
+
+	</resultMap>
+	
+	
+	
+	
 	<!--부서 등록 쿼리  -->
 	<insert id="insertDept">
 		INSERT INTO DEPT (DEPTNO
@@ -67,6 +92,50 @@
 		WHERE DEPTNO = #{deptno}
 	</update>
 
+
+	<!-- 조직도 조회 -->
+	<select id="getLocList" resultMap="organization">
+		SELECT LOC
+		FROM 
+		(
+		    SELECT DISTINCT LOC, SUBSTR(DEPTNO, 0, 1)
+		    FROM DEPT
+		    ORDER BY SUBSTR(DEPTNO, 0, 1)
+		)
+	</select>
+	
+	<!--지역별 부서 리스트 -->
+	<select id="getDeptListForOrg" resultMap="orgDept">
+		SELECT DEPTNO
+			, DENAME 
+		FROM DEPT
+		WHERE LOC = #{loc}
+	</select>
+	
+	<!--부서별 사원 리스트  -->
+	<select id="getEmpListForOrg" resultMap="empMapper.emp">
+		SELECT EMPNO
+		    , ENAME
+		    , E_JOB
+		    , PHONE_TEL
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM EMP
+		WHERE DEPTNO = #{deptno}
+	</select>
+
+
+	<!-- 지사 지도 검색  -->
+	<select id="selectBranchLocation" resultMap="branchInfo">
+		SELECT BRANCH_CODE,
+				BRANCH_ADDR,
+				BY_WAY_BUS,
+				BY_WAY_SUBWAY,
+				LATITUDE,
+				LONGITUDE
+		FROM BRANCH_LOCATION_INFO	
+		WHERE BRANCH_CODE=#{branchCode}			
+	</select>
+	
 	
 </mapper>
 
