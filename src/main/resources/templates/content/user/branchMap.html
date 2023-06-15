@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+   layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+	<!--<link rel="stylesheet" href=""> -->
+</th:block>
+
+<th:block layout:fragment="content">
+<style>
+.nav-tabs {
+	display: flex;
+	flex-direction: row;
+}
+.nav-item {
+	flex-grow: 1;
+	text-align: center;
+}
+a{
+	cursor: pointer;
+}
+
+
+</style>
+	<h1>지도</h1>
+	<div class="row">
+		<div class="col">
+			<div class="row header"> <!--total -->			
+				<div class="col">
+					<ul class="nav nav-tabs">
+						<li class="nav-item"><a >서울 본사</a> </li>
+						<li class="nav-item">
+							<a >인천 지원</a>
+						</li>
+						<li class="nav-item">
+							<a>부산 지원</a>
+						</li>
+						<li class="nav-item">
+							<a>여수 지원</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col">
+					<th:block th:each="branchLocation:${branchLocationList}">
+					<!-- <input type="hidden" id=""> -->
+					<table>
+						<tbody>
+							<tr>
+								<th>주소</th>
+								<td>[[${branchLocation.branchAddr}]]</td>
+							</tr>
+							<tr>
+								<th>버스</th>
+								<td>[[${branchLocation.byWayBus}]]</td>
+							</tr>
+							<tr>
+								<th>지하철</th>
+								<td>[[${branchLocation.byWaySubway}]]</td>
+							</tr>
+							<tr>								
+								<td colspan="2">									
+									<div id="map" style="width: 100%; height: 350px;"></div>									
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					</th:block>
+					
+				</div>			
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				
+			</div>
+		</div>
+		<div class="row"></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+</th:block>
+
+<th:block layout:fragment="content_js">
+	<!--연결해야하는 외부 js  -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8a82647c53447a1359fc4e0803155ba5"></script>
+	<script type="text/javascript" src="/js/content/user/branchMap.js"></script> -->
+</th:block>
+
+</html>
