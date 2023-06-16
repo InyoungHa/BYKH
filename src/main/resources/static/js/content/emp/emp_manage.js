@@ -656,11 +656,11 @@ function change_account_fu(){
 	const eAccount = document.querySelector('#changeEAccountForm #eAccount').value;
 	const selectedEAccount = document.querySelector('#changeEAccountForm #selectedEAccount').value;
 	
-	console.log(empno);
-	console.log(`eStatus :${eStatus}`);
-	console.log(`selectedEStatus :${selectedEStatus}`);
-	console.log(`eAccount : ${eAccount}`);
-	console.log(`selectedEAccount : ${selectedEAccount}`);
+	//console.log(empno);
+	//console.log(`eStatus :${eStatus}`);
+	//console.log(`selectedEStatus :${selectedEStatus}`);
+	//console.log(`eAccount : ${eAccount}`);
+	//console.log(`selectedEAccount : ${selectedEAccount}`);
 	
 	$.ajax({
 		url: '/emp/updateAccountAjax', //요청경로

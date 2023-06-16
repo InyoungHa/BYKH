@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.User.vo.UserVO;
+import com.bykh.groupware.notice.vo.BoardVO;
 
 
 @Service("userService")
@@ -37,6 +38,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String selectToDoCode() {
 		return sqlSession.selectOne("userMapper.selectToDoCode");
+	}
+
+	//메인 공지 목록
+	@Override
+	public List<BoardVO> getMainBoard() {
+		return sqlSession.selectList("boardMapper.getMainBoard");
 	}
 
 

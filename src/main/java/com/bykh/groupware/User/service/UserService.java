@@ -3,6 +3,7 @@ package com.bykh.groupware.User.service;
 import java.util.List;
 
 import com.bykh.groupware.User.vo.UserVO;
+import com.bykh.groupware.notice.vo.BoardVO;
 
 public interface UserService {
 	
@@ -17,6 +18,9 @@ public interface UserService {
 	
 	//toDo코드 조회
 	String selectToDoCode();
+	
+	//메인 공지사항 목록
+	List<BoardVO> getMainBoard();
 	
 }
 

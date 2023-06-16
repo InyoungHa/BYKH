@@ -60,7 +60,7 @@ position: absolute; top:1070px;
 
 .notice{
 border-radius: 0.5em;
-display:flex;
+/* display:flex; */
 position: relative; top:-290px;
 right: 120px; 
 border:2px solid #ebe9ed;
@@ -68,7 +68,7 @@ background-color: #ffffff;
 height: 350px;
 width: 800px;
 left:290px;
-
+padding: 2rem;
 }
 .sign{
 border-radius: 0.5em;
@@ -396,7 +396,47 @@ h6{
 </span>
 
 </span> 
-<span class="notice">공지게시판</span>
+
+
+<!-- 공지 게시판 -->
+<div class="notice">
+	<div class="mb-1 d-flex justify-content-between">
+		<div class="fs-3 fw-semibold">전사공지</div>
+		<div class="fs-6 align-self-end">
+			<a class="link-dark" href="/notice/list">게시판으로 이동
+      			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right mt-0" viewBox="0 1 16 16">
+				  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+				  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+				</svg>
+   			</a>
+		</div>
+	</div>
+
+	<table class="table text-center align-middle table-group-divider table-hover">
+		<colgroup>
+			<col width="*">
+			<col width="20%">
+		</colgroup>
+		<tbody>
+			<th:block th:if="${#lists.size(noticeList) == 0}">
+				<tr>
+					<td colspan="3">등록된 게시글이 없습니다.</td>
+				</tr>						
+			</th:block>
+			<th:block th:unless="${#lists.size(noticeList) == 0}">
+				<tr th:each="notice, state : ${noticeList}" th:class="${notice.isImportant eq 'Y'} ? table-light">
+					<td class="text-start px-3">
+						<a th:href="@{/notice/detail(boardNum=${notice.boardNum})}" th:class="${notice.isImportant eq 'Y'} ? link-success : link-dark">
+						[[${notice.boardTitle}]]
+						</a>
+					</td>
+					<td>[[${notice.boardDate}]]</td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+</div>
+
 
 
 <div class="attendance">
