@@ -37,7 +37,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		session.setAttribute("userInfo", empService.selectEmpDetail(loginEmpno));
 		
 		//세션 시간 설정
-		session.setMaxInactiveInterval(1800);
+		session.setMaxInactiveInterval(3600);
 				
 		/*
 		 * User user=(User)authentication.getPrincipal(); user.getUsername();

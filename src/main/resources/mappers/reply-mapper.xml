@@ -59,7 +59,7 @@
 	<update id="updateReply">
 		UPDATE BOARD_REPLY
 		SET REPLY_CONTENT = #{replyContent}
-			, REPLY_DATE = SYSDATE
+			, REPLY_DATE = CURRENT_DATE
 		WHERE REPLY_NUM = #{replyNum}
 	</update>
 	
