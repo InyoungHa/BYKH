@@ -132,6 +132,28 @@
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
+	<!--  메인 페이지용 공지글 목록 조회 -->
+	<select id="getMainBoard" resultMap="board">
+		SELECT * FROM (
+			SELECT BOARD.BOARD_NUM
+			    , BOARD_TITLE
+			    , IS_IMPORTANT
+			    , TO_CHAR(BOARD_DATE, 'MM-DD') BOARD_DATE
+			    , TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI:SS') BOARD_DATE_ORDER
+			    , (SELECT COUNT(FILE_NUM) 
+					FROM BOARD_FILE
+					WHERE BOARD_NUM = BOARD.BOARD_NUM) FILE_CNT
+				, (SELECT COUNT(REPLY_NUM)
+	                FROM BOARD_REPLY
+	                WHERE BOARD_NUM = BOARD.BOARD_NUM) REPLY_CNT
+			FROM BOARD
+			WHERE BOARD_MENU_CODE = 'BOARD_MENU_002'
+			AND BOARD_STATUS = 1
+			ORDER BY IS_IMPORTANT DESC, BOARD_DATE_ORDER DESC
+        )
+		WHERE ROWNUM  &lt;= 5
+	</select>
+	
 	<!-- 중요글 목록 조회 -->
 	<select id="getBoardImportantList" resultMap="board">
 		SELECT BOARD.BOARD_NUM
