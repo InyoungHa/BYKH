@@ -92,7 +92,7 @@
 			, ITEM_PRICE = #{itemPrice}
 			, ITEM_CNT = #{itemCnt}
 			, IS_USE = #{isUse}
-			, UPDATE_DATE = SYSDATE
+			, UPDATE_DATE = CURRENT_DATE
 		WHERE ITEM_NO = #{itemNo}
 	</update>
 	

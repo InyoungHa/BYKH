@@ -307,7 +307,7 @@
 		<if test='sgnComent != null and !sgnComent.equals("")'>
 		    , SGN_COMENT = #{sgnComent}
 		</if>
-		    , SGN_DATE = SYSDATE
+		    , SGN_DATE = CURRENT_DATE
 		WHERE DOC_NO = #{docNo}
 		AND APPROVER_NO = ${approverNo}
 	</update>

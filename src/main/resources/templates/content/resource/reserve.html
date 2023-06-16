@@ -262,6 +262,66 @@ color: black;
 padding-bottom: 10px;
 font-size: 22px;
 }
+.input-container {
+  position: relative;
+}
+
+.input {
+  font-size: 1em;
+  padding: 0.6em 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  max-width: 500px;
+  color: #333;
+}
+
+.input:hover {
+  background-color: #f2f2f2;
+}
+
+.input:focus {
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #6c63ff;
+  transition: width 0.3s ease;
+}
+
+.input:focus + .highlight {
+  width: 100%;
+}
+
+/* Optional: Animation on focus */
+@keyframes input-focus {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  to {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.input:focus {
+  animation: input-focus 0.3s ease;
+}
 
 </style>
 </head>
@@ -364,10 +424,10 @@ font-size: 22px;
 							<label for="taskId" class="col-form-label">총 사용 시간</label>
 							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
 							
-							<label for="taskId" class="col-form-label">참석자</label>
-							<input type="text" id="participant" name="participant" style="width: 100%;"><br>
-							<label for="taskId" class="col-form-label" style="margin-bottom: 5px;">사유</label>
-							<textarea rows="5" cols="30" id="resourceContent" name="resourceContent" style="resize: none;"></textarea>
+							<label for="taskId" class="input-container" style="margin-top: 10px;">참석자</label><br>
+							<input type="text" id="participant" name="participant" style="width: 100%;" class="input"><br>
+							<label for="taskId" class="input-container" style="margin-top: 10px; margin-bottom: 5px;">사유</label>
+							<textarea rows="4" cols="30" id="resourceContent" name="resourceContent" style="width: 100%; resize: none;" class="input"></textarea>
 	                    </div>
 	                </div>
 	                
@@ -452,7 +512,7 @@ font-size: 22px;
 										</tr>
 										<tr>
 											<td>위치:</td>
-											<td>서울본사</td>
+											<td>인천</td>
 										</tr>
 										<tr>
 											<td>수용인원:</td>
@@ -498,7 +558,7 @@ font-size: 22px;
 										</tr>
 										<tr>
 											<td>위치:</td>
-											<td>울산사무소</td>
+											<td>부산</td>
 										</tr>
 										<tr>
 											<td>수용인원:</td>
