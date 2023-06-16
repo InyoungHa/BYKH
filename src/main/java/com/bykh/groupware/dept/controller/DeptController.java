@@ -2,6 +2,7 @@ package com.bykh.groupware.dept.controller;
 
 import java.util.List;
 
+import org.springframework.expression.spel.ast.Literal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -106,9 +107,8 @@ public class DeptController {
 		//데이터 조회
 		//System.out.println(organizationList.toString());
 		
-		model.addAttribute("organizationList", organizationList);
-		
-		
+		//조직도 데이터
+		model.addAttribute("organizationList", organizationList);		
 		
 		return "content/dept/organiazion_manage";
 	}
@@ -121,6 +121,13 @@ public class DeptController {
 		return deptService.getEmpListForOrg(deptno);
 	}
 	
+	@ResponseBody //지사에 등록된 부서 띄우기 
+	@PostMapping("/getDeptListAjax")
+	public List<OrgDeptVO> getDeptListAjax(String loc) {
+		System.out.println(loc);
+		return deptService.getDeptListForOrg(loc);
+		
+	}
 
 	
 }
