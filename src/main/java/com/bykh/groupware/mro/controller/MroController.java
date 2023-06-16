@@ -1,10 +1,15 @@
 package com.bykh.groupware.mro.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.mro.service.MroService;
 import com.bykh.groupware.mro.vo.ItemVO;
@@ -48,5 +53,21 @@ public class MroController {
 		model.addAttribute("cateList", mroService.getCateList());
 		return "content/mro/mro_emp";
 	}
+	
+	@ResponseBody
+	@PostMapping("/searchItemListAjax")
+	public List<ItemVO> searchItemListAjax(ItemVO itemVO){
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+		System.out.println(itemVO);
+		return mroService.getItemListForEmp(itemVO);
+	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("/searchItemListAjax") public Map<String, List<ItemVO>>
+	 * searchItemListAjax(ItemVO itemVO){ Map<String, List<ItemVO>> data = new
+	 * HashMap<>(); data.put("searchItemList",
+	 * mroService.getItemListForEmp(itemVO)); return data; }
+	 */
 	
 }
