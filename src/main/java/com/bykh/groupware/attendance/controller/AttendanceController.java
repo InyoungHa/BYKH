@@ -14,6 +14,7 @@ import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
 import com.bykh.groupware.calendar.service.CalendarService;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 import com.bykh.groupware.util.DateUtil;
 
 import jakarta.annotation.Resource;
@@ -36,6 +37,7 @@ public class AttendanceController {
 		
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
+		int writerNo = Integer.parseInt(user.getUsername());
 		
 		//이름 조회
 		model.addAttribute("selectName",attendanceService.selectName(empno));
@@ -54,6 +56,13 @@ public class AttendanceController {
 		//결근 횟수 조회
 		model.addAttribute("findLateTime",attendanceService.findLateCount(empno));
 		
+		//이번달 사용한 연차개수
+		model.addAttribute("vacation", attendanceService.selectCountVacation(writerNo));
+		
+		//이번달 사용한 반차개수
+		model.addAttribute("halfVacation", attendanceService.selectCountHalfVacation(writerNo));
+		
+		
 		//출퇴근 기록 게시판 조회(최근5일)
 		List<AttendanceVO> attList =  attendanceService.workingBoard(empno);
 		model.addAttribute("attList", attList); 
@@ -68,33 +77,32 @@ public class AttendanceController {
 
 	// 근태관리 휴가관리 페이지
 	@GetMapping("/vacation")
-	public String vacation() {
-
-		return "content/attendance/vacation";
-	}
-
-	// 근태관리 연장근무관리 페이지
-	@GetMapping("/overTime")
-	public String overTime(AttendanceVO attendanceVO, Model model, Authentication authentication) {
+	public String vacation(AttendanceVO attendanceVO, Model model, Authentication authentication, EmpVO empVO) {
 		String nowDate = DateUtil.getNowDateToString(); //오늘날짜설정	
 		if(attendanceVO.getCurDate() == null) {
 			attendanceVO.setCurDate(nowDate);
 		}	
 		
 		User user = (User)authentication.getPrincipal();
+		int writerNo = Integer.parseInt(user.getUsername());		
 		int empno = Integer.parseInt(user.getUsername());
-		
 		//이름 조회
 		model.addAttribute("selectName",attendanceService.selectName(empno));
+		//이번달 사용한 총 휴가개수
+		model.addAttribute("allVacation",  attendanceService.selectAllVacation(writerNo));
 		
-		//총 연장근무시간 조회
-		model.addAttribute("findOverTime",attendanceService.findOverTime(empno));
+		//휴가사용내역 조회(최신5회)
+		List<DocAnnualLeaveVO> vacList =  attendanceService.selectListVacation(writerNo);
+		model.addAttribute("vacList", vacList); 
 		
-		//연장근무 가능시간 조회
-		model.addAttribute("findCanOverTime", attendanceService.findCanOverTime(empno));
-
-		return "content/attendance/overTime";
+		//휴가사용내역 조회(전체)
+		List<DocAnnualLeaveVO> vacList2 =  attendanceService.selectListVacation(writerNo);
+		model.addAttribute("vacList2", vacList2); 
+	
+		return "content/attendance/vacation";
 	}
+
+
 		
 	// 캘린더 페이지 이동
 	@GetMapping("/calender")

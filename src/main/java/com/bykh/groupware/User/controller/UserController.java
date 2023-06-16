@@ -1,6 +1,7 @@
 package com.bykh.groupware.User.controller;
 
 
+
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
@@ -18,7 +19,6 @@ import com.bykh.groupware.User.service.UserService;
 import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
-import com.bykh.groupware.calendar.vo.CalendarVO;
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.dept.vo.BranchLocationInfoVO;
 import com.bykh.groupware.dept.vo.OrgDeptVO;
@@ -26,7 +26,6 @@ import com.bykh.groupware.dept.vo.OrganizationVO;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
-import com.bykh.groupware.resource.vo.ResourceVO;
 import com.bykh.groupware.util.DateUtil;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -68,6 +67,9 @@ public class UserController {
 		//ToDoList 조회
 		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
+		//공지 목록 조회
+		model.addAttribute("noticeList", userService.getMainBoard());
+		
 		return "content/user/main";
 
 	}
@@ -75,13 +77,12 @@ public class UserController {
 	//toDOList 저장
 	@ResponseBody
 	@PostMapping("/insertToDoList")
-	public void insertToDoList(@RequestParam String toDoContent,  Authentication authentication, UserVO userVO) {
+	public void insertToDoList(String toDoCode,  Authentication authentication, UserVO userVO) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());	
-		userVO.setEmpno(empno);
-		userVO.setToDoContent(toDoContent);
-		
-	
+		userVO.setEmpno(empno);		
+
+
 		 userService.insertToDoList(userVO);
 		 
 		 
@@ -91,11 +92,11 @@ public class UserController {
 	//toDoList 삭제
 	@ResponseBody
 	@PostMapping("/deleteToDoList")
-	public void deleteToDoList(String toDoContent,  Authentication authentication, UserVO userVO) {
+	public void deleteToDoList(@RequestParam String toDoCode,  Authentication authentication, UserVO userVO) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());	
 		userVO.setEmpno(empno);
-		userVO.setToDoContent(toDoContent);
+		userVO.setToDoCode(toDoCode);
 		
 		
 		 userService.deleteToDoList(userVO);
@@ -259,6 +260,13 @@ public class UserController {
 		model.addAttribute("organizationList", organizationList);
 		
 		return "content/user/organizationMap";
+	}
+	
+	//권한 관리 페이지 이동
+	@GetMapping("/roleManage")
+	public String roleManage() {
+		
+		return "content/user/role_manage";
 	}
 	
 

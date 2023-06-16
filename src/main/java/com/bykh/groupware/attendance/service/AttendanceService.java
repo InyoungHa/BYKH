@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 
 public interface AttendanceService {
 	
@@ -50,6 +51,20 @@ public interface AttendanceService {
 	//출퇴근 기록 게시판 조회 (전체)
 	List<AttendanceVO> workingBoardAll(int empno);
 	
+	// 이번달 사용한 연차개수 
+	DocAnnualLeaveVO selectCountVacation(int empno);
+	
+	// 이번달 사용한 반차개수 
+	DocAnnualLeaveVO selectCountHalfVacation(int empno);
+	
+	// 이번달 사용한 총휴가개수 
+	DocAnnualLeaveVO selectAllVacation(int empno);
+	
+	//휴가사용내역 테이블 조회
+	List<DocAnnualLeaveVO> selectListVacation(int empno);
+	
+	//휴가사용내역 테이블 조회
+	List<DocAnnualLeaveVO> selectListVacation2(int empno);
 	
 }
 

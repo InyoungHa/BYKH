@@ -3,6 +3,7 @@ package com.bykh.groupware.User.service;
 import java.util.List;
 
 import com.bykh.groupware.User.vo.UserVO;
+import com.bykh.groupware.notice.vo.BoardVO;
 
 public interface UserService {
 	
@@ -16,7 +17,10 @@ public interface UserService {
 	void deleteToDoList(UserVO userVO);
 	
 	//toDo코드 조회
-	List<UserVO> selectToDoCode();
+	String selectToDoCode();
+	
+	//메인 공지사항 목록
+	List<BoardVO> getMainBoard();
 	
 }
 
