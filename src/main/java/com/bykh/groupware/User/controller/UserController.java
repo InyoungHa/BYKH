@@ -67,6 +67,9 @@ public class UserController {
 		//ToDoList 조회
 		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
+		//공지 목록 조회
+		model.addAttribute("noticeList", userService.getMainBoard());
+		
 		return "content/user/main";
 
 	}
@@ -257,6 +260,13 @@ public class UserController {
 		model.addAttribute("organizationList", organizationList);
 		
 		return "content/user/organizationMap";
+	}
+	
+	//권한 관리 페이지 이동
+	@GetMapping("/roleManage")
+	public String roleManage() {
+		
+		return "content/user/role_manage";
 	}
 	
 

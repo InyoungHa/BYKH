@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+   		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   		xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+   		layout:decorate="~{fragment/admin_layout}">
+
+<!-- 외부 css 파일 --> 
+<th:block layout:fragment="content_css">
+	<!-- <link rel="stylesheet" href=""> -->
+
+</th:block>
+
+<th:block layout:fragment="content">
+	<!-- 코드 작성 -->
+	<div class="row mb-5">
+		<div class="col">
+			<div class="row mb-2">
+				<div class="col fs-1 fw-bolder">
+					관리자 설정
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-3">
+					<div class="p-2">
+						<ul class="list-group">
+						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  	<div class="d-flex align-items-center">
+						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
+									<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-briefcase-fill" viewBox="0 0 16 16">
+									  <path d="M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v1.384l7.614 2.03a1.5 1.5 0 0 0 .772 0L16 5.884V4.5A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5z"/>
+									  <path d="M0 12.5A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5V6.85L8.129 8.947a.5.5 0 0 1-.258 0L0 6.85v5.65z"/>
+									</svg>
+								</span>
+								<span class="align-self-center ms-2 fs-4">자료실</span>
+						  	</div>
+						  </li>
+						  <li class="list-group-item my-0">
+						  
+						  </li>
+						  <li class="list-group-item my-0">A third item</li>
+						  <li class="list-group-item my-0">A fourth item</li>
+						  <li class="list-group-item my-0">And a fifth one</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-4">
+					<div class="p-2" style="background-color: aqua;">test</div>
+				</div>
+				<div class="col-5">
+					<div class="p-2" style="background-color: aqua;">test</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+<!-- 외부 js 파일 -->
+<th:block layout:fragment="content_js">
+	<script type="text/javascript" src=""></script>
+</th:block>
+
+</html>
