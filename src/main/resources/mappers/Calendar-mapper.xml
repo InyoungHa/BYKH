@@ -63,6 +63,7 @@ INSERT INTO SCHEDUL_FOR_RESOURCE (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPN
 VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno}, #{id})
 </insert>
 
+
 <!-- 자원관리 캘린더 일정(월) 업데이트 -->
 <update id="resourceCalendarUpdate">
 	MERGE INTO SCHEDUL_FOR_RESOURCE
@@ -75,8 +76,8 @@ WHEN MATCHED THEN
     END_DATE = #{end},
     ALLDAY = #{allDay}
 WHEN NOT MATCHED THEN
-  INSERT (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO)
-  VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno})
+  INSERT (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO, SCHEDULE_CODE)
+  VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno}, #{id})
 </update>
 
 <!-- 자원관리 캘린더 일정(주/일) 업데이트 -->
@@ -91,8 +92,8 @@ WHEN MATCHED THEN
     END_DATE = #{end},
     ALLDAY = #{allDay}
 WHEN NOT MATCHED THEN
-  INSERT (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO)
-  VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno})
+  INSERT (EVENT_NAME, START_DATE, END_DATE, ALLDAY, EMPNO, SCHEDULE_CODE)
+  VALUES (#{title}, #{start}, #{end}, #{allDay}, #{empno}, #{id})
 </update>
 
 <!--자원관리 캘린더 일정조회 -->

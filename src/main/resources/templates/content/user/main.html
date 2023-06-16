@@ -47,6 +47,7 @@ width: 350px;
 display:flex;
 position: relative; top:-670px;
 right: 120px; 
+
 }
 .board{
 border-radius: 0.5em;
@@ -102,9 +103,9 @@ flex-wrap: wrap;
 .time{
 display:inline-block;
 margin-top:15px;
-margin-left: 30px;
-font-size: 25px;
-color: #4c4c4c;
+margin-left: 24px;
+font-size: 27px;
+color: #025464;
 font-weight: bold;
 
 }
@@ -269,6 +270,120 @@ ol li {
 li:hover {
   cursor: pointer;
 }
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  height: 100%;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  background: #87a5b2;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+
+
+.list {
+	  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  gap: 10px 0;
+}
+
+.list__item {
+  width: 100%;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  color: #001d29;
+  font-weight: 500;
+  font-size: 18px;
+  box-shadow: 0 4px 6px -1px #001d2910, 0 2px 4px -2px #001d2910;
+  display: flex;
+  position: relative;
+  will-change: transform;
+}
+
+
+.list__item.is-idle .drag-handle {
+  cursor: grab;
+}
+
+.list__item.is-idle {
+  transition: 0.25s ease transform;
+}
+
+.list__item.is-draggable,
+.list__item.is-draggable .drag-handle {
+  cursor: grabbing;
+}
+
+.list__item.is-draggable {
+  z-index: 10;
+}
+
+
+.card{
+  background-color: #EDEDED;
+  font-family: 'Arimo', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #F9F9F9;
+  height: 500px;
+  width: 320px;
+  margin-top: 100px;
+  margin-left: 200px;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
+  padding: 20px;
+  box-sizing: border-box;
+  color: #757575;
+}
+h6{
+  font-weight: 500;
+  font-size: 2em;
+  margin-top: 10px;
+  color: #000;
+  
+}
+
+.temp{
+  font-size: 4.0em;
+  color: #757575;
+  font-weight: 200;
+  margin-top: 20px;
+ 
+}
+.wind{
+  margin-top: 15px;
+}
+.hum{
+  margin-top: 15px;
+}
+.date{
+  margin-left: 16px;
+  margin-right: 5px;
+}
+
+.temp-icon img{
+  width: 100%;
+}
+
+.small-icon img{
+  width: 20px;
+ display: inline;
+}
 
 </style>
 <!--내정보 -->
@@ -285,9 +400,9 @@ li:hover {
 
 
 <div class="attendance">
-<div class="time">[[${attendanceVO.curDate}]]
-<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 135px; height: 50px; background-color: #457096;  font-weight: bold; border: 0px; font-size: 20px; margin-right: 5px; margin-top: 20px;">출근</button>
-<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 135px; height: 50px; background-color: #e03b42;  font-weight: bold; border: 0px; font-size: 20px; margin-top: 20px;">퇴근</button>
+<div class="time" >[[${attendanceVO.curDate}]]
+<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 140px; height: 50px; background-color: #457096; font-weight: bold; border: 0px;  font-size: 20px; margin-right: 5px; margin-top: 20px;">출근</button>
+<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 140px; height: 50px; background-color: #e03b42;  font-weight: bold; border: 0px; font-size: 20px; margin-top: 20px;">퇴근</button>
 </div>
 
 </div> 
@@ -296,10 +411,12 @@ li:hover {
 <div class="quickMenu" style="color: black; font-weight: bold; font-style: italic; font-size: 25px; padding-left: 20px; padding-top: 10px; flex-wrap: wrap; width: 350px;">
 <span>Quick Menu</span>
 
+
+
 <table style="margin-right: 50px; margin-bottom: 20px;">
 <tr>
 <td style="width: 100px; "><a th:href="@{/sign/signMain}"><button type="button" class="btn"  style="margin-left: 5px; background-color: #454545; border: 1px solid #454545; width: 100%;">결재현황</button></a></td>
-<td style="width: 100px;"><a><button type="button"  class="btn cl" value="조직도"  style="margin-left: 10px; background-color: #454545; border: 1px solid #454545; width: 100%;">조직도</button></a></td>
+<td style="width: 100px;"><a th:href="@{/user/organizationMap}"><button type="button"  class="btn cl" value="조직도"  style="margin-left: 10px; background-color: #454545; border: 1px solid #454545; width: 100%;">조직도</button></a></td>
 <td style="width: 100px;"><a th:href="@{/attendance/calender}"><button type="button" class="btn cl"  style="margin-left: 15px; background-color: #454545; border: 1px solid #454545; width: 115%;">근태캘린더</button></a></td>
 </tr>
 <tr>
@@ -308,18 +425,24 @@ li:hover {
 <td style="width: 100px;"><a th:href="@{/archive/list}" ><button type="button" class="btn"  style="margin-left: 15px; background-color: #454545; border: 1px solid #454545; width: 100%;">자료실</button></a></td>
 </tr>
 </table>
-
-
-
-
 </div>
+
+
+
+
+
+
+
+
+
+
 <div class="toDoList">
 <div class="container1" >
     <h2 style="font-weight: bold; color: #ffad78; text-align: center; font-size: 38px; width: 100%">ToDoList</h2>
 
 	 <ol style="margin-left: 5px;">
-	 <li th:each="toDoCotent : ${toDoCotent}" id="toDoContent"  th:data-to-do-code="${toDoCotent.toDoCode}" style="color: #9b9797;">
-	 	[[${toDoCotent.toDoContent}]]
+	 <li th:each="toDoCotent : ${toDoCotent}" id="toDoContent"  th:data-to-do-code="${toDoCotent.toDoCode}" style="color: #9b9797; width: 100%;" class="list__item is-idle js-item">
+	 		[[${toDoCotent.toDoContent}]]
 	 </li>
 	 </ol>
     <form name="toDoList">
