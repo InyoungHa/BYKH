@@ -249,14 +249,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 			//ajax start
 			$.ajax({
-				url: '/calendar/resourceCalendarSave', //요청경로
+				url: '/calendar/resourceCalendarUpdate2', //요청경로
 				type: 'post',
 				async: false,
 				contentType: 'application/json; charset=UTF-8',
 				data: jsondataUpdated,
 				dataType: 'text',
 				success: function(result) {
-					//location.reload();
+					
 
 				},
 				error: function() {
@@ -364,11 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		//드래그앤드랍 삭제
 		eventDragStop: function(info) {
 		const id = info.event.id;
-		console.log(id);
-	
-			
-			
-			
+		console.log(id);			
 			var jsEvent = info.jsEvent;
 
 			if (isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
@@ -385,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						stick: true
 					}));
 				});
-							//ajax start
+		//ajax start
 			$.ajax({
 				url: '/calendar/deleteResourceSchedule', //요청경로
 				type: 'post',
@@ -514,16 +510,6 @@ for (let hour = 0; hour < 24; hour++) {
 		document.getElementById("calendar_end_time").appendChild(option);
 	}
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

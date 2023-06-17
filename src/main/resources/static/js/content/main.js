@@ -162,7 +162,7 @@ $(function () {
 $(document).ready(function () {
   $("#button").click(function () {
     var toDoContent = $("input[name=ListItem]").val();
-    $("li").append("<li>" + toDoContent + "</li>");
+   $("li").after("<li>" + toDoContent + "</li>");
     //toDolist 저장
 	  //ajax start
 	  $.ajax({
@@ -176,7 +176,8 @@ $(document).ready(function () {
 			location.reload();
 		  },
 		  error: function() {
-			  alert('실패');
+			  alert('글자 수 16자 제한');
+			  location.reload();
 		  }
 	  });
 //ajax end

@@ -8,26 +8,42 @@
 <th:block layout:fragment="content_css">
    	<!-- <link rel="stylesheet" href="/"> -->
    	<style type="text/css">
-   		.my-scroll{
+   		.buy-list-area{
+   			min-height: 38rem;
+   		}
+   	
+   		.item-table-scroll {
    			max-height: 40rem;
    			overflow-y: auto;
    			padding-right: 0px;
    		}
-   		.my-scroll::-webkit-scrollbar {
+   		.buy-table-scroll{
+   			max-height: 35rem;
+   			overflow-y: auto;
+   			padding-right: 0px;
+   		}
+   		.item-table-scroll::-webkit-scrollbar, .buy-table-scroll::-webkit-scrollbar {
 			width: 8px; /* 스크롤바의 너비 */
 		}
-		.my-scroll::-webkit-scrollbar-thumb {
+		.item-table-scroll::-webkit-scrollbar-thumb, .buy-table-scroll::-webkit-scrollbar-thumb {
 			height: 30%; /* 스크롤바의 길이 */
 			background: #b7b7b7; /* 스크롤바의 색상 */
 			border-radius: 10px;
 		}
 		
-		.my-scroll::-webkit-scrollbar-track {
+		.item-table-scroll::-webkit-scrollbar-track, .buy-table-scroll::-webkit-scrollbar-track {
 			background: #84848447; /*스크롤바 뒷 배경 색상*/
 		}
 		
 		.item-table, .buy-table, .item-table input[type='number'], .item-table input[type='button']{
 			font-size: 0.85rem;
+		}
+		.minus-svg {
+		  width: 1.3rem;
+		  height: 1.3rem;
+		}
+		.minus-svg path{
+		  fill:red;
 		}
 		
    	</style>
@@ -42,7 +58,7 @@
 						<h2>상품 목록</h2>   
 					</div>
 					<div class="offset-1 col-4">
-						<select class="form-select select-cate" onchange="getItemInCate(this);" name="searchItemVO.searchCateNo">
+						<select class="form-select search-cate-no" name="searchItemVO.searchCateNo">
 							<option value="0" th:selected="${itemVO.searchItemVO == null or itemVO.searchItemVO.searchCateNo == 0}">카테고리 선택</option>
 							<th:block th:each="cate : ${cateList}">
 								<option th:value="${cate.cateNo}" 
@@ -53,24 +69,33 @@
 					</div>
 					<div class="col-4">
 						<div class="input-group">
-							<input type="text" class="form-control" placeholder="상품명"
+							<input type="text" class="form-control search-item-name" placeholder="상품명" 
 								aria-describedby="search-btn" name="searchItemVO.searchItemName">
-							<button class="btn" type="submit" id="search-btn">검색</button>
+							<button class="btn" type="button" id="search-btn" onclick="searchItemList();">검색</button>
 						</div>
 					</div>
 				</div>
 			</form>
 			<div class="row">
-				<div class="col my-scroll" >
-					<table class="table table-hover table-bordered text-center my-scroll item-table">
+				<div class="col item-table-scroll" >
+					<table class="table table-hover table-bordered text-center item-table-scroll item-table">
+						<colgroup>
+							<col width="5%">
+							<col width="15%">
+							<col width="*">
+							<col width="15%">
+							<col width="15%">
+							<col width="15%">
+							<col width="8%">
+						</colgroup>
 						<thead>
 							<tr>
 								<td>No.</td>
 								<td>분류</td>
 								<td>상품명</td>
-								<td>가격</td>
+								<td>단가</td>
 								<td>수량</td>
-								<td>총 가격</td>
+								<td>가격</td>
 								<td></td>
 							</tr>
 						</thead>
@@ -80,10 +105,10 @@
 									<td>[[${status.size - status.index}]]</td>
 									<td>[[${item.categoryVO.cateName}]]</td>
 									<td th:data-item-no="${item.itemNo}">[[${item.itemName}]]</td>
-									<td>[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
+									<td th:data-item-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 									<td th:data-item-cnt="${item.itemCnt}">
 										<input type="number" class="form-select" value="1" min="1" th:max="${item.itemCnt}" 
-										onchange="setTotalPrice(this);" onkeyup="setTotalPrice(this);">
+										onchange="updateItemCnt(this);" onkeyup="updateItemCnt(this);">
 									</td>
 									<td th:data-total-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 									<td>
@@ -93,7 +118,7 @@
 							</th:block>
 							<th:block th:if="${#arrays.length(itemList) == 0}">
 								<tr>
-									<td>구매할 수 있는 상품이 없습니다.</td>
+									<td colspan="7">구매할 수 있는 상품이 없습니다.</td>
 								</tr>
 							</th:block>
 						</tbody>
@@ -101,14 +126,14 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-4">
+		<div class="col-4 ">
 			<div class="row">
 				<div class="col-6">
 					<h2>구매 목록</h2>
 				</div>
 				<div class="offset-4 col-2">
 					<div class="d-grid">
-					<button class="btn">
+					<button class="btn" onclick="goPurchaseOrderForm();">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-plus" viewBox="0 0 16 16">
 						  <path fill-rule="evenodd" d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"/>
 						  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
@@ -118,8 +143,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col">
+			<div class="row buy-list-area">
+				<div class="col buy-table-scroll">
 					<table class="table table-hover table-bordered text-center buy-table">
 						<colgroup>
 							<col width="*">
@@ -130,12 +155,20 @@
 							<tr>
 								<td>상품명</td>
 								<td>수량</td>
-								<td>총 가격</td>
+								<td>가격</td>
 							</tr>
 						</thead>
 						<tbody>
 						</tbody>
 					</table>
+				</div>
+			</div>
+			<div class="row text-center">
+				<div class="col-6">
+					<h3>총 가격</h3>
+				</div>
+				<div class="col-6">
+					<h4 class="final-price">₩0 원</h4>
 				</div>
 			</div>
 		</div>

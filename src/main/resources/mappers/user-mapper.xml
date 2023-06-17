@@ -27,6 +27,7 @@ INSERT INTO TO_DO_LIST (
 <!-- ToDoList 내용 조회 -->
 <select id="selectToDoList" resultMap="user">
 SELECT * FROM TO_DO_LIST WHERE EMPNO = #{empno}
+ORDER BY TO_DO_CODE
 </select>
 
 <!-- TODO코드 조회  -->
