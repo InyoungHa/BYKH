@@ -1,12 +1,14 @@
 package com.bykh.groupware.dept.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.expression.spel.ast.Literal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -124,12 +126,53 @@ public class DeptController {
 	@ResponseBody //지사에 등록된 부서 띄우기 
 	@PostMapping("/getDeptListAjax")
 	public List<OrgDeptVO> getDeptListAjax(String loc) {
-		System.out.println(loc);
+		//System.out.println(loc);
 		return deptService.getDeptListForOrg(loc);
 		
 	}
 
 	
+	@ResponseBody //부서 수정_ 중복 확인 ajax
+	@PostMapping("/isDuplicateModifyDenameAjax")
+	public boolean isDuplicateModifyDenameAjax(String loc, String dename, String modifyDename) {
+		//부서 중복 확인
+		DeptVO deptVO = new DeptVO();
+		deptVO.setLoc(loc);
+		deptVO.setDename(dename);
+		deptVO.setModifyDename(modifyDename);
+		
+	
+		
+		System.out.println(deptService.isDuplicateModifyDename(deptVO));
+		
+		return  deptService.isDuplicateModifyDename(deptVO);			
+	}
+	
+	
+	@ResponseBody //부서 수정
+	@PostMapping("/updateDenameAjax")
+	public void updateDenameAjax(@RequestBody Map<String, Object> modifyData) {
+		
+	    String loc =(String) modifyData.get("loc");
+	    String dename =(String) modifyData.get("dename");
+	    int deptno = (Integer)modifyData.get("deptno");
+	    String modifyDename = (String)modifyData.get("modifyDename");
+	    
+	    System.out.println("!!!!!!!!!!!!11"+loc);
+	    System.out.println("!!!!!!!!!!!!11"+dename);
+	    System.out.println("!!!!!!!!!!!!11"+dename);
+	    System.out.println("!!!!!!!!!!!!11"+modifyDename);
+	    
+	    DeptVO deptVO = new DeptVO();
+	    deptVO.setLoc(loc);
+	    deptVO.setDename(dename);
+	    deptVO.setDeptno(deptno);
+	    deptVO.setModifyDename(modifyDename);
+	    
+	    //부서명 수정 쿼리
+	    deptService.updateDename(deptVO);
+	    
+	}
 }
 
 

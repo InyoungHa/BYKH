@@ -10,6 +10,8 @@
 		<result column="LOC"					property="loc"/>
 		<result column="IS_USE"					property="isUse"/>
 
+		<!--부서 수정_중복 확인  -->
+		<result column="MODIFY_DENAME"					property="modifyDename"/>
 	</resultMap>
 	
 	<!--지역데이터 _ 조직도 -->
@@ -69,7 +71,7 @@
 		WHERE IS_USE = 'Y'
 		ORDER BY DENAME DESC
 	</select>
-<!-- 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY -->
+
 	
 	<!--부서 등록 중복검사  -->
 	<select id="isDulicateDept" resultType="int">
@@ -136,6 +138,28 @@
 		WHERE BRANCH_CODE=#{branchCode}			
 	</select>
 	
+	
+	<!--부서 수정_ 중복검사  -->
+	<select id="isDuplicateModifyDename" resultType="int">
+		SELECT COUNT(DENAME) 
+				FROM (
+				SELECT DEPTNO
+					, DENAME	
+				FROM DEPT WHERE LOC = #{loc}
+				AND DENAME = #{modifyDename}
+					) 
+	</select>
+	
+	<!--부서 수정 쿼리  -->
+	<update id="updateDename">
+		UPDATE DEPT
+		SET DENAME =#{modifyDename}
+		WHERE LOC =#{loc}
+		AND DEPTNO =#{deptno}
+	
+	
+	</update>
+
 
 </mapper>
 

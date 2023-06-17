@@ -1,25 +1,5 @@
 
 
-
-
-init();
-
-
-function init(){
-	
-	
-	const changeEAccountModal = document.getElementById('changeEAccountModal');
-
-	changeEAccountModal.addEventListener('hidden.bs.modal', event=>{
-	
-	document.querySelector('#changeEAccountForm').reset();
-	//const modal_body_tag=document.querySelector('#changeEAccountModal .modal-content');
-	//modal_body_tag.innerHTML='';
-	});
-	
-} 
-
-
 //오류 메세지 div 전체 제거
 function delete_error_div(){
 	const error_divs= document.querySelectorAll('div[class="my-invalid"]');

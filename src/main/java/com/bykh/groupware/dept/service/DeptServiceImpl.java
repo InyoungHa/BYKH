@@ -89,6 +89,26 @@ public class DeptServiceImpl implements DeptService{
 
 
 
+	@Override //부서 수정_중복 확인
+	public boolean isDuplicateModifyDename(DeptVO deptVO) {		
+		
+		int result = sqlSession.selectOne("deptMapper.isDuplicateModifyDename",deptVO);
+		
+		return result != 0 ? true : false;
+
+	}
+
+
+
+	@Override //부서 수정
+	public void updateDename(DeptVO deptVO) {
+		sqlSession.update("deptMapper.updateDename",deptVO);
+		
+	}
+
+	
+
+
 	
 	
 	
