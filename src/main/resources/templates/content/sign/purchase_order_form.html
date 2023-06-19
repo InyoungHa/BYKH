@@ -217,7 +217,7 @@
 							<th:block th:if="${docPurchaseOrder == null and buyDetailList != null and #lists.size(buyDetailList) != 0}">
 								<th:block th:each="buyDetail : ${buyDetailList}">
 									<tr class="itemTr">
-										<td>[[${buyDetail.itemVO}]]
+										 <td>[[${buyDetail.itemVO.itemName}]]
 											<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
 											th:value="${buyDetail.itemVO.itemNo}" class="item-no">
 										</td>

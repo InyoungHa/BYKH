@@ -101,7 +101,7 @@ public class SignController {
 		User user = (User)authentication.getPrincipal();
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
-		model.addAttribute("buyDetailList", signService.getItemList());
+		model.addAttribute("itemList", signService.getItemList());
 		
 		return "content/sign/purchase_order_form";
 	}
