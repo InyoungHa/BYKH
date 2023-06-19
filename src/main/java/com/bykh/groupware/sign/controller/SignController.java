@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.mro.vo.ItemVO;
 import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.sign.vo.BuyDetailVO;
 import com.bykh.groupware.sign.vo.BuyVO;
@@ -63,7 +65,6 @@ public class SignController {
 	@GetMapping("/purchaseOrderForm")
 	public String purchaseOrderForm(Model model, SignDocVO signDocVO, Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
-		//시큐리티 설정 완료 후 바꾸기
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		model.addAttribute("itemList", signService.getItemList());
@@ -71,6 +72,37 @@ public class SignController {
 			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
 			model.addAttribute("docPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 		}
+		return "content/sign/purchase_order_form";
+	}
+	
+	// mro  > 구매신청서 작성
+	@GetMapping("/purchaseOrderFormMro")
+	public String purchaseOrderFormMro(@RequestParam("buyDetailArr") String buyDetailArrJson, Model model, Authentication authentication) {
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			List<BuyDetailVO> buyDetailList = objectMapper.readValue(buyDetailArrJson, objectMapper.getTypeFactory().constructCollectionType(List.class, BuyDetailVO.class));
+			
+			// itemVO를 ItemVO 객체로 변환
+			for (BuyDetailVO buyDetail : buyDetailList) {
+				ItemVO item = objectMapper.convertValue(buyDetail.getItemVO(), ItemVO.class);
+				buyDetail.setItemVO(item);
+			}
+			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
+			System.out.println(buyDetailList);
+			model.addAttribute("buyDetailList", buyDetailList);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		//구매신청서 작성 페이지 이동시와 같은 코드
+		User user = (User)authentication.getPrincipal();
+		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
+		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
+		model.addAttribute("buyDetailList", signService.getItemList());
+		
 		return "content/sign/purchase_order_form";
 	}
 	
@@ -181,6 +213,7 @@ public class SignController {
 		//2. 쿼리 실행
 		signService.insertDocPurchaseOrder(signDocVO);
 	}
+	
 	
 	//결재문서 상세조회
 	@ResponseBody

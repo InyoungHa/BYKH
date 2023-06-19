@@ -198,6 +198,7 @@
 							</tr>
 						</thead>
 						<tbody>
+							<!-- 결재현황 페이지에서 작성 페이지 이동 시 -->
 							<th:block th:if="${docPurchaseOrder != null and docPurchaseOrder.buyVO != null}">
 								<th:block th:each="buyDetail : ${docPurchaseOrder.buyVO.buyDetailVOList}">
 									<tr class="itemTr">
@@ -211,6 +212,22 @@
 									</tr>
 								</th:block>
 							</th:block>
+							
+							<!-- mro 페이지에서 이동 시 -->
+							<th:block th:if="${docPurchaseOrder == null and buyDetailList != null and #lists.size(buyDetailList) != 0}">
+								<th:block th:each="buyDetail : ${buyDetailList}">
+									<tr class="itemTr">
+										<td>[[${buyDetail.itemVO}]]
+											<input type="hidden" name="docPurchaseOrderVO.buyVO.itemNo.buyDetailVOList.itemNo" 
+											th:value="${buyDetail.itemVO.itemNo}" class="item-no">
+										</td>
+										<td>[[${buyDetail.buyCnt}]]</td>
+										<td>[[${buyDetail.itemVO.itemPrice}]]</td>
+										<td>[[${buyDetail.buyDetailPrice}]]</td>
+									</tr>
+								</th:block>
+							</th:block>
+							
 							<tr>
 								<td>합 계</td>
 								<td colspan="2"></td>
