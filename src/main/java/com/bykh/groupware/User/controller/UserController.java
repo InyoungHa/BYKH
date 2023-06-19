@@ -70,6 +70,9 @@ public class UserController {
 		//공지 목록 조회
 		model.addAttribute("noticeList", userService.getMainBoard());
 		
+		//결재문서 조회
+		model.addAttribute("approver", null);
+		
 		return "content/user/main";
 
 	}
