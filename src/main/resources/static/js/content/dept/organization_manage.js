@@ -393,7 +393,7 @@ function denameModifyValidate(){
 	
 	//유효성 검사 실패시 오류 메세지 출력(false 일때)
 	if(!result_modifyDename){
-		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.5rem;">${str_modifyDename}</div>`;
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 1rem;">${str_modifyDename}</div>`;
 		modifyDename_div.insertAdjacentHTML('beforeend', errorHTML);
 		document.querySelector('#modifyDenameBtn').disabled = true;
 	}
@@ -426,28 +426,22 @@ function modifyDename(){
 	
 	const modifyDename = document.querySelector('#modifyDename').value;
 	
-	console.log(`loc=${loc}`)
-	console.log(`dename=${dename}`)
-	console.log(`deptno=${deptno}`)
-	
-	
-	modifyData ={
-		"loc": loc,
-	    "dename": dename,
-	    "deptno": deptno,
-	    "modifyDename": modifyDename		
-	}
-	
+	//console.log(`loc=${loc}`)
+	//console.log(`dename=${dename}`)
+	//console.log(`deptno=${deptno}`)
+	//console.log(`modifyDename=${modifyDename}`)
 	
 
-	
 	$.ajax({
 		url: '/dept/updateDenameAjax', //요청경로
 		type: 'post',
 		//async: true, // 동기 방식으로 설정
-		contentType :'application/json; charset=UTF-8', //Json 타입
-		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
-		data: JSON.stringify({ modifyData: modifyData }), //필요한 데이터
+		//contentType :'application/json; charset=UTF-8', //Json 타입
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: {'loc' : loc
+			, 'dename' : dename
+			, 'deptno' :deptno
+			, 'modifyDename' :modifyDename}, //필요한 데이터
 		success: function(result) {
 			
 			alert('부서 수정 완료입니다.')

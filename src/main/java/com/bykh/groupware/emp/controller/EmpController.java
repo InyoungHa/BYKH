@@ -103,32 +103,22 @@ public class EmpController {
 	@ResponseBody
 	@PostMapping("/regEmpDetailAjax")
 	public void regEmpImgAjax(EmpVO empVO, MultipartFile empImg) {
-		//System.out.println(empVO);
+		System.out.println(empVO);
 		
 		//사진 업로드
 		if(empImg != null) {
-			EImgVO existingImg = empService.selectE_Img(empVO.getEmpno());
 			
-			if(existingImg == null) {
-				
-				//사진 업로드하고 객체 반환함
 				EImgVO eImgVO = UploadUtil.uploadFile(empImg);
 				
 				//반환 받은 객체에 empno 데이터 추가
 				eImgVO.setEmpno(empVO.getEmpno());
 				
 				//쿼리에 필요한 데이터 다 있음(originFileName, attachedFileName, empno)
-				//System.out.println(eImgVO);
+				System.out.println(eImgVO);
 				
 				//그 객체로 insert 쿼리 실행
-				empService.insertEmpImg(eImgVO);
-			}
-			else {
-				EImgVO eImgVO = existingImg;
-				eImgVO.setOriginFileName(eImgVO.getOriginFileName());
-				eImgVO.setAttachedFileName(eImgVO.getAttachedFileName());
-				empService.updateEmpImg(eImgVO);
-			}
+				empService.insertOrUpdateE_Img(eImgVO);
+			
 			
 		}
 		
