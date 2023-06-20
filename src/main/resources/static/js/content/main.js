@@ -221,4 +221,92 @@ $(document).ready(function () {
 
 });
 
+
+
+//메인 날씨
+$(document).ready(function() {
+      let weatherIcon = {
+        '01' : 'fas fa-sun',
+        '02' : 'fas fa-cloud-sun',
+        '03' : 'fas fa-cloud',
+        '04' : 'fas fa-cloud-meatball',
+        '09' : 'fas fa-cloud-sun-rain',
+        '10' : 'fas fa-cloud-showers-heavy',
+        '11' : 'fas fa-poo-storm',
+        '13' : 'far fa-snowflake',
+        '50' : 'fas fa-smog'
+      };
+ 	//서울날씨
+    $.ajax({
+	url: 'http://api.openweathermap.org/data/2.5/weather?q=seoul&APPID=39780da450a1a87f7b037001513b9e8b&units=metric&lang=kr',
+ 	lang : "kr",
+    dataType:'json',
+    type:'GET',
+    success:function(data){
+	console.log(data);
+      var $Icon = (data.weather[0].icon).substr(0,2);
+      var $Temp = Math.floor(data.main.temp) + 'º';
+      var $city = '서울';									
+ 
+      $('.CurrIcon').append('<i class="' + weatherIcon[$Icon] +'"></i>');
+      $('.CurrTemp').prepend($Temp);
+      $('.City').append($city);
+      }
+    })
+    //인천날씨
+    $.ajax({
+	url: 'http://api.openweathermap.org/data/2.5/weather?q=incheon&APPID=39780da450a1a87f7b037001513b9e8b&units=metric&lang=kr',
+ 	lang : "kr",
+    dataType:'json',
+    type:'GET',
+    success:function(data){
+	console.log(data);
+      var $Icon = (data.weather[0].icon).substr(0,2);
+      var $Temp = Math.floor(data.main.temp) + 'º';
+      var $city = '인천';									
+ 
+      $('.CurrIcon2').append('<i class="' + weatherIcon[$Icon] +'"></i>');
+      $('.CurrTemp2').prepend($Temp);
+      $('.City2').append($city);
+      }
+    })
+    //부산날씨
+    $.ajax({
+	url: 'http://api.openweathermap.org/data/2.5/weather?q=busan&APPID=39780da450a1a87f7b037001513b9e8b&units=metric&lang=kr',
+ 	lang : "kr",
+    dataType:'json',
+    type:'GET',
+    success:function(data){
+	console.log(data);
+      var $Icon = (data.weather[0].icon).substr(0,2);
+      var $Temp = Math.floor(data.main.temp) + 'º';
+      var $city = '부산';									
+ 
+      $('.CurrIcon3').append('<i class="' + weatherIcon[$Icon] +'"></i>');
+      $('.CurrTemp3').prepend($Temp);
+      $('.City3').append($city);
+      }
+    })
+    
+    //여수날씨
+    $.ajax({
+	url: 'http://api.openweathermap.org/data/2.5/weather?q=yeosu&APPID=39780da450a1a87f7b037001513b9e8b&units=metric&lang=kr',
+ 	lang : "kr",
+    dataType:'json',
+    type:'GET',
+    success:function(data){
+	console.log(data);
+      var $Icon = (data.weather[0].icon).substr(0,2);
+      var $Temp = Math.floor(data.main.temp) + 'º';
+      var $city = '여수';									
+ 
+      $('.CurrIcon4').append('<i class="' + weatherIcon[$Icon] +'"></i>');
+      $('.CurrTemp4').prepend($Temp);
+      $('.City4').append($city);
+      }
+    })
+    
+    
+    });
+
    

@@ -45,7 +45,7 @@ background-color: white;
 height: 170px;
 width: 350px;
 display:flex;
-position: relative; top:-670px;
+position: relative; top:-690px;
 right: 120px; 
 
 }
@@ -72,12 +72,15 @@ padding: 2rem;
 }
 .sign{
 border-radius: 0.5em;
-height: 350px;
+height: 370px;
 width: 800px;
-display:flex;
+/* display:flex; */
 border:2px solid #ebe9ed;
 background-color: #ffffff;
 position: relative; top:-400px; left:290px;
+right: 120px; 
+left:290px;
+padding: 2rem;
 }
 
 
@@ -196,7 +199,7 @@ height: 300px;
 width: 300px;
 display:flex;
 flex-wrap: wrap;
-position: relative; right:-1145px; top:-1310px;
+position: relative; right:-1145px; top:-1415px;
  background-color: #fbf4ea;
 }
 
@@ -385,6 +388,17 @@ h6{
  display: inline;
 }
 
+.weather{
+border-radius: 0.6em;
+border:2px solid #ebe9ed;
+background-color: #537188;
+width:350px;
+height:83px;
+position: relative; right:118px; bottom:660px;
+font-size: 24px;
+color: white;
+text-align: center;
+}
 </style>
 <!--내정보 -->
 <span class="mypage">
@@ -446,12 +460,46 @@ h6{
 </div>
 
 </div> 
-<span class="sign">전자결재</span>
+<div class="sign">
+	<div class="mb-1 d-flex justify-content-between">
+		<div class="fs-3 fw-semibold">전자결재</div>
+		<div class="fs-6 align-self-end">
+			<a class="link-dark" href="/sign/signMain">결재페이지로 이동
+      			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right mt-0" viewBox="0 1 16 16">
+				  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+				  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+				</svg>
+   			</a>
+		</div>
+	</div>
+
+	<table class="table text-center align-middle table-group-divider table-hover">
+		<colgroup>
+			<col width="*">
+			<col width="20%">
+		</colgroup>
+		<tbody>
+			<th:block th:if="${#lists.size(noticeList) == 0}">
+				<tr>
+					<td colspan="3">등록된 게시글이 없습니다.</td>
+				</tr>						
+			</th:block>
+			<th:block th:unless="${#lists.size(noticeList) == 0}">
+				<tr th:each="notice, state : ${noticeList}" th:class="${notice.isImportant eq 'Y'} ? table-light">
+					<td class="text-start px-3">
+						<a th:href="@{/notice/detail(boardNum=${notice.boardNum})}" th:class="${notice.isImportant eq 'Y'} ? link-success : link-dark">
+						[[${notice.boardTitle}]]
+						</a>
+					</td>
+					<td>[[${notice.boardDate}]]</td>
+				</tr>
+			</th:block>
+		</tbody>
+	</table>
+</div>
 
 <div class="quickMenu" style="color: black; font-weight: bold; font-style: italic; font-size: 25px; padding-left: 20px; padding-top: 10px; flex-wrap: wrap; width: 350px;">
 <span>Quick Menu</span>
-
-
 
 <table style="margin-right: 50px; margin-bottom: 20px;">
 <tr>
@@ -468,12 +516,44 @@ h6{
 </div>
 
 
-
-
-
-
-
-
+<table class="weather">
+<tr>
+<td>
+ <span class="CurrTemp" style="font-size: 19px; ">
+        <span class="CurrIcon" ></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp2" style=" font-size: 19px;">
+        <span class="CurrIcon2" ></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp3" style=" font-size: 19px;">
+        <span class="CurrIcon3"></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp4" style=" font-size: 19px;">
+        <span class="CurrIcon4" ></span>
+  </span>
+</td>
+</tr>
+<tr>
+<td>
+	<span class="City" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City2" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City3" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City4" style="margin-left: 3px;"></span>
+</td>
+</tr>
+</table>
 
 
 <div class="toDoList">
@@ -513,6 +593,7 @@ h6{
 
 <th:block layout:fragment="content_js">
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" integrity="sha384-vuFJ2JiSdUpXLKGK+tDteQZBqNlMwAjhZ3TvPaDfN9QmbPb7Q8qUpbSNapQev3YF" crossorigin="anonymous"></script>
 	
 	<!--연결해야하는 외부 js  -->
 <script type="text/javascript" src="/js/content/main.js"></script>
