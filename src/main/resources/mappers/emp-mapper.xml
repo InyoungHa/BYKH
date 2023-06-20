@@ -23,9 +23,9 @@
 		
 		<result column="E_ACCOUNT_STR" 				property="eAccountStr"/>
 		<result column="E_STATUS_STR" 				property="eStatusStr"/>
-		<result column="SELECTED_E_STATUS" 				property="selectedEStatus"/><!--재직상태변경  -->
-		<result column="SELECTED_E_ACCOUNT" 				property="selectedEAccount"/><!--계정상태 변경  -->
-		
+		<result column="SELECTED_E_STATUS" 			property="selectedEStatus"/><!--재직상태변경  -->
+		<result column="SELECTED_E_ACCOUNT" 		property="selectedEAccount"/><!--계정상태 변경  -->
+	
 		
 		<!-- 테스트용 임시 추가 - 희수 -->
 		<result column="LEVEL" 				property="level"/>

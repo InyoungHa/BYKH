@@ -17,4 +17,9 @@ public class DeptVO {
 	private String dename;
 	private String loc;
 	private String isUse;
+	
+	
+	//부서 수정_ 중복확인
+	private String modifyDename;
+	
 }

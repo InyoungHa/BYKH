@@ -70,6 +70,9 @@ public class UserController {
 		//공지 목록 조회
 		model.addAttribute("noticeList", userService.getMainBoard());
 		
+		//결재문서 조회
+		model.addAttribute("approver", null);
+		
 		return "content/user/main";
 
 	}
@@ -264,9 +267,35 @@ public class UserController {
 	
 	//권한 관리 페이지 이동
 	@GetMapping("/roleManage")
-	public String roleManage() {
+	public String roleManage(Model model) {
+		//지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();
+	 
+		//모든 지역 정보를 조회 
+		for(OrganizationVO organizationVO : organizationList) {
+			//지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+			
+			//부서에 속한 모든 사원 정보 조회
+			for(OrgDeptVO orgDeptVO : deptList) {
+				List<EmpVO> empList = deptService.getEmpListForOrg(orgDeptVO.getDeptno());
+				orgDeptVO.setEmpList(empList);
+			}
+			
+			organizationVO.setOrgDeptList(deptList);
+		}
+		
+		model.addAttribute("organizationList", organizationList);
 		
 		return "content/user/role_manage";
+	}
+	
+	//부서별 사원 정보 조회 (권한 관리 조직도)
+	@ResponseBody
+	@PostMapping("/getDeptEmpList")
+	public List<EmpVO> getDeptEmpList(int deptno) {
+		
+		return deptService.getEmpListForOrg(deptno);
 	}
 	
 

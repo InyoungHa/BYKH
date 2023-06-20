@@ -118,6 +118,7 @@ function drawEmpList(empList){
 //부서 추가 모달 등록 비활성화하는 방법
 function setDisabled() {
   document.querySelector('#addDeptBtn').disabled = true;
+  document.querySelector('#modifyDenameBtn').disabled = true;
  
 }
 
@@ -219,8 +220,8 @@ function regDept(){
 	const loc=document.querySelector('#addDeptModal_loc').value;
 	const dename = document.querySelector('#addDeptModal_dename').value;
 	
-	console.log(`loc=${loc}`)
-	console.log(`dename=${dename}`)
+	//console.log(`loc=${loc}`)
+	//console.log(`dename=${dename}`)
 	
 	if(dename.value == ''){
 		alert('부서 추가 모달명 입력은 필수입니다 \n부서 추가 모달명을 입력해주세요');
@@ -245,6 +246,11 @@ function regDept(){
 	});
 	
 }
+
+
+
+/////////////////////////부서 수정////////////////
+
 
 //부서 수정 _ 원래 데이터 띄우기
 //select된 loc로 부서 리스트 조회
@@ -271,33 +277,188 @@ function showDeptList(){
 }
 
 function add_select_modal(deptList){
-	console.log(deptList);
+	//console.log(deptList);
 	
 	const locMatachDept =document.querySelector('#locMatachDept');
 	locMatachDept.replaceChildren();
 	
 	let str ='';
 	
-	str += `<select id="deptModal_dept" class="form-control">`;
+	
+	str +='<div class="row">';
+	str +=	'<div class="col">';
+	str +=		'<div class="row mb-3">';
+	str +=			'<div class="col">';	
+	str += 				`<select id="modifyDeptModal_dename" class="form-select">`;
+	
 	deptList.forEach(function(dept){
+
+		str += 				`<option value="${dept.dename}" data-deptno="${dept.deptno}">${dept.dename}</option>`;
 		
-		str += 		`<option value="${dept.deptno}">${dept.dename}</option>`;
 	});		
 
-	str += '</select>';
-	str += '<div class="modal-footer">';
-	str += 	`<input type="text" id="modifyDename">`;
-	str += 		`<input type="button" value="중복확인" onclick="isDuplicate();" class="btn">`;
-	str += 		`<button type="button" onclick="regDept();" class="btn btn-secondary" data-bs-dismiss="modal">수정하기</button>`;
-	str += '</select>';
+	str += 				'</select>';
+	str +=			'</div>';
+	str +=		'</div>';
+	str +=		'<div class="row">';
+	str +=			'<div class="col">';
+	str += 				`<input type="text" id="modifyDename" onInput="denameModifyValidate();" placeholder="수정할 부서명을 입력하세요" class="form-control">`;
+	str +=			'</div>';
+	str +=		'<div class="row mt-3">';
+	str +=			'<div class="col modal-footer">';
+	str += 				`<input type="button" value="중복확인" onclick="isDuplicateModifyDename();" class="btn">`;
+	str += 				`<button type="button" id="modifyDenameBtn" onclick="modifyDename();" class="btn" disabled>수정하기</button>`;
+	str +=			'</div>';
+	str +=		'</div>';
+	str +=		'</div>';
+	str +=	'</div>';
+	str +='</div>';
 	
-	
+
 	locMatachDept.insertAdjacentHTML('beforeend', str);
 	
 }
 
 
+//부서 수정 중복 검사
+function isDuplicateModifyDename(){
+	const loc=document.querySelector('#modifyDeptModal_loc').value;
+	const dename = document.querySelector('#modifyDeptModal_dename').value;
+	const modifyDename = document.querySelector('#modifyDename').value;
+	
 
+	$.ajax({
+		url: '/dept/isDuplicateModifyDenameAjax', //요청경로
+		type: 'post',
+		async: false, // 동기 방식으로 설정
+		//contentType :'application/json; charset=UTF-8', //Json 타입
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: {'loc' : loc
+			, 'dename' : dename
+			, 'modifyDename' : modifyDename}, //필요한 데이터
+		success: function(result) {
+			
+			if(result){
+				alert('중복된 부서입니다.');				
+			} else{					
+				alert('등록 가능한 부서입니다.')
+				//console.log(result);
+				
+				//부서 추가 모달 등록의 비활성화 기능을 제거한다	
+				document.querySelector('#modifyDenameBtn').disabled = false;
+				
+			}
+		},
+		error: function() {
+			alert('중복 확인 실패');
+		}
+	});
+}
+
+
+//부서 수정 유효성 검사
+function denameModifyValidate(){
+	
+	//기존의 오류 메세지 전부 삭제
+	deleteErrorDiv();
+	
+	
+	//함수의 리턴 결과를 저장하는 변수
+	//let result = true;
+	let result_modifyDename = true;
+	
+	//오류 메세지
+	//let str ='';
+	let str_modifyDename = '';
+	
+	
+	//dename div 선택
+	const modifyDename_div = document.querySelector('#modifyDename').closest('div');
+	
+	//부서 추가 모달 등록 버튼을 누르면 validation처리
+	const modifyDename = document.querySelector('#modifyDename').value;
+	
+	
+	//부서 추가 모달 등록 공백 정규식 
+	const denameExp = /\s/;
+	
+	if(modifyDename ==''){
+		str_modifyDename = '부서 입력은 필수입니다.';
+		result_modifyDename = false;
+	}else if(denameExp.test(modifyDename)){
+		str_modifyDename = '부서 명을 공백 없이 입력해주세요';
+		result_modifyDename = false;
+	} 
+	
+	
+	//유효성 검사 실패시 오류 메세지 출력(false 일때)
+	if(!result_modifyDename){
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.5rem;">${str_modifyDename}</div>`;
+		modifyDename_div.insertAdjacentHTML('beforeend', errorHTML);
+		document.querySelector('#modifyDenameBtn').disabled = true;
+	}
+	else{
+		document.querySelector('#modifyDenameBtn').disabled = true;
+	}
+		
+	//모든 제약에 걸리지 않을때(true 일때)
+	return result_modifyDename;
+}
+
+
+//부서 추가 모달 등록
+function modifyDename(){
+	//유효성 검사 진행
+	const isValideModify = denameModifyValidate();
+	
+	if(!isValideModify){
+	return; // 유효하지 않는다면 deptJoinValidate()함수 진행 종료 false가 됨
+	//isValide가 유효하다면 true; 
+	}
+	
+	const loc=document.querySelector('#modifyDeptModal_loc').value;
+	const dename = document.querySelector('#modifyDeptModal_dename').value;
+	
+	const dename_select = document.querySelector('#modifyDeptModal_dename');
+	
+	
+	const deptno=dename_select.options[dename_select.selectedIndex].dataset.deptno;
+	
+	const modifyDename = document.querySelector('#modifyDename').value;
+	
+	console.log(`loc=${loc}`)
+	console.log(`dename=${dename}`)
+	console.log(`deptno=${deptno}`)
+	
+	
+	modifyData ={
+		"loc": loc,
+	    "dename": dename,
+	    "deptno": deptno,
+	    "modifyDename": modifyDename		
+	}
+	
+	
+
+	
+	$.ajax({
+		url: '/dept/updateDenameAjax', //요청경로
+		type: 'post',
+		//async: true, // 동기 방식으로 설정
+		contentType :'application/json; charset=UTF-8', //Json 타입
+		//contentType: "application/x-www-form-urlencoded; charset=UTF-8", //default
+		data: JSON.stringify({ modifyData: modifyData }), //필요한 데이터
+		success: function(result) {
+			
+			alert('부서 수정 완료입니다.')
+			location.reload();		
+		},
+		error: function() {
+			alert('부서 수정 실패');
+		}
+	});
+	
+}
 
 
 

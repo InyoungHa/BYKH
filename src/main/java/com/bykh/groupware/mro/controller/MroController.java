@@ -24,7 +24,6 @@ public class MroController {
 	
 	@RequestMapping("/mroManage")
 	public String mroManage(Model model, ItemVO itemVO) {
-		
 		//페이지 정보 세팅
 		itemVO.setTotalDataCnt(mroService.getItemCntForMroManage(itemVO));
 		itemVO.setNowPage(itemVO.getNowPage());
@@ -57,8 +56,6 @@ public class MroController {
 	@ResponseBody
 	@PostMapping("/searchItemListAjax")
 	public List<ItemVO> searchItemListAjax(ItemVO itemVO){
-		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-		System.out.println(itemVO);
 		return mroService.getItemListForEmp(itemVO);
 	}
 	/*

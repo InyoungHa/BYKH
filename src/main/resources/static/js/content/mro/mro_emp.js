@@ -27,12 +27,11 @@ function addBuyTable(clickTag){
 	const buyTbody = document.querySelector('.buy-table tbody');
 	const tdList = clickTag.closest("tr").querySelectorAll("td");
 	
-	const itemNo = tdList[2].dataset.itemNo
-	const itemName = tdList[2].textContent
+	const itemNo = tdList[2].dataset.itemNo;
+	const itemName = tdList[2].textContent;
+	const itemPrice = tdList[3].dataset.itemPrice;
 	const itemCnt = tdList[4].querySelector("input[type='number']").value;
 	const totalPrice = tdList[5].dataset.totalPrice;
-	console.log(tdList[5]);
-	console.log(tdList[5].dataset.totalPrice);
 	//중복 검사		
 	const buyTrs = buyTbody.querySelectorAll('tr');
 	let isDuplicated = false;
@@ -45,7 +44,8 @@ function addBuyTable(clickTag){
 				const updateItemCnt = parseInt(buyTr.children[1].textContent) + parseInt(itemCnt);
 				const updateTotalPrice = parseInt(tdList[3].dataset.itemPrice)*updateItemCnt;
 				const updateTotalPriceView = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(updateTotalPrice);
-				buyTr.children[1].textContent = updateItemCnt;	
+				buyTr.children[0].querySelector('input[type="hidden"]').value = itemPrice;
+				buyTr.children[1].textContent = updateItemCnt;
 				buyTr.children[2].dataset.totalPrice = updateTotalPrice;
 				buyTr.children[2].textContent = updateTotalPriceView;
 				
@@ -58,6 +58,7 @@ function addBuyTable(clickTag){
 		let str = '';
 		str += `<tr>
 					<td data-item-no="${itemNo}">${itemName}
+						<input type="hidden" value="${itemPrice}" class="item-price"> 
 						<svg class="minus-svg" onclick="delBuyItem(this);" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 							<path d="m12.002 2.005c5.518 0 9.998 4.48 9.998 9.997 0 5.518-4.48 9.998-9.998 9.998-5.517 0-9.997-4.48-9.997-9.998 0-5.517 4.48-9.997 9.997-9.997zm4.253 9.25h-8.5c-.414 0-.75.336-.75.75s.336.75.75.75h8.5c.414 0 .75-.336.75-.75s-.336-.75-.75-.75z" fill-rule="nonzero"/>
 						</svg>
@@ -156,18 +157,28 @@ function searchItemList(){
 // 구매신청서 작성 페이지이동
 function goPurchaseOrderForm(){
 	//구매목록 데이터
-	const buyTrs = document.querySelectorAll('.buy-table tr');
+	const buyTrs = document.querySelectorAll('.buy-table tbody tr');
 	
-	const itemArr = []
+	const buyDetailArr = [];
+	console.log(buyTrs[0].querySelector('input[type="hidden"]'));
 	buyTrs.forEach(function(buyTr){
-		item = {
+		const item = {
 			'itemNo':buyTr.children[0].dataset.itemNo
-			, 'itemCnt':buyTr.children[1].textContent
+			, 'itemName':buyTr.children[0].textContent.replace(/ |\n|\t/g, '')
+			, 'itemPrice':buyTr.querySelector('input[type="hidden"]').value
 		}
-		itemArr.push(item);
+		
+		const buyDetail = {
+			'itemNo':buyTr.children[0].dataset.itemNo
+			, 'buyCnt':buyTr.children[1].textContent
+			, 'buyDetailPrice':buyTr.children[2].dataset.totalPrice
+			, 'itemVO':item
+		}
+		buyDetailArr.push(buyDetail);
 	});
-	
-	//ajax로 데이터 전달 + 구매신청서 작성 페이지 이동
+	console.log(buyDetailArr);
+	const data = encodeURIComponent(JSON.stringify(buyDetailArr));
+	location.href=`/sign/purchaseOrderFormMro?buyDetailArr=${data}`;
 };
 
 

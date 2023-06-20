@@ -38,4 +38,10 @@ public interface DeptService {
 	
 	//회사 지도 조회
 	BranchLocationInfoVO selectBranchLocation(String branchCode);
+	
+	//부서 수정_중복 확인
+	boolean isDuplicateModifyDename(DeptVO deptVO);
+	
+	//부서 수정
+	void updateDename(DeptVO deptVO);
 }
