@@ -502,8 +502,7 @@ function showSignDocModal(clickTag){
 						<table class="table table-bordered text-center stamp-table">
 							<tbody>
 								<tr class="eJobTr">
-									<!-- 사원 >> 쿼리 결과로 들어가도록 변경하기!!!!!!!!11 -->
-									<td>사원</td>`;
+									<td>담당</td>`;
 								signWriteInfo.signVOList.forEach(function(signVO){
 									str += `
 									<td>

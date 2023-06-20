@@ -150,8 +150,9 @@
 	<select id="getSingWriteInfo" resultMap="signDoc">
 		SELECT 
 			ENAME
-			, DENAME 
 			, EMPNO
+			, E_JOB
+			, DENAME 
 			, D.DEPTNO
             , (SELECT ENAME FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '과장') AS APPROVER_NAME
             , (SELECT EMPNO FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '과장') AS APPROVER_NO
