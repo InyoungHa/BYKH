@@ -26,6 +26,7 @@ import com.bykh.groupware.dept.vo.OrganizationVO;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.util.DateUtil;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -42,6 +43,8 @@ public class UserController {
 	private DeptService deptService;
 	@Resource(name="userService")
 	private UserService userService;
+	@Resource(name="signService")
+	private SignService signService;
 	
 	//로그인 페이지
 	@GetMapping("/log")
@@ -71,7 +74,7 @@ public class UserController {
 		model.addAttribute("noticeList", userService.getMainBoard());
 		
 		//결재문서 조회
-		model.addAttribute("approver", null);
+		model.addAttribute("sgnDocList", signService.getMainSignDocList(empno));
 		
 		return "content/user/main";
 
