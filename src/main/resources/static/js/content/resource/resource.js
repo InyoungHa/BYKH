@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	calendar = new FullCalendar.Calendar(calendarEl, {
 
 		headerToolbar: {
-			left: 'prev,next today,addEventButton',
+			left: 'prev,next today',
 			center: 'title',
 			right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
 		},
@@ -150,75 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			},
 		],
 
-		customButtons: {
-			addEventButton: { // 추가한 버튼 설정
-				text: "자원 추가",  // 버튼 내용
-				click: function() { // 버튼 클릭 시 이벤트 추가
-					$("#sprintSettingModalClose").click(function() {
-						$("#calendarModal").modal("hide");
-					});
-
-					var return_value = [];
-
-					$("#calendarModal").modal("show");
-
-					$("#addCalendar").on("click", function() {
-						var content = $("#calendar_content").val();
-						var start_date = $("#calendar_start_date").val();
-						var end_date = $("#calendar_end_date").val();
-						var start_time = $("#calendar_start_time").val();
-						var end_time = $("#calendar_end_time").val();
-						var allDay = false;
-
-						if (content == null || content == "") {
-							alert("내용을 입력하세요.");
-						} else if (start_date == "" || end_date == "") {
-							alert("날짜를 입력하세요.");
-						} else if (new Date(end_date) - new Date(start_date) < 0) {
-							alert("종료일이 시작일보다 먼저입니다.");
-						} else if (start_time == "" && end_time == "") {
-							allDay = true;
-						} else if (start_time == "" && end_time != "") {
-							alert("시작 시간을 선택하세요.");
-							return;
-						} else if (start_time != "" && end_time == "") {
-							alert("종료 시간을 선택하세요.");
-							return;
-						} else {
-							start_date += "T" + start_time;
-							end_date += "T" + end_time;
-						}
-				
-					
-						var obj = {
-							"title": content,
-							"start": start_date,
-							"allDay": allDay,
-							"color": '#E8A0BF',
-							"end": end_date
-						};
-						return_value.push(obj);
-						console.log(return_value);
-
-						// 기존의 이벤트 소스를 가져옴.
-						var eventSources = calendar.getOption('eventSources');
-
-						// 새로운 이벤트 소스를 생성하여 기존의 이벤트 소스와 합침.
-						var newEventSources = eventSources.concat({
-							events: return_value
-						});
-
-						// 합쳐진 이벤트 소스를 캘린더에 설정.
-						calendar.setOption('eventSources', newEventSources);
-
-						// 모달 숨기기
-						$("#calendarModal").modal("hide");
-					});
-
-				}
-
-			}
-		},
 		//이벤트 드래그 드랍 후 저장 
 		eventReceive: function(info) {
 			if (info.view.type === 'dayGridMonth') {

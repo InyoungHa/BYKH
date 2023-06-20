@@ -9,6 +9,7 @@
 		<result column="OUT_WORK" 		property="outWork"/>
 		<result column="CUR_DATE" 		property="curDate"/>
 		<result column="LATE_COUNT" 	property="lateCount"/>
+		<result column="NOMAL_COUNT" 	property="nomalCount"/>
 		<result column="CHECK_LATE" 	property="checkLate"/>
 		<result column="WORKING_DAYS" 	property="workingDays"/>
 		<result column="OVER_TIME" 	property="overTime"/>
@@ -95,7 +96,7 @@
 		SET OUT_WORK = CURRENT_DATE,
 		WORKING_STATUS = CASE
 		WHEN TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00' THEN 2
-		WHEN GO_WORK IS NULL THEN 3
+		WHEN GO_WORK IS NULL OR GO_WORK = CURRENT_DATE THEN 3
 		ELSE 1
 		END
 		WHERE ATT_CODE = #{attCode}
@@ -125,14 +126,26 @@
 	</select>
 
 
+
+	<!-- 정상출근 횟수 조회 -->
+	<select id="selectNomalCount" resultMap="att">
+		SELECT COUNT(*) AS NOMAL_COUNT
+		FROM ATTENDANCE
+		WHERE WORKING_STATUS = 1
+	    AND EMPNO = #{empno}
+	</select>
+
+
 	<!-- 지각 횟수 조회 -->
 	<select id="selectLateCount" resultMap="att">
 		SELECT COUNT(*) AS LATE_COUNT
 		FROM ATTENDANCE
-		WHERE TO_CHAR(GO_WORK, 'HH24:MI:SS') > '09:10:00'
+		WHERE WORKING_STATUS = 2
 	    AND EMPNO = #{empno}
-	    AND ROWNUM = 1
 	</select>
+	
+	
+
 
 
 	<!-- 근무일수 조회 -->
@@ -179,34 +192,7 @@
 	</select>
 
 
-	<!-- 결근 횟수 조회 -->
-	<select id="findLateCount" resultMap="att">
-		SELECT COUNT(*) AS LATE_COUNT
-		FROM ATTENDANCE
-		WHERE TRUNC(GO_WORK) = TRUNC(CURRENT_DATE) AND GO_WORK IS NULL
-		AND
-		TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(CURRENT_DATE, 'YYYYMM')
-		AND
-		TO_CHAR(GO_WORK, 'D') NOT IN (1, 7)
-		AND TO_CHAR(GO_WORK, 'YYYY-MM-DD')
-		NOT IN (
-		'2023-01-01', 
-		'2023-02-16', 
-		'2023-02-17', 
-		'2023-02-18', 
-		'2023-03-01', 
-		'2023-05-05', 
-		'2023-05-09', 
-		'2023-06-06', 
-		'2023-08-15', 
-		'2023-09-14', 
-		'2023-09-15', 
-		'2023-09-16', 
-		'2023-10-03', 
-		'2023-10-09' 
-		)
-		AND EMPNO = #{empno}
-	</select>
+
 
 
 	<!--출퇴근 기록 게시판 최근 5일 -->

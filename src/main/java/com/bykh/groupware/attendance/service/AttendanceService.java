@@ -27,6 +27,9 @@ public interface AttendanceService {
 	//제일최신 퇴근시간 조회
 	AttendanceVO selectOutwork(int empno);
 	
+	//정상출근 조회
+	AttendanceVO selectNomalCount(int empno);
+	
 	//지각횟수 조회
 	AttendanceVO selectLateCount(int empno);
 	
@@ -41,9 +44,6 @@ public interface AttendanceService {
 	
 	//연장근무가능시간 조회 
 	AttendanceVO findCanOverTime(int empno);
-	
-	//결근 횟수조회(한달)
-	AttendanceVO findLateCount(int empno);
 	
 	//출퇴근 기록 게시판 조회 (최근5일)
 	List<AttendanceVO> workingBoard(int empno);

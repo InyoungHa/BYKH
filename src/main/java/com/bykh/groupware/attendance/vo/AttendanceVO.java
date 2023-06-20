@@ -16,6 +16,7 @@ public class AttendanceVO {
 	private	String outWork; //퇴근 DATE 정보
 	private	String curDate; //현재시간
 	private	int empno;  
+	private int nomalCount; //정상출근 횟수
 	private	int lateCount; //지각횟수
 	private	int workingDays; //근무일수
 	private	String overTime; //연장근무시간
@@ -29,6 +30,7 @@ public class AttendanceVO {
 	private	String workingTime; //출근 시간
 	private	String outTime; //퇴근 시간 
 	private EmpVO empVO;
+	
 	
 }
 
