@@ -87,8 +87,6 @@ public class SignController {
 				ItemVO item = objectMapper.convertValue(buyDetail.getItemVO(), ItemVO.class);
 				buyDetail.setItemVO(item);
 			}
-			System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~`");
-			System.out.println(buyDetailList);
 			model.addAttribute("buyDetailList", buyDetailList);
 			
 		}catch (Exception e) {
@@ -123,8 +121,6 @@ public class SignController {
 	//연차신청서 작성
 	@PostMapping("/insertSign")
 	public String insertSign(SignDocVO signDocVO, String approverNoStr) {
-		System.out.println("기존~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(signDocVO);
 		//기존 데이터가 있다면 삭제(임시저장)
 		if(signDocVO.getDocNo() != 0) {
 			signService.delAnnualLeave(signDocVO.getDocNo());
@@ -151,7 +147,6 @@ public class SignController {
 		signDocVO.setDocNo(docNo);
 		signDocVO.setDocType(1);
 		signDocVO.getDocAnnualLeaveVO().setDocNo(docNo);
-		System.out.println("실행전~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		System.out.println(signDocVO);
 		signService.insertDocAnnualLeave(signDocVO);
 		

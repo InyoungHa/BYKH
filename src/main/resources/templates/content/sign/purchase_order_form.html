@@ -103,6 +103,11 @@
 		.my-scroll::-webkit-scrollbar-track {
 			background: #84848447; /*스크롤바 뒷 배경 색상*/
 		}
+		.btn-area{
+			position: fixed;
+			bottom: 0;
+			
+		}
 		
 		
 </style>
@@ -154,7 +159,7 @@
 							<tbody>
 								<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
 								<tr class="eJobTr">
-									<td>사원</td><!-- 직책 -->
+									<td>담당</td><!-- 직책 -->
 									<td>
 										[[${signWriteInfo.signVOList[0].approverJob}]]
 									</td>
@@ -284,19 +289,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="row" style="min-height: 400px;">
-				<div class="col-12">
+			
+				
+			<div class="row">
+				<div class="offset-8 col-4">
 					<div class="row">
-						<div class="col-12">
-							<h3>파일 첨부</h3>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div>
-				<div class="col-12">
-					<div class="row">
-						<div class="col text-end">
+						<div class="col btn-area">
 							<button type="button" class="btn btn-primary" onclick="insertPurchaseorder(0);">임시저장</button>
 							<button type="button" class="btn btn-primary" onclick="insertPurchaseorder(1);">기안</button>
 						</div>
