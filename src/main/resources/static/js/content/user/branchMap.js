@@ -1,7 +1,7 @@
 
 
 //누를 때마다 active 효과 주기
-const header_div = document.querySelector('.header ul');
+const header_div = document.querySelector('.header_branch_map ul');
 const li_tags = header_div.querySelectorAll('li');
 
 let anchor;

@@ -125,6 +125,7 @@
 			, E_EMAIL
 			, PHONE_TEL
 			, OFFICE_TEL
+			,(SELECT ORIGIN_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ORIGIN_FILE_NAME
 			,(SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
 			, E_STATUS
 		FROM EMP EMP, DEPT DEPT
@@ -137,7 +138,7 @@
 
 	
 	<!-- 사원 이미지 넣기  -->
-	<insert id="insertEmpImg">
+<!-- 	<insert id="insertEmpImg">
 		INSERT INTO E_IMG(
 				IMG_CODE
 				, ORIGIN_FILE_NAME
@@ -150,28 +151,36 @@
 				, #{attachedFileName}
 				, #{empno}
 			)
-	</insert>
+	</insert> -->
 	
 	<!-- 사원 이미지 update  -->
-	<update id="updateEmpImg">
+<!-- 	<update id="updateEmpImg">
 		UPDATE E_IMG
-			SET 
-				IMG_CODE =(SELECT 'IMG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(IMG_CODE,5))), 0)+1 ,3,'0')FROM E_IMG),
-				ORIGIN_FILE_NAME=#{originFileName},
+			SET ORIGIN_FILE_NAME=#{originFileName},
 				ATTACHED_FILE_NAME=#{attachedFileName}
 		WHERE EMPNO =#{empno}				
 	</update>
-	
-	<!--이미지 등록 여부 확인  -->
-	<select id="selectE_Img" resultMap="eImg">
-		SELECT IMG_CODE,
-			EMPNO,
-			ORIGIN_FILE_NAME,
-			ATTACHED_FILE_NAME
-		FROM E_IMG
-		WHERE EMPNO =#{empno}
-	
-	</select>
+	 -->
+	<!--기존 이미지가 등록되어 있으면 UPDATE, 기존 이미지가 등록되지 않았으면 INSERT  -->
+	<update id="insertOrUpdateE_Img">
+	    MERGE INTO E_IMG 
+	    USING DUAL
+	    ON (EMPNO = #{empno})
+	    WHEN MATCHED THEN
+	        UPDATE SET
+	            IMG_CODE = (SELECT 'IMG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(IMG_CODE,5))), 0)+1 ,3,'0')FROM E_IMG),
+	            ORIGIN_FILE_NAME = #{originFileName},
+	            ATTACHED_FILE_NAME = #{attachedFileName}
+	        WHERE EMPNO = #{empno}
+	    WHEN NOT MATCHED THEN
+	        INSERT (IMG_CODE, ORIGIN_FILE_NAME, ATTACHED_FILE_NAME, EMPNO)
+	        VALUES (
+	            (SELECT 'IMG_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(IMG_CODE,5))), 0)+1 ,3,'0')FROM E_IMG),
+	            #{originFileName}, #{attachedFileName}, #{empno})
+	</update>
+
+
+
 	
 	<!--상세 사원 정보 등록  -->
 	<update id="updateEmpDetail">

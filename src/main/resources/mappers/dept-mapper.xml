@@ -156,8 +156,6 @@
 		SET DENAME =#{modifyDename}
 		WHERE LOC =#{loc}
 		AND DEPTNO =#{deptno}
-	
-	
 	</update>
 
 

@@ -46,22 +46,24 @@ public class EmpServiceImpl implements EmpService {
 	}
 
 
-	@Override //사원 이미지 등록
-	public void insertEmpImg(EImgVO eImgVO) {
-		
-		sqlSession.insert("empMapper.insertEmpImg", eImgVO);
-		
-	}	
+	/*
+	 * @Override //사원 이미지 등록 public void insertEmpImg(EImgVO eImgVO) {
+	 * 
+	 * sqlSession.insert("empMapper.insertEmpImg", eImgVO);
+	 * 
+	 * }
+	 * 
+	 * @Override //사원 이미지 update public void updateEmpImg(EImgVO eImgVO) {
+	 * sqlSession.update("empMapper.updateEmpImg",eImgVO);
+	 * 
+	 * }
+	 */
 	
-	@Override //사원 이미지 update
-	public void updateEmpImg(EImgVO eImgVO) {
-		sqlSession.update("empMapper.updateEmpImg",eImgVO);
+
+	@Override //이미지 있으면 update, 없으면 insert
+	public void insertOrUpdateE_Img(EImgVO eImgVO) {
+		sqlSession.update("empMapper.insertOrUpdateE_Img", eImgVO);
 		
-	}
-	
-	@Override //사원 이미지 등록여부
-	public EImgVO selectE_Img(int empno) {
-		return sqlSession.selectOne("empMapper.selectE_Img", empno);
 	}
 
 

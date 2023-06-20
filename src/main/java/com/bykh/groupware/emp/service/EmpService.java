@@ -24,13 +24,17 @@ public interface EmpService {
 	EmpVO selectEmpDetail(int empno);
 	
 	//사원 이미지 등록
-	void insertEmpImg(EImgVO eImgVO);
+	//void insertEmpImg(EImgVO eImgVO);
 	
 	//사원 이미지 update
-	void updateEmpImg(EImgVO eImgVO);
+	//void updateEmpImg(EImgVO eImgVO);	
+
 	
-	//사원 이미지 등록여부
-	EImgVO selectE_Img(int empno);
+	
+	//이미지 있으면 update, 없으면 insert
+	void insertOrUpdateE_Img(EImgVO eImgVO);
+	
+	
 	
 	//사원 상세 정보 수정
 	void updateEmpDetail(EmpVO empVO);
@@ -48,6 +52,9 @@ public interface EmpService {
 	
 	//마이페이지 수정
 	void updateSelfEmpDetail(EmpVO empVO);
+	
+	
+	
 
 
 }
