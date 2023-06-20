@@ -45,7 +45,7 @@ background-color: white;
 height: 170px;
 width: 350px;
 display:flex;
-position: relative; top:-670px;
+position: relative; top:-690px;
 right: 120px; 
 
 }
@@ -72,7 +72,7 @@ padding: 2rem;
 }
 .sign{
 border-radius: 0.5em;
-height: 350px;
+height: 370px;
 width: 800px;
 display:flex;
 border:2px solid #ebe9ed;
@@ -196,7 +196,7 @@ height: 300px;
 width: 300px;
 display:flex;
 flex-wrap: wrap;
-position: relative; right:-1145px; top:-1310px;
+position: relative; right:-1145px; top:-1415px;
  background-color: #fbf4ea;
 }
 
@@ -385,6 +385,17 @@ h6{
  display: inline;
 }
 
+.weather{
+border-radius: 0.6em;
+border:2px solid #ebe9ed;
+background-color: #537188;
+width:350px;
+height:83px;
+position: relative; right:118px; bottom:660px;
+font-size: 24px;
+color: white;
+text-align: center;
+}
 </style>
 <!--내정보 -->
 <span class="mypage">
@@ -451,8 +462,6 @@ h6{
 <div class="quickMenu" style="color: black; font-weight: bold; font-style: italic; font-size: 25px; padding-left: 20px; padding-top: 10px; flex-wrap: wrap; width: 350px;">
 <span>Quick Menu</span>
 
-
-
 <table style="margin-right: 50px; margin-bottom: 20px;">
 <tr>
 <td style="width: 100px; "><a th:href="@{/sign/signMain}"><button type="button" class="btn"  style="margin-left: 5px; background-color: #454545; border: 1px solid #454545; width: 100%;">결재현황</button></a></td>
@@ -468,12 +477,44 @@ h6{
 </div>
 
 
-
-
-
-
-
-
+<table class="weather">
+<tr>
+<td>
+ <span class="CurrTemp" style="font-size: 19px; ">
+        <span class="CurrIcon" ></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp2" style=" font-size: 19px;">
+        <span class="CurrIcon2" ></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp3" style=" font-size: 19px;">
+        <span class="CurrIcon3"></span>
+  </span>
+</td>
+<td>
+ <span class="CurrTemp4" style=" font-size: 19px;">
+        <span class="CurrIcon4" ></span>
+  </span>
+</td>
+</tr>
+<tr>
+<td>
+	<span class="City" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City2" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City3" style="margin-left: 3px;"></span>
+</td>
+<td>
+	<span class="City4" style="margin-left: 3px;"></span>
+</td>
+</tr>
+</table>
 
 
 <div class="toDoList">
@@ -513,6 +554,7 @@ h6{
 
 <th:block layout:fragment="content_js">
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.15.2/js/all.js" integrity="sha384-vuFJ2JiSdUpXLKGK+tDteQZBqNlMwAjhZ3TvPaDfN9QmbPb7Q8qUpbSNapQev3YF" crossorigin="anonymous"></script>
 	
 	<!--연결해야하는 외부 js  -->
 <script type="text/javascript" src="/js/content/main.js"></script>
