@@ -87,3 +87,9 @@
 .rounded-image {
 	border-radius: 100%;
 }
+
+.btn-area{
+	position: fixed;
+	bottom: 0;
+	
+}

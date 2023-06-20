@@ -3,7 +3,7 @@ package com.bykh.groupware.dept.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.expression.spel.ast.Literal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -151,23 +151,20 @@ public class DeptController {
 	
 	@ResponseBody //부서 수정
 	@PostMapping("/updateDenameAjax")
-	public void updateDenameAjax(@RequestBody Map<String, Object> modifyData) {
+	public void updateDenameAjax(String loc, String dename, int deptno, String modifyDename) {
 		
-	    String loc =(String) modifyData.get("loc");
-	    String dename =(String) modifyData.get("dename");
-	    int deptno = (Integer)modifyData.get("deptno");
-	    String modifyDename = (String)modifyData.get("modifyDename");
-	    
-	    System.out.println("!!!!!!!!!!!!11"+loc);
-	    System.out.println("!!!!!!!!!!!!11"+dename);
-	    System.out.println("!!!!!!!!!!!!11"+dename);
-	    System.out.println("!!!!!!!!!!!!11"+modifyDename);
-	    
-	    DeptVO deptVO = new DeptVO();
+		System.out.println(loc);
+		System.out.println(dename);
+		System.out.println(deptno);
+		System.out.println(modifyDename);
+		
+		DeptVO deptVO = new DeptVO();
+	
 	    deptVO.setLoc(loc);
 	    deptVO.setDename(dename);
-	    deptVO.setDeptno(deptno);
 	    deptVO.setModifyDename(modifyDename);
+	    deptVO.setDeptno(deptno);
+	 
 	    
 	    //부서명 수정 쿼리
 	    deptService.updateDename(deptVO);

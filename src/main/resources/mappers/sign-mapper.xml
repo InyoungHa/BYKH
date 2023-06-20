@@ -79,6 +79,32 @@
 		<association property="itemVO" resultMap="mroMapper.item"></association>
 	</resultMap>
 	
+	<!-- 메인화면 - 조회 -->
+	<select id="getMainSignDocList" resultMap="signDoc">
+		SELECT 
+		    SD.DOC_NO
+		    , DOC_TYPE
+		    , DOC_TITLE
+		    , WRITER_NO
+		    , ENAME
+		    , TO_CHAR(INSERT_DATE, 'MM-DD HH24:MI') INSERT_DATE
+		    , DECODE(SGN_STATUS, 1, '결재중', 2, '결재완료', 3, '반려') AS SGN_STATUS_STR
+		    , (SELECT APPROVER_NO FROM SGN S_SGN
+            WHERE S_SGN.DOC_NO = SGN.DOC_NO
+            AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
+		FROM SGN_DOC SD, EMP, SGN
+		WHERE SD.WRITER_NO = EMP.EMPNO
+        AND SD.DOC_NO = SGN.DOC_NO
+        AND SGN_STATUS != 0
+		AND (
+				(SD.WRITER_NO = ${empno})
+			OR
+				(EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+			)
+		ORDER BY  (CASE WHEN NEXT_APPROVER_NO = 2340103 THEN 0 ELSE 1 END), INSERT_DATE DESC
+        OFFSET 0 ROWS
+        FETCH FIRST 5 ROWS ONLY
+	</select>
 	
 	<!-- 기안 조회 페이지 -->
 	<select id="getInProgressSignDocList" resultMap="signDoc">
@@ -109,8 +135,9 @@
 		    , ENAME
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
 		    , DECODE(SGN_STATUS, 2, '결재완료', 3, '반려') AS SGN_STATUS_STR
-		FROM SGN_DOC SD,EMP
+		FROM SGN_DOC SD, EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
+        
 		AND SGN_STATUS IN (2, 3)
 		AND (
 				(SD.WRITER_NO = ${empno})
@@ -123,8 +150,9 @@
 	<select id="getSingWriteInfo" resultMap="signDoc">
 		SELECT 
 			ENAME
-			, DENAME 
 			, EMPNO
+			, E_JOB
+			, DENAME 
 			, D.DEPTNO
             , (SELECT ENAME FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '과장') AS APPROVER_NAME
             , (SELECT EMPNO FROM EMP WHERE EMP.DEPTNO = D.DEPTNO AND E_JOB = '과장') AS APPROVER_NO

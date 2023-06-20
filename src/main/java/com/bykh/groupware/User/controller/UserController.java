@@ -26,6 +26,7 @@ import com.bykh.groupware.dept.vo.OrganizationVO;
 import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.util.DateUtil;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -42,6 +43,8 @@ public class UserController {
 	private DeptService deptService;
 	@Resource(name="userService")
 	private UserService userService;
+	@Resource(name="signService")
+	private SignService signService;
 	
 	//로그인 페이지
 	@GetMapping("/log")
@@ -71,7 +74,7 @@ public class UserController {
 		model.addAttribute("noticeList", userService.getMainBoard());
 		
 		//결재문서 조회
-		model.addAttribute("approver", null);
+		model.addAttribute("sgnDocList", signService.getMainSignDocList(empno));
 		
 		return "content/user/main";
 
@@ -161,32 +164,22 @@ public class UserController {
 	@PostMapping("/regSelfEmpDetailAjax") //마이페이지 수정, 사진등록
 	public void regSelfEmpDetailAjax(EmpVO empVO, MultipartFile empImg) {
 		System.out.println("%%%%%%%%%%%%%%%%%"+empVO);
-		
-		if(empImg != null) {
-			EImgVO existingImg = empService.selectE_Img(empVO.getEmpno());
 			
-			if(existingImg == null) {
-				
-				//사진 업로드하고 객체 반환함
+		//사진 업로드
+		if(empImg != null) {			
 				EImgVO eImgVO = UploadUtil.uploadFile(empImg);
 				
 				//반환 받은 객체에 empno 데이터 추가
 				eImgVO.setEmpno(empVO.getEmpno());
 				
 				//쿼리에 필요한 데이터 다 있음(originFileName, attachedFileName, empno)
-				//System.out.println(eImgVO);
+				System.out.println(eImgVO);
 				
 				//그 객체로 insert 쿼리 실행
-				empService.insertEmpImg(eImgVO);
-			}
-			else {
-				EImgVO eImgVO = existingImg;
-				eImgVO.setOriginFileName(eImgVO.getOriginFileName());
-				eImgVO.setAttachedFileName(eImgVO.getAttachedFileName());
-				empService.updateEmpImg(eImgVO);
-			}
-			
+				empService.insertOrUpdateE_Img(eImgVO);			
 		}
+		
+
 		
 		//사원 상세 정보 업데이트		
 		// 사무실 전화번호

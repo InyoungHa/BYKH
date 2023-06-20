@@ -172,8 +172,6 @@ function allSave() {
 	var allEvent = calendar.getEvents();
 	var events = [];
 
-	for (const e of allEvent) {
-	}
 	for (var i = 0; i < allEvent.length; i++) {
 
 		const is_holy = allEvent[i]._def.extendedProps.description != undefined ? true : false;

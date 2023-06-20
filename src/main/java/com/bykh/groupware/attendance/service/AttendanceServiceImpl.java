@@ -59,7 +59,14 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public AttendanceVO selectLateCount(int empno) {
 		return sqlSession.selectOne("attendanceMapper.selectLateCount", empno);
 	}
+	
+	//정상출근횟수 조회
+	@Override
+	public AttendanceVO selectNomalCount(int empno) {
+		return sqlSession.selectOne("attendanceMapper.selectNomalCount",empno);
+	}
 
+	
 	@Override
 	public AttendanceVO checkDays(int empno) {
 		return sqlSession.selectOne("attendanceMapper.checkDays", empno);
@@ -84,11 +91,6 @@ public class AttendanceServiceImpl implements AttendanceService {
 	}
 	
 
-	//결근 횟수 조회
-	@Override
-	public AttendanceVO findLateCount(int empno) {
-		return sqlSession.selectOne("attendanceMapper.findLateCount", empno);
-	}
 
 	//출퇴근 기록 게시판 조회(최근5일)
 	@Override
@@ -132,6 +134,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 	public List<DocAnnualLeaveVO> selectListVacation2(int empno) {
 		return sqlSession.selectList("attendanceMapper.selectListVacation", empno);
 	}
+
 
 	
 

@@ -45,6 +45,8 @@ public class AttendanceController {
 		model.addAttribute("goWork",attendanceService.selectGowork(empno));
 		//퇴근시간 조회
 		model.addAttribute("outWork",attendanceService.selectOutwork(empno));
+		//정상출근횟수 조회
+		model.addAttribute("selectNomalCount",attendanceService.selectNomalCount(empno));
 		//지각횟수 조회
 		model.addAttribute("lateCount",attendanceService.selectLateCount(empno));
 		//근무일수 조회
@@ -53,9 +55,7 @@ public class AttendanceController {
 		model.addAttribute("totalWorkingTime",attendanceService.totalWorkingTime(empno));
 		//총 연장근무시간 조회
 		model.addAttribute("findOverTime",attendanceService.findOverTime(empno));
-		//결근 횟수 조회
-		model.addAttribute("findLateTime",attendanceService.findLateCount(empno));
-		
+
 		//이번달 사용한 연차개수
 		model.addAttribute("vacation", attendanceService.selectCountVacation(writerNo));
 		

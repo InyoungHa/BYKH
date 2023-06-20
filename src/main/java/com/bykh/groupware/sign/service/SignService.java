@@ -10,6 +10,10 @@ import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
 public interface SignService {
+	//메인화면 - 조회
+	List<SignDocVO> getMainSignDocList(int empno);
+	
+	
 	List<SignDocVO> getInProgressSignDocList(int empno);
 	List<SignDocVO> getEndSignDocList(int empno);
 	SignDocVO getSingWriteInfo(int empno);
@@ -43,5 +47,7 @@ public interface SignService {
 	
 	//다음 결재자번호 조회
 	int getNextApproverNo(int docNo);
+	
+	
 	
 }
