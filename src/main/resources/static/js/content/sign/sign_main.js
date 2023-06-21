@@ -253,7 +253,7 @@ function showSignDocModal(clickTag){
 				console.log(signWriteInfo);
 				str += `
 			<div class="row">
-			<div class="col-8" style="border: 1px solid #dee2e6;">
+			<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>구매신청서</h2>
@@ -290,8 +290,7 @@ function showSignDocModal(clickTag){
 						<table class="table table-bordered text-center stamp-table">
 							<tbody>
 								<tr class="eJobTr">
-									<!-- 사원 >> 쿼리 결과로 들어가도록 변경하기!!!!!!!!11 -->
-									<td>사원</td>`;
+									<td>담당</td>`;
 								signWriteInfo.signVOList.forEach(function(signVO){
 									str += `
 									<td>
