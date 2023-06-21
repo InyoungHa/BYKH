@@ -57,7 +57,6 @@ public class UserController {
 			attendanceVO.setCurDate(nowDate);
 		}	
 		
-		
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
 				
@@ -72,6 +71,12 @@ public class UserController {
 		
 		//결재문서 조회
 		model.addAttribute("approver", null);
+		
+		//부서/위치 조회
+		model.addAttribute("selectDept", userService.selectDept(empno));
+		
+		//사원이미지 조회
+		model.addAttribute("selectAttImg", userService.selectAttImg(empno));
 		
 		return "content/user/main";
 
