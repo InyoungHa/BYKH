@@ -85,8 +85,18 @@ body {
 .sign {
 	border-radius: 0.5em;
 	height: 365px;
-
-
+	width: 800px;
+	/* display:flex; */
+	border: 2px solid #ebe9ed;
+	background-color: #ffffff;
+	position: relative;
+	top: -400px;
+	left: 290px;
+	right: 120px;
+	left: 290px;
+	padding: 2rem;
+	border-top: 5px solid #A0D8B3;
+}
 
 .calendar {
 	height: 225px;
@@ -108,15 +118,13 @@ body {
 	right: 185px;
 }
 
-
-
-.time{
-display:inline-block;
-margin-top:15px;
-margin-left: 22px;
-font-size: 27px;
-color: #525E75;
-font-weight: bold;
+.time {
+	display: inline-block;
+	margin-top: 15px;
+	margin-left: 23px;
+	font-size: 27px;
+	color: #525E75;
+	font-weight: bold;
 }
 
 #calendar {
@@ -204,81 +212,6 @@ i[class^="icon-chevron"] {
 
 @import
 	url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400);
-
-
-#calendar_content, #calendar_weekdays, #calendar_header {
-	position: relative;
-	width: 320px;
-	overflow: hidden;
-	float: left;
-	z-index: 10;
-}
-
-#calendar_weekdays div, #calendar_content div {
-	width: 40px;
-	height: 40px;
-	overflow: hidden;
-	text-align: center;
-	background-color: #ffffff;
-	color: #787878;
-}
-
-#calendar_content {
-	border-bottom-right-radius: 0.7em;
-	border-bottom-left-radius: 0.7em;
-}
-
-#calendar_content div {
-	float: left;
-}
-
-#calendar_content div:hover {
-	background-color: #f8f8f8;
-}
-
-#calendar_content div.blank {
-	background-color: #e8e8e8;
-}
-
-#calendar_header, #calendar_content div.today {
-	zoom: 1;
-	filter: alpha(opacity = 70);
-	opacity: 0.7;
-}
-
-#calendar_content div.today {
-	color: #F97B22;;
-}
-
-#calendar_header {
-	flex-wrap: wrap;
-	width: 100%;
-	height: 37px;
-	text-align: center;
-	background-color: #E57C23;
-	padding: 8px 0;
-	-webkit-border-radius: 12px 12px 0px 0px;
-	-moz-border-radius: 12px 12px 0px 0px;
-	border-radius: 12px 12px 0px 0px;
-}
-
-#calendar_header h1 {
-	font-size: 1.5em;
-	color: #F97B22;
-	float: left;
-	width: 50%;
-}
-
-i[class^="icon-chevron"] {
-	color: #ffffff;
-	float: left;
-	width: 15%;
-	border-radius: 50%;
-}
-
-@import
-	url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400);
-
 
 .toDoList {
 	border-top-right-radius: 0.7em;
@@ -449,26 +382,6 @@ h6 {
 	margin-top: 15px;
 }
 
-
-.hum {
-	margin-top: 15px;
-}
-
-
-.weather{
-border-radius: 0.6em;
-border:2px solid #ebe9ed;
-background-color: #537188;
-width:350px;
-height:83px;
-position: relative; right:118px; bottom:660px;
-font-size: 24px;
-color: white;
-text-align: center;
-
-
-}
-
 .hum {
 	margin-top: 15px;
 }
@@ -476,118 +389,6 @@ text-align: center;
 .date {
 	margin-left: 16px;
 	margin-right: 5px;
-}
-
-
-.temp-icon img {
-	width: 100%;
-}
-
-.small-icon img {
-	width: 20px;
-	display: inline;
-}
-
-.alarm-svg {
-	color: #00df8e;
-}
-
-.sgn-info-table, .stamp-table, .annual-content-table,
-	.purchase-content-table { 
-	--bs-table-border-color: black;
-}
-
-.sgn-info-table {
-	width: 300px;
-}
-
-.sgn-info-table>tbody>tr>td:first-child {
-	width: 100px; /* td의 너비를 원하는 크기로 설정 */
-	height: 1rem; /* td의 높이를 원하는 크기로 설정 */
-	background-color: #dddddd;
-}
-
-.sgn-info-table>tbody>tr>td:last-child {
-	width: 200px; /* td의 너비를 원하는 크기로 설정 */
-	height: 1rem; /* td의 높이를 원하는 크기로 설정 */
-}
-
-.full-width-input {
-	width: 100%; /* 너비를 100%로 설정 */
-	height: 100%; /* 높이를 100%로 설정 */
-	box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
-	border: none;
-}
-
-.full-width-input:focus {
-	outline: none; /* 클릭 효과인 테두리 선을 없앰 */
-}
-
-.full-width-textarea {
-	width: 100%; /* 너비를 100%로 설정 */
-	height: 200px; /* 높이를 100%로 설정 */
-	box-sizing: border-box; /* padding과 border를 포함한 크기 지정 */
-	border: none;
-}
-
-.full-width-textarea:focus {
-	outline: none; /* 클릭 효과인 테두리 선을 없앰 */
-}
-
-.stamp-table {
-	display: flex;
-	width: max-content; /* 테이블의 가로 길이를 자식 요소에 맞추기 위해 설정 */
-}
-
-.stamp-table td {
-	flex: 1; /* 각 td 요소들을 균등하게 너비를 분배하기 위해 설정 */
-}
-
-.stamp-table>tbody>tr:first-child>td {
-	background-color: #dddddd;
-}
-
-.stamp-table>tbody>tr:last-child>td, .stamp-table>tbody>tr:first-child>td
-	{
-	height: 1rem;
-}
-
-.stamp-table>tbody>tr:last-child>td {
-	font-size: 0.8rem;
-}
-
-.stamp-table>tbody>tr:nth-child(2)>td {
-	height: 80px;
-	vertical-align: middle;
-}
-
-.annual-content-table>tbody>tr:nth-child(4)>td {
-	vertical-align: middle;
-}
-
-.annual-content-table>tbody>tr:nth-child(4) {
-	height: 200px;
-}
-
-.annual-content-table>tbody>tr>td:last-child {
-	text-align: left;
-}
-
-.annual-content-table>tbody>tr>td:first-child {
-	background-color: #dddddd;
-}
-
-.purchase-content-table {
-	vertical-align: middle;
-}
-
-.purchase-content-table>thead, .purchase-content-table>tbody>tr:last-child>td:first-child,
-	.purchase-content-table>tbody>tr:nth-last-child(2) {
-	background-color: #dddddd;
-}
-
-.rounded-image {
-	border-radius: 100%;
 }
 
 .temp-icon img {
@@ -680,7 +481,6 @@ text-align: center;
 
 <!-- 전자결재  --> 
 <div class="sign">
-	<input type="hidden" th:value="${#authentication.name}" class="login-id">
 	<div class="mb-1 d-flex justify-content-between">
 		<div class="fs-3 fw-semibold"><i class="fas fa-chalkboard-teacher" style="color: #38ad7b; margin-right: 5px; height: 25px;"></i>전자결재</div>
 		<div class="fs-6 align-self-end">
@@ -694,37 +494,24 @@ text-align: center;
 	</div>
 	<table class="table text-center align-middle table-group-divider table-hover">
 		<colgroup>
-			<col width="5%">
-			<col width="20%">
-			<col width="20%">
-			<col width="20%">
+			<col width="*">
 			<col width="20%">
 		</colgroup>
 		<tbody>
-			<th:block th:if="${#lists.size(sgnDocList) == 0}">
+			<th:block th:if="${#lists.size(noticeList) == 0}">
 				<tr>
-					<td colspan="5">조회할 문서가 없습니다.</td>
+					<td colspan="3">등록된 게시글이 없습니다.</td>
 				</tr>						
 			</th:block>
-			<th:block th:unless="${#lists.size(sgnDocList) == 0}">
-				<th:block th:each="sgnDoc, state : ${sgnDocList}">
-					<tr onclick="showSignDocModal(this);"
-					th:data-doc-no="${sgnDoc.docNo}" th:data-doc-type=${sgnDoc.docType}>
-						<td>
-							<span th:class="${#authentication.name == sgnDoc.signVOList[0].nextApproverNo.toString() ? '' : 'd-none'}">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-fill alarm-svg" viewBox="0 0 16 16">
-								  <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10z"/>
-								</svg>
-							</span>
-						</td>
-						<td class="text-start px-3">
-							[[${sgnDoc.docTitle}]]
-						</td>
-						<td>[[${sgnDoc.empVO.ename}]]</td>
-						<td>[[${sgnDoc.insertDate}]]</td>
-						<td>[[${sgnDoc.sgnStatusStr}]]</td>
-					</tr>
-				</th:block>
+			<th:block th:unless="${#lists.size(noticeList) == 0}">
+				<tr th:each="notice, state : ${noticeList}" th:class="${notice.isImportant eq 'Y'} ? table-light">
+					<td class="text-start px-3">
+						<a th:href="@{/notice/detail(boardNum=${notice.boardNum})}" th:class="${notice.isImportant eq 'Y'} ? link-success : link-dark">
+						[[${notice.boardTitle}]]
+						</a>
+					</td>
+					<td>[[${notice.boardDate}]]</td>
+				</tr>
 			</th:block>
 		</tbody>
 	</table>
@@ -815,31 +602,6 @@ text-align: center;
   </div>
  
 </div>
-<<<<<<< HEAD
-=======
-
-<!-- 기안 조회 모달 -->
-	<!-- 임시저장일 경우 show -->
-	<div class="modal fade" id="showSignDoc" data-bs-backdrop="static"
-		data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-xl">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="staticBackdropLabel">기안 조회</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					
-				</div>
-				
-			</div>
-		</div>
-	</div>
-
-
->>>>>>> ce33645ca33e31606eeee1ab81d9f858c5fe3267
 </th:block>
 
 <th:block layout:fragment="content_js">
