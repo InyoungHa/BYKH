@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,7 +35,9 @@ public class SecurityConfig {
 						.successHandler(getSucessHandler())
 						.failureHandler(getFailureHandler())
 						.permitAll() //로그인
-				//.and() 	.rememberMe().key("AbcdEfghIjklmNopQrsTuvXyz_0123456789")
+				/*
+				 * .and() .rememberMe() .userDetailsService(UserDetails);
+				 */
 				.and()
 						.logout()
 						.logoutUrl("/user/logout")
@@ -73,5 +76,6 @@ return security.build();
 		return new SuccessHandler();
 	}
 	
+
 
 }

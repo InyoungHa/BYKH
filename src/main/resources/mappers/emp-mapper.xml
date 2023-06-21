@@ -295,15 +295,25 @@
 	<update id="updateSelfEmpDetail">
 		UPDATE EMP
 		SET ENAME = #{ename},
-			DEPTNO =#{deptno},
-			E_JOB =#{eJob},
 			E_EMAIL =#{eEmail},
 			OFFICE_TEL =#{officeTel},
 			PHONE_TEL =#{phoneTel}
 		WHERE EMPNO = #{empno}			
 	</update>
 	
+	<!--비밀번호 가져오기  -->
+	<select id="getEpw" resultType="String">
+		SELECT EPW
+		FROM EMP
+		WHERE EMPNO =#{empno}
+	</select>
 
+	<!--비밀번호 변경하기 -->
+	<update id="updateEpw">
+		UPDATE EMP
+		SET EPW =#{epw}
+		WHERE EMPNO =#{empno}
+	</update>
 	
 </mapper>
 

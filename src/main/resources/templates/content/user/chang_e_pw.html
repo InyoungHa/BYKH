@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+   layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+	<!--<link rel="stylesheet" href=""> -->
+</th:block>
+
+<th:block layout:fragment="content">
+<div class="row">
+	<div class="col offset-4">
+		<div class="row">
+			<div class="col-4 ">		
+				<label class="form-label">비밀번호 변경</label>
+				<input type="password" id="changePassword" name="changePassword" oninput="change_epw_validate();" class="form-control">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-4 ">		
+				<label class="form-label">비밀번호 확인</label>
+				<input type="password" id="confirmPassword" name="confirmPassword" oninput="change_epw_validate();" class="form-control">
+			</div>
+		</div>
+		<div class="row">	
+			<div class="col-4">
+				<div class="text-center">
+					<button class="btn bg-gradient-primary w-100 my-4 mb-2" onclick="changeEPw();">비밀번호 변경</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	
+
+</th:block>
+
+<th:block layout:fragment="content_js">
+	<!--연결해야하는 외부 js  -->
+	<script type="text/javascript" src="/js/content/user/chang_e_pw.js"></script>
+</th:block>
+
+</html>
