@@ -7,41 +7,108 @@
 		<id column="TO_DO_CODE" 		property="toDoCode"/>
 		<result column="EMPNO" 		property="empno"/>
 		<result column="TO_DO_CONTENT" 		property="toDoContent"/>
+		<association property="empVO" resultMap="empMapper.emp"></association>
+		<association property="deptVO" resultMap="deptMapper.dept"></association>
+		<association property="eImgVO" resultMap="empMapper.eImg"></association>
 	</resultMap>
+	
+	
 
 <!--TO_DO_LIST 내용 저장  -->
 <insert id="insertToDoList">
-INSERT INTO TO_DO_LIST (
-			TO_DO_CODE
-			, TO_DO_CONTENT
-			, EMPNO
-		)
-		VALUES (
-			(SELECT 'TO_DO_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TO_DO_CODE, 7))), 0) + 1, 3, '0')
-			FROM TO_DO_LIST)
-			, #{toDoContent}
-			, #{empno}
-		)
+	INSERT INTO TO_DO_LIST (
+				TO_DO_CODE
+				, TO_DO_CONTENT
+				, EMPNO
+			)
+			VALUES (
+				(SELECT 'TO_DO_'||LPAD(NVL(MAX(TO_NUMBER(SUBSTR(TO_DO_CODE, 7))), 0) + 1, 3, '0')
+				FROM TO_DO_LIST)
+				, #{toDoContent}
+				, #{empno}
+			)
 </insert>
 
 <!-- ToDoList 내용 조회 -->
 <select id="selectToDoList" resultMap="user">
-SELECT * FROM TO_DO_LIST WHERE EMPNO = #{empno}
-ORDER BY TO_DO_CODE
+	SELECT * FROM TO_DO_LIST WHERE EMPNO = #{empno}
+	ORDER BY TO_DO_CODE
 </select>
 
 <!-- TODO코드 조회  -->
 <select id="selectToDoCode" resultMap="user">
-SELECT TO_DO_CODE FROM TO_DO_LIST
+	SELECT TO_DO_CODE FROM TO_DO_LIST
 </select>
 
 <!-- ToDoList 삭제 -->
 <delete id="deleteToDoList">
-DELETE TO_DO_LIST WHERE TO_DO_CODE = #{toDoCode} AND EMPNO = #{empno}
+	DELETE TO_DO_LIST WHERE TO_DO_CODE = #{toDoCode} AND EMPNO = #{empno}
 </delete>
 
+<!-- 메인화면 부서 위치 조회 -->
+<select id="selectDept" resultMap="user">
+	SELECT DENAME, LOC
+	FROM DEPT DT, EMP EP
+	WHERE DT.DEPTNO = EP.DEPTNO 
+	AND EP.EMPNO = #{empno}
+</select>
 
+<!--메인화면 이미지 조회 -->
+<select id="selectAttImg" resultMap="user">
+	SELECT ATTACHED_FILE_NAME
+	FROM E_IMG
+	WHERE EMPNO = #{empno}
+</select>
 
+	<!-- 권한 추가 -->
+	<update id="updateRole">
+		UPDATE EMP
+		SET E_ROLE = CONCAT(E_ROLE, #{eRole})
+		WHERE EMPNO = #{empno}
+	</update>
+	
+	<!-- 권한 리스트 조회 -->
+	<select id="getEmpRoleList" resultMap="empMapper.emp">
+		SELECT EMPNO
+		    , ENAME
+		    , E_EMAIL
+		    , OFFICE_TEL
+		    , LOC
+		    , DENAME
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM EMP, DEPT
+		WHERE E_ROLE LIKE '%${eRole}%'
+		AND DEPT.DEPTNO = EMP.DEPTNO
+	</select>
+	
+	<!-- 권한 중복 체크 -->
+	<select id="roleCheck" resultType="int">
+		SELECT COUNT(EMPNO)
+		FROM EMP
+		WHERE E_ROLE LIKE '%${eRole}%'
+		AND EMPNO = #{empno}
+	</select>
+	
+	<!-- 권한 삭제 -->
+	<update id="deleteRole">
+		UPDATE EMP
+		SET E_ROLE = REPLACE(E_ROLE, #{eRole}, '')
+		WHERE EMPNO = #{empno}
+	</update>
+	
+	<!-- 권한 추가한  -->
+	<select id="">
+		SELECT EMPNO
+		    , ENAME
+		    , E_EMAIL
+		    , OFFICE_TEL
+		    , LOC
+		    , DENAME
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM EMP, DEPT
+		WHERE E_ROLE LIKE '%${role}%'
+		AND DEPT.DEPTNO = EMP.DEPTNO
+	</select>
 </mapper>
 
 

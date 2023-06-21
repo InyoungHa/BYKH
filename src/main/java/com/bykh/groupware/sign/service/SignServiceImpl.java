@@ -94,6 +94,10 @@ public class SignServiceImpl implements SignService{
 	public void delAnnualLeave(int docNo) {
 		sqlsession.delete("signMapper.delAnnualLeave", docNo);
 	}
+	@Override
+	public List<SignDocVO> getMainSignDocList(int empno) {
+		return sqlsession.selectList("signMapper.getMainSignDocList", empno);
+	}
 	
 	
 	

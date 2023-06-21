@@ -23,6 +23,7 @@ public class SecurityConfig {
 			   		//.requestMatchers("/", "/user/loginForm").permitAll()
 			   		.requestMatchers("/emp/**").hasAnyRole("ADMIN","SUPER_ADMIN")
 			   		.requestMatchers("/dept/**").hasAnyRole("ADMIN","SUPER_ADMIN")
+			   		.requestMatchers("/mor/mroManage").hasAnyRole("ADMIN","SUPER_ADMIN")
 			   		.anyRequest().authenticated()
 				.and()
 						.formLogin()

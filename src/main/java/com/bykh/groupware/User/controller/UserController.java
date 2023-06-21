@@ -39,6 +39,7 @@ import com.bykh.groupware.emp.service.EmpService;
 import com.bykh.groupware.emp.service.UserDetailsServiceImpl;
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
+import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.util.DateUtil;
 import com.bykh.groupware.util.UploadUtil;
 
@@ -59,6 +60,8 @@ public class UserController {
 	private DeptService deptService;
 	@Resource(name="userService")
 	private UserService userService;
+	@Resource(name="signService")
+	private SignService signService;
 	
 	//로그인 페이지
 	@GetMapping("/log")
@@ -74,7 +77,6 @@ public class UserController {
 			attendanceVO.setCurDate(nowDate);
 		}	
 		
-		
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
 				
@@ -88,7 +90,13 @@ public class UserController {
 		model.addAttribute("noticeList", userService.getMainBoard());
 		
 		//결재문서 조회
-		model.addAttribute("approver", null);
+		model.addAttribute("sgnDocList", signService.getMainSignDocList(empno));
+		
+		//부서/위치 조회
+		model.addAttribute("selectDept", userService.selectDept(empno));
+		
+		//사원이미지 조회
+		model.addAttribute("selectAttImg", userService.selectAttImg(empno));
 		
 		return "content/user/main";
 
@@ -369,12 +377,6 @@ public class UserController {
 			//지역에 속한 모든 부서 목록 조회 
 			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
 			
-			//부서에 속한 모든 사원 정보 조회
-			for(OrgDeptVO orgDeptVO : deptList) {
-				List<EmpVO> empList = deptService.getEmpListForOrg(orgDeptVO.getDeptno());
-				orgDeptVO.setEmpList(empList);
-			}
-			
 			organizationVO.setOrgDeptList(deptList);
 		}
 		
@@ -391,6 +393,33 @@ public class UserController {
 		return deptService.getEmpListForOrg(deptno);
 	}
 	
+	//항목별 관리자 리스트 조회
+	@ResponseBody
+	@PostMapping("/getEmpRoleList")
+	public List<EmpVO> getEmpRoleList(String eRole) {
+		return userService.getEmpRoleList(eRole);
+	}
+	
+	//권한 중복 조회
+	@ResponseBody
+	@PostMapping("/roleCheck")
+	public int roleCheck(EmpVO empVO) {
+		return userService.roleCheck(empVO);
+	}
+	
+	//권한 추가
+	@ResponseBody
+	@PostMapping("/updateRole")
+	public void updateRole(EmpVO empVO) {
+		userService.updateRole(empVO);
+	}
+	
+	//권한 삭제
+	@ResponseBody
+	@PostMapping("/deleteRole")
+	public void deleteRole(EmpVO empVO) {
+		userService.deleteRole(empVO);
+	}
 
 	
 

@@ -185,7 +185,7 @@ li:last-child {
         <nav class="nav">
             <div>
             
-                <div class="nav__brand">
+                <div class="nav__brand ">
                     <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
                     <a th:href="@{/user/main}" class="nav__logo"><img src="/img/content/header/BYKHlogo.png" id="logoImg" style="width: 120px; height: 105px;"></a>
                 </div>
@@ -203,16 +203,7 @@ li:last-child {
                         
                        		 <a th:href="@{/sign/signMain}"><span  class="nav_name" data-bs-toggle="collapse" href="#collapseExample1" role="button" aria-expanded="false" aria-controls="collapseExample1">전자결재</span></a>
 						<div class="collapse" id="collapseExample1">
-	   						<ul>
-	   						<!-- li 글자 길면 짤리니 주의 ! -->
-			    				<li class="nav-item"><a  aria-current="page" th:href="@{/sign/signMain}">결재현황</a></li>
-			    				<li class="nav-item"><a  aria-current="page" href="#">미결함</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">진행함</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">완료함</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">반려함</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">임시함</a></li>
-			    				<li class="nav-item"><a aria-current="page" href="#">참조함</a></li>
-	 						</ul>
+	   						
 						</div>             	
  					</div>
  					
@@ -287,6 +278,20 @@ li:last-child {
 	                    <ion-icon name="briefcase-outline"></ion-icon>
 	                    <span class="nav_name">자료실</span>
 	                </a>
+	                <th:block sec:authorize="hasRole('USER')">
+		                <a th:href="@{/mro/mroEmp}" class="nav__link">
+		                    <ion-icon name="briefcase-outline"></ion-icon>
+		                    <span class="nav_name">MRO</span>
+		                </a>
+	                </th:block>
+	                <th:block sec:authorize="hasRole('ADMIN')">
+		                <a th:href="@{/mro/mroManage}" class="nav__link">
+		                    <ion-icon name="briefcase-outline"></ion-icon>
+		                    <span class="nav_name">MRO관리</span>
+		                </a>
+	                </th:block>
+	                
+	                
 	                   <a th:href="@{/user/branchMap}" class="nav__link">
 	                   <ion-icon name="location-outline"></ion-icon>
 	                    <span class="nav_name">지사 위치</span>

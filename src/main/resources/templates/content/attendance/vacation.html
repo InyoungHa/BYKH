@@ -179,7 +179,7 @@ margin-right: 10px;
 					<td>사용 휴가</td>
 				</tr>
 				<tr>
-					<td>[[${allVacation.allVacation}]]일</td>
+					<td th:unless="${allVacation== null}" th:text="${allVacation.allVacation} + '일'" ></td>
 				</tr>
 			</table>
 
@@ -189,21 +189,16 @@ margin-right: 10px;
 					<td>잔여 휴가</td>
 				</tr>
 				<tr>
-					<td>[[${15-allVacation.allVacation}]]일</td>
+					<td th:unless="${allVacation== null}" th:text="${15-allVacation.allVacation} + '일'" ></td>
 				</tr>
 			</table>
 		</div>
 	</div>
-
-
-
-
-
 	<!--출퇴근기록 테이블 box -->
 	<div class="bottomBox">
 		<div class="bottomTitle">
 			[[${#strings.substring(attendanceVO.curDate, 0, 4)}]]년 [[${selectName.empVO.ename}]]님의 휴가사용내역 (최신 5회)
-		<input type="button" class="btn" style="color: white;" th:onclick="|location.href='@{/sign/annualLeaveForm}'|" value="휴가 신청">
+		<input type="button" class="btn" style="color: white; margin-top: 5px;" th:onclick="|location.href='@{/sign/annualLeaveForm}'|" value="휴가 신청">
 
 		</div>
 
@@ -229,10 +224,8 @@ margin-right: 10px;
 
 			</tbody>
 		</table>
-			<input  data-bs-toggle="modal" data-bs-target="#findAll"  type="button" class="btn all" value="전체보기" style="margin-top: 10px; margin-left:580px;"> 
+			<input  data-bs-toggle="modal" data-bs-target="#findAll"  type="button" class="btn all" value="전체보기" style="margin-top: 10px; margin-left:600px;"> 
 	</div>
-	
-
 
 	<!-- modal 추가 -->
 	<div class="modal fade" id="findAll" tabindex="-1" role="dialog"
@@ -260,24 +253,18 @@ margin-right: 10px;
 									<td>[[${detailState.index + 1}]]</td>
 									<td>[[${vacList2.startDate}]]~[[${vacList2.endDate}]]</td>
 									<td>[[${vacList2.dalType}]]</td>
-									<td th:unless="${vacList2.dalType == '연차'}">[[${vacList2.startTime}]]시
-										~ [[${vacList2.endTime}]]시</td>
+									<td th:unless="${vacList2.dalType == '연차'}">[[${vacList2.startTime}]]시 ~ [[${vacList2.endTime}]]시</td>
 									<td th:if="${vacList2.dalType == '연차'}"></td>
 									<td>[[${vacList2.leaveReason}]]</td>
 								</tr>
-
 							</tbody>
 						</table>
-
 						<br>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<input type="button" class="btn" value="인쇄하기" id="print"
-						onclick="printArea()"
-						style="margin-top: 10px; margin-right: 510px;" />
+					<input type="button" class="btn" value="인쇄하기" id="print" onclick="printArea()" style="margin-top: 10px; margin-right: 495px;" />
 				</div>
-
 			</div>
 		</div>
 	</div>

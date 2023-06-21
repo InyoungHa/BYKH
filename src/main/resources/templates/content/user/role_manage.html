@@ -7,6 +7,18 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.selectLi {
+		height: 4rem;
+	}
+	.selectLi:hover {
+		cursor: pointer;
+		background-color: #f2f3f5;
+	}
+	.selectedLi {
+		background-color: #f2f3f5;
+	}
+	</style>
 
 </th:block>
 
@@ -26,7 +38,7 @@
 					<div class="px-3 py-2 border border-bottom-0 border-dark-subtle fs-5 fw-semibold bg-body-secondary">설정 항목</div>
 					<div class="p-2 border border-dark-subtle" style="height: 50rem;">
 						<ul class="list-group">
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',ADMIN', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 									<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-building-fill-gear" viewBox="0 0 16 16">
@@ -37,7 +49,7 @@
 								<span class="align-self-center ms-3 fs-5">회사 관리자</span>
 						  	</div>
 						  </li>
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',ARCHIVE', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 									<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-briefcase-fill" viewBox="0 0 16 16">
@@ -48,7 +60,7 @@
 								<span class="align-self-center ms-3 fs-5">자료실</span>
 						  	</div>
 						  </li>
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',NOTICE', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 							  		<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-clipboard2-fill" viewBox="0 0 16 16">
@@ -59,7 +71,7 @@
 								<span class="align-self-center ms-3 fs-5">게시판</span>
 						  	</div>
 						  </li>
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',COMMUNITY', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 							  		<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-chat-text-fill" viewBox="0 0 16 16">
@@ -69,7 +81,7 @@
 								<span class="align-self-center ms-3 fs-5">커뮤니티</span>
 						  	</div>
 						  </li>
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',EMP', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 									<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
@@ -80,7 +92,7 @@
 								<span class="align-self-center ms-3 fs-5">인사관리</span>
 						  	</div>
 						  </li>
-						  <li class="list-group-item my-0 d-flex" style="height: 4rem;">
+						  <li class="list-group-item my-0 d-flex selectLi" onclick="selectRole(',MRO', this);">
 						  	<div class="d-flex align-items-center">
 						  		<span class="badge rounded-pill align-self-center" style="background-color: #1e2b37;">
 							  		<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
@@ -92,6 +104,7 @@
 						  </li>
 						</ul>
 					</div>
+					<input type="hidden" id="eRole" name="eRole">
 				</div>
 				
 				<!-- 두 번째 칸 (사원) -->
@@ -115,7 +128,8 @@
 							</ul>
 						</div>
 					</div>
-					<div class="p-4 border border-dark-subtle bg-body-tertiary" id="empListDiv" style="height: 20rem;">
+					<div class="p-4 border border-dark-subtle bg-body-tertiary" id="empListDiv" style="min-height: 20rem;">
+					
 						
 					</div>
 				</div>
@@ -123,8 +137,24 @@
 				<!-- 세 번째 칸 (관리자) -->
 				<div class="col-5">
 					<div class="px-3 py-2 border border-bottom-0 border-dark-subtle fs-5 fw-semibold bg-body-secondary">관리자 리스트</div>
-					<div class="p-2 border border-dark-subtle"  style="height: 50rem;">test</div>
+					<div class="p-2 border border-dark-subtle"  style="height: 50rem;">
+						<div class="row row-cols-2" id="roleEmpListDiv">
+							<!-- 반복 데이터 -->
+						    
+						</div>
+						<div class="text-center" style="color: #d5d5d5" id="alertDiv">
+							<div class="mt-5 mb-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+								  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+								  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+								</svg>
+							</div>
+							<div class="fs-3">항목을 선택해주세요.</div>
+						</div>
+					</div>
+					
 				</div>
+				
 			</div>
 		</div>
 	</div>

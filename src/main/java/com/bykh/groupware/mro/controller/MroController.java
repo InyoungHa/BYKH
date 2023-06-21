@@ -58,13 +58,6 @@ public class MroController {
 	public List<ItemVO> searchItemListAjax(ItemVO itemVO){
 		return mroService.getItemListForEmp(itemVO);
 	}
-	/*
-	 * @ResponseBody
-	 * 
-	 * @PostMapping("/searchItemListAjax") public Map<String, List<ItemVO>>
-	 * searchItemListAjax(ItemVO itemVO){ Map<String, List<ItemVO>> data = new
-	 * HashMap<>(); data.put("searchItemList",
-	 * mroService.getItemListForEmp(itemVO)); return data; }
-	 */
+	
 	
 }
