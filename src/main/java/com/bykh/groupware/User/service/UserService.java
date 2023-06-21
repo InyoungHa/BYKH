@@ -14,6 +14,12 @@ public interface UserService {
 	// 메인 TOdoList 내용조회
 	List<UserVO> selectToDoList(int empno);
 	
+	// 메인 부서/위치 조회
+	UserVO selectDept(int empno);
+	
+	//메인 사원이미지 조회
+	UserVO selectAttImg(int empno);
+	
 	//메인 TodoList 삭제 
 	void deleteToDoList(UserVO userVO);
 	

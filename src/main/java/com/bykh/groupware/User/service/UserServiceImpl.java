@@ -71,6 +71,19 @@ public class UserServiceImpl implements UserService {
 	public void deleteRole(EmpVO empVO) {
 		sqlSession.update("userMapper.deleteRole", empVO);
 	}
+		
+	
+	// 메인 부서/위치 조회
+	@Override
+	public UserVO selectDept(int empno) {
+		return sqlSession.selectOne("userMapper.selectDept", empno);
+	}
+
+	//메인 사원이미지 조회
+	@Override
+	public UserVO selectAttImg(int empno) {
+		return sqlSession.selectOne("userMapper.selectAttImg", empno);
+	}
 
 
 
