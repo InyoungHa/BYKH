@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bykh.groupware.User.vo.UserVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.notice.vo.BoardVO;
 
 
@@ -44,6 +45,31 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<BoardVO> getMainBoard() {
 		return sqlSession.selectList("boardMapper.getMainBoard");
+	}
+
+	
+	//항목별 관리자 리스트 조회
+	@Override
+	public List<EmpVO> getEmpRoleList(String role) {
+		return sqlSession.selectList("userMapper.getEmpRoleList", role);
+	}
+
+	//권한 추가
+	@Override
+	public void updateRole(EmpVO empVO) {
+		sqlSession.update("userMapper.updateRole", empVO);
+	}
+
+	//권한 중복 조회
+	@Override
+	public int roleCheck(EmpVO empVO) {
+		return sqlSession.selectOne("userMapper.roleCheck", empVO);
+	}
+
+	//권한 삭제
+	@Override
+	public void deleteRole(EmpVO empVO) {
+		sqlSession.update("userMapper.deleteRole", empVO);
 	}
 
 

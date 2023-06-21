@@ -42,6 +42,55 @@ DELETE TO_DO_LIST WHERE TO_DO_CODE = #{toDoCode} AND EMPNO = #{empno}
 
 
 
+	<!-- 권한 추가 -->
+	<update id="updateRole">
+		UPDATE EMP
+		SET E_ROLE = CONCAT(E_ROLE, #{eRole})
+		WHERE EMPNO = #{empno}
+	</update>
+	
+	<!-- 권한 리스트 조회 -->
+	<select id="getEmpRoleList" resultMap="empMapper.emp">
+		SELECT EMPNO
+		    , ENAME
+		    , E_EMAIL
+		    , OFFICE_TEL
+		    , LOC
+		    , DENAME
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM EMP, DEPT
+		WHERE E_ROLE LIKE '%${eRole}%'
+		AND DEPT.DEPTNO = EMP.DEPTNO
+	</select>
+	
+	<!-- 권한 중복 체크 -->
+	<select id="roleCheck" resultType="int">
+		SELECT COUNT(EMPNO)
+		FROM EMP
+		WHERE E_ROLE LIKE '%${eRole}%'
+		AND EMPNO = #{empno}
+	</select>
+	
+	<!-- 권한 삭제 -->
+	<update id="deleteRole">
+		UPDATE EMP
+		SET E_ROLE = REPLACE(E_ROLE, #{eRole}, '')
+		WHERE EMPNO = #{empno}
+	</update>
+	
+	<!-- 권한 추가한  -->
+	<select id="">
+		SELECT EMPNO
+		    , ENAME
+		    , E_EMAIL
+		    , OFFICE_TEL
+		    , LOC
+		    , DENAME
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM EMP, DEPT
+		WHERE E_ROLE LIKE '%${role}%'
+		AND DEPT.DEPTNO = EMP.DEPTNO
+	</select>
 </mapper>
 
 

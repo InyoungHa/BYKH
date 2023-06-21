@@ -3,6 +3,7 @@ package com.bykh.groupware.User.service;
 import java.util.List;
 
 import com.bykh.groupware.User.vo.UserVO;
+import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.notice.vo.BoardVO;
 
 public interface UserService {
@@ -21,6 +22,19 @@ public interface UserService {
 	
 	//메인 공지사항 목록
 	List<BoardVO> getMainBoard();
+	
+	
+	//항목별 관리자 리스트 조회
+	List<EmpVO> getEmpRoleList(String role);
+	
+	//권한 추가
+	void updateRole(EmpVO empVO);
+	
+	//권한 중복 조회
+	int roleCheck(EmpVO empVO);
+	
+	//권한 삭제
+	void deleteRole(EmpVO empVO);
 	
 }
 
