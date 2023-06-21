@@ -125,10 +125,7 @@ function regSelfEmpDetail() {
 	const empno = document.querySelector('#empno').textContent; //사번
 	const ename = document.querySelector('#ename').value; //이름
 	
-	const deptno= document.querySelector('#deptno').value; //부서번호
-	
-	
-	const eJob = document.querySelector('#eJob').value; //직책
+
 	const eEmail = document.querySelector('#eEmail').textContent; //이메일
 	
 	const office_tel_first=document.querySelector('#officeTel').value;
@@ -143,9 +140,7 @@ function regSelfEmpDetail() {
 	regDetail={
 		'empno' : empno,		
 		'ename':ename,
-		'deptno' :deptno,
 		'eEmail' : eEmail,
-		'eJob' : eJob,
 		'officeTel':officeTel,
 		'phoneTel': phoneTel,
 			

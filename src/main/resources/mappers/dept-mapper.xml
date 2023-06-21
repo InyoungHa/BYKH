@@ -112,6 +112,7 @@
 			, DENAME 
 		FROM DEPT
 		WHERE LOC = #{loc}
+		ORDER BY DEPTNO
 	</select>
 	
 	<!--부서별 사원 리스트  -->

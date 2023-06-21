@@ -102,6 +102,22 @@ public class EmpServiceImpl implements EmpService {
 		
 	}
 
+
+	@Override //비밀번호 조회
+	public String getEpw(int empno) {
+		return sqlSession.selectOne("empMapper.getEpw", empno);
+		
+	}
+
+
+	@Override //비밀번호 변경
+	public void updateEpw(EmpVO empVO) {
+		sqlSession.update("empMapper.updateEpw",empVO);
+		
+	}
+	
+	
+
 	
 	
 	

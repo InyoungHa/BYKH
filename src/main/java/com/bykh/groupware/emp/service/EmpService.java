@@ -53,6 +53,12 @@ public interface EmpService {
 	//마이페이지 수정
 	void updateSelfEmpDetail(EmpVO empVO);
 	
+	//비밀번호 조회
+	String getEpw(int empno);
+	
+	//비밀번호 변경
+	void updateEpw(EmpVO empVO);
+	
 	
 	
 

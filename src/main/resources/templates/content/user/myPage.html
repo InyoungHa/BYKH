@@ -24,6 +24,11 @@
 						<h4 class="card-title">[[${empDetail.ename}]]</h4>
 						<p class="card-text">[[${empDetail.deptVO.dename +'(' +empDetail.deptVO.loc+')'}]]</p>
 					</div>
+					<div class="col-4 offset-4 text-center mb-3">
+						<button class="btn" type="button" onclick="location.href='/user/checkEPwPage'">
+							<div>비밀번호 변경</div>
+						</button>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -48,8 +53,8 @@
 							<tr>
 								<td>아이디</td>
 								<td>[[${empDetail.empno}]]</td>
-							</tr>
-					</table>
+							</tr>						
+						</table>
 					</ul>
 					</div>
 				</div>
@@ -60,23 +65,11 @@
 					<table style="margin-bottom:1rem;">
 						<tr>
 							<td>부서</td>
-							<td>
-								<select id="deptno" name="deptno" class="form-select">
-									<option th:each="dept:${deptListIsUse}" th:text="${dept.dename+'(' +dept.loc+')'}"	th:value="${dept.deptno}" th:selected="${empDetail.deptno == dept.deptno}"></option>
-	 							</select>
-	 						</td>
+							<td>[[${empDetail.deptVO.dename +'(' +empDetail.deptVO.loc+')'}]]</td>
 	 					</tr>
 	 					<tr>
 	 						<td>직급</td>
-	 						<td>
-	 							<select id="eJob" name="eJob" class="form-select">
-										<option value="사장" th:selected="${empDetail.eJob == '사장'}">사장</option>
-										<option value="과장" th:selected="${empDetail.eJob == '과장'}">과장</option>
-										<option value="대리" th:selected="${empDetail.eJob == '대리'}">대리</option>
-										<option value="주임" th:selected="${empDetail.eJob == '주임'}">주임</option>
-										<option value="사원" th:selected="${empDetail.eJob == '사원'}">사원</option>
-								</select>
-							</td>
+	 						<td>[[${empDetail.eJob}]]</td>
 						</tr>
 						<tr>
 							<td>입사일</td>
