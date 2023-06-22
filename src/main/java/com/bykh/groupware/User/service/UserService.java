@@ -42,6 +42,9 @@ public interface UserService {
 	//권한 삭제
 	void deleteRole(EmpVO empVO);
 	
+	//권한 추가한 사원 정보
+	EmpVO getRoleEmp(EmpVO empVO);
+	
 }
 
 

@@ -108,7 +108,32 @@
 			bottom: 0;
 			
 		}
-		
+		.emp-list-border{
+			border: 1px solid #dee2e6;
+		}
+		.number-bg-svg{
+			color: #00df8e;
+		}
+		 .image-container {
+            position: relative;
+            display: inline-block;
+            background-color: #22415f;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 100px;
+        }
+
+        .number {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 숫자를 동그라미 중앙에 정렬 */
+        }
 		
 </style>
 </th:block>
@@ -167,7 +192,7 @@
 								<tr class="enameTr">
 									<td>
 										[[${signWriteInfo.empVO.ename}]]
-									</td><!-- 도장 이미지 -->
+									</td>
 									<td>
 									</td>
 								</tr>
@@ -264,10 +289,11 @@
 						</div>
 						<div class="col-4 d-grid">
 							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal">
+<!-- 							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal"> -->
 						</div>
 						<!-- 결제자 츠기될 때마다 생성(신청서의 html도 같이 생성되어야 함) -->
 						<div class="col-12  approver-list-div">
-						<th:block th:if="${signWriteInfo.signVOList != null}>
+						<th:block th:if="${signWriteInfo.signVOList != null}">
 							<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div">
 								<div class="col-3">
 									<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
@@ -385,17 +411,44 @@
 	<!-- 결재자 찾기 모달 -->
 	<div class="modal fade" id="searchApproverModal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-dialog modal-dialog-scrollable modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h1 class="modal-title fs-5" id="exampleModalLabel">결재자 추가</h1>
 					<button type="button" class="btn-close" data-bs-dismiss="modal"
 						aria-label="Close"></button>
 				</div>
-				<div class="modal-body align-items-center pt-3" >
-					
+				<div class="modal-body align-items-center pt-3">
+					<div class="row">
+						<div class="col-6">
+							<ul class="border rounded dept-list-area">
+								<th:block th:each="organization : ${organizationList}">
+									<li class="m-3">
+									<a class="loc text-dark" style="cursor: pointer;"> 
+										<img src="/img/folder.png" width="30px" class="me-2" />[[${organization.loc}]]
+									</a>
+										<ul class="dept">
+											<li th:each="dept : ${organization.orgDeptList}" style="padding-left: 50px;">
+												<a class="link-dark" style="cursor: pointer;"
+												th:onclick="getDeptEmpList([[${dept.deptno}]])">
+													[[${dept.dename}]]
+												</a>
+											</li>
+										</ul>
+									</li>
+								</th:block>
+							</ul>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col emp-list-border rounded emp-list-area">
+									
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				
+
 			</div>
 		</div>
 	</div>

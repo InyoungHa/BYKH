@@ -71,6 +71,12 @@ public class UserServiceImpl implements UserService {
 	public void deleteRole(EmpVO empVO) {
 		sqlSession.update("userMapper.deleteRole", empVO);
 	}
+	
+	//권한 추가한 사원 정보 조회
+	@Override
+	public EmpVO getRoleEmp(EmpVO empVO) {
+		return sqlSession.selectOne("userMapper.getRoleEmp", empVO);
+	}
 		
 	
 	// 메인 부서/위치 조회
@@ -84,6 +90,7 @@ public class UserServiceImpl implements UserService {
 	public UserVO selectAttImg(int empno) {
 		return sqlSession.selectOne("userMapper.selectAttImg", empno);
 	}
+
 
 
 

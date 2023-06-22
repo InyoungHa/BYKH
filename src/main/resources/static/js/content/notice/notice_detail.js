@@ -24,7 +24,7 @@ function regReply(boardNum) {
 	
 	//ajax start
 	$.ajax({
-		url: '/reply/regReply', //요청경로
+		url: '/reply/regReplyAjax', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -41,7 +41,7 @@ function regReply(boardNum) {
 			str += `<tr class="border-top">                                                         `;
 			str += `	<td class="text-center">                                                    `;
 			if(reply.attachedFileName == null) {
-			str += `		<img src="/upload/empImg/default.png" width="100%" class="mx-0 rounded-circle border">`;
+			str += `		<img src="/upload/empImg/test.jpg" width="100%" class="mx-0 rounded-circle border">`;
 			}
 			else {
 			str += `		<img src="/upload/empImg/${reply.attachedFileName}" width="100%" class="mx-0 rounded-circle border">`;
@@ -85,7 +85,7 @@ function deleteReply(replyNum, deleteBtn) {
 	if(confirm('댓글을 삭제하시겠습니까?')) {
 		//ajax start
 		$.ajax({
-			url: '/reply/delete', //요청경로
+			url: '/reply/deleteAjax', //요청경로
 			type: 'post',
 			async: true,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -151,7 +151,7 @@ function updateReply(replyNum, formBtn) {
 	
 	//ajax start
 	$.ajax({
-		url: '/reply/update', //요청경로
+		url: '/reply/updateAjax', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

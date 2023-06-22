@@ -20,7 +20,7 @@ public class ReplyController {
 	
 	//댓글 등록
 	@ResponseBody
-	@PostMapping("/regReply")
+	@PostMapping("/regReplyAjax")
 	public ReplyVO regReplyAjax(ReplyVO replyVO, Authentication authentication) {
 		//다음으로 들어갈 댓글 번호 조회
 		String nextReplyNum = replyService.getNextReplyNum();
@@ -41,14 +41,14 @@ public class ReplyController {
 	
 	//댓글 삭제
 	@ResponseBody
-	@PostMapping("/delete")
+	@PostMapping("/deleteAjax")
 	public void deleteReply(String replyNum) {
 		replyService.deleteReply(replyNum);
 	}
 	
 	//댓글 수정
 	@ResponseBody
-	@PostMapping("/update")
+	@PostMapping("/updateAjax")
 	public ReplyVO updateReply(ReplyVO replyVO) {
 		replyService.updateReply(replyVO);
 		

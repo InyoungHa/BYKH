@@ -20,17 +20,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
 		//로그인 정보 조회
-		EmpVO empVO =empService.login(Integer.parseInt(username));
+		EmpVO empVO = empService.login(Integer.parseInt(username));
 		
 		//아이디가 없는 경우 예외 설정
-		if(empVO ==null) {
+		if(empVO == null) {
 			throw new UsernameNotFoundException("오류");
 		}
 		
 		
 		UserDetails user = User.withUsername(String.valueOf(empVO.getEmpno()))
 							   .password(empVO.getEpw())
-							   .roles(empVO.getERole())
+							   .roles(empVO.getERole().split(","))
 							   .build();
 				
 		return user;

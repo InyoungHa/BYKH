@@ -79,6 +79,7 @@
 		FROM EMP, DEPT
 		WHERE E_ROLE LIKE '%${eRole}%'
 		AND DEPT.DEPTNO = EMP.DEPTNO
+		ORDER BY ENAME
 	</select>
 	
 	<!-- 권한 중복 체크 -->
@@ -96,8 +97,8 @@
 		WHERE EMPNO = #{empno}
 	</update>
 	
-	<!-- 권한 추가한  -->
-	<select id="">
+	<!-- 권한 추가한 사원 정보 -->
+	<select id="getRoleEmp" resultMap="empMapper.emp">
 		SELECT EMPNO
 		    , ENAME
 		    , E_EMAIL
@@ -106,8 +107,9 @@
 		    , DENAME
 		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) AS ATTACHED_FILE_NAME
 		FROM EMP, DEPT
-		WHERE E_ROLE LIKE '%${role}%'
+		WHERE E_ROLE LIKE '%${eRole}%'
 		AND DEPT.DEPTNO = EMP.DEPTNO
+		AND EMPNO = #{empno}
 	</select>
 </mapper>
 

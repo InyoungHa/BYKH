@@ -24,7 +24,7 @@ function checkBoardPw() {
 	else {
 		//ajax start
 		$.ajax({
-			url: '/community/checkBoardPw', //요청경로
+			url: '/community/checkBoardPwAjax', //요청경로
 			type: 'post',
 			async: true,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

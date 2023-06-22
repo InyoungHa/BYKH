@@ -3,7 +3,7 @@
 function getReportBoard(boardNum) {
 	//ajax start
 	$.ajax({
-		url: '/community/getReportBoard', //요청경로
+		url: '/community/getReportBoardAjax', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

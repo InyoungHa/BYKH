@@ -45,7 +45,7 @@ function tempRegNotice() {
 		
 		//ajax start
 		$.ajax({
-			url: '/notice/tempRegNotice', //요청경로
+			url: '/notice/tempRegNoticeAjax', //요청경로
 			type: 'post',
 			async: true,
 			data: formData,
@@ -223,7 +223,7 @@ function deleteFileInputDiv(deleteBtn) {
 function tempBoardList() {
 	//ajax start
 	$.ajax({
-		url: '/notice/tempBoardList', //요청경로
+		url: '/notice/tempBoardListAjax', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -316,7 +316,7 @@ function updateTempBoard(boardNum) {
 			
 			//ajax start
 			$.ajax({
-				url: '/notice/tempRegNotice', //요청경로
+				url: '/notice/tempRegNoticeAjax', //요청경로
 				type: 'post',
 				async: true,
 				data: formData,
@@ -340,7 +340,7 @@ function updateTempBoard(boardNum) {
 function getTempBoard(boardNum) {
 	//ajax start
 	$.ajax({
-		url: '/notice/getTempDetail', //요청경로
+		url: '/notice/getTempDetailAjax', //요청경로
 		type: 'post',
 		async: true,
 		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -421,7 +421,7 @@ function deleteBoard(boardNum, deleteBtn) {
 	if(confirm('정말 삭제하시겠습니까?')) {
 		//ajax start
 		$.ajax({
-			url: '/notice/tempDelete', //요청경로
+			url: '/notice/tempDeleteAjax', //요청경로
 			type: 'post',
 			async: true,
 			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

@@ -101,7 +101,7 @@ public class NoticeController {
 	
 	//글 임시 저장
 	@ResponseBody
-	@PostMapping("/tempRegNotice")
+	@PostMapping("/tempRegNoticeAjax")
 	public BoardVO tempRegNotice(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
@@ -123,7 +123,7 @@ public class NoticeController {
 	
 	//임시저장함 조회
 	@ResponseBody
-	@PostMapping("/tempBoardList")
+	@PostMapping("/tempBoardListAjax")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
 		String boardMenuCode = "BOARD_MENU_002";
 		
@@ -139,14 +139,14 @@ public class NoticeController {
 	
 	//임시저장 글 조회
 	@ResponseBody
-	@PostMapping("/getTempDetail")
+	@PostMapping("/getTempDetailAjax")
 	public BoardVO getTempDetail(BoardVO boardVO) {
 		return noticeService.getBoardDetailForUpdate(boardVO);
 	}
 	
 	//임시저장 글 삭제
 	@ResponseBody
-	@PostMapping("/tempDelete")
+	@PostMapping("/tempDeleteAjax")
 	public void deleteTempBoard(BoardVO boardVO) {
 		noticeService.deleteBoard(boardVO);
 	}

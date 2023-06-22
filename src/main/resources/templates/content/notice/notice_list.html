@@ -154,7 +154,7 @@
 			</div>
 			<div class="row">
 				<div class="col">
-					<input type="button" class="btn float-end" th:onclick="|location.href='@{/notice/regForm}'|" value="글쓰기">
+					<input type="button" class="btn float-end" th:onclick="|location.href='@{/notice/regForm}'|" value="글쓰기" sec:authorize="hasRole('NOTICE')">
 					<nav aria-label="Page navigation example">
 					  <ul class="pagination justify-content-center">
 					    <li class="page-item" th:classappend="${boardVO.prev} ? '' :  'disabled'">
