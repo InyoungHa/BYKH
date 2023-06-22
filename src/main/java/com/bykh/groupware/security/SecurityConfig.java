@@ -20,6 +20,7 @@ public class SecurityConfig {
 		security.csrf().disable()
 				.authorizeHttpRequests()
 			   		.requestMatchers("/"
+			   						, "user/log"
 			   						, "/user/findEPWForm"
 			   						, "/user/getEmailEPWAjax").permitAll() //로그인 전 임시비번 받기
 					.requestMatchers("/emp/**", "/dept/**").hasRole("EMP") //인사관리

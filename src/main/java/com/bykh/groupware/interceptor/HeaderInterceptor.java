@@ -19,15 +19,20 @@ public class HeaderInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+		String previousPage = request.getHeader("Referer");
+		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		//로그인 풀렸을 때 
 		if(authentication.getPrincipal() == "anonymousUser") {
-			response.sendRedirect("redirect:/user/log");
+			System.out.println(previousPage);
+			System.out.println("anonymousUser");
+			response.sendRedirect("/user/log");
 			
 			return false;
 		}
 		else {
+			System.out.println("preHandle end");
 			return true;
 		}
 	}
