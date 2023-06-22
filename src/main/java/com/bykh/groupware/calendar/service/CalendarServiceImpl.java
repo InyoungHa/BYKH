@@ -65,6 +65,12 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<ResourceVO> getAllResourceSchedules(int empno) {
 		return sqlSession.selectList("calendarMapper.getAllResourceSchedules", empno);
 	}
+	
+	//자원관리 캘린더 전체 일정 조회
+	@Override
+	public List<ResourceVO> selectAllSchedules() {
+		return sqlSession.selectList("calendarMapper.selectAllSchedules");
+	}
 
 	//자원관리 캘린더 세부일정 추가
 	@Override
@@ -77,6 +83,9 @@ public class CalendarServiceImpl implements CalendarService {
 	public int getInsertScheduleCode() {
 		return sqlSession.selectOne("calendarMapper.getLastSchedulCode");
 	}
+
+
+
 
 
 

@@ -23,6 +23,7 @@ public class ResourceVO {
     private String totalDuration;
     private String participant;
     private String resourceContent;
+    private int resourceCnt;
 
 }
 

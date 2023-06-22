@@ -15,8 +15,7 @@ body {
 
 .commute {
 	width: 100%;
-	font-size: 20px;
-	margin-bottom: 20px;
+	margin-bottom: 25px;
 	font-weight: bold;
 }
 
@@ -126,7 +125,8 @@ tbody tr td:nth-child(2) {
 .bottomThead {
 	margin-left: 10px;
 	margin-right: 10px;
-	border: solid #ebeaed;
+	border-top: 3px solid #ebeaed;
+	border-bottom: 3px solid #ebeaed;
 }
 
 .bottomTable tr td {
@@ -223,7 +223,7 @@ img {
 
 
 	<!-- 출퇴근 -->
-		<div class="commute">[[${selectName.empVO.ename}]]님의 출퇴근기록</div>
+		<h2 class="commute">[[${selectName.empVO.ename}]]님의 출퇴근기록</h2>
 		
 	<!-- 출퇴근시간box -->
 	<span class="time"> 

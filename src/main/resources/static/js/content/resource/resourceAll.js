@@ -65,11 +65,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				});
 		});
 
-
+//모달상세 조회 (전체)
 		var id = info.event._def.publicId;
 				//ajax start
 				$.ajax({
-					url: '/resource/selectCalendarDetailAjax', //요청경로
+					url: '/resource/selectCalendarDetailAllAjax', //요청경로
 					type: 'post',
 					async: false,
 					contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -365,7 +365,7 @@ function loadingEvents() {
 	
 	//ajax start
 	$.ajax({
-		url: '/calendar/resourceCalendarLoadAjax', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
+		url: '/calendar/selectAllSchedulesAjax', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
 		type: 'POST',
 		async: false,
 		dataType: 'json',

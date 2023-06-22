@@ -166,7 +166,7 @@ $(document).ready(function () {
     //toDolist 저장
 	  //ajax start
 	  $.ajax({
-		  url: '/user/insertToDoList', //요청경로
+		  url: '/user/insertToDoListAjax', //요청경로
 		  type: 'post',
 		  async: true,
 		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",
@@ -199,7 +199,7 @@ $(document).ready(function () {
      //toDolist 삭제	
      //ajax start
 	  $.ajax({
-		  url: '/user/deleteToDoList', //요청경로
+		  url: '/user/deleteToDoListAjax', //요청경로
 		  type: 'post',
 		  async: false,
 		  contentType: "application/x-www-form-urlencoded; charset=UTF-8",

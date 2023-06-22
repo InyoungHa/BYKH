@@ -1,6 +1,7 @@
 package com.bykh.groupware.attendance.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bykh.groupware.attendance.vo.AttendanceVO;
 import com.bykh.groupware.emp.vo.EmpVO;
@@ -65,6 +66,9 @@ public interface AttendanceService {
 	
 	//휴가사용내역 테이블 조회
 	List<DocAnnualLeaveVO> selectListVacation2(int empno);
+	
+	//사원별 총근무시간 조회(차트용)
+	List<Map<String, Object>> selectTotalChart();
 	
 }
 

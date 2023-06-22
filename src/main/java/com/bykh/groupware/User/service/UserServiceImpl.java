@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 	
 	//메인 todoList 내용 저장
 	@Override
-	public void insertToDoList(UserVO userVO) {
+	public void insertToDoListAjax(UserVO userVO) {
 		sqlSession.insert("userMapper.insertToDoList", userVO);
 	}
 
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	
 	//메인 todoList 내용 삭제
 	@Override
-	public void deleteToDoList(UserVO userVO) {
+	public void deleteToDoListAjax(UserVO userVO) {
 		sqlSession.delete("userMapper.deleteToDoList", userVO);
 	}
 

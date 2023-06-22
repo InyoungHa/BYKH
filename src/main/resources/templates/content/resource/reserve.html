@@ -77,7 +77,6 @@ html {
 }
 
 body {
-
   margin-bottom:150px;
   height: 100%;
   display: flex;
@@ -328,7 +327,7 @@ font-size: 22px;
 <body>
 
 
-<div style="margin-left:445px; font-size: 50px; font-weight: bold; color: #0b5573; ">자원 관리 캘린더</div>
+<div style="margin-left:360px; font-size: 50px; font-weight: bold; color: #0b5573; ">[[${selectName.empVO.ename}]]님의 자원 캘린더</div>
   <div id='external-events'>
     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
       <div data-bs-toggle="modal" data-bs-target="#room1" class='fc-event-main' style="background-color: #025464; border: 1px solid #025464; cursor: pointer;">회의실01</div>
@@ -375,7 +374,7 @@ font-size: 22px;
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="taskId" class="col-form-label">자원 내용</label>
-                        <input type="text" class="form-control" id="calendar_content" name="calendar_content">
+                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" >
                         <label for="taskId" class="col-form-label" style="margin-top: 10px;">시작 날짜</label>
                         <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                      
@@ -424,7 +423,7 @@ font-size: 22px;
 							<label for="taskId" class="col-form-label">총 사용 시간</label>
 							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
 							
-							<label for="taskId" class="input-container" style="margin-top: 10px;">참석자</label><br>
+							<label for="taskId" class="input-container" style="margin-top: 10px;">참석자(신청자 맨앞 기입)</label><br>
 							<input type="text" id="participant" name="participant" style="width: 100%;" class="input" autocomplete="off"><br>
 							<label for="taskId" class="input-container" style="margin-top: 10px; margin-bottom: 5px;">사유</label>
 							<textarea rows="4" cols="30" id="resourceContent" name="resourceContent" style="width: 100%; resize: none;" class="input" autocomplete="off"></textarea>

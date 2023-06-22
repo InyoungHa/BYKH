@@ -26,7 +26,7 @@ public class CalendarController {
 
 	// 근태캘린더 일정추가
 	@ResponseBody
-	@RequestMapping("/calendarSave")
+	@RequestMapping("/calendarSaveAjax")
 	public void calendarSaveAjax(@RequestBody List<CalendarVO> calendarVOs, Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
@@ -44,7 +44,7 @@ public class CalendarController {
 
 	// 근태캘린더 조회
 	@ResponseBody
-	@RequestMapping("/calendarLoad")
+	@RequestMapping("/calendarLoadAjax")
 	public List<CalendarVO> calendarLoadAjax(Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
@@ -52,7 +52,7 @@ public class CalendarController {
 		return calendarService.getAllSchedules(empno);
 	}
 
-	// 자원관리캘린더 일정추가
+	// 자원관리캘린더 일정추가(?)
 	@ResponseBody
 	@RequestMapping("/resourceCalendarSave")
 	public void resourceCalendarSaveAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
@@ -70,7 +70,7 @@ public class CalendarController {
 	}
 	// 자원관리캘린더 일정 이동시 업데이트
 		@ResponseBody
-		@RequestMapping("/resourceCalendarUpdate2")
+		@RequestMapping("/resourceCalendarUpdate2Ajax")
 		public void resourceCalendarUpdateAjax2(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
 			User user = (User)authentication.getPrincipal();
 			int empno = Integer.parseInt(user.getUsername());
@@ -86,7 +86,7 @@ public class CalendarController {
 	
 	//자원관리캘린더 일정(주/일) 업데이트
 		@ResponseBody
-		@RequestMapping("/resourceCalendarUpdate")
+		@RequestMapping("/resourceCalendarUpdateAjax")
 		public int resourceCalendarUpdateAjax(@RequestBody List<ResourceVO> resourceVOs, Authentication authentication, ResourceVO resourceVO) {
 			User user = (User)authentication.getPrincipal();
 			int empno = Integer.parseInt(user.getUsername());
@@ -108,17 +108,26 @@ public class CalendarController {
 
 	// 자원관리캘린더 조회
 	@ResponseBody
-	@RequestMapping("/resourceCalendarLoad")
-	public List<ResourceVO> resourceCalendarLoad(Authentication authentication) {
+	@RequestMapping("/resourceCalendarLoadAjax")
+	public List<ResourceVO> resourceCalendarLoadAjax(Authentication authentication) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());
 
 		return calendarService.getAllResourceSchedules(empno);
 	}
 	
+		// 자원관리캘린더 전체조회
+		@ResponseBody
+		@RequestMapping("/selectAllSchedulesAjax")
+		public List<ResourceVO> selectAllSchedulesAjax(Authentication authentication) {
+		
+
+			return calendarService.selectAllSchedules();
+		}
+	
 	// 자원관리캘린더 일정제거
 		@ResponseBody
-		@RequestMapping("/deleteResourceSchedule")
+		@RequestMapping("/deleteResourceScheduleAjax")
 		public void resourceCalendarSaveAjax(Authentication authentication, ResourceVO resourceVO) {
 			User user = (User)authentication.getPrincipal();
 			int empno = Integer.parseInt(user.getUsername());

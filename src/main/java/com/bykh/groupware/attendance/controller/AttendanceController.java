@@ -2,13 +2,16 @@ package com.bykh.groupware.attendance.controller;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
@@ -106,10 +109,17 @@ public class AttendanceController {
 		
 	// 캘린더 페이지 이동
 	@GetMapping("/calender")
-	public String calender() {
+	public String calender(AttendanceVO attendanceVO, Model model, Authentication authentication) {	
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());
+		
+		//이름 조회
+		model.addAttribute("selectName",attendanceService.selectName(empno));
 
 		return "content/attendance/calender";
 	}
+	
+	
 	
 
 	// 휴가신청 페이지 이동
@@ -145,5 +155,25 @@ public class AttendanceController {
 
 	    return "redirect:/user/main";
 	}
+	
+	
+	// 사원별 근태차트 이동
+	@GetMapping("/workingChart")
+	public String calender() {	
+
+
+		return "content/attendance/workingChart";
+	}
+	
+	
+	//사원별 총근무시간 조회(차트용)
+	@ResponseBody
+	@PostMapping("/selectTotalChartAjax")
+	public List<Map<String, Object>> selectTotalChartAjax() {
+	List<Map<String, Object>> maplList = attendanceService.selectTotalChart();
+	
+	
+	return maplList;
+	}	
 
 }
