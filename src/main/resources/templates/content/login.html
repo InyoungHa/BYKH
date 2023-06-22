@@ -188,23 +188,25 @@ color: white;
     display: flex;
     align-items: center; /* 수직 가운데 정렬 */
   }
-  
+ 
+
 
 </style>
 <body>
-    <div style="background-color: #0c141e; width: 20%; height:395px; margin: auto; margin-top: 271px; border-radius: 20px; ">
+    <div style="background-color: #0c141e; width: 20%; height:410px; margin: auto; margin-top: 263.5px; border-radius: 20px; ">
 	    <div class="row justify-content-center mt-5">
-			    <span style="color: white; margin-top: 30px; font-size: 35px; margin-left: 190px; margin-bottom: 10px; font-weight: bold;" >BYKH Login</span>    	
+			    <span style="color: white; margin-top: 30px; font-size: 40px; margin-left: 160px; margin-bottom: 10px; font-weight: bold;" >BYKH Login</span>    
+			    	
 	    </div>
         <div class="row">
             <div class="col-md-4">
               <!--   <form class="px-4 py-3" th:action="@{/user/login}" method="POST" id="loginForm"> -->
                 <form class="px-4 py-3 user-box" id="loginForm">
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="empno" id="empno" placeholder="사번을 입력하세요" style=" width: 300px; margin-left:18px;" autocomplete="off">
+                        <input type="text" class="form-control" name="empno" id="empno" placeholder="사번을 입력하세요." style=" width: 300px; margin-left:18px;" autocomplete="off">
                     </div>
                     <div class="mb-3" id="loginErrorDiv">
-                        <input type="password" class="form-control" name="epw" id="epw" placeholder="비밀번호를 입력하세요" style=" width: 300px;  margin-left:18px;" autocomplete="off">
+                        <input type="password" class="form-control" name="epw" id="epw" placeholder="비밀번호를 입력하세요." style=" width: 300px;  margin-left:18px;" autocomplete="off">
                     </div>
                     <div class="mb-3">
                     <span class="checkbox-wrapper " style="width: 500px; display: flex;">
@@ -213,15 +215,12 @@ color: white;
 							<span class="form-check-label" for="rememberMe" aria-describedby="remeberMeHelp" style="width: 100px; margin-left: 7px; font-size: 17px; color:#D8D8D8; margin-bottom: 2px; ">
                                 기억하기
                             </span>
-					</span>
-					
-                         
-                         
+					</span>                
                     </div>
                     <div class="d-grid gap-2 col-12 mx-auto">                    
-	                    <input type="button" th:onclick="login();" value="로그인" class="btn" style="background-color: #4F709C; color: #F5F5F5; margin-left: 18px; width: 300px;"> 
+	                    <input type="button" th:onclick="login();" value="로그인"  class="btn login" style="background-color: #4F709C; color: #F5F5F5; margin-left: 18px; width: 300px;"> 
                     </div>
-                </form>              
+                </form>                          
                 <a class="dropdown-item" href="#" style="margin-left: 35px; font-size: 17px; color: #D8D8D8;">사번 찾기</a>
                 <a class="dropdown-item" href="#"  style="margin-left: 35px; font-size: 16.5px; margin-top: 2px; color: #D8D8D8;">비밀번호 찾기</a>
             </div>
