@@ -31,7 +31,7 @@ function login(){
 				//로그인 버튼과 비밀번호 input태그 사이에 실패 멘트를 넣어준다.
 				let str='';
 				
-				str += '<div id="errorDiv" style="color: red; font-size: 0.9rem;">';
+				str += '<div id="errorDiv" style="color: red; font-size: 0.9rem; width:500px; margin-left:20px; margin-top:3px; font-wight:bold;">';
 				str += '로그인 정보를 확인하세요';					
 				str += '</div>';				
 				
