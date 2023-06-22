@@ -2,19 +2,37 @@ const addItemModal = new bootstrap.Modal(document.querySelector('#addItemModal')
 init();
 
 function init(){
+	
 	setFinalPrice();
+	
+	$('.dept').hide();
+	
+	//도시명 눌렀을 때
+	$(".loc").click(function() {
+		//누른 도시 말고 다른 li 태그의 ul 들고와서 닫아주기
+		const otherDept = $(".loc").not(this).next(".dept");
+		
+		$.each(otherDept, function() {
+			if($(this).css("display") == "block") {
+				$(this).slideUp(500);
+			}
+		});
+		
+		//내거는 열기
+		$(this).next(".dept").slideToggle(500);
+	});
 }
 
 
 //결재자 리스트 div에 추가
-function addApproverHTML(approverNo, approverName, approverJob){
+function addApproverHTML(approverNo, approverName, approverJob, attachedFileName){
 	//html에 추가
 	const approver_list_div = document.querySelector('.approver-list-div');
 	let str = '';
 	str += `
 		<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div">
 			<div class="col-3">
-				<img src="/img/content/emp/YangDongGun.jpg" width="60px;" class="rounded-image">
+				<img src="${attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/'+attachedFileName}" width="60px;" class="rounded-image">
 			</div>
 			<div class="col-7">
 				${approverName} ${approverJob}
@@ -30,6 +48,82 @@ function addApproverHTML(approverNo, approverName, approverJob){
 	addStampTableTd(approverNo, approverName, approverJob);
 	
 }
+
+// 조직도 사원 조회
+function getDeptEmpList(deptno){
+		//ajax start
+	$.ajax({
+		url: '/user/getDeptEmpList', //요청경로
+		type: 'post',
+		async: true, //동기/비동기
+		//contentType: 'application/json; charset=UTF-8',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {'deptno' : deptno}, //필요한 데이터
+		success: function(result) {
+			const empListArea = document.querySelector('.emp-list-area');
+			empListArea.replaceChildren();
+			console.log(result)
+			let str = '';
+			for (const emp of result){
+				console.log(emp.eimgVO);
+				//console.log(emp.eImgVO.attachedFileName);
+				
+				str += `
+					<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div"
+							>
+						<div class="col-3">
+							
+							<img src="${emp.eimgVO.attached_file_name == null ? '/upload/empImg/default.png' : '/upload/empImg/'+emp.eimgVO.attached_file_name}" width="60px;" class="rounded-image">
+						</div>
+						<div class="col-7">
+							${emp.ename} ${emp.e_job}
+							<input type="hidden" value="${emp.empno}" class="approverNo">
+						</div>
+						<div class="col-2 d-grid">
+							<input type="button" class="btn btn-primary" value="추가" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}', '${emp.eimgVO.attached_file_name}');">
+						</div>
+					</div>
+						`;				
+			
+			}
+			empListArea.insertAdjacentHTML('afterbegin', str);
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+}
+
+//결재자 추가 - 사원 클릭시 배경색, 결재순서 토글
+/*
+function select_toggle(clickTag){
+	const sgnOrderSpan = clickTag.querySelector('.image-container');
+	clickTag.style.backgroundColor = clickTag.style.backgroundColor === 'rgb(204, 204, 204)' ? '' : 'rgb(204, 204, 204)';
+	sgnOrderSpan.classList.toggle("d-none");
+	
+	
+}*/
+
+
+const deptListArea = document.querySelector(".dept-list-area");
+const empListArea = document.querySelector(".emp-list-area");
+
+// divA의 높이가 변경될 때마다 실행되는 함수
+function syncHeights() {
+    const deptHeight = deptListArea.offsetHeight;
+    console.log(deptHeight);
+    empListArea.style.height = `${deptHeight}px`;
+}
+syncHeights();
+//
+deptListArea.addEventListener("resize", syncHeights);
+
+
+
+
+
+
 
 //테이블 td 추가
 function addStampTableTd(approverNo, approverName, approverJob) {
@@ -73,10 +167,12 @@ function delStampTableTd(this_tag) {
 	var tdList = table.querySelectorAll('td');
 
 	//!!!!!!!!!시간 남을 때 제대로 고치기
+	console.log(`tdList length = ${tdList.length}`);
 	for(let i = 0; i<tdList.length; i++){
 		if(str.includes(tdList[i].textContent)){
 			const addNum = Math.floor((tdList.length + 1) / 3);
 			const idx = i == 5 ? 1 : i;
+			console.log(`idx = ${idx} / addNum = ${addNum}`)
 			tdList[idx].remove();
 			tdList[idx+addNum].remove();
 			tdList[idx+addNum+addNum].remove();
@@ -382,7 +478,7 @@ function insertPurchaseorder(sgnStatus){
 //========이벤트=========
 //모달이 열릴 때 emp 리스트 조회해오기
 const searchApproverModal = document.querySelector('#searchApproverModal');
-
+/*
 searchApproverModal.addEventListener('show.bs.modal', function() {
 	//모달이 열릴 때
 	const search_name_tag = document.querySelector('.search-name');
@@ -438,7 +534,7 @@ searchApproverModal.addEventListener('show.bs.modal', function() {
 	//ajax end
 
 });
-
+*/
 //모달 태그 선택
 const addItemModalEvent = document.querySelector('#addItemModal');
 //모달이 열리면 itemList 테이블의 tr을 클릭할 때마다 색상 추가/삭제 이벤트 추가
