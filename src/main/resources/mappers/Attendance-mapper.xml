@@ -38,6 +38,7 @@
 		<result column="TOTAL_DURATION" property="totalDuration"/>
 		<result column="ALLDAY" property="allDay" jdbcType="CHAR" javaType="boolean"/>
 		<result column="EMPNO" property="empno"/>
+		<result column="RESOURCE_CNT" property="resourceCnt"/>
 	</resultMap>
 	
 	<resultMap type="com.bykh.groupware.sign.vo.DocAnnualLeaveVO" id="leave">
@@ -55,7 +56,12 @@
 		<result column="ALL_VACATION" property="allVacation"/>
 	</resultMap>
 	
-
+	<!-- 이벤트갯수 조회(차트용) -->
+	<select id="selectEventCount" resultType="Map" >
+	 SELECT EVENT_NAME, COUNT(EVENT_NAME) AS RESOURCE_CNT
+    FROM SCHEDUL_FOR_RESOURCE
+    GROUP BY EVENT_NAME
+	</select>
 	
 
 	<!-- 회원정보 조회 -->
@@ -162,6 +168,15 @@
 		FROM ATTENDANCE
 		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(CURRENT_DATE, 'YYYYMM')
 		AND EMPNO = #{empno} 
+	</select>
+	
+	<!-- 사원별 총근무시간 조회(차트용) -->
+	<select id="selectTotalChart" resultType="Map"  >
+		SELECT EP.ENAME, ROUND(SUM(OUT_WORK - GO_WORK) * 24) AS WORKING_DAYS
+		FROM ATTENDANCE AT, EMP EP
+		WHERE TO_CHAR(GO_WORK, 'YYYYMM') = TO_CHAR(CURRENT_DATE, 'YYYYMM')
+		AND AT.EMPNO = EP.EMPNO
+		GROUP BY ENAME
 	</select>
 	
 		

@@ -77,7 +77,6 @@ html {
 }
 
 body {
-
   margin-bottom:150px;
   height: 100%;
   display: flex;
@@ -115,7 +114,7 @@ color: white;
     width: 150px;
     padding: 0 10px;
     border: 1px solid #ccc;
-    background: #F0EDD4;
+    background: #DBDFEA;
   }
 
   .demo-topbar + #external-events { /* will get stripped out */
@@ -200,7 +199,7 @@ font-weight: bold;
 	border: 0.3px solid #466583;
 }
 .fc-col-header {
-background-color: #F0EDD4;
+background-color: #DBDFEA;
 }
 
 
@@ -258,46 +257,82 @@ color: black;
 .modal.fade.show .modal-content {
   opacity: 1;
 }
+.room1 td{
+padding-bottom: 10px;
+font-size: 22px;
+}
+.input-container {
+  position: relative;
+}
+
+.input {
+  font-size: 1em;
+  padding: 0.6em 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  max-width: 500px;
+  color: #333;
+}
+
+.input:hover {
+  background-color: #f2f2f2;
+}
+
+.input:focus {
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input::placeholder {
+  color: #999;
+}
+
+.highlight {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #6c63ff;
+  transition: width 0.3s ease;
+}
+
+.input:focus + .highlight {
+  width: 100%;
+}
+
+/* Optional: Animation on focus */
+@keyframes input-focus {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  to {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.input:focus {
+  animation: input-focus 0.3s ease;
+}
+
 </style>
 </head>
 <body>
 
 
-<div style="margin-left:420px; font-size: 50px; font-weight: bold; color: #3C486B;">[[${selectName.empVO.ename}]]님의 근태 캘린더</div>
-  <div id='external-events'>
-  <button id="saveButton" class="but">일정저장</button>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #025464; border: 1px solid #025464;">연차</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #1B9C85; border: 1px solid #1B9C85; ">반차</div>
-    </div>
-     <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #1D267D; border: 1px solid #1D267D;">조퇴</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #E76161; border: 1px solid #E76161;">병가</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #19A7CE; border: 1px solid #19A7CE;">외출</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #643A6B;  border: 1px solid #643A6B;">출장</div>
-    </div>
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #9E6F21; border: 1px solid #9E6F21;">교육</div>
-    </div>
-    
-    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
-      <div class='fc-event-main' style="background-color: #C92C6D; border: 1px solid #C92C6D;">휴일근무</div>
-    </div>
-      <p style="visibility: hidden;">
-      <input type='checkbox' id='drop-remove' />
-      <label for='drop-remove'></label>
-    </p>
-  </div>
+<div style="margin-left:420px; font-size: 50px; font-weight: bold; color: #0b5573; ">자원 캘린더(전체)</div>
+ 
+  
 
 
+<!--  -->
 
 <div id="calendarBox">
         <div id="calendar"></div>
@@ -309,12 +344,12 @@ color: black;
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>        
+                    <h5 class="modal-title" id="exampleModalLabel">자원을 입력하세요.</h5>        
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" autocomplete="off">
+                        <label for="taskId" class="col-form-label">자원 내용</label>
+                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" >
                         <label for="taskId" class="col-form-label" style="margin-top: 10px;">시작 날짜</label>
                         <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
                      
@@ -338,6 +373,49 @@ color: black;
             </div>
         </div>
     </div>
+    
+
+    <!-- 자원상세내역 -->
+       <div class="modal fade" id="calendarModalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="height: 750px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">자원상세내역</h5>        
+                </div>
+                <div class="modal-body">
+             
+                    <div class="form-group">
+                        <label for="taskId" class="col-form-label">자원 내용</label>
+                        <input type="hidden" class="schedule_code">
+                        <input type="text" class="form-control resourceContent" disabled id="changeCalendar_content" name="changeCalendar_content">                           
+                            <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
+                    		<input type="text" id="start_time_resource" name="start_date"  disabled style="width: 100%;">
+                    	
+                    	    <label for="taskId" class="col-form-label">종료 시간</label>
+							<input type="text" id="end_time_resource" name="end_date" disabled style="width: 100%;">
+							
+							<label for="taskId" class="col-form-label">총 사용 시간</label>
+							<input type="text" id="total_time_resource" name="total_time" disabled style="width: 100%;">
+							
+							<label for="taskId" class="input-container" style="margin-top: 10px;">참석자(신청자 맨앞 기입)</label><br>
+							<input type="text" id="participant" name="participant" style="width: 100%;" class="input" autocomplete="off" disabled><br>
+							<label for="taskId" class="input-container" style="margin-top: 10px; margin-bottom: 5px;">사유</label>
+							<textarea rows="4" cols="30" id="resourceContent" name="resourceContent" style="width: 100%; resize: none;" class="input" autocomplete="off" disabled></textarea>
+	                    </div>
+	                </div>
+	                
+	               
+							
+                    
+       
+              
+    
+            </div>
+        </div>
+    </div>
+  
+
 
   <!-- calendar 태그 -->
   <div id='calendar-container'>
@@ -425,7 +503,7 @@ color: black;
 
 <script src='https://cdn.jsdelivr.net/npm/moment@2.27.0/min/moment.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
-<script type="text/javascript" src="/js/content/attendance/calendar.js"></script>
+<script type="text/javascript" src="/js/content/resource/resourceAll.js"></script>
 
   <!-- jquery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

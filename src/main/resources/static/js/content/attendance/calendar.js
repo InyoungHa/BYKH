@@ -202,7 +202,7 @@ function allSave() {
 function savedata(jsondata) {
 	//ajax start
 	$.ajax({
-		url: '/calendar/calendarSave', //요청경로
+		url: '/calendar/calendarSaveAjax', //요청경로
 		type: 'post',
 		async: false,
 		contentType: 'application/json; charset=UTF-8',
@@ -225,7 +225,7 @@ loadingEvents();
 function loadingEvents() {
 	//ajax start
 	$.ajax({
-		url: '/calendar/calendarLoad', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
+		url: '/calendar/calendarLoadAjax', // 요청 경로 (서버에서 데이터를 가져올 API 엔드포인트)
 		type: 'POST',
 		async: false,
 		dataType: 'json',

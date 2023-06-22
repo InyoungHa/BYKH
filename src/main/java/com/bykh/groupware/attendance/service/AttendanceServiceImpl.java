@@ -1,6 +1,7 @@
 package com.bykh.groupware.attendance.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 	@Override
 	public List<DocAnnualLeaveVO> selectListVacation2(int empno) {
 		return sqlSession.selectList("attendanceMapper.selectListVacation", empno);
+	}
+
+	//사원별 총근무시간 조회(차트용)
+	@Override
+	public List<Map<String, Object>> selectTotalChart() {
+		return sqlSession.selectList("attendanceMapper.selectTotalChart");
 	}
 
 

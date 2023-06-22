@@ -104,14 +104,14 @@ public class UserController {
 	
 	//toDOList 저장
 	@ResponseBody
-	@PostMapping("/insertToDoList")
-	public void insertToDoList(String toDoCode,  Authentication authentication, UserVO userVO) {
+	@PostMapping("/insertToDoListAjax")
+	public void insertToDoListAjax(String toDoCode,  Authentication authentication, UserVO userVO) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());	
 		userVO.setEmpno(empno);		
 
 
-		 userService.insertToDoList(userVO);
+		 userService.insertToDoListAjax(userVO);
 		 
 		 
 	}
@@ -119,15 +119,15 @@ public class UserController {
 
 	//toDoList 삭제
 	@ResponseBody
-	@PostMapping("/deleteToDoList")
-	public void deleteToDoList(@RequestParam String toDoCode,  Authentication authentication, UserVO userVO) {
+	@PostMapping("/deleteToDoListAjax")
+	public void deleteToDoListAjax(@RequestParam String toDoCode,  Authentication authentication, UserVO userVO) {
 		User user = (User)authentication.getPrincipal();
 		int empno = Integer.parseInt(user.getUsername());	
 		userVO.setEmpno(empno);
 		userVO.setToDoCode(toDoCode);
 		
 		
-		 userService.deleteToDoList(userVO);
+		 userService.deleteToDoListAjax(userVO);
 	}
 	
 	 //비번 변경전 비번 확인

@@ -37,6 +37,9 @@ void updateResourceSchedule2(ResourceVO resourceVO);
 //자원관리 캘린더 일정조회
 List<ResourceVO> getAllResourceSchedules(int empno);
 
+//자원관리 캘린더(전체) 일정조회
+List<ResourceVO> selectAllSchedules();
+
 //자원관리 캘린더 세부일정 추가
 void insertScheduleDetail(ResourceVO resourceVO);
 

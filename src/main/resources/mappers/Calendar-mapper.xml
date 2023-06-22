@@ -108,6 +108,17 @@ WHERE EMPNO = #{empno}
 </select>
 
 
+<!--자원관리 캘린더  전체일정조회 -->
+<select id="selectAllSchedules" resultMap="resourceCal">
+  SELECT SCHEDULE_CODE
+		, EVENT_NAME
+		, START_DATE
+		, END_DATE
+		, ALLDAY
+FROM SCHEDUL_FOR_RESOURCE
+</select>
+
+
 
 <!-- 자원관리 캘린더 디테일 내용추가 -->
 <update id="insertScheduleDetail">
@@ -123,6 +134,12 @@ WHERE EMPNO = #{empno}
 <select id="selectCalendarDetail" resultMap="resourceCal">
 		SELECT PARTICIPANT, RESOURCE_CONTENT FROM SCHEDUL_FOR_RESOURCE
 		WHERE SCHEDULE_CODE = #{id} AND EMPNO = #{empno}
+</select>
+
+<!--자원관리 캘린더 디테일 내용 조회(전체)  -->
+<select id="selectCalendarDetailAll" resultMap="resourceCal">
+		SELECT PARTICIPANT, RESOURCE_CONTENT FROM SCHEDUL_FOR_RESOURCE
+		WHERE SCHEDULE_CODE = #{id}
 </select>
 	
 <select id="getLastSchedulCode" resultType="int">

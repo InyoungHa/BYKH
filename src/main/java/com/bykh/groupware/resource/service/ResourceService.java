@@ -1,6 +1,7 @@
 package com.bykh.groupware.resource.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bykh.groupware.resource.vo.ResourceVO;
 
@@ -16,10 +17,17 @@ public interface ResourceService {
 	List<ResourceVO> selectId(int empno);
 	
 	//자원관리 캘린더 상세 정보 저장
-	void insertScheduleDetail(ResourceVO resourceVO);
+	void insertScheduleDetailAjax(ResourceVO resourceVO);
 
 	//자원관리 캘린더 상세 정보 조회
-	List<ResourceVO> selectCalendarDetail(ResourceVO resourceVO);
+	List<ResourceVO> selectCalendarDetailAjax(ResourceVO resourceVO);
+	
+	//자원관리 캘린더 상세 정보 조회(전체)
+	List<ResourceVO> selectCalendarDetailAllAjax(ResourceVO resourceVO);
+	
+	
+	 //이벤트갯수조회(차트용)
+	 List<Map<String, Object>> selectEventCount();
 	
 
 	
