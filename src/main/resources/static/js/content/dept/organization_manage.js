@@ -3,14 +3,11 @@ function deleteErrorDiv(){
 	const errorDivs = document.querySelectorAll('div[class="my-invalid"]');
 
 	//여러 태그들인 erroDivs를 하나씩 출력해준다
-	//잘 진행되지만, 창에서 나갔다가 다시 돌아오면 input 태그에 내용이 그대로 있다 -> init함수에도 적용하기
 	for(const errorDiv of errorDivs){
 		errorDiv.remove();
 	}
 }
 
- 
- 
     $(document).ready(function(){
         $(".menu>a").click(function(){
             var submenu = $(this).next("ul");
@@ -83,7 +80,7 @@ function drawEmpList(empList){
 							
 			str += 	'<tr>';		
 			str += 		'<td>';
-			str += 			`<img src="${emp.eimgVO.attached_file_name ? '/upload/empImg/' + emp.eimgVO.attached_file_name : '/upload/empImg/default.png'}"
+			str += 			`<img src="${emp.eimgVO.attached_file_name ? '/upload/empImg/' + emp.eimgVO.attached_file_name : '/upload/empImg/test.jpg'}"
 								style="width: 5rem; display: block;">`;
 			str += 		'</td>';
 			str += 		`<td>${emp.empno}</td>`;

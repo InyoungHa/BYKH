@@ -2,9 +2,9 @@ package com.bykh.groupware.User.service;
 
 import java.util.List;
 
-import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.User.vo.UserVO;
 
 public interface UserService {
 	

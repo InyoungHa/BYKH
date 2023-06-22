@@ -59,7 +59,12 @@ public interface EmpService {
 	//비밀번호 변경
 	void updateEpw(EmpVO empVO);
 	
+	//임시비밀번호 받기
+	String getEmailEpw(EmpVO empVO);
 	
+	
+	//임시비밀번호로 비번 변경
+	void updateImsiEpw(EmpVO empVO);
 	
 
 

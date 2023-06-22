@@ -2,52 +2,48 @@ package com.bykh.groupware.User.controller;
 
 
 
+
+import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.jta.UserTransactionAdapter;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.bykh.groupware.User.service.UserService;
-import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.attendance.service.AttendanceService;
 import com.bykh.groupware.attendance.vo.AttendanceVO;
 import com.bykh.groupware.dept.service.DeptService;
 import com.bykh.groupware.dept.vo.BranchLocationInfoVO;
 import com.bykh.groupware.dept.vo.OrgDeptVO;
 import com.bykh.groupware.dept.vo.OrganizationVO;
-import com.bykh.groupware.emp.controller.EmpController;
+
 import com.bykh.groupware.emp.service.EmpService;
-import com.bykh.groupware.emp.service.UserDetailsServiceImpl;
+
 import com.bykh.groupware.emp.vo.EImgVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.sign.service.SignService;
+import com.bykh.groupware.User.service.UserService;
+import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.util.DateUtil;
+import com.bykh.groupware.util.MailService;
+import com.bykh.groupware.util.MailVO;
 import com.bykh.groupware.util.UploadUtil;
 
 
 
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpSession;
-import jakarta.websocket.Session;
 
 @Controller
 @RequestMapping("/user")
@@ -62,6 +58,10 @@ public class UserController {
 	private UserService userService;
 	@Resource(name="signService")
 	private SignService signService;
+	@Resource(name="mailService")
+	private MailService mailService;
+	
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
 	//로그인 페이지
 	@GetMapping("/log")
@@ -97,7 +97,7 @@ public class UserController {
 		
 		//사원이미지 조회
 		model.addAttribute("selectAttImg", userService.selectAttImg(empno));
-		
+			
 		return "content/user/main";
 
 	}
@@ -150,8 +150,6 @@ public class UserController {
 		//암호화 된 비밀번호와 일치하는지 확인 
 		// 무조건 () 안의 앞에는 암호화 되지 않은 입력값이 와야함!! 
 		// ex)encoder.matches("1234", ss);//true, false
-    
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         
         String inputPw = encoder.encode(checkPassword); // 입력한 비밀번호
         System.out.println("입력한 비번: "+inputPw);
@@ -172,7 +170,7 @@ public class UserController {
     @GetMapping("/changeEPW")
     public String pwChangePage() {
     	
-    	return "content/user/chang_e_pw";
+    	return "content/user/change_e_pw";
     }
     
     //비밀번호 변경 ajax
@@ -182,7 +180,7 @@ public class UserController {
     	
     	System.out.println("변경할 비번!!!!!!!!!!" + changePassword);
     	
-    	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    	
     	
     	//변경할 비번
     	String changePw = encoder.encode(changePassword);
@@ -212,7 +210,61 @@ public class UserController {
     	    	
     	return resultStr;
     }
-
+    
+    //비밀번호 찾기 페이지로 이동
+    @GetMapping("/findEPWForm")
+    public String findEPWForm() {
+    	
+    	return "content/user/find_e_pw";
+    }
+    
+    //메일로 임시비밀번호 받기
+    @ResponseBody
+    @PostMapping("/getEmailEPWAjax")
+    public boolean getEmailEPWAjax(@RequestParam int empno, @RequestParam String ename) {
+    	System.out.println("!!!!!!!!!!!!!"+empno);
+    	System.out.println("!!!!!!!!!!!!!"+ename);
+    	
+    	EmpVO empVO = new EmpVO();
+    	
+    	empVO.setEmpno(empno);
+    	empVO.setEname(ename);
+    	
+    	//empno, ename 일치하면 e_email select
+    	String eMail = empService.getEmailEpw(empVO);
+    	System.out.println(eMail);
+    	
+    	//e_email이 null이 아니면 임시비번으로 update (empno, ename이 일치함)
+    	if(eMail != null) {
+    		//임시비밀번호로 비번 변경
+    		//임시 비번 생성
+    		String imsiPw =mailService.createRandomPw();
+    		
+    		//임시 비번 암호호
+    		String encodeImsiPw= encoder.encode(imsiPw);
+    		
+    		//암호화된 임시 비번 적용
+    		empVO.setEpw(encodeImsiPw);
+    		
+    		//비번 update 쿼리
+    		empService.updateImsiEpw(empVO);
+    		
+    		//임시 비밀번호 메일 보내기 설정
+    		MailVO mailVO = new MailVO();
+    		mailVO.setTitle("임시 비밀번호가 발송되었습니다.");
+    		
+    		List<String> eMailList = new ArrayList<>();
+    		eMailList.add(eMail);
+    		mailVO.setRecipientList(eMailList);
+    		mailVO.setContent("임시 비밀번호는 "+imsiPw +" 입니다. 임시 비밀번호로 로그인 부탁드립니다.");
+    		
+    		
+    		mailService.sendSimpleEmail(mailVO);
+    		    		
+    	}
+    	
+    	return eMail != null? true : false;
+    }
     
     
 	
@@ -363,7 +415,7 @@ public class UserController {
 		
 		model.addAttribute("organizationList", organizationList);
 		
-		return "content/user/organizationMap";
+		return "content/user/organization_map";
 	}
 	
 	//권한 관리 페이지 이동

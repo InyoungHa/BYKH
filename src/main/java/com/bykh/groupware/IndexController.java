@@ -28,6 +28,10 @@ public class IndexController {
 		
 		
 		
+		
+		
+		
+		
 		String path ="";
 		
 		//authentication이 null이면 로그인 안하거나, 로그아웃된 상태

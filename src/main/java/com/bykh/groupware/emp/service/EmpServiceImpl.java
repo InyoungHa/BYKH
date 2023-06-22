@@ -115,6 +115,20 @@ public class EmpServiceImpl implements EmpService {
 		sqlSession.update("empMapper.updateEpw",empVO);
 		
 	}
+
+
+	@Override //임시비밀번호 받기
+	public String getEmailEpw(EmpVO empVO) {
+		
+		return sqlSession.selectOne("empMapper.getEmailEpw",empVO);
+	}
+
+
+	@Override //임시비밀번호로 비번 변경
+	public void updateImsiEpw(EmpVO empVO) {
+		sqlSession.update("empMapper.updateImsiEpw",empVO);
+		
+	}
 	
 	
 

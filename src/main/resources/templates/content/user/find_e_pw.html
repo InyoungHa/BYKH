@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+
+.page_title{
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+</style>
+
+
+</head>
+<body>
+<div class="row">
+	<div class="col">
+		<label class="page_title">비밀번호 찾기</label>
+		<form id="getEmailEPWForm">
+			<div class="row">
+				<div class="col">
+					<label class="form-control">사번</label>
+					<input type="text" id="empno" name="empno" onInput="check_empno_validate()" autocomplete="off" class="form-control">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<label class="form-control">사원 이름</label>
+					<input type="text" id="ename" name="ename" onInput="check_empno_validate()" autocomplete="off" class="form-control">
+				</div>
+			
+			</div>
+			<input type="button" value="임시비밀번호 발급받기" onclick="getImsiEPW()" class="btn">
+		</form>	
+	
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript" src="/js/find_e_pw.js"></script>
+</body>
+</html>

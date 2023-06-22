@@ -10,22 +10,17 @@
 </th:block>
 
 <th:block layout:fragment="content">
-<style>
-.page_title{
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2rem;
-}
-</style>
-
-<label class="page_title">조직도(사원)</label>
-
+<div class="row">
+	<div class="col">
+		<canvas id="myChart"></canvas>
+	</div>		
+</div>
 </th:block>
 
 <th:block layout:fragment="content_js">
-
-	<script type="text/javascript" src="/js/content/user/organizationMap.js"></script> -->
+	<!--연결해야하는 외부 js  -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script type="text/javascript" src="/js/content/sales/sale_status_per_year.js"></script>
 </th:block>
 
 </html>

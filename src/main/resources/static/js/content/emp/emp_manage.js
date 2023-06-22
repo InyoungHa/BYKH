@@ -167,7 +167,7 @@ function drawEmpDatail(data){
 	str += 	`<div class="col-6 ">`;
 	str += 		`<div class="row">`;
 	str += 			`<div class="col card text-center" style="max-width: 35rem;">`;
-	str += 				`<img src="${data['empDetail'].eimgVO.attached_file_name ? '/upload/empImg/' + data['empDetail'].eimgVO.attached_file_name : '/upload/empImg/default.png'}"
+	str += 				`<img src="${data['empDetail'].eimgVO.attached_file_name ? '/upload/empImg/' + data['empDetail'].eimgVO.attached_file_name : '/upload/empImg/test.jpg'}"
 							style="width: 18rem; display: block;  margin: 0 auto;" id="empImgPreview" class="card-img-top">`;
 	str += 				`<input type="file" class="form-control" id="empImgInput">`;	
 	str += 			`<div class="card-body">`;
@@ -186,7 +186,7 @@ function drawEmpDatail(data){
 	str += 				'<tr>';
 	str += 					'<td>이름</td>';
 	str += 					`<td>`;
-	str += 						`<input type="text" value="${data['empDetail'].ename}" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control">`;
+	str += 						`<input type="text"  value="${data['empDetail'].ename}"  autocomplete="off" oninput="reg_empDetail_validate();" id="ename" name="ename" class="form-control">`;
 	str += 					`</td>`;
 	str += 				'</tr>';
 	str += 				'<tr>';
@@ -278,7 +278,7 @@ function drawEmpDatail(data){
 		str += 						`</select>`;
 		str += 					'</div>';
 		str += 					'<div class="col-auto">';
-		str += 						`<input type="number" id="officeTelInput" oninput="reg_empDetail_validate();" value="" min="0" class="form-control form-control-sm">`;
+		str += 						`<input type="number" id="officeTelInput"  autocomplete="off" oninput="reg_empDetail_validate();" value="" min="0" class="form-control form-control-sm">`;
 		str += 					'</div>';
 		str += 				'</div>';
 	 }
@@ -298,7 +298,7 @@ function drawEmpDatail(data){
 		str += 						`</select>`;
 		str += 					'</div>';
 		str += 					'<div class="col-auto">';
-		str += 						`<input type="number" id="officeTelInput" value="${officeTelSuffix}" oninput="reg_empDetail_validate();" min="0" class="form-control form-control-sm">`;
+		str += 						`<input type="number" id="officeTelInput"  autocomplete="off" value="${officeTelSuffix}" oninput="reg_empDetail_validate();" min="0" class="form-control form-control-sm">`;
 		str += 					'</div>';
 		str += 				'</div>';
 	}	
@@ -339,7 +339,7 @@ function drawEmpDatail(data){
 		str += 						`</select>`;
 		str += 					'</div>';
 		str += 					'<div class="col-auto">';
-		str += 						`<input type="number" id="phoneTelInput" value="${phoneTelSuffix}" oninput="reg_empDetail_validate();" min="0" class="form-control form-control-sm">`;
+		str += 						`<input type="number" id="phoneTelInput"  autocomplete="off" value="${phoneTelSuffix}" oninput="reg_empDetail_validate();" min="0" class="form-control form-control-sm">`;
 		str += 					'</div>';
 		str += 				'</div>';		
 	}	

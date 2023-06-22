@@ -315,6 +315,23 @@
 		WHERE EMPNO =#{empno}
 	</update>
 	
+	<!--비밀번호 찾기 -->
+	<select id="getEmailEpw" resultType="String">
+		SELECT E_EMAIL
+		FROM EMP
+		WHERE EMPNO =#{empno}
+		AND ENAME =#{ename}
+	</select>
+	
+	<!--임시 비밀번호로 변경  -->
+	<update id="updateImsiEpw">
+		UPDATE EMP
+		SET
+		EPW = #{epw}
+		WHERE EMPNO =#{empno}
+		
+	</update>
+	
 </mapper>
 
 

@@ -7,9 +7,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bykh.groupware.User.vo.UserVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.notice.vo.BoardVO;
+import com.bykh.groupware.User.vo.UserVO;
 
 
 @Service("userService")

@@ -25,11 +25,11 @@
 					</div>
 					<div class="col-3">
 						<input id="dename" name="dename" onInput="deptJoinValidate();"
-							type="text" class="form-control" placeholder="추가 할 부서명을 입력하세요">
+							type="text" class="form-control"  autocomplete="off" placeholder="추가 할 부서명을 입력하세요">
 					</div>
 
 					<div class="col-auto">
-						<input onclick="isDuplicate();" type="button" value="중복 확인" class="btn">
+						<input onclick="isDuplicate();"  type="button" value="중복 확인" class="btn">
 					</div>
 					<div class="col-auto">
 						<button onclick="regDept();" id="joinDeptBtn" type="button"	class="btn" disabled>

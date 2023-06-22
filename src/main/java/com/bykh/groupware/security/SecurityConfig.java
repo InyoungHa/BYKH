@@ -20,10 +20,12 @@ public class SecurityConfig {
 		
 		security.csrf().disable()
 				.authorizeHttpRequests()
-			   		//.requestMatchers("/", "/user/loginForm").permitAll()
+			   		.requestMatchers("/"
+			   						, "/user/findEPWForm"
+			   						, "/user/getEmailEPWAjax").permitAll()
 			   		.requestMatchers("/emp/**").hasAnyRole("ADMIN","SUPER_ADMIN")
 			   		.requestMatchers("/dept/**").hasAnyRole("ADMIN","SUPER_ADMIN")
-			   		.requestMatchers("/mor/mroManage").hasAnyRole("ADMIN","SUPER_ADMIN")
+			   		.requestMatchers("/mro/mroManage").hasAnyRole("ADMIN","SUPER_ADMIN")
 			   		.anyRequest().authenticated()
 				.and()
 						.formLogin()

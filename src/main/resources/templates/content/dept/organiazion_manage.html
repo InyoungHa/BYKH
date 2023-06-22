@@ -13,32 +13,15 @@
 
 
 <th:block layout:fragment="content">
-<style>
-.page_title{
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2rem;
-}
 
- .menu a{
- 	cursor:pointer;
- }
- .menu .hide{
- 	display:none;
- }
- 
-
-</style>
-
-<label class="page_title">조직도</label>
+<label class="page_title">조직도 관리</label>
 <div class="row">
 	<div class="col">
 		<div class="row mb-2">
 			<div class="col-4 offset-1">
 				<input type="button" value="부서 추가"  data-bs-toggle="modal" data-bs-target="#addDeptModal" style="cursor: pointer;" class="btn">
 				<input type="button" value="부서 수정" data-bs-toggle="modal" data-bs-target="#modifyDeptModal" style="cursor: pointer;" class="btn">
-				<input type="button" value="조직도 보기" class="btn">
+				<input type="button" value="조직도 보기" data-bs-toggle="modal" data-bs-target="#organizationMapModal" style="cursor:pointer;" class="btn">
 			</div>
 		</div>
 		
@@ -53,7 +36,7 @@
 									<a><img src="/img/folder.png"width="30px;"/>[[${organization.loc}]]</a>
 									<ul class="hide">
 										<th:block th:each="dept : ${organization.orgDeptList}">
-											<li class="menu" style="padding-left: 50px;" th:onclick="detailDept([[${dept.deptno}]]);"><a id="dename">[[${dept.dename}]]</a>
+											<li class="menu" style="padding-left: 50px;" th:onmouseover="detailDept([[${dept.deptno}]]);"><a id="dename">[[${dept.dename}]]</a>
 													<ul class="hide emp">
 														<th:block th:each="emp : ${dept.empList}">
 															<li style="padding-left: 50px;">[[${emp.ename}]]/[[${emp.eJob}]]</li>												
@@ -145,15 +128,43 @@
 			</select>
 			<div id="locMatachDept"></div>
 	      </div>
-	   <!--    <div class="modal-footer">
-	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
-	      </div> -->
 	    </div>
 	  </div>
 	</div>
 	
 	
+	<!--조직도  -->
+	<div class="modal modal-lg" tabindex="-1" id="organizationMapModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">조직도</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="tree">
+			    <ul>
+					<li>
+						<a href="#">BYKH</a>
+						<ul>
+					    	<th:block th:each="organization :${organizationList}">
+							<li>
+								<a href="#">[[${organization.loc}]]</a>
+								<ul>
+									<th:block th:each="dept:${organization.orgDeptList}">
+									<li>
+										<a href="#">[[${dept.dename}]]</a>									
+									</li>
+									</th:block>
+								</ul>
+							</li>
+							
+						</ul>
+					</li>
+				</ul>
+			</div>
+	    </div>
+	  </div>
+	</div>
 	
 	
 

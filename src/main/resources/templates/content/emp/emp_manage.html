@@ -17,7 +17,7 @@
 		<form th:action="@{/emp/empManage}" th:method="post" id="searchForm">
 			<div class="col d-grid gap-7 d-md-flex justify-content-md-end">
 				<div class="row">
-					<input type="hidden" name="nowPage" id="nowPage" th:value=${empVO.nowPage}>
+					<input type="hidden" name="nowPage" id="nowPage"  autocomplete="off" th:value=${empVO.nowPage}>
 					<div class="col-3">
 						<select class="form-select" name="searchKeyword"
 							id="searchKeyword">
@@ -31,7 +31,7 @@
 						</select>
 					</div>
 					<div class="col-3">
-						<input id="searchValue" name="searchValue" th:value="${empVO.searchValue}" type="text" class="form-control">
+						<input id="searchValue" name="searchValue"  autocomplete="off" th:value="${empVO.searchValue}" type="text" class="form-control">
 					</div>
 					<div class="col-auto">
 						<input th:onclick="getSearchList();" type="button" value="검색" class="btn">
@@ -79,8 +79,8 @@
 							<td colspan="2">
 								<button type="button" class="button">간편등록</button>
 							</td>
-							<td colspan="2"><input type="text" name="ename" id="ename"	oninput="reg_emp_validate();" class="form-control"></td>
-							<td><input type="password" name="epw" id="epw" oninput="reg_emp_validate();" class="form-control"></td>
+							<td colspan="2"><input type="text" name="ename" id="ename" autocomplete="off" oninput="reg_emp_validate();" class="form-control"></td>
+							<td><input type="password" name="epw" id="epw" autocomplete="off" oninput="reg_emp_validate();" class="form-control"></td>
 							<td><input type="date" name="joinDate"	class="form-control"></td>
 							<td>
 								<select name="deptno" class="form-control">

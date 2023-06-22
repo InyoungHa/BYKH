@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+   xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+   layout:decorate="~{fragment/admin_layout}">
+
+<th:block layout:fragment="content_css">
+	<!--연결해야하는 외부 css  -->
+	<link rel="stylesheet" href="/css/organization_map.css">
+</th:block>
+
+<th:block layout:fragment="content">
+<label class="page_title">조직도</label>
+
+<div class="tree">
+    <ul>
+		<li>
+			<a href="#">BYKH</a>
+			<ul>
+		    	<th:block th:each="organization :${organizationList}">
+				<li>
+					<a href="#">[[${organization.loc}]]</a>
+					<ul>
+						<th:block th:each="dept:${organization.orgDeptList}">
+						<li>
+							<a href="#">[[${dept.dename}]]</a>
+							<ul>
+								<th:block th:each="emp:${dept.empList}">
+								<li>
+									<a href="#">[[${emp.ename}]]</a>
+								</li>
+								</th:block>
+							</ul>
+						</li>
+						</th:block>
+					</ul>
+				</li>
+				
+			</ul>
+		</li>
+	</ul>
+</div>
+
+
+
+</th:block>
+
+<th:block layout:fragment="content_js">
+<!-- 	<script type="text/javascript" src="/js/content/user/organizationMap.js"></script> -->
+</th:block>
+
+</html>
