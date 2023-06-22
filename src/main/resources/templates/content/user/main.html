@@ -473,7 +473,7 @@ h6 {
 
 <!--출석 -->
 <div class="attendance">
-	<div class="time"  style="border-bottom: 2px solid #ebe9ed; height: 45px;margin-right: 12px;">[[${attendanceVO.curDate}]]
+	<div class="time"  style="border-bottom: 2px solid #ebe9ed; height: 45px; margin-right: 2px;">[[${attendanceVO.curDate}]]
 		<button type="button" class="btn" id="go_work" th:onclick="|location.href='@{/attendance/goToWork}'|" style="width: 140px; height: 50px; background-color: #3a70a0; font-weight: bold; border: 0px;  font-size: 20px; margin-right: 7px; margin-top: 20px; margin-left: 3px;">출근</button>
 		<button type="button" class="btn" id="out_work" th:onclick="|location.href='@{/attendance/outWork}'|"  onclick="" style="width: 140px; height: 50px; background-color: #fc6363;  font-weight: bold; border: 0px; font-size: 20px; margin-top: 20px; ">퇴근</button>
 	</div>
