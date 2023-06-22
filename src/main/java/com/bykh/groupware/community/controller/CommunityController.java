@@ -116,7 +116,7 @@ public class CommunityController {
 	
 	//글 임시 저장
 	@ResponseBody
-	@PostMapping("/tempRegCommunity")
+	@PostMapping("/tempRegCommunityAjax")
 	public BoardVO tempRegCommunity(BoardVO boardVO, String[] deleteFileNum, MultipartFile[] files, Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
 		int loginEmpno = Integer.parseInt(user.getUsername());
@@ -138,7 +138,7 @@ public class CommunityController {
 	
 	//임시저장함 조회
 	@ResponseBody
-	@PostMapping("/tempBoardList")
+	@PostMapping("/tempBoardListAjax")
 	public List<BoardVO> tempBoardList(Authentication authentication) {
 		String boardMenuCode = "BOARD_MENU_003";
 		
@@ -154,14 +154,14 @@ public class CommunityController {
 	
 	//임시저장 글 조회
 	@ResponseBody
-	@PostMapping("/getTempDetail")
+	@PostMapping("/getTempDetailAjax")
 	public BoardVO getTempDetail(BoardVO boardVO) {
 		return noticeService.getBoardDetailForUpdate(boardVO);
 	}
 	
 	//임시저장 글 삭제
 	@ResponseBody
-	@PostMapping("/tempDelete")
+	@PostMapping("/tempDeleteAjax")
 	public void deleteTempBoard(BoardVO boardVO) {
 		noticeService.deleteBoard(boardVO);
 	}
@@ -250,7 +250,7 @@ public class CommunityController {
 	
 	//비밀글 체크
 	@ResponseBody
-	@PostMapping("/checkBoardPw")
+	@PostMapping("/checkBoardPwAjax")
 	public String checkBoardPw(BoardVO boardVO) {
 		return communityService.checkBoardNum(boardVO);
 	}
@@ -270,7 +270,7 @@ public class CommunityController {
 	
 	//좋아요 취소
 	@ResponseBody
-	@PostMapping("/deleteBoardLike")
+	@PostMapping("/deleteBoardLikeAjax")
 	public void deleteBoardLike(BoardLikeVO boardLikeVO, Authentication authentication) {
 		//좋아요 누른 사용자
 		User user = (User) authentication.getPrincipal();
@@ -283,7 +283,7 @@ public class CommunityController {
 	
 	//신고
 	@ResponseBody
-	@PostMapping("/reportBoard")
+	@PostMapping("/reportBoardAjax")
 	public void reportBoard(BoardReportVO boardReportVO, Authentication authentication) {
 		//신고자
 		User user = (User) authentication.getPrincipal();
@@ -312,7 +312,7 @@ public class CommunityController {
 	
 	//신고글 정보 조회
 	@ResponseBody
-	@PostMapping("/getReportBoard")
+	@PostMapping("/getReportBoardAjax")
 	public BoardVO getReportBoard(BoardVO boardVO) {
 		return noticeService.getBoardDetailForUpdate(boardVO);
 	}

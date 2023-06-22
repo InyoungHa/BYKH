@@ -41,7 +41,7 @@
 			<div class="row mb-2 ">
 				<div class="col fs-1 fw-bolder d-grid d-flex justify-content-between">
 					<span>커뮤니티</span>
-					<a href="/community/report" class="btn btn-lg align-self-center">신고 글 관리</a>
+					<a href="/community/report" class="btn btn-lg align-self-center" sec:authorize="hasRole('COMMUNITY')">신고 글 관리</a>
 				</div>
 			</div>
 		

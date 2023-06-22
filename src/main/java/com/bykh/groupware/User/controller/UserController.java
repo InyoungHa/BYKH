@@ -387,7 +387,7 @@ public class UserController {
 	
 	//부서별 사원 정보 조회 (권한 관리 조직도)
 	@ResponseBody
-	@PostMapping("/getDeptEmpList")
+	@PostMapping("/getDeptEmpListAjax")
 	public List<EmpVO> getDeptEmpList(int deptno) {
 		
 		return deptService.getEmpListForOrg(deptno);
@@ -395,28 +395,30 @@ public class UserController {
 	
 	//항목별 관리자 리스트 조회
 	@ResponseBody
-	@PostMapping("/getEmpRoleList")
+	@PostMapping("/getEmpRoleListAjax")
 	public List<EmpVO> getEmpRoleList(String eRole) {
 		return userService.getEmpRoleList(eRole);
 	}
 	
 	//권한 중복 조회
 	@ResponseBody
-	@PostMapping("/roleCheck")
+	@PostMapping("/roleCheckAjax")
 	public int roleCheck(EmpVO empVO) {
 		return userService.roleCheck(empVO);
 	}
 	
 	//권한 추가
 	@ResponseBody
-	@PostMapping("/updateRole")
-	public void updateRole(EmpVO empVO) {
+	@PostMapping("/updateRoleAjax")
+	public EmpVO updateRole(EmpVO empVO) {
 		userService.updateRole(empVO);
+		
+		return userService.getRoleEmp(empVO);
 	}
 	
 	//권한 삭제
 	@ResponseBody
-	@PostMapping("/deleteRole")
+	@PostMapping("/deleteRoleAjax")
 	public void deleteRole(EmpVO empVO) {
 		userService.deleteRole(empVO);
 	}

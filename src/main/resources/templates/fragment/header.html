@@ -24,19 +24,16 @@
 </style>
 
 
-	<div class="row d-flex justify-content-between">
+	<div class="row d-flex justify-content-between g-0">
 		<div class="col">
 			<img src="/img/content/header/BYKHlogo.png" id="logoImg">
 		</div>
-
-
-
-		<div class="col d-flex justify-content-end me-5 fs-5" id="profileDiv">
+			<div class="col d-flex justify-content-end me-5 fs-5" id="profileDiv">
 				<div class="d-flex align-self-center gap-4" style="color: white;">
 					<div class="d-flex align-items-center gap-1 dropdown">
 						<a class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 							<span>
-								[[${session.userInfo.ename}]] [[${session.userInfo.eJob}]]
+								[[${userInfo.ename}]] [[${userInfo.eJob}]]
 							</span>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end pt-0">
@@ -54,21 +51,21 @@
 													</a>
 												</div>
 												<div class="d-flex justify-content-center align-items-center">
-													<img th:src="${session.userInfo.eImgVO.attachedFileName != null ? '/upload/empImg/' + session.userInfo.eImgVO.attachedFileName : '/upload/empImg/test.jpg'}" 
+													<img th:src="${userInfo.eImgVO.attachedFileName != null ? '/upload/empImg/' + userInfo.eImgVO.attachedFileName : '/upload/empImg/test.jpg'}" 
 														width="130px" class="mx-0 rounded-circle border">
 												</div>
 											</div>
 										</div>
 										<div class="row g-0">
 											<div class="col">
-												<div class="fs-3 text-center mb-3">[[${session.userInfo.ename}]] [[${session.userInfo.eJob}]]</div>
+												<div class="fs-3 text-center mb-3">[[${userInfo.ename}]] [[${userInfo.eJob}]]</div>
 												<div class="mx-5 mb-2 gap-3 d-flex align-items-center">
 													<span class="badge rounded-pill" style="background-color: #e2ecff">
 														<svg xmlns="http://www.w3.org/2000/svg" style="color: #b1bacb" width="20" height="20" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
 														  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
 														</svg>
 													</span>
-													<span>[[${session.userInfo.eEmail}]]2310105@bykh.com</span>
+													<span>[[${userInfo.eEmail}]]</span>
 												</div>
 												<div class="mx-5 mb-4 gap-3 d-flex align-items-center">
 													<span class="badge rounded-pill" style="background-color: #e2ecff">
@@ -77,11 +74,11 @@
 														</svg>
 													</span>
 													<span class="gap-1 d-flex align-items-center">
-														<span>[[${session.userInfo.deptVO.loc}]]</span>
+														<span>[[${userInfo.deptVO.loc}]]</span>
 														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
 														  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
 														</svg>
-														<span>[[${session.userInfo.deptVO.dename}]]</span>
+														<span>[[${userInfo.deptVO.dename}]]</span>
 													</span>
 												</div>
 												<div class="mx-5 d-grid gap-5 d-flex justify-content-center align-items-center">
@@ -93,7 +90,7 @@
 														</div>
 														<div>개인설정</div>
 													</button>
-													<button class="btn rounded-pill" type="button" onclick="location.href='/user/roleManage'">
+													<button class="btn rounded-pill" type="button" onclick="location.href='/user/roleManage'" sec:authorize="hasRole('ADMIN')">
 														<div class="mb-1">
 															<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-building-gear" viewBox="0 0 16 16">
 															  <path d="M2 1a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6.5a.5.5 0 0 1-1 0V1H3v14h3v-2.5a.5.5 0 0 1 .5-.5H8v4H3a1 1 0 0 1-1-1V1Z"/>
@@ -111,11 +108,14 @@
 						</ul>
 					</div>
 					<div>
-						<img th:src="${session.userInfo.eImgVO.attachedFileName != null ? '/upload/empImg/' + session.userInfo.eImgVO.attachedFileName : '/upload/empImg/test.jpg'}" 
+						<img th:src="${userInfo.eImgVO.attachedFileName != null ? '/upload/empImg/' + userInfo.eImgVO.attachedFileName : '/upload/empImg/test.jpg'}" 
 							 width="50px" class="mx-0 rounded-circle border">
 					</div>
 				</div>
 		</div>
+
+
+		
 
 
 	</div>

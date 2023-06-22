@@ -25,20 +25,7 @@ public class SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		           	Authentication authentication) throws IOException, ServletException {
-	
-		System.out.println("success handler 실행~");
-		
-		//헤더 정보
-		User user = (User) authentication.getPrincipal();
-		int loginEmpno = Integer.parseInt(user.getUsername());
-		
-		HttpSession session = request.getSession();
-		
-		session.setAttribute("userInfo", empService.selectEmpDetail(loginEmpno));
-		
-		//세션 시간 설정
-		session.setMaxInactiveInterval(3600);
-				
+
 		/*
 		 * User user=(User)authentication.getPrincipal(); user.getUsername();
 		 * 

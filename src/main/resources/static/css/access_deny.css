@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'NanumSquareNeo-Variable';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+/*모든 css는 admin_layout.html의 container class에 적용하겠다.*/
+.container{
+	font-family: 'NanumSquareNeo-Variable';
+	font-size: 30px;
+	margin-top: 200px;
+	height: 100rem;
+	display: flex;
+	justify-content: center;
+}
+
+.content {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+}
