@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.bykh.groupware.dept.service.DeptService;
+import com.bykh.groupware.dept.vo.OrgDeptVO;
+import com.bykh.groupware.dept.vo.OrganizationVO;
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.mro.vo.ItemVO;
 import com.bykh.groupware.sign.service.SignService;
@@ -36,6 +39,8 @@ import jakarta.annotation.Resource;
 public class SignController {
 	@Resource(name = "signService")
 	private SignService signService;
+	@Resource(name = "deptService")
+	private DeptService deptService;
 	
 	//결재 메인 페이지 이동
 	@GetMapping("/signMain")
@@ -72,6 +77,19 @@ public class SignController {
 			signDocVO = signService.getDetailDocPurchaseOrder(signDocVO.getDocNo());
 			model.addAttribute("docPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
 		}
+		
+		
+		//===========조직도 정보=============
+		//지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();	 
+		//모든 지역 정보를 조회 
+		for(OrganizationVO organizationVO : organizationList) {
+			//지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+			
+			organizationVO.setOrgDeptList(deptList);
+		}		
+		model.addAttribute("organizationList", organizationList);
 		return "content/sign/purchase_order_form";
 	}
 	
@@ -100,11 +118,22 @@ public class SignController {
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
 		model.addAttribute("itemList", signService.getItemList());
+		//===========조직도 정보=============
+		//지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();	 
+		//모든 지역 정보를 조회 
+		for(OrganizationVO organizationVO : organizationList) {
+			//지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+			
+			organizationVO.setOrgDeptList(deptList);
+		}		
+		model.addAttribute("organizationList", organizationList);
 		
 		return "content/sign/purchase_order_form";
 	}
 	
-	
+	//쓰이는지 확인!!!!!!!!!!!!
 	//결제문서 작성 페이지 - 결재자 추가 시 전체 직원 조회
 	@ResponseBody
 	@PostMapping("/getEmpListAjax")
@@ -230,12 +259,10 @@ public class SignController {
 		data.put(keyName, signDocVO);
 		return data;
 	}
-	//
+	//'결재' 또는 '반려' 클릭 시 실행
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
 	public void updateSignResultAjax(SignVO signVO) {
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println(signVO);
 		
 		signService.updateSignResult(signVO);
 
@@ -250,10 +277,9 @@ public class SignController {
 		}else if(signVO.getSgnResult() == 0) {
 			signDocVO.setSgnStatus(3);
 			signService.updateSignStatus(signDocVO);
-			
 		}
-		
 	}
+	
 	
 	
 	

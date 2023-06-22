@@ -10,39 +10,242 @@
 <link rel="shortcut icon" href="#">
 
 </head>
+<style>
+
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: linear-gradient(#141e30, #243b55);
+}
+
+.login-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  padding: 40px;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
+.login-box h2 {
+  margin: 0 0 30px;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+.login-box .user-box {
+  position: relative;
+}
+
+.login-box .user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 30px;
+  border: none;
+  border-bottom: 1px solid #fff;
+  outline: none;
+  background: transparent;
+}
+.login-box .user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #fff;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label {
+  top: -20px;
+  left: 0;
+  color: #03e9f4;
+  font-size: 12px;
+}
+
+.login-box form a {
+  position: relative;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #03e9f4;
+  font-size: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+  overflow: hidden;
+  transition: 0.5s;
+  margin-top: 40px;
+  letter-spacing: 4px;
+}
+
+.login-box a:hover {
+  background: #03e9f4;
+  color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
+    0 0 100px #03e9f4;
+}
+
+.login-box a span {
+  position: absolute;
+  display: block;
+}
+
+.login-box a span:nth-child(1) {
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #03e9f4);
+  animation: btn-anim1 1s linear infinite;
+}
+
+.login-box a span:nth-child(2) {
+  top: -100%;
+  right: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, #03e9f4);
+  animation: btn-anim2 1s linear infinite;
+  animation-delay: 0.25s;
+}
+
+
+.login-box a span:nth-child(3) {
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(270deg, transparent, #03e9f4);
+  animation: btn-anim3 1s linear infinite;
+  animation-delay: 0.5s;
+}
+
+
+.login-box a span:nth-child(4) {
+  bottom: -100%;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(360deg, transparent, #03e9f4);
+  animation: btn-anim4 1s linear infinite;
+  animation-delay: 0.75s;
+}
+.dropdown-item{
+color: white;
+}
+.form-check-label{
+color: white;
+}
+.checkmark {
+ display: block;
+ width: 20px;
+ height: 20px;
+ background-color: #ddd;
+ border-radius: 10px;
+ position: relative;
+ transition: background-color 0.4s;
+ overflow: hidden;
+ cursor: pointer;
+ margin-left: 20px;
+}
+
+#check:checked ~ .checkmark {
+ background-color: #08bb68;
+}
+
+.checkmark::after {
+ content: "";
+ position: absolute;
+ width: 5px;
+ height: 10px;
+ border-right: 3px solid #fff;
+ border-bottom: 3px solid #fff;
+ top: 44%;
+ left: 50%;
+ transform: translate(-50%, -50%) rotateZ(40deg) scale(10);
+ opacity: 0;
+ transition: all 0.4s;
+}
+
+#check:checked ~ .checkmark::after {
+ opacity: 1;
+ transform: translate(-50%, -50%) rotateZ(40deg) scale(1);
+}
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+  }
+ 
+
+ 
+ .login {
+  background: #ffd442;
+  font-family: inherit;
+  padding: 0.6em 1.3em;
+  font-weight: 900;
+  font-size: 17px;
+  border: 3px solid black;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em;
+}
+
+.login:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em;
+}
+
+.login:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em;
+}
+
+
+</style>
 <body>
-    <div>
+    <div style="background-color: #0c141e; width: 20%; height:420px; margin: auto; margin-top: 258px; border-radius: 20px; ">
 	    <div class="row justify-content-center mt-5">
-	    	<div class="col-md-4">
-			    <h1>BYKH 로그인 페이지</h1>    	
-	    	</div>
+			    <span style="color: white; margin-top: 30px; font-size: 40px; margin-left: 160px; margin-bottom: 10px; font-weight: bold;" >BYKH Login</span>    
+			    	
 	    </div>
-        <div class="row justify-content-center mt-5">
+        <div class="row">
             <div class="col-md-4">
               <!--   <form class="px-4 py-3" th:action="@{/user/login}" method="POST" id="loginForm"> -->
-                <form class="px-4 py-3" id="loginForm">
+                <form class="px-4 py-3 user-box" id="loginForm">
                     <div class="mb-3">
-                        <label class="form-label">사번</label>
-                        <input type="text" class="form-control" name="empno" id="empno" placeholder="2020010101">
+                        <input type="text" class="form-control" name="empno" id="empno" placeholder="사번을 입력하세요." style=" width: 300px; margin-left:18px;" autocomplete="off">
                     </div>
                     <div class="mb-3" id="loginErrorDiv">
-                        <label class="form-label">비밀번호</label>
-                        <input type="password" class="form-control" name="epw" id="epw" placeholder="비밀번호를 입력하세요">
+                        <input type="password" class="form-control" name="epw" id="epw" placeholder="비밀번호를 입력하세요." style=" width: 300px;  margin-left:18px;" autocomplete="off">
                     </div>
                     <div class="mb-3">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="rememberMe" aria-describedby="remeberMeHelp">
+                    <span class="checkbox-wrapper " style="width: 500px; display: flex;">
+						<input  type="checkbox" id="check" hidden="" style="flex-wrap: wrap; margin-top: 5px;">
+						<label for="check" class="checkmark"></label>
+							<span class="form-check-label" for="rememberMe" aria-describedby="remeberMeHelp" style="width: 100px; margin-left: 7px; font-size: 17px; color:#D8D8D8; margin-bottom: 2px; ">
                                 기억하기
-                            </label>
-                        </div>
+                            </span>
+					</span>                
                     </div>
+                    
                     <div class="d-grid gap-2 col-12 mx-auto">                    
-	                    <input type="button" th:onclick="login();" value="로그인" class="btn btn-primary">
+	                    <input type="button" th:onclick="login();" value="로그인"  class="login" style="  margin-left: 18px; width: 300px;"> 
                     </div>
-                </form>              
-                <a class="dropdown-item" href="#">사번 찾기</a>
-                <a class="dropdown-item" href="#">비밀번호 찾기</a>
+                </form>                          
+                <a class="dropdown-item" href="#" style="margin-left: 35px; font-size: 17px; color: #D8D8D8;">사번 찾기</a>
+                <a class="dropdown-item" href="#"  style="margin-left: 35px; font-size: 16.5px; margin-top: 2px; color: #D8D8D8;">비밀번호 찾기</a>
             </div>
         </div>
     </div>
