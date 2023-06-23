@@ -189,7 +189,7 @@ margin-right: 10px;
 					<td>잔여 휴가</td>
 				</tr>
 				<tr>
-					<td th:if="${allVacation== null}">0일</td>
+					<td th:if="${allVacation== null}">15일</td>
 					<td th:unless="${allVacation== null}">[[${15-allVacation.allVacation}]]일</td>
 				</tr>
 			</table>
