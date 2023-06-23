@@ -66,6 +66,7 @@ public class UserController {
 	//로그인 페이지
 	@GetMapping("/log")
 	public String login() {
+		
 		return "content/login";
 	}
 	
@@ -476,6 +477,13 @@ public class UserController {
 	@PostMapping("/deleteRoleAjax")
 	public void deleteRole(EmpVO empVO) {
 		userService.deleteRole(empVO);
+	}
+	
+	//관리자 문의 페이지로 이동
+	@GetMapping("/userAsk")
+	public String userAsk() {
+		
+		return "content/user/userAsk";
 	}
 
 	
