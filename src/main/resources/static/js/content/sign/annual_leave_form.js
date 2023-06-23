@@ -65,6 +65,63 @@ function addApproverHTML(approverNo, approverName, approverJob){
 	
 }
 
+// 조직도 사원 조회
+function getDeptEmpList(deptno){
+		//ajax start
+	$.ajax({
+		url: '/user/getDeptEmpListAjax', //요청경로
+		type: 'post',
+		async: true, //동기/비동기
+		//contentType: 'application/json; charset=UTF-8',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {'deptno' : deptno}, //필요한 데이터
+		success: function(result) {
+			const empListArea = document.querySelector('.emp-list-area');
+			empListArea.replaceChildren();
+			let str = '';
+			for (const emp of result){
+				//console.log(emp.eImgVO.attachedFileName);
+				
+				str += `
+					<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div"
+							>
+						<div class="col-3">
+							
+							<img src="${emp.eimgVO.attached_file_name == null ? '/upload/empImg/default.png' : '/upload/empImg/'+emp.eimgVO.attached_file_name}" width="60px;" class="rounded-image">
+						</div>
+						<div class="col-7">
+							${emp.ename} ${emp.e_job}
+							<input type="hidden" value="${emp.empno}" class="approverNo">
+						</div>
+						<div class="col-2 d-grid">
+							<input type="button" class="btn btn-primary" value="추가" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}', '${emp.eimgVO.attached_file_name}');">
+						</div>
+					</div>
+						`;				
+			
+			}
+			empListArea.insertAdjacentHTML('afterbegin', str);
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+}
+
+// divA의 높이가 변경될 때마다 실행되는 함수
+const deptListArea = document.querySelector(".dept-list-area");
+const empListArea = document.querySelector(".emp-list-area");
+function syncHeights() {
+    const deptHeight = deptListArea.offsetHeight;
+    console.log(deptHeight);
+    empListArea.style.height = `${deptHeight}px`;
+}
+syncHeights();
+//
+deptListArea.addEventListener("resize", syncHeights);
+
+
 //테이블 td 추가
 function addStampTableTd(approverNo, approverName, approverJob) {
 	const table = document.querySelector('.stamp-table');
@@ -74,17 +131,14 @@ function addStampTableTd(approverNo, approverName, approverJob) {
 
 
 	// 각 <tr> 요소에 마지막 자식으로 <td> 요소 추가
-	trList.forEach(function(tr) {
+	for(let i = 0; i<trList.length; i++){
 		const td = document.createElement('td');
-		tr.appendChild(td);
-	});
-
-	//ejobtr 태그 마지막 자식 td에 직업 추가
-	const str = `${approverJob}
-				<input type="hidden" value="" name="">`;
-	const e_job_tr = document.querySelector('.eJobTr');
-	last_td = e_job_tr.querySelector('td:last-child');
-	last_td.insertAdjacentHTML('afterbegin', str);
+		if(i === 0){			
+			td.dataset.approverNo = approverNo;
+			td.textContent = approverJob;
+		}
+			trList[i].appendChild(td);
+	}
 	
 }
 
@@ -100,26 +154,18 @@ function delApproverHTML(this_tag){
 
 //테이블 Td 삭제
 function delStampTableTd(this_tag) {
-	
 	const approver = this_tag.parentElement.parentElement
-	console.log(approver);
-	str = approver.querySelector('div:nth-child(2)').textContent;
-	console.log(str);
-	var table = document.querySelector('.stamp-table');
-	var tdList = table.querySelectorAll('td');
-	console.log(tdList);
-
-	//!!!!!!!!!시간 남을 때 제대로 고치기
-	for(let i = 0; i<tdList.length; i++){
-		if(str.includes(tdList[i].textContent)){
-			const addNum = Math.floor((tdList.length + 1) / 3);
-			const idx = i == 5 ? 1 : i;
-			console.log(`i = ${i} / idx = ${idx} / addNum = ${addNum}`)
-			console.log(tdList)
-			tdList[idx].remove();
-			tdList[idx+addNum].remove();
-			tdList[idx+addNum+addNum].remove();
-			break;
+	const delApproverNo = approver.querySelector('input[type="hidden"]').value;
+	const table = document.querySelector('.stamp-table');
+	//ejob tr에 삭제할 결제자번호와 같은 approver 번호가 있다면
+	for(let i=0; i<table.rows[0].cells.length; i++){
+		const approverNo = table.rows[0].cells[i].dataset.approverNo;
+		if(approverNo == delApproverNo){
+			//같은 열의 td 모두 삭제
+			for(let j=0; j<table.rows.length; j++){
+				table.rows[j].deleteCell(i)
+			}
+			
 		}
 	}
 }

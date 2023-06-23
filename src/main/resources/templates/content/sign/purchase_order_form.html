@@ -185,7 +185,7 @@
 								<!-- 결재자 추가시 추가되어야 하는 코드 시작 -->
 								<tr class="eJobTr">
 									<td>담당</td><!-- 직책 -->
-									<td>
+									<td th:data-approver-no="${signWriteInfo.signVOList[0].approverNo}">
 										[[${signWriteInfo.signVOList[0].approverJob}]]
 									</td>
 								</tr>
@@ -291,28 +291,36 @@
 							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal">
 <!-- 							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal"> -->
 						</div>
-						<!-- 결제자 츠기될 때마다 생성(신청서의 html도 같이 생성되어야 함) -->
-						<div class="col-12  approver-list-div">
-						<th:block th:if="${signWriteInfo.signVOList != null}">
-							<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div">
-								<div class="col-3">
-									<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
-										class="rounded-image">
+						<div class="col-12 mb-2">
+							<div class="row mb-1 mt-1 d-flex align-items-center">
+								<div class="col-3" style="border-right: 1px solid #dddddd;">
+									<h5 style="text-align: center;">참조자</h5>
 								</div>
-								<div class="col-7">
-									[[${signWriteInfo.signVOList[0].approverName}]]
-									 [[${signWriteInfo.signVOList[0].approverJob}]]
-									 <input type="hidden" class="approverNo" th:value="${signWriteInfo.signVOList[0].approverNo}">
-								</div>
-								<div class="col-2 d-grid">
-									<input type="button" class="btn btn-primary" value="삭제"
-										onclick="delApproverHTML(this);">
-								</div>
+								<div class="col-9 referrer-list-div" style="font-size: 16px;"></div>
 							</div>
-						</th:block>
-
-
 						</div>
+						<div class="col-12  approver-list-div" style="min-height: 400px;">
+							
+							<th:block th:if="${signWriteInfo.signVOList != null}">
+								<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
+									
+									<div class="col-3">
+										<img th:src="${signWriteInfo.signVOList[0].attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/'+signWriteInfo.signVOList[0].attachedFileName}" width="60px;"
+											class="rounded-image">
+									</div>
+									<div class="col-7">
+										[[${signWriteInfo.signVOList[0].approverName}]]
+										 [[${signWriteInfo.signVOList[0].approverJob}]]
+										 <input type="hidden" class="approverNo" th:value="${signWriteInfo.signVOList[0].approverNo}">
+									</div>
+									<div class="col-2 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제"
+											onclick="delApproverHTML(this);">
+									</div>
+								</div>
+							</th:block>
+						</div>
+						
 						
 					</div>
 				</div>
