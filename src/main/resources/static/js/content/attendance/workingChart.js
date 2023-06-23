@@ -55,6 +55,13 @@ new Chart(ctx, {
 				label: '총 근무시간',
 				data: sumbyCntArr,
 				//backgroundColor: Object.values(Utils.CHART_COLORS),
+				  backgroundColor: [
+                'rgba(54, 162, 235, 0.6)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+            ]
+				
 			}
 		]
 	},
@@ -82,11 +89,16 @@ function drawTable(data){
 	//그려질 테이블 태그를 문자열로 작성
 	let str = ``;
 	str+= `<table class="table text-center" style='margin-top:50px;'>`;
+	str+= `<colgroup>`;
+	str+= `<col width="*">`;
+	str+= `<col width="40%">`;
+	str+= `<col width="40%">`;
+	str+= `</colgroup>`;
 	str+= `<thead>`;
 	str+= `<tr>`;
-	str+= `<td>No</td>`;
-	str+= `<td>사원명</td>`;
-	str+= `<td>총 근무시간</td>`;
+	str+= `<td style=font-weight:bold;>No</td>`;
+	str+= `<td style=font-weight:bold;>사원명</td>`;
+	str+= `<td style=font-weight:bold;>총 근무시간</td>`;
 	str+= `</tr>`;
 	str+= `</thead>`;
 	str+= `<tbody>`;
