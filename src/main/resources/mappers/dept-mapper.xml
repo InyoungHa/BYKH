@@ -112,6 +112,7 @@
 			, DENAME 
 		FROM DEPT
 		WHERE LOC = #{loc}
+		AND IS_USE = 'Y'
 		ORDER BY DEPTNO
 	</select>
 	

@@ -12,14 +12,42 @@
 /*Now the CSS*/
 * {margin: 0; padding: 0;}
 
+.company_tag{
+	background-color:#001C30;
+	font-weight: bold;
+	width: 8rem;
+	height: 3rem;
+
+}
+
+.loc_tag{
+	background-color: #176B87;
+	font-weight: bold;
+	width: 5rem;
+	height: 2.2rem;
+	text-align: center;
+}
+
+.dename_tag{
+	background-color: #64CCC5;
+	font-weight: bold;
+	width: 4rem;
+	height: 2rem;	
+}
+
+.ename_tag{
+	background-color: #DAFFFB;
+	
+}
+
+
 .tree ul {
     padding-top: 20px; position: relative;
-    	
+	
 	transition: all 0.5s;
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
 }
-
 
 .tree li {
 	float: left; text-align: center;
@@ -32,21 +60,17 @@
 	-moz-transition: all 0.5s;
 }
 
-/* .tree ul:nth-child(2) li:nth-child(2){
-	 background-color: #f2f2f2; 배경색 추가 및 설정
-} */
-
 /*We will use ::before and ::after to draw the connectors*/
 
 .tree li::before, .tree li::after{
 	content: '';
 	position: absolute; top: 0; right: 50%;
-	border-top: 1px solid #ccc;
+	border-top: 1px solid black; /*가로 직선  */
 	width: 50%; height: 20px;
 }
 .tree li::after{
 	right: auto; left: 50%;
-	border-left: 1px solid #ccc;
+	border-left: 1px solid black; /* 왼쪽 직선 트리 */
 }
 
 /*We need to remove left-right connectors from elements without 
@@ -65,7 +89,7 @@ right connector from last child*/
 }
 /*Adding back the vertical connector to the last nodes*/
 .tree li:last-child::before{
-	border-right: 1px solid #ccc;
+	border-right: 1px solid black; /* 오른쪽 직선 트리 */
 	border-radius: 0 5px 0 0;
 	-webkit-border-radius: 0 5px 0 0;
 	-moz-border-radius: 0 5px 0 0;
@@ -76,22 +100,21 @@ right connector from last child*/
 	-moz-border-radius: 5px 0 0 0;
 }
 
-/*Time to add downward connectors from parents*/
+/*부모에서 자식으로 내려오는 직선  */
 .tree ul ul::before{
 	content: '';
 	position: absolute; top: 0; left: 50%;
-	border-left: 1px solid #ccc;
+	border-left: 1px solid black;
 	width: 0; height: 20px;
-
 }
 
-.tree li a{
-	border: 1px solid #ccc;
+.tree li a{/*a태그를 감싸고 있는 박스  */
+	border: 1px solid black; 
 	padding: 5px 10px;
 	text-decoration: none;
-	color: #666;
-	font-family: arial, verdana, tahoma;
-	font-size: 11px;
+	color: black;
+	font-family: arial, verdana, tahoma; 
+	font-size: 14px;
 	display: inline-block;
 
 	
@@ -103,6 +126,7 @@ right connector from last child*/
 	-webkit-transition: all 0.5s;
 	-moz-transition: all 0.5s;
 }
+
 
 /*Time for some hover effects*/
 /*We will apply the hover effect the the lineage of the element also*/
