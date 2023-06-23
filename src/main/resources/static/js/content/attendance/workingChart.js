@@ -39,8 +39,8 @@ const ctx = document.getElementById('categoryPieChart');
 	const sumbyCntArr = [];
 
 	data.forEach(function(item, index){
-		cateNameArr[index] = item['EVENT_NAME'];
-		sumbyCntArr[index] = item['RESOURCE_CNT'];	
+		cateNameArr[index] = item['ENAME'];
+		sumbyCntArr[index] = item['WORKING_DAYS'];	
 	});
 	
 
@@ -52,14 +52,21 @@ new Chart(ctx, {
 		labels: cateNameArr,
 		datasets: [
 			{
-				label: 'Dataset 1',
+				label: '총 근무시간',
 				data: sumbyCntArr,
 				//backgroundColor: Object.values(Utils.CHART_COLORS),
+				  backgroundColor: [
+                'rgba(54, 162, 235, 0.6)',
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+            ]
+				
 			}
 		]
 	},
 	options: {
-		responsive: true,
+		responsive: false,
 		plugins: {
 			legend: {
 				position: 'top',
@@ -82,11 +89,16 @@ function drawTable(data){
 	//그려질 테이블 태그를 문자열로 작성
 	let str = ``;
 	str+= `<table class="table text-center" style='margin-top:50px;'>`;
+	str+= `<colgroup>`;
+	str+= `<col width="*">`;
+	str+= `<col width="40%">`;
+	str+= `<col width="40%">`;
+	str+= `</colgroup>`;
 	str+= `<thead>`;
 	str+= `<tr>`;
-	str+= `<td>No</td>`;
-	str+= `<td>자원명</td>`;
-	str+= `<td>자원 사용 횟수</td>`;
+	str+= `<td style=font-weight:bold;>No</td>`;
+	str+= `<td style=font-weight:bold;>사원명</td>`;
+	str+= `<td style=font-weight:bold;>총 근무시간</td>`;
 	str+= `</tr>`;
 	str+= `</thead>`;
 	str+= `<tbody>`;
@@ -94,8 +106,8 @@ function drawTable(data){
 	for(let i = 0; i < data.length; i++){
 		str += `<tr>`;
 		str += `<td>${data.length - i}</td>`;
-		str += `<td>${data[i]['EVENT_NAME']}</td>`;
-		str += `<td>${data[i]['RESOURCE_CNT']}</td>`;
+		str += `<td>${data[i]['ENAME']}</td>`;
+		str += `<td>${data[i]['WORKING_DAYS']}</td>`;
 		str += `</tr>`;
 	}
 	

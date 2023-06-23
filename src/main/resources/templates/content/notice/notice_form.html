@@ -16,6 +16,19 @@
 	.numberBtn {
 		color: #466583;
 	}
+  	.ck-editor__editable {
+  		height: 500px;
+	}
+  	.ck-editor__editable p {
+  		margin: 0
+  	}
+  	.ck-editor__editable a {
+  		color : blue;
+  		cursor: pointer;
+  	}
+	.ck-content {
+	font-size: 18px;
+	}
 	</style>
 
 </th:block>
@@ -54,7 +67,8 @@
 						<tr>
 							<td class="align-baseline table-light">내용</td>
 							<td colspan="2">
-								<textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent"></textarea>
+								<!-- <textarea class="form-control" rows="20" style="resize: none" name="boardContent" id="boardContent"></textarea> -->
+								<textarea name="boardContent" id="boardContent"></textarea>
 							</td>
 						</tr>
 						<tr>
@@ -87,6 +101,7 @@
 			
 		</form>
 		</div>
+		
 	</div>
 	
 	

@@ -66,6 +66,7 @@ public class UserController {
 	//로그인 페이지
 	@GetMapping("/log")
 	public String login() {
+		
 		return "content/login";
 	}
 	
@@ -87,7 +88,10 @@ public class UserController {
 		model.addAttribute("toDoCotent",userService.selectToDoList(empno));
 		
 		//공지 목록 조회
-		model.addAttribute("noticeList", userService.getMainBoard());
+		model.addAttribute("noticeList", userService.getMainBoard("BOARD_MENU_002"));
+		
+		//자료실 목록 조회
+		model.addAttribute("archiveList", userService.getMainBoard("BOARD_MENU_001"));
 		
 		//결재문서 조회
 		model.addAttribute("sgnDocList", signService.getMainSignDocList(empno));
@@ -473,6 +477,13 @@ public class UserController {
 	@PostMapping("/deleteRoleAjax")
 	public void deleteRole(EmpVO empVO) {
 		userService.deleteRole(empVO);
+	}
+	
+	//관리자 문의 페이지로 이동
+	@GetMapping("/userAsk")
+	public String userAsk() {
+		
+		return "content/user/userAsk";
 	}
 
 	
