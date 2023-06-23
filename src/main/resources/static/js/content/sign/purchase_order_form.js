@@ -24,15 +24,41 @@ function init(){
 }
 
 
+
 //결재자 리스트 div에 추가
-function addApproverHTML(approverNo, approverName, approverJob, attachedFileName){
-	//html에 추가
+function addApproverHTML(approverNo, approverName, approverJob, img_route){
+	//결재자 리스트 영역
 	const approver_list_div = document.querySelector('.approver-list-div');
+	
+	//함수를 종료할지 결정(중복검사, 본인선택)
+	const isReturn = false;
+	//중복검사
+	const approver_no_list = document.querySelectorAll('.approverNo');
+	console.log(approver_no_list);
+	let return_msg = '';
+	for (let i=0; i<approver_no_list.length; i++){
+		if(approver_no_list[i].value == approverNo){
+			return_msg = '이미 결재 목록에 있습니다.';
+			isReturn = true;
+		}
+	}
+	//본인 선택 금지
+	const writer_no = document.querySelector('.writerNo').value;
+	if(writer_no == approverNo){
+		return_msg = '자신은 추가할 수 없습니다.';
+		isReturn = true;
+	}
+	
+	if(isReturn){
+		alert(return_msg);
+		return ;
+	}
+	
 	let str = '';
 	str += `
 		<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div">
 			<div class="col-3">
-				<img src="${attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/'+attachedFileName}" width="60px;" class="rounded-image">
+				<img src="${img_route}" width="60px;" class="rounded-image">
 			</div>
 			<div class="col-7">
 				${approverName} ${approverJob}
@@ -43,17 +69,50 @@ function addApproverHTML(approverNo, approverName, approverJob, attachedFileName
 			</div>
 		</div>
 			`;
+	//'참조' 또는 '추가' 버튼 클릭에 따라 각 영역에 추가
 	approver_list_div.insertAdjacentHTML('beforeend', str);
 	//테이블 td 추가
 	addStampTableTd(approverNo, approverName, approverJob);
 	
 }
-
+//참조자 리스트 div에 추가
+function addReferrerHTML(referrerNo, referrerName){
+	//참조자 리스트 영역	
+	const referrer_list_div = document.querySelector('.referrer-list-div');
+	
+	//중복검사
+	const referrer_span_list = referrer_list_div.querySelectorAll('span');
+	for(let i=0; i<referrer_span_list.length; i++){
+		if(referrerNo == referrer_span_list[i].dataset.referrerNo){
+			return ;
+		}
+	}
+	
+	let str = '';
+	str += `
+		<span data-referrer-no="${referrerNo}">
+			${referrerName}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+				class="bi bi-x-circle-fill" viewBox="0 0 16 16"
+				onclick="delReferrerHTML(this);"
+				style="cursor: pointer;">
+			  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+			</svg>
+		</span>
+			`;
+	//'참조' 또는 '추가' 버튼 클릭에 따라 각 영역에 추가
+	referrer_list_div.insertAdjacentHTML('beforeend', str);
+	
+}
+function delReferrerHTML(clickTag){
+	
+	clickTag.parentElement.remove();
+}
 // 조직도 사원 조회
 function getDeptEmpList(deptno){
 		//ajax start
 	$.ajax({
-		url: '/user/getDeptEmpList', //요청경로
+		url: '/user/getDeptEmpListAjax', //요청경로
 		type: 'post',
 		async: true, //동기/비동기
 		//contentType: 'application/json; charset=UTF-8',
@@ -62,25 +121,23 @@ function getDeptEmpList(deptno){
 		success: function(result) {
 			const empListArea = document.querySelector('.emp-list-area');
 			empListArea.replaceChildren();
-			console.log(result)
 			let str = '';
 			for (const emp of result){
-				console.log(emp.eimgVO);
 				//console.log(emp.eImgVO.attachedFileName);
-				
+				const img_route = emp.eimgVO.attached_file_name == null ? '/upload/empImg/test.jpg' : '/upload/empImg/'+emp.eimgVO.attached_file_name;
 				str += `
 					<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom approver-div"
 							>
 						<div class="col-3">
 							
-							<img src="${emp.eimgVO.attached_file_name == null ? '/upload/empImg/default.png' : '/upload/empImg/'+emp.eimgVO.attached_file_name}" width="60px;" class="rounded-image">
+							<img src="${img_route}" width="60px;" class="rounded-image">
 						</div>
 						<div class="col-7">
 							${emp.ename} ${emp.e_job}
-							<input type="hidden" value="${emp.empno}" class="approverNo">
 						</div>
 						<div class="col-2 d-grid">
-							<input type="button" class="btn btn-primary" value="추가" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}', '${emp.eimgVO.attached_file_name}');">
+								<input type="button" class="btn btn-primary mb-1" value="참조" onclick="addReferrerHTML(${emp.empno}, '${emp.ename}');">
+								<input type="button" class="btn btn-primary" value="추가" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}', '${img_route}');">
 						</div>
 					</div>
 						`;				
@@ -95,21 +152,9 @@ function getDeptEmpList(deptno){
 	//ajax end
 }
 
-//결재자 추가 - 사원 클릭시 배경색, 결재순서 토글
-/*
-function select_toggle(clickTag){
-	const sgnOrderSpan = clickTag.querySelector('.image-container');
-	clickTag.style.backgroundColor = clickTag.style.backgroundColor === 'rgb(204, 204, 204)' ? '' : 'rgb(204, 204, 204)';
-	sgnOrderSpan.classList.toggle("d-none");
-	
-	
-}*/
-
-
+// divA의 높이가 변경될 때마다 실행되는 함수
 const deptListArea = document.querySelector(".dept-list-area");
 const empListArea = document.querySelector(".emp-list-area");
-
-// divA의 높이가 변경될 때마다 실행되는 함수
 function syncHeights() {
     const deptHeight = deptListArea.offsetHeight;
     console.log(deptHeight);
@@ -120,11 +165,6 @@ syncHeights();
 deptListArea.addEventListener("resize", syncHeights);
 
 
-
-
-
-
-
 //테이블 td 추가
 function addStampTableTd(approverNo, approverName, approverJob) {
 	const table = document.querySelector('.stamp-table');
@@ -132,19 +172,15 @@ function addStampTableTd(approverNo, approverName, approverJob) {
 	// 모든 <tr> 요소를 선택
 	const trList = table.querySelectorAll('tr');
 
-
 	// 각 <tr> 요소에 마지막 자식으로 <td> 요소 추가
-	trList.forEach(function(tr) {
+	for(let i = 0; i<trList.length; i++){
 		const td = document.createElement('td');
-		tr.appendChild(td);
-	});
-
-	//ejobtr 태그 마지막 자식 td에 직업 추가
-	const str = `${approverJob}
-				<input type="hidden" value="" name="">`;
-	const e_job_tr = document.querySelector('.eJobTr');
-	last_td = e_job_tr.querySelector('td:last-child');
-	last_td.insertAdjacentHTML('afterbegin', str);
+		if(i === 0){			
+			td.dataset.approverNo = approverNo;
+			td.textContent = approverJob;
+		}
+			trList[i].appendChild(td);
+	}
 	
 }
 
@@ -156,32 +192,25 @@ function delApproverHTML(this_tag){
 	this_tag.parentElement.parentElement.remove();
 }
 
-	
-
 //테이블 Td 삭제
 function delStampTableTd(this_tag) {
-	
 	const approver = this_tag.parentElement.parentElement
-	str = approver.querySelector('div:nth-child(2)').textContent;
-	var table = document.querySelector('.stamp-table');
-	var tdList = table.querySelectorAll('td');
-
-	//!!!!!!!!!시간 남을 때 제대로 고치기
-	console.log(`tdList length = ${tdList.length}`);
-	for(let i = 0; i<tdList.length; i++){
-		if(str.includes(tdList[i].textContent)){
-		//if(i==1){
+	const delApproverNo = approver.querySelector('input[type="hidden"]').value;
+	const table = document.querySelector('.stamp-table');
+	//ejob tr에 삭제할 결제자번호와 같은 approver 번호가 있다면
+	for(let i=0; i<table.rows[0].cells.length; i++){
+		const approverNo = table.rows[0].cells[i].dataset.approverNo;
+		if(approverNo == delApproverNo){
+			//같은 열의 td 모두 삭제
+			for(let j=0; j<table.rows.length; j++){
+				table.rows[j].deleteCell(i)
+			}
 			
-			const addNum = Math.floor((tdList.length + 1) / 3);
-			const idx = i == 5 ? 1 : i;
-			console.log(`i = ${i} / idx = ${idx} / addNum = ${addNum}`)
-			console.log(tdList)
-			tdList[idx].remove();
-			tdList[idx+addNum].remove();
-			tdList[idx+addNum+addNum].remove();
-			break;
 		}
 	}
+	
+	
+	
 }
 
 //'▼' 버튼 클릭 시 실행
