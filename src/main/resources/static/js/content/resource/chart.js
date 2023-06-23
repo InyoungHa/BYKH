@@ -9,7 +9,6 @@ function getSaleStatusByCategoryAjax(){
 		url: '/resource/selectEventCountAjax', //요청경로
 		type: 'post',
 		async: true,
-		//contentType: 'application/json; charset=UTF-8',
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		data: {}, //필요한 데이터
 		success: function(result) {
@@ -29,11 +28,6 @@ function getSaleStatusByCategoryAjax(){
 function drawChart(data){
 	
 const ctx = document.getElementById('categoryPieChart');
-	//data에 들어있는 모든 데이터 중 CATE_NAME 데이터만 추출해서 
-	//추출한 데이터를 배열로 만들로 생성 
-	
-	//data에 들어있는 모든 데이터 중 SUM_BUY_CNT 데이터만 추출해서 
-	//추출한 데이터를 배열로 만들로 생성 
 
 	const cateNameArr = [];
 	const sumbyCntArr = [];
@@ -52,15 +46,16 @@ new Chart(ctx, {
 		labels: cateNameArr,
 		datasets: [
 			{
-				label: 'Dataset 1',
+				label: '자원 사용 횟수',
 				data: sumbyCntArr,
-				//backgroundColor: Object.values(Utils.CHART_COLORS),
 			}
 		]
 	},
+	plugins: [ChartDataLabels],
 	options: {
-		responsive: true,
+		responsive: false,
 		plugins: {
+			
 			legend: {
 				position: 'top',
 			},
@@ -68,25 +63,39 @@ new Chart(ctx, {
 				display: true,
 				
 			}
+			,
+	          datalabels: {
+                    formatter: function (value, context) {
+                        return Math.round(value / context.chart.getDatasetMeta(0).total * 100) + "%";
+                    },
+                    color: '#fff',
+                     font: {
+                        size: 28
+                    }
+                }
+                
 		}
 	}
 });
 	
 }
 
-//테이블을 그리는 함수
 function drawTable(data){
-	//테이블이 그려질 div태그 선택
 	const tableDiv = document.querySelector('.tableDiv');
 	
-	//그려질 테이블 태그를 문자열로 작성
 	let str = ``;
-	str+= `<table class="table text-center" style='margin-top:50px;'>`;
+
+	str+= `<table class="table text-center" style='margin-top:30px; width:600px;'>`;
+		str+= `<colgroup>`;
+	str+= `<col width="*">`;
+	str+= `<col width="40%">`;
+	str+= `<col width="40%">`;
+	str+= `</colgroup>`;
 	str+= `<thead>`;
 	str+= `<tr>`;
-	str+= `<td>No</td>`;
-	str+= `<td>자원명</td>`;
-	str+= `<td>자원 사용 횟수</td>`;
+	str+= `<td style=font-weight:bold;>No</td>`;
+	str+= `<td style=font-weight:bold;>자원명</td>`;
+	str+= `<td style=font-weight:bold;>자원 사용 횟수</td>`;
 	str+= `</tr>`;
 	str+= `</thead>`;
 	str+= `<tbody>`;
@@ -104,7 +113,6 @@ function drawTable(data){
 	str+= `</tbody>`;
 	str+= `</table>`;
 	
-	//테이블이 들어갈 div 태그에 위에서 만든 코드를 삽입
 	tableDiv.insertAdjacentHTML('afterbegin', str);
 	
 }

@@ -51,12 +51,16 @@
 		<result column="APPROVER_NO" 		property="approverNo"/>
 		<result column="APPROVER_NAME" 		property="approverName"/>
 		<result column="APPROVER_JOB" 		property="approverJob"/>
+		<result column="ATTACHED_FILE_NAME" 		property="attachedFileName"/>
 		<result column="SGN_COMENT" 		property="sgnComent"/>
 		<result column="SGN_DATE" 			property="sgnDate"/>
 		<result column="NEXT_APPROVER_NO" 	property="nextApproverNo"/>
 		
 	</resultMap>
-	
+	<resultMap type="com.bykh.groupware.sign.vo.ReferrerVO" id="referrer">
+		<id column="REFERRER_NO" property="referrerNo"/>
+		<result column="DOC_NO" property="docNo"/>
+	</resultMap>
 	
 	
 	<!-- 구매 테이블 -->
@@ -154,9 +158,22 @@
 		    E_JOB,
 		    DENAME,
 		    D.DEPTNO,
-		    (SELECT ENAME FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)) AS APPROVER_NAME,
-		    (SELECT EMPNO FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)) AS APPROVER_NO,
-		    (SELECT E_JOB FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)) AS APPROVER_JOB
+		    COALESCE(
+		        (SELECT ENAME FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)),
+		        (SELECT ENAME FROM EMP WHERE E_JOB = '사장')
+		    ) AS APPROVER_NAME,
+		    COALESCE(
+		        (SELECT EMPNO FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)),
+		        (SELECT EMPNO FROM EMP WHERE E_JOB = '사장')
+		    ) AS APPROVER_NO,
+		    COALESCE(
+		        (SELECT E_JOB FROM EMP WHERE (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)),
+		        (SELECT E_JOB FROM EMP WHERE E_JOB = '사장')
+		    ) AS APPROVER_JOB,
+		    COALESCE(
+		        (SELECT ATTACHED_FILE_NAME FROM EMP, E_IMG WHERE EMP.EMPNO = E_IMG.EMPNO AND (E.E_JOB = '과장' OR EMP.DEPTNO = D.DEPTNO) AND E_JOB = (CASE WHEN E.E_JOB = '과장' THEN '사장' ELSE '과장' END)),
+		        (SELECT ATTACHED_FILE_NAME FROM EMP, E_IMG WHERE EMP.EMPNO = E_IMG.EMPNO AND E_JOB = '사장')
+		    ) AS ATTACHED_FILE_NAME
 		FROM EMP E, DEPT D
 		WHERE E.DEPTNO = D.DEPTNO
 		AND EMPNO = ${empno}
@@ -311,6 +328,7 @@
             , ENAME
             , DENAME
             , APPROVER_NO
+            , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) ATTACHED_FILE_NAME
             , (SELECT ENAME FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_NAME
             , (SELECT E_JOB FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_JOB
             , SGN_ORDER
@@ -320,11 +338,12 @@
             , (SELECT APPROVER_NO FROM SGN S_SGN
             WHERE S_SGN.DOC_NO = SGN.DOC_NO
             AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
-		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT
+		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT, E_IMG
 		WHERE DOC.DOC_NO = DAL.DOC_NO
         AND SGN.DOC_NO = DOC.DOC_NO
         AND DOC.WRITER_NO = EMP.EMPNO
         AND EMP.DEPTNO = DEPT.DEPTNO
+        AND EMP.EMPNO = E_IMG.EMPNO
 		AND DOC.DOC_NO = ${docNo}
 		
 	</select>

@@ -1,11 +1,13 @@
 package com.bykh.groupware.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bykh.groupware.emp.vo.EImgVO;
@@ -15,6 +17,7 @@ public class UploadUtil {
 
 	//단일 파일 업로드 메소드
 	public static BoardFileVO fileUpload(MultipartFile boardFile) {
+		
 		//반환할 파일 객체 생성
 		BoardFileVO boardFileVO = null;
 		
@@ -37,6 +40,16 @@ public class UploadUtil {
 			//파일 사이즈
 			long fileSize = boardFile.getSize();
 			String fileFancySize = fancySize(fileSize);
+			
+			//파일 경로
+			ClassPathResource resource = new ClassPathResource("static/upload/file/");
+			try {
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+resource.getURL().toString());
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+resource.getURL().getPath());
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			
 			
 			//파일 업로드

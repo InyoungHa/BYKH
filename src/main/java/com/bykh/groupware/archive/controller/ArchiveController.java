@@ -95,7 +95,7 @@ public class ArchiveController {
 		else { // 임시저장하고 등록
 			//상태값 변경
 			boardVO.setBoardStatus(1);
-			boardVO.setBoardDate("SYSDATE");
+			boardVO.setBoardDate("CURRENT_DATE");
 			
 			updateBoard(boardVO, deleteFileNum, files);			
 		}
@@ -118,7 +118,7 @@ public class ArchiveController {
 			regBoard(boardVO, files);
 		}
 		else { //같은 임시글 저장
-			boardVO.setBoardDate("SYSDATE");
+			boardVO.setBoardDate("CURRENT_DATE");
 			updateBoard(boardVO, deleteFileNum, files);
 		}
 		

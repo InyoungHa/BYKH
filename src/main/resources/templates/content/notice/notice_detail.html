@@ -7,6 +7,12 @@
 <!-- 외부 css 파일 --> 
 <th:block layout:fragment="content_css">
 	<!-- <link rel="stylesheet" href=""> -->
+	<style type="text/css">
+	.ck-content {
+		min-height: 20rem;
+		padding: 0.5rem;
+	}
+	</style>
 
 </th:block>
 
@@ -60,7 +66,7 @@
 						</tr>
 						<tr>
 							<td colspan="4" class="text-start align-baseline">
-								<div style="min-height: 20rem">[[${notice.boardContent}]]</div>
+								<div class="ck-content" th:utext="${notice.boardContent}"></div>
 							</td>
 						</tr>
 						<tr class="table-group-divider">

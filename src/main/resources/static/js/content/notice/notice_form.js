@@ -1,4 +1,18 @@
-
+let editor;
+    
+ClassicEditor
+	.create( document.querySelector( '#boardContent' ), {
+		ckfinder: {
+			uploadUrl : '/notice/imgUploadAjax'
+		},
+    	language: "ko"
+  	} )
+	.then( newEditor => {
+		editor = newEditor;
+	} )
+  	.catch( error => {
+        console.error( error );
+    } );
 
 
 //정상 글 등록
@@ -42,6 +56,8 @@ function tempRegNotice() {
 		
 		//폼 태그
 		const formData = new FormData(document.querySelector('#noticeForm'));
+		//내용 추가
+		formData.set('boardContent', editor.getData());
 		
 		//ajax start
 		$.ajax({
@@ -141,7 +157,9 @@ function tempDeleteFileInputDiv(deleteBtn, fileNum) {
 //제목, 내용, 파일 첨부 유효성 체크
 function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
-	const boardContent = document.querySelector('#boardContent').value;
+	//const boardContent = document.querySelector('#boardContent').value;
+	const boardContent = editor.getData();
+	
 	const fileInputList = document.querySelectorAll('#fileInput');
 	
 	
@@ -350,8 +368,11 @@ function getTempBoard(boardNum) {
 			
 			$('#tempRegModal').modal('hide');
 			
+			//글 제목
 			document.querySelector('#boardTitle').value = tempBoard.boardTitle;
-			document.querySelector('#boardContent').value = tempBoard.boardContent;
+			//글 내용
+			editor.setData(tempBoard.boardContent);
+			//document.querySelector('#boardContent').value = tempBoard.boardContent;
 			
 			const fileDivs = document.querySelectorAll('#fileDiv');
 			

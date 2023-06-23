@@ -27,7 +27,7 @@ public interface UserService {
 	String selectToDoCode();
 	
 	//메인 공지사항 목록
-	List<BoardVO> getMainBoard();
+	List<BoardVO> getMainBoard(String boardMenuCode);
 	
 	
 	//항목별 관리자 리스트 조회

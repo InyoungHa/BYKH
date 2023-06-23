@@ -14,8 +14,7 @@ function goWriteForm(clickTag){
 //제목 클릭 시 - 임시저장이 아닐 경우
 function showSignDocModal(clickTag){
 	
-	//모달 각 영역 선택
-	const modalTitleArea = document.querySelector('#showSignDoc .modal-title');
+	//모달 내용 영역 선택
 	const modalBodyArea = document.querySelector('#showSignDoc .modal-body');
 	
 	//내용 초기화
@@ -38,6 +37,7 @@ function showSignDocModal(clickTag){
 			console.log(result);
 			//키값 가져옴(list 형태)
 			const key = Object.keys(result);
+			console.log(result);
 			let str = '';
 			//연차신청서일 경우
 			if(key[0] == 'docAnnualLeave'){
@@ -190,7 +190,7 @@ function showSignDocModal(clickTag){
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -391,7 +391,7 @@ function showSignDocModal(clickTag){
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
