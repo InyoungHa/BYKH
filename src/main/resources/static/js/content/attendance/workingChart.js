@@ -66,7 +66,7 @@ new Chart(ctx, {
 		]
 	},
 	options: {
-		responsive: true,
+		responsive: false,
 		plugins: {
 			legend: {
 				position: 'top',
