@@ -10,21 +10,23 @@
 </th:block>
 
 <th:block layout:fragment="content">
-<h2 style="font-weight: bold;">전체 자원 사용률</h2>
+<h2 style="font-weight: bold;">전체 자원 사용차트</h2>
 	<div class="row">
 		<div class="col-6">
-			<canvas id="categoryPieChart"></canvas>
+			<canvas id="categoryPieChart" style="height:50vh; width:30vw;"></canvas>
 		</div>
 		<div class="col-6 tableDiv">
-		
 		</div>
 	</div>
 </th:block>
 
 <!-- 연결해야 할 외부 js 파일 -->
 <th:block layout:fragment="content_js">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script type="text/javascript" src="/js/content/resource/chart.js"></script>
+
 </th:block>
 
 </html>
