@@ -178,7 +178,8 @@ margin-right: 10px;
 					<td>사용 휴가</td>
 				</tr>
 				<tr>
-					<td th:unless="${allVacation== null}" th:text="${allVacation.allVacation} + '일'" ></td>
+					<td th:if="${allVacation== null}">0일</td>
+					<td th:unless="${allVacation== null}">[[${allVacation.allVacation}]]일</td>
 				</tr>
 			</table>
 
@@ -188,7 +189,8 @@ margin-right: 10px;
 					<td>잔여 휴가</td>
 				</tr>
 				<tr>
-					<td th:unless="${allVacation== null}" th:text="${15-allVacation.allVacation} + '일'" ></td>
+					<td th:if="${allVacation== null}">0일</td>
+					<td th:unless="${allVacation== null}">[[${15-allVacation.allVacation}]]일</td>
 				</tr>
 			</table>
 		</div>
