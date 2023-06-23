@@ -2,6 +2,7 @@ package com.bykh.groupware.resource.service;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +39,30 @@ public class ResourceServiceImpl implements ResourceService {
 	
 	//자원관리 캘린더 상세정보 저장
 		@Override
-		public void insertScheduleDetail(ResourceVO resourceVO) {
+		public void insertScheduleDetailAjax(ResourceVO resourceVO) {
 			sqlSession.update("calendarMapper.insertScheduleDetail", resourceVO);
 		}
 
 		//자원관리 캘린더 상세정보 조회
 		@Override
-		public List<ResourceVO> selectCalendarDetail(ResourceVO resourceVO) {
+		public List<ResourceVO> selectCalendarDetailAjax(ResourceVO resourceVO) {
 			return sqlSession.selectList("calendarMapper.selectCalendarDetail", resourceVO);
 		}
 
 
+		//자원관리 캘린더 상세정보 조회(전체)
+		@Override
+		public List<ResourceVO> selectCalendarDetailAllAjax(ResourceVO resourceVO) {
+			return sqlSession.selectList("calendarMapper.selectCalendarDetailAll", resourceVO);
+		}
 
 
+
+		//이벤트갯수 조회(차트용)
+		@Override
+		public List<Map<String, Object>> selectEventCount() {
+			return sqlSession.selectList("attendanceMapper.selectEventCount");
+		}
 		
 
 

@@ -3,6 +3,7 @@ package com.bykh.groupware.resource.controller;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -33,10 +34,31 @@ public class ResourceController {
 
 	//예약하기 페이지
 	@GetMapping("/reserve")
-	public String reserve() {
+	public String reserve(AttendanceVO attendanceVO, Model model, Authentication authentication) {
+		User user = (User)authentication.getPrincipal();
+		int empno = Integer.parseInt(user.getUsername());
+		
+		//이름 조회
+		model.addAttribute("selectName",attendanceService.selectName(empno));
 
 		return "content/resource/reserve";
 	}
+	
+	//전체조회 페이지
+		@GetMapping("/reserveAll")
+		public String reserveAll() {
+		
+
+			return "content/resource/reserveAll";
+		}
+		
+		//차트 페이지
+		@GetMapping("/chart")
+		public String chart() {
+		
+
+			return "content/resource/chart";
+		}
 
 	//예약목록 페이지
 	@GetMapping("/reservationList")
@@ -66,30 +88,47 @@ public class ResourceController {
 	
 	//자원관리 캘린더상세정보 저장
 		@ResponseBody
-		@PostMapping("/insertScheduleDetail")
-		public void insertScheduleDetail(ResourceVO resourceVO, Authentication authentication) {
+		@PostMapping("/insertScheduleDetailAjax")
+		public void insertScheduleDetailAjax(ResourceVO resourceVO, Authentication authentication) {
 			User user = (User)authentication.getPrincipal();
 			int empno = Integer.parseInt(user.getUsername());	
 			
 			resourceVO.setEmpno(empno);
 			
-			 resourceService.insertScheduleDetail(resourceVO);
+			 resourceService.insertScheduleDetailAjax(resourceVO);
 		}
 
 
 		// 자원관리 캘린더상세정보 조회
 		@ResponseBody
-		@RequestMapping("/selectCalendarDetail")
-		public List<ResourceVO> selectCalendarDetail(Authentication authentication, ResourceVO resourceVO) {
+		@RequestMapping("/selectCalendarDetailAjax")
+		public List<ResourceVO> selectCalendarDetailAjax(Authentication authentication, ResourceVO resourceVO) {
 			User user = (User)authentication.getPrincipal();
 			int empno = Integer.parseInt(user.getUsername());	
 			
 			resourceVO.setEmpno(empno);
 
-			return resourceService.selectCalendarDetail(resourceVO);
+			return resourceService.selectCalendarDetailAjax(resourceVO);
+		}
+		
+		
+		// 자원관리 캘린더상세정보 조회(전체)
+		@ResponseBody
+		@RequestMapping("/selectCalendarDetailAllAjax")
+		public List<ResourceVO> selectCalendarDetailAllAjax(ResourceVO resourceVO) {
+
+			return resourceService.selectCalendarDetailAllAjax(resourceVO);
 		}
 	
+		//이벤트갯수조회(차트용)
+		@ResponseBody
+		@PostMapping("/selectEventCountAjax")
+		public List<Map<String, Object>> getSaleStatusByCategoryAjax() {
+		List<Map<String, Object>> maplList = resourceService.selectEventCount();
 		
+		
+		return maplList;
+		}	
 		
 		
 

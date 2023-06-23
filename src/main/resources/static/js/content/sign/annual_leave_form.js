@@ -114,6 +114,8 @@ function delStampTableTd(this_tag) {
 		if(str.includes(tdList[i].textContent)){
 			const addNum = Math.floor((tdList.length + 1) / 3);
 			const idx = i == 5 ? 1 : i;
+			console.log(`i = ${i} / idx = ${idx} / addNum = ${addNum}`)
+			console.log(tdList)
 			tdList[idx].remove();
 			tdList[idx+addNum].remove();
 			tdList[idx+addNum+addNum].remove();
