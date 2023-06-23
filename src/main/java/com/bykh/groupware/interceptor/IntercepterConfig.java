@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @Configuration
 public class IntercepterConfig implements WebMvcConfigurer {
@@ -26,7 +27,8 @@ public class IntercepterConfig implements WebMvcConfigurer {
 				.addPathPatterns("/user/**")
 				.excludePathPatterns("/user/log")
 				.excludePathPatterns("/user/findEPWForm")
-				.excludePathPatterns("/**/*Ajax");
+				.excludePathPatterns("/**/*Ajax")
+				.excludePathPatterns("/**/download");
 				//.order()로 순번 지정 가능
 	}
 	
@@ -35,6 +37,11 @@ public class IntercepterConfig implements WebMvcConfigurer {
 	@Bean //객체 -> 리턴되는 데이터를 객체로 생성, 프로젝트 생성시 바로 실행
 	HeaderInterceptor getHeaderInterceptor() {
 		return new HeaderInterceptor();
+	}
+	
+	@Bean
+	MappingJackson2JsonView jsonView() {
+		return new MappingJackson2JsonView();
 	}
 	
 }

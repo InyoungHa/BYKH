@@ -1,6 +1,7 @@
 package com.bykh.groupware.util;
 
 public class ConstVariable {
+	
 	//첨부파일 업로드 경로
 	public static final String BOARD_UPLOAD_PATH = "C:\\dev\\workspaceSTS\\BYKH\\src\\main\\resources\\static\\upload\\file\\";
 
@@ -10,3 +11,5 @@ public class ConstVariable {
 	//이미지 테스트 경로
 	public static final String TEST_PATH = "C:\\dev\\workspaceSTS\\BYKH\\src\\main\\resources\\static\\upload\\empImg\\";
 }
+
+

@@ -43,8 +43,8 @@ public class UserServiceImpl implements UserService {
 
 	//메인 공지 목록
 	@Override
-	public List<BoardVO> getMainBoard() {
-		return sqlSession.selectList("boardMapper.getMainBoard");
+	public List<BoardVO> getMainBoard(String boardMenuCode) {
+		return sqlSession.selectList("boardMapper.getMainBoard", boardMenuCode);
 	}
 
 	
