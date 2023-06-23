@@ -475,6 +475,13 @@ public class UserController {
 	public void deleteRole(EmpVO empVO) {
 		userService.deleteRole(empVO);
 	}
+	
+	//관리자 문의 페이지로 이동
+	@GetMapping("/userAsk")
+	public String userAsk() {
+		
+		return "content/user/userAsk";
+	}
 
 	
 
