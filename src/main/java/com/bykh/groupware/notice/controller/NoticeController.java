@@ -97,7 +97,7 @@ public class NoticeController {
 		else { // 임시저장하고 등록
 			//상태값 변경
 			boardVO.setBoardStatus(1);
-			boardVO.setBoardDate("SYSDATE");
+			boardVO.setBoardDate("CURRENT_DATE");
 			
 			updateBoard(boardVO, deleteFileNum, files);			
 		}
@@ -120,7 +120,7 @@ public class NoticeController {
 			regBoard(boardVO, files);
 		}
 		else { //같은 임시글 저장
-			boardVO.setBoardDate("SYSDATE");
+			boardVO.setBoardDate("CURRENT_DATE");
 			updateBoard(boardVO, deleteFileNum, files);
 		}
 		
@@ -220,11 +220,10 @@ public class NoticeController {
 	}
 	
 
-	//본문 이미지 등록
+	//본문 이미지 등록(임시... 아직 안 됨)
 	@ResponseBody
 	@PostMapping("/imgUploadAjax")
 	public ModelAndView imgUpload(MultipartHttpServletRequest request) throws Exception {
-
 
 		// ckeditor는 이미지 업로드 후 이미지 표시하기 위해 uploaded 와 url을 json 형식으로 받아야 함
 		// modelandview를 사용하여 json 형식으로 보내기위해 모델앤뷰 생성자 매개변수로 jsonView 라고 써줌
@@ -247,19 +246,6 @@ public class NoticeController {
 		
 		//첨부될 파일명
 		String attachedFileName = uuid + extension;
-//		
-//		String realPath = request.getServletContext().getRealPath("/");
-//
-//		String savePath = realPath + "upload/" + newFileName;
-//  
-//		String uploadPath = "./upload/" + newFileName; 
-//
-//		File file = new File(savePath);
-//
-//		uploadFile.transferTo(file);
-//
-//		mav.addObject("uploaded", true);
-//		mav.addObject("url", uploadPath);
 
 		
 		//파일 업로드

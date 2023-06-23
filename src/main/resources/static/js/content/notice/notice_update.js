@@ -1,3 +1,23 @@
+//CKEditor 설정
+let editor;
+    
+ClassicEditor
+	.create( document.querySelector( '#boardContent' ), {
+		ckfinder: {
+			uploadUrl : '/notice/imgUploadAjax'
+		},
+    	language: "ko"
+  	} )
+	.then( newEditor => {
+		editor = newEditor;
+	} )
+  	.catch( error => {
+        console.error( error );
+    } );
+
+
+
+
 //정상 글 등록
 function updateNotice() {
 	if(!formCheck()) {
