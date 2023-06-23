@@ -93,7 +93,7 @@ function getImsiEPW(){
 	//console.log(ename);
 	
 	$.ajax({
-		url: '/user/getEmailEPWAjax', //요청경로
+		url: '/getEmailEPWAjax', //요청경로
 		type: 'post',
 		async: true, // 동기 방식으로 설정
 		//contentType: 'application/json; charset=UTF-8', //Json 타입

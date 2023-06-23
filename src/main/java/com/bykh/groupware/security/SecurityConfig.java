@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +19,7 @@ public class SecurityConfig {
 		security.csrf().disable()
 				.authorizeHttpRequests()
 			   		.requestMatchers("/"
+			   						,"/user/log"
 			   						, "/user/findEPWForm"
 			   						, "/user/getEmailEPWAjax").permitAll() //로그인 전 임시비번 받기
 					.requestMatchers("/emp/**", "/dept/**").hasRole("EMP") //인사관리
