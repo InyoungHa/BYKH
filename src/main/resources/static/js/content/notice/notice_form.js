@@ -56,6 +56,8 @@ function tempRegNotice() {
 		
 		//폼 태그
 		const formData = new FormData(document.querySelector('#noticeForm'));
+		//내용 추가
+		formData.set('boardContent', editor.getData());
 		
 		//ajax start
 		$.ajax({
@@ -366,8 +368,11 @@ function getTempBoard(boardNum) {
 			
 			$('#tempRegModal').modal('hide');
 			
+			//글 제목
 			document.querySelector('#boardTitle').value = tempBoard.boardTitle;
-			document.querySelector('#boardContent').value = tempBoard.boardContent;
+			//글 내용
+			editor.setData(tempBoard.boardContent);
+			//document.querySelector('#boardContent').value = tempBoard.boardContent;
 			
 			const fileDivs = document.querySelectorAll('#fileDiv');
 			

@@ -5,8 +5,8 @@ function login(){
 	const empno = document.querySelector('#loginForm #empno').value;
 	const epw = document.querySelector('#loginForm #epw').value;
 	
-	console.log(empno)
-	console.log(epw)
+	//console.log(empno)
+	//console.log(epw)
 	
 	$.ajax({
 		url: '/user/login', //요청경로

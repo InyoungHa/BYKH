@@ -1,5 +1,4 @@
 
-
 //오류 메세지 div 전체 제거
 function delete_error_div(){
 	const error_divs= document.querySelectorAll('div[class="my-invalid"]');
@@ -10,7 +9,7 @@ function delete_error_div(){
 }
 
 //임시비번 받기 위한 사번,사원 input태그 유효성 검사
-function check_empno_validate(){
+function check_validate(){
 	
 	//기존 오류 메세지 전부 삭제
 	delete_error_div();
@@ -79,21 +78,21 @@ function check_empno_validate(){
 //비밀번호 변경
 function getImsiEPW(){
 	
-	const isValidate = check_empno_validate();
+	const isValidate = check_validate();
 	
 	if(!isValidate){
 		return;
 	}
 	
-	const empno = document.querySelector('#getEmailEPWForm #empno').value;
-	const ename = document.querySelector('#getEmailEPWForm #ename').value;
+	const empno = document.querySelector('#empno').value;
+	const ename = document.querySelector('#ename').value;
 
 
 	//console.log(empno);
 	//console.log(ename);
 	
 	$.ajax({
-		url: '/getEmailEPWAjax', //요청경로
+		url: '/user/getEmailEPWAjax', //요청경로
 		type: 'post',
 		async: true, // 동기 방식으로 설정
 		//contentType: 'application/json; charset=UTF-8', //Json 타입

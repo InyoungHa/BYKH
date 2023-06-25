@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -161,7 +160,6 @@ public class EmpController {
 	@PostMapping("/updateAccountAjax")
 	public void updateAccountAjax(int empno, int eStatus, int eAccount, EmpVO empVO) {
 		//System.out.println("!!!!!!!!!!!!!"+empVO);
-
 
 		empService.updateE_Account(empVO);
 	}
