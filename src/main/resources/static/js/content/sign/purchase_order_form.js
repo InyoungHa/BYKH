@@ -457,20 +457,29 @@ function insertPurchaseorder(sgnStatus){
 		'buyDeptNo': document.querySelector('.deptNo').value,
 		'buyPrice': document.querySelector('.buyPriceTd').textContent,
 	};
-	//1-5 docPurchaseOrder
+	//1-3 docPurchaseOrder
 	const doc_purchase_order = {
 		'dpoComment': document.querySelector('.dpo-comment').value
 	};
 	//1-4 sgn
 	const sgn_arr = [];
-	const approver_no_list = document.querySelectorAll('.approverNo');
-	approver_no_list.forEach(function(approver_no, index){
+	const approver_tag_list = document.querySelectorAll('.approverNo');
+	approver_tag_list.forEach(function(approver_no, index){
 		const sgn = {
 			'approverNo':approver_no.value
 		};
 		sgn_arr[index] = sgn;
 	});
-	//1-3 sgnDoc
+	//1-5 referrer
+	const referrer_arr = [];
+	const referrer_tag_list = document.querySelectorAll('.referrer-list-div span');
+	referrer_tag_list.forEach(function(referrer_tag, index){
+		const referrer = {
+			'referrerNo':referrer_tag.dataset.referrerNo
+		}
+		referrer_arr[index] = referrer;
+	});
+	//1-6 sgnDoc
 	const sgn_doc = {
 		'docType': 2,
 		'docNo': document.querySelector('.docNo').value,
@@ -479,7 +488,7 @@ function insertPurchaseorder(sgnStatus){
 		'sgnStatus': sgnStatus
 	}
 	
-	
+	//전달할 데이터
 	const data = {
 		'buy_detail_arr' : buy_datail_arr,
 		'buy' : buy,
