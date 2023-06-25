@@ -23,6 +23,7 @@ public class SignDocVO {
 	private DocAnnualLeaveVO docAnnualLeaveVO;
 	private DocPurchaseOrderVO docPurchaseOrderVO;
 	private List<SignVO> signVOList;
+	private List<ReferrerVO> referrerVOList;
 	private EmpVO empVO;
 	 
 }

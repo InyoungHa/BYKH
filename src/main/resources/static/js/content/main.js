@@ -345,7 +345,7 @@ function showSignDocModal(clickTag){
 			if(key[0] == 'docAnnualLeave'){
 				const signWriteInfo = result[key[0]];
 				str += `
-				<div class="row ">
+				<div class="row">
 						<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
 							<input type="hidden" class="docNo" value="${signWriteInfo.docNo}">
 							<div class="row mt-3 mb-3">

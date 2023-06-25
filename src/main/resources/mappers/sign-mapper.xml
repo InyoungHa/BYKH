@@ -23,22 +23,25 @@
 		<id column="DPO_NO" 				property="dpoNo" />
 		<result column="DOC_NO" 			property="docNo" />
 		<result column="DPO_COMMENT" 		property="dpoComment" />
+		
 		<association property="buyVO" resultMap="buy"></association>
 	</resultMap>
 	
 	<!--결재문서 테이블  -->
 	<resultMap type="com.bykh.groupware.sign.vo.SignDocVO" id="signDoc">
 		<id column="DOC_NO" 				property="docNo"/>
-		<result column="DOC_TYPE" 				property="docType"/>
+		<result column="DOC_TYPE" 			property="docType"/>
 		<result column="WRITER_NO" 			property="writerNo"/>
 		<result column="DOC_TITLE" 			property="docTitle"/>
 		<result column="SGN_STATUS" 		property="sgnStatus"/>
 		<result column="SGN_STATUS_STR" 	property="sgnStatusStr"/>
 		<result column="INSERT_DATE" 		property="insertDate"/>
+		
 		<association property="empVO" 		resultMap="empMapper.emp"></association>
 		<association property="docAnnualLeaveVO" 		resultMap="docAnnualLeave"></association>
 		<association property="docPurchaseOrderVO" 		resultMap="docPurchaseOrder"></association>
 		<collection property="signVOList" resultMap="sign" column="DOC_NO"></collection>
+		<collection property="referrerVOList" resultMap="referrer" column="DOC_NO"></collection>
 	</resultMap>
 	
 	
@@ -51,15 +54,17 @@
 		<result column="APPROVER_NO" 		property="approverNo"/>
 		<result column="APPROVER_NAME" 		property="approverName"/>
 		<result column="APPROVER_JOB" 		property="approverJob"/>
-		<result column="ATTACHED_FILE_NAME" 		property="attachedFileName"/>
+		<result column="ATTACHED_FILE_NAME" property="attachedFileName"/>
 		<result column="SGN_COMENT" 		property="sgnComent"/>
 		<result column="SGN_DATE" 			property="sgnDate"/>
 		<result column="NEXT_APPROVER_NO" 	property="nextApproverNo"/>
 		
 	</resultMap>
+	
+	<!-- 참조 테이블 -->
 	<resultMap type="com.bykh.groupware.sign.vo.ReferrerVO" id="referrer">
 		<id column="REFERRER_NO" property="referrerNo"/>
-		<result column="DOC_NO" property="docNo"/>
+		<id column="DOC_NO" property="docNo"/>
 	</resultMap>
 	
 	
@@ -104,8 +109,10 @@
 				(SD.WRITER_NO = ${empno})
 			OR
 				(EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+			OR
+                (EXISTS (SELECT 1 FROM REFERRER WHERE SD.DOC_NO = REFERRER.DOC_NO AND REFERRER_NO = ${empno}))
 			)
-		ORDER BY  (CASE WHEN NEXT_APPROVER_NO = 2340103 THEN 0 ELSE 1 END), INSERT_DATE DESC
+		ORDER BY  (CASE WHEN NEXT_APPROVER_NO = ${empno} THEN 0 ELSE 1 END), INSERT_DATE DESC
         OFFSET 0 ROWS
         FETCH FIRST 5 ROWS ONLY
 	</select>
@@ -128,6 +135,8 @@
                 (SGN_STATUS = 1 AND SD.WRITER_NO = ${empno})
             OR
                 (SGN_STATUS = 1 AND EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+            OR
+                (SGN_STATUS = 1 AND EXISTS (SELECT 1 FROM REFERRER WHERE SD.DOC_NO = REFERRER.DOC_NO AND REFERRER_NO = ${empno}))
             )
 		ORDER BY INSERT_DATE DESC
 	</select>
@@ -147,6 +156,8 @@
 				(SD.WRITER_NO = ${empno})
 			OR
 				(EXISTS (SELECT 1 FROM SGN WHERE SD.DOC_NO = SGN.DOC_NO AND APPROVER_NO = ${empno}))
+			OR
+                (EXISTS (SELECT 1 FROM REFERRER WHERE SD.DOC_NO = REFERRER.DOC_NO AND REFERRER_NO = ${empno}))
 			)
 		ORDER BY INSERT_DATE DESC
 	</select>
@@ -305,6 +316,20 @@
 			    ${docNo}
 			    , ${i+1}
 			    , ${sign.approverNo}
+			)
+		</foreach>
+		SELECT 1 FROM DUAL
+	</insert>
+	<!-- 참조리스트 추가 -->
+	<insert id="insertReferrerList">
+		INSERT ALL
+		<foreach collection="referrerVOList" item="referrer">
+			INTO REFERRER (
+				REFERRER_NO
+				, DOC_NO
+			) VALUES(
+				${referrer.referrerNo}
+				, ${docNo}
 			)
 		</foreach>
 		SELECT 1 FROM DUAL

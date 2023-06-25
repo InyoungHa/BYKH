@@ -493,6 +493,7 @@ function insertPurchaseorder(sgnStatus){
 		'buy_detail_arr' : buy_datail_arr,
 		'buy' : buy,
 		'sgn_arr' : sgn_arr,
+		'referrer_arr':referrer_arr,
 		'sgn_doc' : sgn_doc,
 		'doc_purchase_order' : doc_purchase_order
 	}

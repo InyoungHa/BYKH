@@ -190,7 +190,7 @@ function showSignDocModal(clickTag){
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -391,7 +391,7 @@ function showSignDocModal(clickTag){
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">

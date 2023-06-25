@@ -20,6 +20,7 @@
 					<input type="hidden" value="1" name="sgnStatus" class="sgnStatus">
 					<input type="hidden" th:value="${docAnnualLeave != null ? docAnnualLeave.docNo : 0}" name="docNo" class="">
 					<input type="hidden" value="1" name="approverNoStr" class="approverNoStr">
+					<input type="hidden" value="1" name="referrerNoStr" class="referrerNoStr">
 					<input type="hidden" th:value="연차신청서" name="docTitle" class=""><!-- 필요한지 확인 -->
 					<!-- !!!!!!!!!!!!시큐리티 설정 적용 후 변경하기!!!!!!!!! -->
 					<input type="hidden" th:value="${signWriteInfo.empVO.empno}" name="writerNo">
@@ -222,7 +223,7 @@
 	<!-- 결재자 찾기 모달 -->
 	<div class="modal fade" id="searchApproverModal" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-scrollable">
+		<div class="modal-dialog modal-dialog-scrollable modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h1 class="modal-title fs-5" id="exampleModalLabel">결재자 추가</h1>
@@ -230,9 +231,36 @@
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body align-items-center pt-3">
-					
+					<div class="row">
+						<div class="col-6">
+							<ul class="border rounded dept-list-area">
+								<th:block th:each="organization : ${organizationList}">
+									<li class="m-3">
+									<a class="loc text-dark" style="cursor: pointer;"> 
+										<img src="/img/folder.png" width="30px" class="me-2" />[[${organization.loc}]]
+									</a>
+										<ul class="dept">
+											<li th:each="dept : ${organization.orgDeptList}" style="padding-left: 50px;">
+												<a class="link-dark" style="cursor: pointer;"
+												th:onclick="getDeptEmpList([[${dept.deptno}]])">
+													[[${dept.dename}]]
+												</a>
+											</li>
+										</ul>
+									</li>
+								</th:block>
+							</ul>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col emp-list-border rounded emp-list-area">
+									
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				
+
 			</div>
 		</div>
 	</div>
