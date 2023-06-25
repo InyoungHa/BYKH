@@ -212,6 +212,8 @@ function showSignDocModal(clickTag){
 							str += `
 							</div>
 								</div>`;
+							//결재/반려 버튼 노출여부 지정
+							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -227,8 +229,6 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							
 							str += `
 								<div class="row btn-area">
@@ -387,6 +387,7 @@ function showSignDocModal(clickTag){
 								</div>
 							</div>`;
 							let isNextApprover = false;
+							let isCanBeDeleted = false;
 							const loginId = document.querySelector('.login-id').value;
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
@@ -405,9 +406,14 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
 								}	
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && sign.nextApproverNo == null){
+									isCanBeDeleted = true;
+								}
 								str += `</div>
 								`;
 							});
@@ -429,9 +435,8 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
 							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
-							
+							// 노출여부에 따라 결재/반려버튼 노출
 							str += `
 								<div class="row btn-area">
 									<div class="col-6 d-grid">
