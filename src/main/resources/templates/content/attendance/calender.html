@@ -245,7 +245,7 @@ color: black;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 20%;
-  height: 50%;
+  height: 55%;
   opacity: 0;
   transition: opacity 0.8s ease;
 }
@@ -302,19 +302,19 @@ color: black;
     <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
+            <div class="modal-content" >
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>        
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="height: 800px; width: 450px;">
                     <div class="form-group">
                         <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" autocomplete="off">
+                        <input type="text" class="form-control" id="calendar_content" name="calendar_content" autocomplete="off" style="width: 350px;">
                         <label for="taskId" class="col-form-label" style="margin-top: 10px;">시작 날짜</label>
-                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+                        <input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date" style="width: 350px;"><br>
                      
                         <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
+                        <input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date" style="width: 350px;">
                            
                             <label for="taskId" class="col-form-label" style="margin-top: 15px;">시작 시간</label>
                     	 <select name="calendar_start_date" id="calendar_start_time" style="text-align: center;"></select>
@@ -327,7 +327,7 @@ color: black;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 100%;">추가</button>
+                    <button type="button" class="btn btn-warning" id="addCalendar" style="width: 100%; margin:0 auto;">추가</button>
                 </div>
     
             </div>
