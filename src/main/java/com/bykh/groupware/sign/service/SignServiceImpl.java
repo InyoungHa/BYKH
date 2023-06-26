@@ -57,6 +57,11 @@ public class SignServiceImpl implements SignService{
 	public int updateSignResult(SignVO signVO) {
 		return sqlsession.update("signMapper.updateSignResult", signVO);
 	}
+	
+	@Override
+	public int updateBuyApproval(SignVO signVO) {
+		return sqlsession.update("signMapper.updateBuyApproval", signVO);
+	}
 	@Override
 	public List<ItemVO> getItemList() {
 		return sqlsession.selectList("signMapper.getItemList");

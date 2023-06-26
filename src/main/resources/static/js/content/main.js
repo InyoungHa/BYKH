@@ -326,6 +326,7 @@ function showSignDocModal(clickTag){
 	//문서번호, 타입 가져오기
 	const docNo = clickTag.dataset.docNo;
 	const docType = clickTag.dataset.docType;
+	const isApproved = clickTag.dataset.isApproved;
 	
 	
 	//ajax start
@@ -488,11 +489,12 @@ function showSignDocModal(clickTag){
 								</div>
 							</div>`;
 							let isNextApprover = false;
+							let isCanBeDeleted = false;
 							const loginId = document.querySelector('.login-id').value;
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -505,9 +507,14 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
 								}	
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
+									isCanBeDeleted = true;
+								}
 								str += `</div>
 								`;
 							});
@@ -529,8 +536,6 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							
 							str += `
 								<div class="row btn-area">
@@ -541,6 +546,16 @@ function showSignDocModal(clickTag){
 										<input type="button" class="btn btn-primary" value="결재" onclick="updateSignResult(1, ${docNo});">
 									</div>
 								</div>`
+							}
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
 							}
 						str += `</div>
 				
@@ -689,11 +704,12 @@ function showSignDocModal(clickTag){
 								</div>
 							</div>`;
 							let isNextApprover = false;
+							let isCanBeDeleted = false;
 							const loginId = document.querySelector('.login-id').value;
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="/img/content/emp/YangDongGun.jpg" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -707,9 +723,14 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
 								}	
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
+									isCanBeDeleted = true;
+								}
 								str += `</div>
 								`;
 							});
@@ -731,8 +752,6 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							
 							str += `
 								<div class="row btn-area">
@@ -743,6 +762,16 @@ function showSignDocModal(clickTag){
 										<input type="button" class="btn btn-primary" value="결재" onclick="updateSignResult(1, ${docNo});">
 									</div>
 								</div>`
+							}
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
 							}
 						str += `</div>
 					</div>

@@ -32,6 +32,7 @@ public interface SignService {
 	
 	//결재/반려 버튼 클릭 시 실행
 	int updateSignResult(SignVO signVO);
+	int updateBuyApproval(SignVO signVO);
 	int updateSignStatus(SignDocVO signDocVO);
 	
 	//구매신청서 - 모든 아이템 리스트 조회

@@ -704,7 +704,8 @@ h6 {
 			<th:block th:unless="${#lists.size(sgnDocList) == 0}">
 				<th:block th:each="sgnDoc, state : ${sgnDocList}">
 					<tr onclick="showSignDocModal(this);"
-					th:data-doc-no="${sgnDoc.docNo}" th:data-doc-type=${sgnDoc.docType}>
+					th:data-doc-no="${sgnDoc.docNo}" th:data-doc-type="${sgnDoc.docType}"
+					th:data-is-approved="${sgnDoc.isApproved}">
 						<td>
 							<span th:class="${#authentication.name == sgnDoc.signVOList[0].nextApproverNo.toString() ? '' : 'd-none'}">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-fill alarm-svg" viewBox="0 0 16 16">

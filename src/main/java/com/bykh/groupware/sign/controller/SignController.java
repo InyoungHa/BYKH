@@ -299,13 +299,15 @@ public class SignController {
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
 	public void updateSignResultAjax(SignVO signVO) {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("controller 실행~~~~~~~~~~~~~");
 		
 		signService.updateSignResult(signVO);
-
+			
 		SignDocVO signDocVO = new SignDocVO();
 		signDocVO.setDocNo(signVO.getDocNo());
 		//결재결과가 '결재'고 다음 결재자가 없다면 문서 상태를 '결재완료'로 변경
-		
+		System.out.println("두번째 실행~~~~~~~~~~");
 		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) == 0) {
 			signDocVO.setSgnStatus(2);
 			signService.updateSignStatus(signDocVO);

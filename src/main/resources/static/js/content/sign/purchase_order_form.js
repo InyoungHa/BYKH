@@ -31,7 +31,7 @@ function addApproverHTML(approverNo, approverName, approverJob, img_route){
 	const approver_list_div = document.querySelector('.approver-list-div');
 	
 	//함수를 종료할지 결정(중복검사, 본인선택)
-	const isReturn = false;
+	let isReturn = false;
 	//중복검사
 	const approver_no_list = document.querySelectorAll('.approverNo');
 	console.log(approver_no_list);

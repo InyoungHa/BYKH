@@ -216,7 +216,8 @@ function showSignDocModal(clickTag){
 							});
 							str += `
 							</div>
-								</div>`;
+								</div>
+								`;
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -235,6 +236,7 @@ function showSignDocModal(clickTag){
 							
 							str += `
 								<div class="row btn-area">
+									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
 									</div>
@@ -253,7 +255,13 @@ function showSignDocModal(clickTag){
 								</div>
 								`;
 							}
-						str += `</div>
+						str += `
+								<div class="row mt-1">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="인쇄" onclick="printArea();">
+									</div>
+								</div>
+							</div>
 				
 				`;
 				
@@ -266,7 +274,7 @@ function showSignDocModal(clickTag){
 				console.log(signWriteInfo);
 				str += `
 			<div class="row">
-			<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
+			<div class="col-8 sign-doc-scroll" id="sgnDocArea" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>구매신청서</h2>
@@ -490,6 +498,18 @@ function showSignDocModal(clickTag){
 	});
 	
 	modal.hide();
+}
+//인쇄하기
+function printArea(){
+ var initBody = document.body.innerHTML;
+    window.onbeforeprint = function(){
+        document.body.innerHTML = document.getElementById("sgnDocArea").innerHTML;
+    }
+    window.onafterprint = function(){
+        document.body.innerHTML = initBody;
+    }
+    window.print();
+    location.reload();
 }
 function deleteSgnDoc(docType, docNo){
 	let pass = confirm('정말 삭제하시겠습니까?');

@@ -89,9 +89,11 @@
 		<association property="itemVO" resultMap="mroMapper.item"></association>
 	</resultMap>
 	
+	
+	
 	<!-- 메인화면 - 조회 -->
 	<select id="getMainSignDocList" resultMap="signDoc">
-		SELECT 
+		SELECT DISTINCT
 		    SD.DOC_NO
 		    , DOC_TYPE
 		    , DOC_TITLE
@@ -121,8 +123,9 @@
                 (EXISTS (SELECT 1 FROM REFERRER WHERE SD.DOC_NO = REFERRER.DOC_NO AND REFERRER_NO = ${empno}))
 			)
 		ORDER BY  (CASE WHEN NEXT_APPROVER_NO = ${empno} THEN 0 ELSE 1 END), INSERT_DATE DESC
-        OFFSET 0 ROWS
+        OFFSET 0 ROWS        
         FETCH FIRST 5 ROWS ONLY
+        
 	</select>
 	
 	<!-- 기안 조회 페이지 -->
@@ -368,7 +371,7 @@
             , ENAME
             , DENAME
             , APPROVER_NO
-            , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = EMP.EMPNO) ATTACHED_FILE_NAME
+            , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = SGN.APPROVER_NO) ATTACHED_FILE_NAME
             , (SELECT ENAME FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_NAME
             , (SELECT E_JOB FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_JOB
             , SGN_ORDER
@@ -378,12 +381,11 @@
             , (SELECT APPROVER_NO FROM SGN S_SGN
             WHERE S_SGN.DOC_NO = SGN.DOC_NO
             AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
-		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT, E_IMG
+		FROM SGN_DOC DOC, DOC_ANNUAL_LEAVE DAL, SGN, EMP, DEPT
 		WHERE DOC.DOC_NO = DAL.DOC_NO
         AND SGN.DOC_NO = DOC.DOC_NO
         AND DOC.WRITER_NO = EMP.EMPNO
         AND EMP.DEPTNO = DEPT.DEPTNO
-        AND EMP.EMPNO = E_IMG.EMPNO
 		AND DOC.DOC_NO = ${docNo}
 		
 	</select>
@@ -397,6 +399,19 @@
 		    , SGN_DATE = CURRENT_DATE
 		WHERE DOC_NO = #{docNo}
 		AND APPROVER_NO = ${approverNo}
+	</update>
+	<!-- signResult 조회 후 buy 결재가 모두 완료되었으면 buyApproval 1로 변경 -->
+	<update id="updateBuyApproval">
+		MERGE INTO BUY B
+		USING (SELECT DOC_NO
+		       FROM SGN
+		       WHERE SGN_RESULT IS NOT NULL
+		       GROUP BY DOC_NO
+		       HAVING COUNT(DOC_NO) = SUM(DECODE(SGN_RESULT, 0, 0, 1))
+		       AND DOC_NO = #{docNo}) S
+		ON (B.DOC_NO = S.DOC_NO)
+		WHEN MATCHED THEN 
+		  UPDATE SET B.BUY_APPROVAL = 1
 	</update>
 	<!-- 결재문서 결재상태(SGN_STATUS) 변경 (0:임시저장/1:결재중/2:결재완료/3:반려) -->
 	<update id="updateSignStatus">
@@ -437,6 +452,7 @@
 		    , BUY_PRICE
 		    , DPO_COMMENT
 		    , APPROVER_NO
+		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO = SGN.APPROVER_NO) ATTACHED_FILE_NAME
 		    , (SELECT ENAME FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_NAME
 		    , (SELECT E_JOB FROM EMP WHERE EMPNO = SGN.APPROVER_NO) APPROVER_JOB
 		    , SGN_ORDER
