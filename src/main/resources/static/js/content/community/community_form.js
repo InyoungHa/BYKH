@@ -1,4 +1,53 @@
 
+let editor;
+    
+ClassicEditor
+	.create( document.querySelector( '#boardContent' ), {
+		ckfinder: {
+			uploadUrl : '/editor/imgUploadAjax'
+		},
+    	language: "ko",
+    	toolbar : {
+			items : ['undo',
+					'redo', 
+					'|',
+					'heading', 
+					'|',
+					'bold', 
+					'italic', 
+					'indent', 
+					'outdent',
+					'|',
+					'numberedList', 
+					'bulletedList', 
+					'|',
+					'blockQuote', 
+					'insertTable',
+					'link',
+					'imageUpload'
+					]
+		}
+  	} )
+	.then( newEditor => {
+		editor = newEditor;
+		//이미지 업로드 시 이벤트
+    	editor.plugins.get( 'FileRepository' ).on( 'change:uploaded', evt => {
+			console.log( 'Image uploaded!' );
+			
+			//타임 딜레이 + 리로드
+			setTimeout(function() {
+			  	const images = document.querySelector('.ck-editor__main').querySelectorAll('img');
+				for(const img of images) {
+					img.src = img.src;					
+				}
+			}, 2000);
+		} );
+	} )
+  	.catch( error => {
+        console.error( error );
+    } );
+
+
 //비밀글 체크박스 & 비밀번호 input 컨트롤
 init();
 
@@ -59,6 +108,8 @@ function tempRegCommunity() {
 		
 		//폼 태그
 		const formData = new FormData(document.querySelector('#communityForm'));
+		//내용 추가
+		formData.set('boardContent', editor.getData());
 		
 		//ajax start
 		$.ajax({
@@ -158,7 +209,7 @@ function tempDeleteFileInputDiv(deleteBtn, fileNum) {
 //제목, 내용, 파일 첨부 유효성 체크
 function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
-	const boardContent = document.querySelector('#boardContent').value;
+	const boardContent = editor.getData();
 	const fileInputList = document.querySelectorAll('#fileInput');
 	const isPrivate = document.querySelector('#isPrivate').checked;
 	const boardPw = document.querySelector('#boardPw').value;
@@ -197,7 +248,7 @@ function formCheck() {
 //제목, 내용, 파일 비어있는지 확인
 function formNullCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
-	const boardContent = document.querySelector('#boardContent').value;
+	const boardContent = editor.getData();
 	const fileInputList = document.querySelectorAll('#fileInput');
 	
 	const titleNull = boardTitle == '' || boardTitle == null;
@@ -379,7 +430,7 @@ function getTempBoard(boardNum) {
 			$('#tempRegModal').modal('hide');
 			
 			document.querySelector('#boardTitle').value = tempBoard.boardTitle;
-			document.querySelector('#boardContent').value = tempBoard.boardContent;
+			editor.setData(tempBoard.boardContent);
 			document.querySelector('#boardCategory').value = tempBoard.boardCategoryVO.boardCateCode;
 			const isPrivate = document.querySelector('#isPrivate');
 			const boardPw = document.querySelector('#boardPw');

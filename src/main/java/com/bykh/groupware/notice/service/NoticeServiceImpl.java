@@ -159,7 +159,7 @@ public class NoticeServiceImpl implements NoticeService {
 			BoardFileVO fileVO =  sqlSession.selectOne("boardMapper.getDownloadFileVO", deleteFileNum);
 			String attachedFileName = fileVO.getAttachedFileName();
 			
-			File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+			File file = new File(ConstVariable.FILE_PATH + attachedFileName);
 			file.delete();
 			
 			sqlSession.delete("boardMapper.deleteFile", deleteFileNum);
