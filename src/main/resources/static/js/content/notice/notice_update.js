@@ -4,12 +4,44 @@ let editor;
 ClassicEditor
 	.create( document.querySelector( '#boardContent' ), {
 		ckfinder: {
-			uploadUrl : '/notice/imgUploadAjax'
+			uploadUrl : '/editor/imgUploadAjax'
 		},
-    	language: "ko"
+    	language: "ko",
+    	toolbar : {
+			items : ['undo',
+					'redo', 
+					'|',
+					'heading', 
+					'|',
+					'bold', 
+					'italic', 
+					'indent', 
+					'outdent',
+					'|',
+					'numberedList', 
+					'bulletedList', 
+					'|',
+					'blockQuote', 
+					'insertTable',
+					'link',
+					'imageUpload'
+					]
+		}
   	} )
 	.then( newEditor => {
 		editor = newEditor;
+		//이미지 업로드 시 이벤트
+    	editor.plugins.get( 'FileRepository' ).on( 'change:uploaded', evt => {
+			console.log( 'Image uploaded!' );
+			
+			//타임 딜레이 + 리로드
+			setTimeout(function() {
+			  	const images = document.querySelector('.ck-editor__main').querySelectorAll('img');
+				for(const img of images) {
+					img.src = img.src;					
+				}
+			}, 2000);
+		} );
 	} )
   	.catch( error => {
         console.error( error );
@@ -32,7 +64,7 @@ function updateNotice() {
 //제목, 내용, 파일 첨부 유효성 체크
 function formCheck() {
 	const boardTitle = document.querySelector('#boardTitle').value;
-	const boardContent = document.querySelector('#boardContent').value;
+	const boardContent = editor.getData();
 	const fileInputList = document.querySelectorAll('#fileInput');
 
 	

@@ -41,20 +41,10 @@ public class UploadUtil {
 			long fileSize = boardFile.getSize();
 			String fileFancySize = fancySize(fileSize);
 			
-			//파일 경로
-			ClassPathResource resource = new ClassPathResource("static/upload/file/");
-			try {
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+resource.getURL().toString());
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+resource.getURL().getPath());
-			} catch (IOException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
-			
 			
 			//파일 업로드
 			try {
-				File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+				File file = new File(ConstVariable.FILE_PATH + attachedFileName);
 				boardFile.transferTo(file);
 				
 				boardFileVO.setOriginFileName(originFileName);

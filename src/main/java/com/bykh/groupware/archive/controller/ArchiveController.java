@@ -197,7 +197,7 @@ public class ArchiveController {
 		String originFileName =  downloadFile.getOriginFileName();
 
 		try {
-			File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+			File file = new File(ConstVariable.FILE_PATH + attachedFileName);
 			
 			byte[] fileByte = Files.readAllBytes(file.toPath());
 			

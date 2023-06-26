@@ -228,7 +228,7 @@ public class CommunityController {
 		String originFileName =  downloadFile.getOriginFileName();
 
 		try {
-			File file = new File(ConstVariable.BOARD_UPLOAD_PATH + attachedFileName);
+			File file = new File(ConstVariable.FILE_PATH + attachedFileName);
 			
 			byte[] fileByte = Files.readAllBytes(file.toPath());
 			
@@ -257,7 +257,7 @@ public class CommunityController {
 	
 	//좋아요 추가
 	@ResponseBody
-	@PostMapping("/insertBoardLike")
+	@PostMapping("/insertBoardLikeAjax")
 	public void insertBoardLike(BoardLikeVO boardLikeVO, Authentication authentication) {
 		//좋아요 누른 사용자
 		User user = (User) authentication.getPrincipal();
