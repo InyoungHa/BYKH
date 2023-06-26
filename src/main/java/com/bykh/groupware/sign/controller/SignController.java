@@ -264,7 +264,16 @@ public class SignController {
 		//2. 쿼리 실행
 		signService.insertDocPurchaseOrder(signDocVO);
 	}
-	
+	@ResponseBody
+	@PostMapping("/delSgnDocAjax")
+	public void delSgnDocAjax(SignDocVO signDocVO) {
+		if(signDocVO.getDocType() == 1) {
+			signService.delAnnualLeave(signDocVO.getDocNo());
+		}else if(signDocVO.getDocType() == 2) {
+			signService.delPurchaseOrder(signDocVO.getDocNo());
+		}else if(signDocVO.getDocType() == 3) {
+		}
+	}
 	
 	//결재문서 상세조회
 	@ResponseBody

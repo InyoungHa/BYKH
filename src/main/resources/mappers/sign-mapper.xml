@@ -36,6 +36,7 @@
 		<result column="SGN_STATUS" 		property="sgnStatus"/>
 		<result column="SGN_STATUS_STR" 	property="sgnStatusStr"/>
 		<result column="INSERT_DATE" 		property="insertDate"/>
+		<result column="IS_APPROVED" 		property="isApproved"/>
 		
 		<association property="empVO" 		resultMap="empMapper.emp"></association>
 		<association property="docAnnualLeaveVO" 		resultMap="docAnnualLeave"></association>
@@ -101,6 +102,13 @@
 		    , (SELECT APPROVER_NO FROM SGN S_SGN
             WHERE S_SGN.DOC_NO = SGN.DOC_NO
             AND SGN_ORDER = (SELECT MIN(SGN_ORDER) FROM SGN S_SGN WHERE S_SGN.DOC_NO = SGN.DOC_NO AND SGN_RESULT IS NULL)) NEXT_APPROVER_NO
+            , DECODE((
+                SELECT NVL(MAX(SGN_RESULT), NULL) 
+                FROM SGN_DOC D, SGN S
+                WHERE D.DOC_NO = S.DOC_NO
+                AND D.DOC_NO = SD.DOC_NO
+                AND SD.WRITER_NO = SD.WRITER_NO
+                ), NULL, 0, 1) AS IS_APPROVED
 		FROM SGN_DOC SD, EMP, SGN
 		WHERE SD.WRITER_NO = EMP.EMPNO
         AND SD.DOC_NO = SGN.DOC_NO
@@ -126,6 +134,13 @@
 		    , ENAME
 		    , TO_CHAR(INSERT_DATE, 'YYYY-MM-DD HH24:MI') INSERT_DATE
 		    , DECODE(SGN_STATUS, 0, '임시저장', 1, '결재중') AS SGN_STATUS_STR
+		    , DECODE((
+                SELECT NVL(MAX(SGN_RESULT), NULL) 
+                FROM SGN_DOC D, SGN S
+                WHERE D.DOC_NO = S.DOC_NO
+                AND D.DOC_NO = SD.DOC_NO
+                AND SD.WRITER_NO = SD.WRITER_NO
+                ), NULL, 0, 1) AS IS_APPROVED
 		FROM SGN_DOC SD,EMP
 		WHERE SD.WRITER_NO = EMP.EMPNO
 		AND SGN_STATUS IN (0, 1)
@@ -461,6 +476,7 @@
 		    DELETE FROM BUY WHERE DOC_NO = ${docNo};
             DELETE FROM DOC_PURCHASE_ORDER WHERE DOC_NO = ${docNo};
 		    DELETE FROM SGN WHERE DOC_NO = ${docNo};
+		    DELETE FROM REFERRER WHERE DOC_NO = ${docNo};
 		    DELETE FROM SGN_DOC WHERE DOC_NO = ${docNo};
 		END;
 	</delete>
@@ -469,6 +485,7 @@
 		BEGIN
 		    DELETE FROM DOC_ANNUAL_LEAVE WHERE DOC_NO = #{docNo};
 		    DELETE FROM SGN WHERE DOC_NO = #{docNo};
+		    DELETE FROM REFERRER WHERE DOC_NO = ${docNo};
 		    DELETE FROM SGN_DOC WHERE DOC_NO = #{docNo};
 		END;
 	</delete>

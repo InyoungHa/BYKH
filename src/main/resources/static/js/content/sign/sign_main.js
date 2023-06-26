@@ -20,10 +20,10 @@ function showSignDocModal(clickTag){
 	//내용 초기화
 	//modalTitleArea.replaceChildren();
 	modalBodyArea.replaceChildren();
-	//문서번호, 타입 가져오기
+	//문서번호, 타입, 결재여부 가져오기
 	const docNo = clickTag.dataset.docNo;
 	const docType = clickTag.dataset.docType;
-	
+	const isApproved = clickTag.dataset.isApproved;
 	
 	//ajax start
 	$.ajax({
@@ -203,8 +203,13 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
+								}
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
+									isCanBeDeleted = true;
 								}	
 								str += `</div>
 								`;
@@ -212,8 +217,6 @@ function showSignDocModal(clickTag){
 							str += `
 							</div>
 								</div>`;
-							//결재/반려 버튼 노출여부 지정
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -239,6 +242,16 @@ function showSignDocModal(clickTag){
 										<input type="button" class="btn btn-primary" value="결재" onclick="updateSignResult(1, ${docNo});">
 									</div>
 								</div>`
+							}
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
 							}
 						str += `</div>
 				
@@ -411,7 +424,7 @@ function showSignDocModal(clickTag){
 									isNextApprover = true;
 								}	
 								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
-								if(loginId == signWriteInfo.writerNo && sign.nextApproverNo == null){
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
 									isCanBeDeleted = true;
 								}
 								str += `</div>
@@ -447,6 +460,16 @@ function showSignDocModal(clickTag){
 									</div>
 								</div>`
 							}
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
+							}
 						str += `</div>
 					</div>
 				`;
@@ -468,6 +491,30 @@ function showSignDocModal(clickTag){
 	
 	modal.hide();
 }
+function deleteSgnDoc(docType, docNo){
+	let pass = confirm('정말 삭제하시겠습니까?');
+	if(!pass){
+		return ;
+	}
+	//ajax start
+	$.ajax({
+		url: '/sign/delSgnDocAjax', //요청경로
+		type: 'post',
+		async: true, //동기/비동기
+		//contentType: 'application/json; charset=UTF-8',
+		//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {'docType':docType, 'docNo':docNo}, //필요한 데이터
+		success: function(result) {
+			alert('삭제되었습니다.');
+			location.href='/sign/signMain';
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+}
+
 //반려 또는 결재 버튼 클릭 시 실행
 function updateSignResult(sgnResult, docNo){
 	
