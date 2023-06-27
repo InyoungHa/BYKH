@@ -1,5 +1,7 @@
 package com.bykh.groupware.interceptor;
 
+
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -7,6 +9,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bykh.groupware.emp.service.EmpService;
+
 
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +22,7 @@ public class HeaderInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+
 		String previousPage = request.getHeader("Referer");
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,6 +39,7 @@ public class HeaderInterceptor implements HandlerInterceptor{
 			System.out.println("preHandle end");
 			return true;
 		}
+		
 	}
 	
 	

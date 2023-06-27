@@ -129,8 +129,13 @@ public class EmpServiceImpl implements EmpService {
 		sqlSession.update("empMapper.updateImsiEpw",empVO);
 		
 	}
-	
-	
+
+
+	@Override //header에서 사원 조회
+	public List<EmpVO> selectForHeader(EmpVO empVO) {
+		return sqlSession.selectList("empMapper.selectForHeader", empVO);
+	}
+
 
 	
 	
