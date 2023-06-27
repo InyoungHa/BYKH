@@ -9,61 +9,68 @@
 
 <style type="text/css">
 
+html {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: linear-gradient(#141e30, #243b55);
+}
 
-.container{
-/* 	background-color :aqua; */
-	margin: 0 auto;
-	display: flex; 
-	justify-content: center; 
-	align-items: center;
-	width: 600px;
- 	margin-top: 5rem;
- 	border: 1px solid gray;
-	
-	
+
+ .getImsiEPW {
+  background: #ffd442;
+  font-family: inherit;
+  padding: 0.6em 1.3em;
+  font-weight: 900;
+  font-size: 17px;
+  border: 3px solid black;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em;
 }
-.page_title{
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2rem;
+
+.getImsiEPW:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em;
 }
+
+.getImsiEPW:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em;
+}
+
 
 </style>
 
 </head>
 <body>
-
-<div class="row container">
-	<div class="col-6 mb-2 mt-2">
-		<label class="page_title">비밀번호 찾기</label>
-
-			<div class="row mb-2">
-				<div class="col-4">
-					<label class="form-label">사번</label>
-				</div>
-				<div class="col-7">
-					<input type="text" id="empno" name="empno" onInput="check_validate()()" autocomplete="off" class="form-control">
-				</div>
-			</div>
-			<div class="row mb-3">
-				<div class="col-4">
-					<label class="form-label">사원 이름</label>
-				</div>
-				<div class="col-7">
-					<input type="text" id="ename" name="ename" onInput="check_validate()()" autocomplete="off" class="form-control">
-				</div>			
-			</div>
-			<div class="row offset-1 mb-2">
-				<div class="col-3 d-grid text-center">
-					<input type="button" value="임시비밀번호 발급받기" onclick="getImsiEPW()" class="btn btn-info">
+ <div style="background-color: #0c141e; width: 20%; height:420px; margin: auto; margin-top: 258px; border-radius: 20px;">
+	<div class="row justify-content-center mt-5">
+		<span style="color: white; margin-top: 30px; font-size: 40px; margin-left: 160px; margin-bottom: 10px; font-weight: bold;" >비밀번호 찾기</span>
+	</div>	
+	<div class="row">
+		<div class="col">
+			<div class="py-3 px-4">
+				<div class="mb-3">
+					<input type="text" id="empno" name="empno" placeholder="사번을 입력하세요." style="width: 300px; margin-left:18px;" onInput="checkValidate()" autocomplete="off" class="form-control">
+				</div>				
+				<div class="mb-3">
+					<input type="text" id="ename" name="ename" placeholder="사원명을 입력하세요." style="width: 300px; margin-left:18px;" onInput="checkValidate()" autocomplete="off" class="form-control">
+				</div>		
+				<div class="d-grid gap-2 col-12 mx-auto"> 	
+					<input type="button" value="임시비밀번호 발급받기" style="  margin-left: 18px; width: 300px;" onclick="getImsiEPW()" class="getImsiEPW">
 				</div>
 			</div>
-				<div  style="color: red; font-size: 1rem;">메일로 임시 비밀번호가 전송됩니다.</div>
-
+		</div>
+	</div>
+	<div class="row">
+		<div class="col">
+			<div  style="color: red; font-size: 1rem; margin-left:45px;">메일로 임시 비밀번호가 전송됩니다.</div>
+		</div>
 	</div>
 </div>
-
  	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script type="text/javascript" src="/js/content/user/find_e_pw.js"></script> 
 </body>

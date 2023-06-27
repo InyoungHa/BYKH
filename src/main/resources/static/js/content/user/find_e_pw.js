@@ -1,6 +1,6 @@
 
 //오류 메세지 div 전체 제거
-function delete_error_div(){
+function deleteErrorDiv(){
 	const error_divs= document.querySelectorAll('div[class="my-invalid"]');
 	
 	for(const error_div of error_divs){
@@ -9,10 +9,10 @@ function delete_error_div(){
 }
 
 //임시비번 받기 위한 사번,사원 input태그 유효성 검사
-function check_validate(){
+function checkValidate(){
 	
 	//기존 오류 메세지 전부 삭제
-	delete_error_div();
+	deleteErrorDiv();
 	
 	//reg_emp_validate()함수의 리턴 결과를 저장하는 변수
 	let result_empno = true;
@@ -59,11 +59,11 @@ function check_validate(){
 	
 	//유효성 검사 오류 메세지 출력(false일때)
 	if(!result_empno){
-		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_empno}</div>`;
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem; display: inline-block; display: block; margin-left:18px;">${str_empno}</div>`;
 		empno_tag.insertAdjacentHTML('beforeend', errorHTML);
 	}
 	if(!result_ename){
-		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem;">${str_ename}</div>`;
+		const errorHTML = `<div class="my-invalid" style="color: red; font-size: 0.8rem; display: inline-block; margin-left:18px;">${str_ename}</div>`;
 		ename_tag.insertAdjacentHTML('beforeend', errorHTML);
 	}
 
@@ -78,7 +78,7 @@ function check_validate(){
 //비밀번호 변경
 function getImsiEPW(){
 	
-	const isValidate = check_validate();
+	const isValidate = checkValidate();
 	
 	if(!isValidate){
 		return;
@@ -114,6 +114,4 @@ function getImsiEPW(){
 			alert('실패');
 		}
 	});
-
-	
 }
