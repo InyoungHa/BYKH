@@ -7,6 +7,14 @@ function setDisabled() {
 
 //부서 중복 확인
 function isDuplicate(){
+	//유효성 검사 진행
+	const isValide = deptJoinValidate();
+	
+	if(!isValide){
+	return; // 유효하지 않는다면 deptJoinValidate()함수 진행 종료 false가 됨
+	//isValide가 유효하다면 true; 
+	}
+	
 	const loc=document.querySelector('select[name="loc"]').value;
 	const dename = document.querySelector('#dename').value;
 	

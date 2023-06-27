@@ -27,13 +27,17 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectOne("boardMapper.getBoardCnt", boardVO);
 	}
 	
-	
 	//공지 게시판 목록 조회
 	@Override
 	public List<BoardVO> getBoardList(BoardVO boardVO) {
 		return sqlSession.selectList("boardMapper.getBoardList", boardVO);
 	}
 	
+	//게시판 목록 BOARD_NUM 조회
+	@Override
+	public List<String> getBoardNumList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getBoardNumList", boardVO);
+	}
 	
 	//공지 게시판 중요글 목록 조회
 	@Override
@@ -41,6 +45,11 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectList("boardMapper.getBoardImportantList", boardVO);
 	}
 	
+	//게시글에 따른 파일 목록 조회
+	@Override
+	public List<BoardFileVO> getFileList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getFileList", boardVO);
+	}
 	
 	//다음으로 들어갈 글 번호 조회
 	@Override
@@ -187,6 +196,8 @@ public class NoticeServiceImpl implements NoticeService {
 		//글 상세 조회 정보 반환
 		return selectedBoard;
 	}
+
+
 
 
 

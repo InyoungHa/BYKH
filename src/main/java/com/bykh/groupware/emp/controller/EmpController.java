@@ -60,8 +60,6 @@ public class EmpController {
 		//사원 조회 쿼리
 		model.addAttribute("empList", empService.selectEmpList(empVO));
 		
-		
-		
 		return "content/emp/emp_manage";
 	}
 	

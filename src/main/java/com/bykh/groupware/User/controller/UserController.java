@@ -486,6 +486,39 @@ public class UserController {
 		return "content/user/userAsk";
 	}
 
+	//사원 조회
+	@ResponseBody
+	@PostMapping("/searchEmpAjax")
+	public List<EmpVO> searchEmp(EmpVO empVO, Model model) {
+	
+		System.out.println(empVO);
+		/*
+		 * int totalDataCnt = empService.getHeaderEmpListCnt(empVO);
+		 * empVO.setTotalDataCnt(totalDataCnt);
+		 */
+		//사원 조회 쿼리
+		return empService.selectForHeader(empVO);
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }
