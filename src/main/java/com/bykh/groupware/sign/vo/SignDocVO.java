@@ -19,10 +19,12 @@ public class SignDocVO {
 	private int sgnStatus;
 	private String sgnStatusStr;
 	private String insertDate;
+	private int isApproved;
 	
 	private DocAnnualLeaveVO docAnnualLeaveVO;
 	private DocPurchaseOrderVO docPurchaseOrderVO;
 	private List<SignVO> signVOList;
+	private List<ReferrerVO> referrerVOList;
 	private EmpVO empVO;
 	 
 }

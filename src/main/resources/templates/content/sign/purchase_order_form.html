@@ -267,7 +267,7 @@
 								<td>구매사유</td>
 								<td colspan="3">
 									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment"
-									>[[${docPurchaseOrder != null and docPurchaseOrder.dpoComment != null
+									autocomplete="off">[[${docPurchaseOrder != null and docPurchaseOrder.dpoComment != null
 									? docPurchaseOrder.dpoComment : ''}]]</textarea>
 								</td>
 							</tr>
@@ -285,7 +285,7 @@
 							<h3>결재자 지정</h3>
 						</div>
 						<div class="col-8">
-							<input type="text" class="form-control search-name">
+							<input type="text" class="form-control search-name" autocomplete="off">
 						</div>
 						<div class="col-4 d-grid">
 							<input type="button" class="btn btn-primary" value="찾기" data-bs-toggle="modal" data-bs-target="#searchApproverModal">

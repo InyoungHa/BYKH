@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.naming.factory.webservices.ServiceRefFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -27,6 +28,7 @@ import com.bykh.groupware.sign.service.SignService;
 import com.bykh.groupware.sign.vo.BuyDetailVO;
 import com.bykh.groupware.sign.vo.BuyVO;
 import com.bykh.groupware.sign.vo.DocPurchaseOrderVO;
+import com.bykh.groupware.sign.vo.ReferrerVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 import com.bykh.groupware.util.DateUtil;
@@ -62,6 +64,17 @@ public class SignController {
 			signDocVO = signService.getDetailDocAnnualLeave(signDocVO.getDocNo());
 			model.addAttribute("docAnnualLeave", signDocVO.getDocAnnualLeaveVO());
 		}
+		//===========조직도 정보=============
+		//지역 목록 조회 
+		List<OrganizationVO> organizationList = deptService.getLocList();	 
+		//모든 지역 정보를 조회 
+		for(OrganizationVO organizationVO : organizationList) {
+			//지역에 속한 모든 부서 목록 조회 
+			List<OrgDeptVO> deptList = deptService.getDeptListForOrg(organizationVO.getLoc());
+			
+			organizationVO.setOrgDeptList(deptList);
+		}		
+		model.addAttribute("organizationList", organizationList);
 		
 		return "content/sign/annual_leave_form";
 	}
@@ -93,7 +106,7 @@ public class SignController {
 		return "content/sign/purchase_order_form";
 	}
 	
-	// mro  > 구매신청서 작성
+	// mro  > 구매신청서 작성 페이지
 	@GetMapping("/purchaseOrderFormMro")
 	public String purchaseOrderFormMro(@RequestParam("buyDetailArr") String buyDetailArrJson, Model model, Authentication authentication) {
 		try {
@@ -149,7 +162,7 @@ public class SignController {
 	
 	//연차신청서 작성
 	@PostMapping("/insertSign")
-	public String insertSign(SignDocVO signDocVO, String approverNoStr) {
+	public String insertSign(SignDocVO signDocVO, String approverNoStr, String referrerNoStr) {
 		//기존 데이터가 있다면 삭제(임시저장)
 		if(signDocVO.getDocNo() != 0) {
 			signService.delAnnualLeave(signDocVO.getDocNo());
@@ -166,11 +179,19 @@ public class SignController {
 			signVO.setDocNo(docNo);
 			signList.add(signVO);
 		}
+		signDocVO.setSignVOList(signList);
+		//참조라인 가공
+		String[] referrerNoArr = referrerNoStr.split(",");
+		List<ReferrerVO> referrerList = new ArrayList<>();
+		for(int i=0; i < referrerNoArr.length; i++) {
+			ReferrerVO referrerVO = new ReferrerVO();
+			referrerVO.setReferrerNo(Integer.parseInt(referrerNoArr[i]));
+			referrerVO.setDocNo(docNo);
+			referrerList.add(referrerVO);
+		}
+		signDocVO.setReferrerVOList(referrerList);
 		//날짜 + 시간 데이터 가공(2023-05-22 09:00:00 ~)
 		//String startDate = docAnnualLeaveVO.getStartDate() + " " + docAnnualLeaveVO.getStartTime();
-		
-		signDocVO.setSignVOList(signList);
-		
 		
 		//결재문서번호 데이터 넣기
 		signDocVO.setDocNo(docNo);
@@ -192,23 +213,28 @@ public class SignController {
 		
 		//1. 데이터 세팅
 		ObjectMapper mapper = new ObjectMapper();
-		//signDoc
+		//1-1 signDoc
 		signDocVO = mapper.convertValue(mapData.get("sgn_doc"), SignDocVO.class);
 		
-		//1-3 sgn_arr
+		//1-2 sgn_arr
 		SignVO[] signArr = mapper.convertValue(mapData.get("sgn_arr"), SignVO[].class);
 		List<SignVO> signVOList = Arrays.asList(signArr);
 		
 		signDocVO.setSignVOList(signVOList);
-		//1-5 purchase_order
+		//1-3 referrer_arr
+		ReferrerVO[] referrerArr = mapper.convertValue(mapData.get("referrer_arr"), ReferrerVO[].class);
+		List<ReferrerVO> referrerVOList = Arrays.asList(referrerArr);
+		
+		signDocVO.setReferrerVOList(referrerVOList);
+		//1-4 purchase_order
 		DocPurchaseOrderVO docPurchaseOrderVO = mapper.convertValue(mapData.get("doc_purchase_order"), DocPurchaseOrderVO.class);
 		
 		signDocVO.setDocPurchaseOrderVO(docPurchaseOrderVO);
-		//1-2 buy
+		//1-5 buy
 		BuyVO buyVO = mapper.convertValue(mapData.get("buy"), BuyVO.class);
 		
 		signDocVO.getDocPurchaseOrderVO().setBuyVO(buyVO);
-		//1-1 buyDetail
+		//1-6 buyDetail
 		BuyDetailVO[] buyDetailArr = mapper.convertValue(mapData.get("buy_detail_arr"), BuyDetailVO[].class);
 		List<BuyDetailVO> buyDetailVOList = Arrays.asList(buyDetailArr);
 		
@@ -220,15 +246,16 @@ public class SignController {
 		if (signDocVO.getDocNo() != 0) {
 			signService.delPurchaseOrder(signDocVO.getDocNo());
 		}
-			// docNo, buyNo 값 세팅
-			int docNo = signService.getNextDocNo();
-			int buyNo = signService.getNextBuyNo();
-			signDocVO.setDocNo(docNo);
-			signVOList.get(0).setDocNo(docNo);
-			docPurchaseOrderVO.setDocNo(docNo);
-			buyVO.setBuyNo(buyNo);
-			buyVO.setDocNo(docNo);
-			buyDetailVOList.get(0).setBuyNo(buyNo);
+		
+		// docNo, buyNo 값 세팅
+		int docNo = signService.getNextDocNo();
+		int buyNo = signService.getNextBuyNo();
+		signDocVO.setDocNo(docNo);
+		signVOList.get(0).setDocNo(docNo);
+		docPurchaseOrderVO.setDocNo(docNo);
+		buyVO.setBuyNo(buyNo);
+		buyVO.setDocNo(docNo);
+		buyDetailVOList.get(0).setBuyNo(buyNo);
 		
 		
 		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -237,7 +264,16 @@ public class SignController {
 		//2. 쿼리 실행
 		signService.insertDocPurchaseOrder(signDocVO);
 	}
-	
+	@ResponseBody
+	@PostMapping("/delSgnDocAjax")
+	public void delSgnDocAjax(SignDocVO signDocVO) {
+		if(signDocVO.getDocType() == 1) {
+			signService.delAnnualLeave(signDocVO.getDocNo());
+		}else if(signDocVO.getDocType() == 2) {
+			signService.delPurchaseOrder(signDocVO.getDocNo());
+		}else if(signDocVO.getDocType() == 3) {
+		}
+	}
 	
 	//결재문서 상세조회
 	@ResponseBody
@@ -263,13 +299,17 @@ public class SignController {
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
 	public void updateSignResultAjax(SignVO signVO) {
+		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		System.out.println("controller 실행~~~~~~~~~~~~~");
 		
 		signService.updateSignResult(signVO);
-
+		//모든 결재자가 결재했을 경우 구매결재여부 1(승인)으로 변경
+		signService.updateBuyApproval(signVO);
+			
 		SignDocVO signDocVO = new SignDocVO();
 		signDocVO.setDocNo(signVO.getDocNo());
 		//결재결과가 '결재'고 다음 결재자가 없다면 문서 상태를 '결재완료'로 변경
-		
+		System.out.println("두번째 실행~~~~~~~~~~");
 		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) == 0) {
 			signDocVO.setSgnStatus(2);
 			signService.updateSignStatus(signDocVO);

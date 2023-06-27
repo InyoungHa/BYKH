@@ -43,6 +43,7 @@ public class SignServiceImpl implements SignService{
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertDocAnnualLeave", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
+		sqlsession.insert("signMapper.insertReferrerList", signDocVO);
 	}
 	@Override
 	public int getNextDocNo() {
@@ -56,6 +57,11 @@ public class SignServiceImpl implements SignService{
 	public int updateSignResult(SignVO signVO) {
 		return sqlsession.update("signMapper.updateSignResult", signVO);
 	}
+	
+	@Override
+	public int updateBuyApproval(SignVO signVO) {
+		return sqlsession.update("signMapper.updateBuyApproval", signVO);
+	}
 	@Override
 	public List<ItemVO> getItemList() {
 		return sqlsession.selectList("signMapper.getItemList");
@@ -65,6 +71,7 @@ public class SignServiceImpl implements SignService{
 	public void insertDocPurchaseOrder(SignDocVO signDocVO) {
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
+		sqlsession.insert("signMapper.insertReferrerList", signDocVO);
 		sqlsession.insert("signMapper.insertBuy", signDocVO.getDocPurchaseOrderVO().getBuyVO());
 		sqlsession.insert("signMapper.insertBuyDetails", signDocVO.getDocPurchaseOrderVO().getBuyVO());
 		sqlsession.insert("signMapper.insertDocPurchaseOrder", signDocVO.getDocPurchaseOrderVO());

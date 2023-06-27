@@ -70,7 +70,8 @@
 					<div class="col-4">
 						<div class="input-group">
 							<input type="text" class="form-control search-item-name" placeholder="상품명" 
-								aria-describedby="search-btn" name="searchItemVO.searchItemName">
+								aria-describedby="search-btn" name="searchItemVO.searchItemName"
+								autocomplete="off">
 							<button class="btn" type="button" id="search-btn" onclick="searchItemList();">검색</button>
 						</div>
 					</div>
@@ -108,7 +109,8 @@
 									<td th:data-item-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 									<td th:data-item-cnt="${item.itemCnt}">
 										<input type="number" class="form-select" value="1" min="1" th:max="${item.itemCnt}" 
-										onchange="updateItemCnt(this);" onkeyup="updateItemCnt(this);">
+										onchange="updateItemCnt(this);" onkeyup="updateItemCnt(this);"
+										autocomplete="off">
 									</td>
 									<td th:data-total-price="${item.itemPrice}">[[${#numbers.formatCurrency(item.itemPrice)}]]</td>
 									<td>

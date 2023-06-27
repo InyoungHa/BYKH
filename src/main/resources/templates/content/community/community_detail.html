@@ -33,6 +33,10 @@
 	background-color: #f8f9fa;
 	border: 0.3px solid #466583;
 	}
+	.ck-content {
+		min-height: 20rem;
+		padding: 0.5rem;
+	}
 	</style>
 </th:block>
 
@@ -90,7 +94,7 @@
 						</tr>
 						<tr class="border-white">
 							<td colspan="4" class="text-start align-baseline">
-								<div style="min-height: 20rem">[[${community.boardContent}]]</div>
+								<div class="ck-content" th:utext="${community.boardContent}"></div>
 							</td>
 						</tr>
 						<tr>

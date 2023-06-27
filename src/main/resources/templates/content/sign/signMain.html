@@ -177,7 +177,8 @@
 											<td th:if="${signDoc.sgnStatusStr == '임시저장'}" 
 											style="cursor: pointer;" 
 											th:onclick="goWriteForm(this);" 
-											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
+											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}
+											th:data-is-approved="${signDoc.isApproved}">
 												<span>
 													[[${signDoc.docTitle}]]
 												</span>
@@ -185,7 +186,8 @@
 											<td th:if="${signDoc.sgnStatusStr != '임시저장'}" 
 											style="cursor: pointer;" 
 											th:onclick="showSignDocModal(this);" 
-											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}>
+											th:data-doc-no="${signDoc.docNo}" th:data-doc-type=${signDoc.docType}
+											th:data-is-approved="${signDoc.isApproved}">
 												<span>
 													[[${signDoc.docTitle}]]
 												</span>

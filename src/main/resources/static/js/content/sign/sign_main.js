@@ -20,10 +20,10 @@ function showSignDocModal(clickTag){
 	//내용 초기화
 	//modalTitleArea.replaceChildren();
 	modalBodyArea.replaceChildren();
-	//문서번호, 타입 가져오기
+	//문서번호, 타입, 결재여부 가져오기
 	const docNo = clickTag.dataset.docNo;
 	const docType = clickTag.dataset.docType;
-	
+	const isApproved = clickTag.dataset.isApproved;
 	
 	//ajax start
 	$.ajax({
@@ -190,7 +190,7 @@ function showSignDocModal(clickTag){
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -203,15 +203,21 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
+								}
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
+									isCanBeDeleted = true;
 								}	
 								str += `</div>
 								`;
 							});
 							str += `
 							</div>
-								</div>`;
+								</div>
+								`;
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -227,11 +233,10 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
 							
 							str += `
 								<div class="row btn-area">
+									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
 									</div>
@@ -240,7 +245,23 @@ function showSignDocModal(clickTag){
 									</div>
 								</div>`
 							}
-						str += `</div>
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
+							}
+						str += `
+								<div class="row mt-1">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="인쇄" onclick="printArea();">
+									</div>
+								</div>
+							</div>
 				
 				`;
 				
@@ -253,7 +274,7 @@ function showSignDocModal(clickTag){
 				console.log(signWriteInfo);
 				str += `
 			<div class="row">
-			<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
+			<div class="col-8 sign-doc-scroll" id="sgnDocArea" style="border: 1px solid #dee2e6;">
 			<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>구매신청서</h2>
@@ -387,11 +408,12 @@ function showSignDocModal(clickTag){
 								</div>
 							</div>`;
 							let isNextApprover = false;
+							let isCanBeDeleted = false;
 							const loginId = document.querySelector('.login-id').value;
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
-										<img src="${sign.attachedFileName == null ? '/upload/empImg/default.png' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
+										<img src="${sign.attachedFileName == null ? '/upload/empImg/test.jpg' : '/upload/empImg/' + sign.attachedFileName}" width="60px;"
 											class="rounded-image">
 									</div>
 									<div class="col-9">
@@ -405,9 +427,14 @@ function showSignDocModal(clickTag){
 									</div>
 									`;
 								}
+								//결재/반려 버튼 노출여부 지정
 								if(loginId == sign.nextApproverNo){
 									isNextApprover = true;
 								}	
+								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
+								if(loginId == signWriteInfo.writerNo && isApproved == 0){
+									isCanBeDeleted = true;
+								}
 								str += `</div>
 								`;
 							});
@@ -429,9 +456,8 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//결재/반려 버튼 노출여부 지정
 							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
-							
+							// 노출여부에 따라 결재/반려버튼 노출
 							str += `
 								<div class="row btn-area">
 									<div class="col-6 d-grid">
@@ -441,6 +467,16 @@ function showSignDocModal(clickTag){
 										<input type="button" class="btn btn-primary" value="결재" onclick="updateSignResult(1, ${docNo});">
 									</div>
 								</div>`
+							}
+							if(isCanBeDeleted){
+								str += `
+								<div style="min-height:350px;"></div>
+								<div class="row btn-area">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
+									</div>
+								</div>
+								`;
 							}
 						str += `</div>
 					</div>
@@ -463,6 +499,42 @@ function showSignDocModal(clickTag){
 	
 	modal.hide();
 }
+//인쇄하기
+function printArea(){
+ var initBody = document.body.innerHTML;
+    window.onbeforeprint = function(){
+        document.body.innerHTML = document.getElementById("sgnDocArea").innerHTML;
+    }
+    window.onafterprint = function(){
+        document.body.innerHTML = initBody;
+    }
+    window.print();
+    location.reload();
+}
+function deleteSgnDoc(docType, docNo){
+	let pass = confirm('정말 삭제하시겠습니까?');
+	if(!pass){
+		return ;
+	}
+	//ajax start
+	$.ajax({
+		url: '/sign/delSgnDocAjax', //요청경로
+		type: 'post',
+		async: true, //동기/비동기
+		//contentType: 'application/json; charset=UTF-8',
+		//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		data: {'docType':docType, 'docNo':docNo}, //필요한 데이터
+		success: function(result) {
+			alert('삭제되었습니다.');
+			location.href='/sign/signMain';
+		},
+		error: function() {
+			alert('실패');
+		}
+	});
+	//ajax end
+}
+
 //반려 또는 결재 버튼 클릭 시 실행
 function updateSignResult(sgnResult, docNo){
 	
