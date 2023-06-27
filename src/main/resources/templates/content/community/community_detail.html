@@ -186,9 +186,6 @@
 										[[${community.boardNextTitle}]]
 										</a>
 									</th:block>
-									<a th:if="${boardNextNum} != 'BOARD_000'" th:href="@{/community/detail(boardNum=${community.boardNextNum})}" style="color : black">
-									[[${community.boardNextTitle}]]
-									</a>
 								</th:block>
 								<th:block th:unless="${community.boardNextNum != 'BOARD_000'}">
 									<div class="text-secondary">[[${community.boardNextTitle}]]</div>

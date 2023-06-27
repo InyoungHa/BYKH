@@ -46,7 +46,7 @@
 							  		th:selected="${boardVO.searchBoardVO != null and boardVO.searchBoardVO.searchSelect == 'ENAME'}">작성자</option>
 							</select>
 							<input type="text" class="form-control w-25" name="searchBoardVO.searchKeyword"
-									th:value="${boardVO.searchBoardVO == null ? '' : boardVO.searchBoardVO.searchKeyword}">
+									th:value="${boardVO.searchBoardVO == null ? '' : boardVO.searchBoardVO.searchKeyword}" autocomplete="off">
 							<input type="submit" class="btn" value="검색">
 						</div>
 						<input type="hidden" id="nowPage" name="nowPage" 

@@ -132,9 +132,11 @@
 	<!--  글 목록 BOARD_NUM 조회(파일 제외) -->
 	<select id="getBoardNumList" resultType="String">
 		SELECT BOARD.BOARD_NUM
-		FROM BOARD
+			, ENAME
+		FROM BOARD, EMP
 		WHERE BOARD_MENU_CODE = #{boardMenuVO.boardMenuCode}
 		AND BOARD_STATUS = 1
+		AND BOARD_WRITER = EMPNO
 		<if test='searchBoardVO != null and !searchBoardVO.searchKeyword.equals("")'>
 		AND UPPER(${searchBoardVO.searchSelect}) LIKE '%'||UPPER(#{searchBoardVO.searchKeyword})||'%'
 		</if>
@@ -343,6 +345,35 @@
 			FROM BOARD, EMP, BOARD_CATEGORY CATE
 			WHERE BOARD_WRITER = EMPNO
 			AND BOARD_STATUS = 1
+            AND BOARD.BOARD_CATE_CODE = CATE.BOARD_CATE_CODE (+))
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<!-- 수정을 위한 상세 조회 -->
+	<select id="getBoardDetailForUpdate" resultMap="board">
+	 SELECT * FROM
+			(SELECT BOARD_NUM
+				, BOARD_TITLE
+				, BOARD_CONTENT
+				, BOARD_WRITER
+				, TO_CHAR(BOARD_DATE, 'YYYY-MM-DD HH24:MI') BOARD_DATE
+				, BOARD_STATUS
+				, BOARD_VIEW
+				, IS_IMPORTANT
+				, ENAME
+				, BOARD_MENU_CODE
+				, CATE.BOARD_CATE_CODE
+				, BOARD_CATE_NAME
+				, IS_PRIVATE
+				, BOARD_PW
+				, (SELECT COUNT(REPLY_NUM)
+                    FROM BOARD_REPLY
+                    WHERE BOARD_NUM = #{boardNum}) REPLY_CNT
+                , (SELECT COUNT(LIKE_NUM)
+					FROM BOARD_LIKE
+					WHERE BOARD_NUM = #{boardNum}) LIKE_CNT
+			FROM BOARD, EMP, BOARD_CATEGORY CATE
+			WHERE BOARD_WRITER = EMPNO
             AND BOARD.BOARD_CATE_CODE = CATE.BOARD_CATE_CODE (+))
 		WHERE BOARD_NUM = #{boardNum}
 	</select>
