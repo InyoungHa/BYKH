@@ -46,5 +46,6 @@ public class BoardVO extends PageVO {
 	private int likeCnt;
 	
 	private SearchBoardVO searchBoardVO;
+	private List<String> boardNumList;
 	
 }

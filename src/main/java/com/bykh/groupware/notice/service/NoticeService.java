@@ -14,6 +14,12 @@ public interface NoticeService {
 	//게시판 목록 조회
 	List<BoardVO> getBoardList(BoardVO boardVO);
 	
+	//게시글 목록 BOARD_NUM 조회
+	List<String> getBoardNumList(BoardVO boardVO);
+	
+	//게시글 목록에 따른 파일 목록 조회
+	List<BoardFileVO> getFileList(BoardVO boardVO);
+	
 	//중요글 목록 조회
 	List<BoardVO> getBoardImportantList(BoardVO boardVO);
 	
