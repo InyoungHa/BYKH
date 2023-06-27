@@ -181,15 +181,17 @@ public class SignController {
 		}
 		signDocVO.setSignVOList(signList);
 		//참조라인 가공
-		String[] referrerNoArr = referrerNoStr.split(",");
-		List<ReferrerVO> referrerList = new ArrayList<>();
-		for(int i=0; i < referrerNoArr.length; i++) {
-			ReferrerVO referrerVO = new ReferrerVO();
-			referrerVO.setReferrerNo(Integer.parseInt(referrerNoArr[i]));
-			referrerVO.setDocNo(docNo);
-			referrerList.add(referrerVO);
+		if (referrerNoStr != "") {			
+			String[] referrerNoArr = referrerNoStr.split(",");
+			List<ReferrerVO> referrerList = new ArrayList<>();
+			for(int i=0; i < referrerNoArr.length; i++) {
+				ReferrerVO referrerVO = new ReferrerVO();
+				referrerVO.setReferrerNo(Integer.parseInt(referrerNoArr[i]));
+				referrerVO.setDocNo(docNo);
+				referrerList.add(referrerVO);
+			}
+			signDocVO.setReferrerVOList(referrerList);
 		}
-		signDocVO.setReferrerVOList(referrerList);
 		//날짜 + 시간 데이터 가공(2023-05-22 09:00:00 ~)
 		//String startDate = docAnnualLeaveVO.getStartDate() + " " + docAnnualLeaveVO.getStartTime();
 		
@@ -223,6 +225,8 @@ public class SignController {
 		signDocVO.setSignVOList(signVOList);
 		//1-3 referrer_arr
 		ReferrerVO[] referrerArr = mapper.convertValue(mapData.get("referrer_arr"), ReferrerVO[].class);
+		System.out.println("============referrerArr=============================");
+		System.out.println(referrerArr);
 		List<ReferrerVO> referrerVOList = Arrays.asList(referrerArr);
 		
 		signDocVO.setReferrerVOList(referrerVOList);
@@ -298,21 +302,30 @@ public class SignController {
 	//'결재' 또는 '반려' 클릭 시 실행
 	@ResponseBody
 	@PostMapping("/updateSignResultAjax")
-	public void updateSignResultAjax(SignVO signVO) {
-		System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		System.out.println("controller 실행~~~~~~~~~~~~~");
-		
+	public void updateSignResultAjax(SignVO signVO, int docType) {
 		signService.updateSignResult(signVO);
 		//모든 결재자가 결재했을 경우 구매결재여부 1(승인)으로 변경
-		signService.updateBuyApproval(signVO);
-			
+		//signService.updateBuyApproval(signVO);
 		SignDocVO signDocVO = new SignDocVO();
 		signDocVO.setDocNo(signVO.getDocNo());
-		//결재결과가 '결재'고 다음 결재자가 없다면 문서 상태를 '결재완료'로 변경
-		System.out.println("두번째 실행~~~~~~~~~~");
+		//결재결과가 '결재'고 다음 결재자가 없다면 
 		if(signVO.getSgnResult() == 1 && signService.getNextApproverNo(signVO.getDocNo()) == 0) {
+			//1. 문서 상태를 '결재완료'로 변경
 			signDocVO.setSgnStatus(2);
 			signService.updateSignStatus(signDocVO);
+			//=====구매신청서일 경우 실행=====
+			if(docType == 2) {
+				//2. 구매결재여부(BUY_APPROVAL) 1(승인)으로 변경
+				signService.updateBuyApproval(signVO);
+				//3. 구매한 ITEM_NO, BUY_CNT 조회해서 ITEM의 ITEM_CNT 변경
+				BuyVO buyVO = new BuyVO();
+				buyVO.setBuyDetailVOList(signService.getBuyDetailListInDoc(signVO));
+				signService.updateItemCnt(buyVO);
+			}
+			
+			
+			
+			
 		//결재결과가 '반려'이면 문서상태를 '반려'로 변경
 		}else if(signVO.getSgnResult() == 0) {
 			signDocVO.setSgnStatus(3);

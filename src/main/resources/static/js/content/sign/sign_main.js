@@ -38,14 +38,18 @@ function showSignDocModal(clickTag){
 			//키값 가져옴(list 형태)
 			const key = Object.keys(result);
 			console.log(result);
+			const loginId = document.querySelector('.login-id').value;
+			let isNextApprover = false;
+			let isCanBeDeleted = false;
 			let str = '';
 			//연차신청서일 경우
 			if(key[0] == 'docAnnualLeave'){
 				const signWriteInfo = result[key[0]];
 				str += `
 				<div class="row">
-						<div class="col-8" style="border: 1px solid #dee2e6;">
+						<div class="col-8" id="sgnDocArea" style="border: 1px solid #dee2e6;">
 							<input type="hidden" class="docNo" value="${signWriteInfo.docNo}">
+							<input type="hidden" class="docType" value="${docType}">
 							<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>연차신청서</h2>
@@ -185,8 +189,7 @@ function showSignDocModal(clickTag){
 									<h3>결재라인</h3>
 								</div>
 							</div>`;
-							let isNextApprover = false;
-							const loginId = document.querySelector('.login-id').value;
+							
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
@@ -235,7 +238,7 @@ function showSignDocModal(clickTag){
 							</div>`;
 							
 							str += `
-								<div class="row btn-area">
+								<div class="row">
 									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
@@ -248,12 +251,15 @@ function showSignDocModal(clickTag){
 							if(isCanBeDeleted){
 								str += `
 								<div style="min-height:350px;"></div>
-								<div class="row btn-area">
+								<div class="row">
 									<div class="col-12 d-grid">
 										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
 									</div>
 								</div>
 								`;
+							}
+							if(!isCanBeDeleted && !isNextApprover){
+								str+= `<div style="min-height:400px;"></div>`;
 							}
 						str += `
 								<div class="row mt-1">
@@ -275,6 +281,7 @@ function showSignDocModal(clickTag){
 				str += `
 			<div class="row">
 			<div class="col-8 sign-doc-scroll" id="sgnDocArea" style="border: 1px solid #dee2e6;">
+			<input type="hidden" class="docType" value="${docType}">
 			<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>구매신청서</h2>
@@ -387,8 +394,9 @@ function showSignDocModal(clickTag){
 							</tr>
 							<tr>
 								<td>구매사유</td>
-								<td colspan="3">
-									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment">${signWriteInfo.docPurchaseOrderVO.dpoComment}</textarea>
+								<td colspan="3"
+								style="width: 100%; height: 200px; text-align: left;">
+									${signWriteInfo.docPurchaseOrderVO.dpoComment == null ? '' : signWriteInfo.docPurchaseOrderVO.dpoComment}
 								</td>
 							</tr>
 							
@@ -407,9 +415,8 @@ function showSignDocModal(clickTag){
 									<h3>결재라인</h3>
 								</div>
 							</div>`;
-							let isNextApprover = false;
-							let isCanBeDeleted = false;
-							const loginId = document.querySelector('.login-id').value;
+							
+							
 							signWriteInfo.signVOList.forEach(function(sign){
 								str += `<div class="row pt-2 pb-2 d-flex align-items-center justify-content-center border-bottom">
 									<div class="col-3">
@@ -420,7 +427,6 @@ function showSignDocModal(clickTag){
 										${sign.approverName} ${sign.approverJob}
 									</div>`;
 								if(sign.sgnComent != null){
-									console.log('signComent if문 실행');
 									str += `
 									<div class="col-12 mt-3">
 										${sign.sgnComent}
@@ -434,13 +440,14 @@ function showSignDocModal(clickTag){
 								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
 								if(loginId == signWriteInfo.writerNo && isApproved == 0){
 									isCanBeDeleted = true;
-								}
+								}	
 								str += `</div>
 								`;
 							});
 							str += `
 							</div>
-								</div>`;
+								</div>
+								`;
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -456,10 +463,10 @@ function showSignDocModal(clickTag){
 							</div>
 							</div>
 							</div>`;
-							//현재 로그인중인 아이디 가져오기 + 결재순번인지 비교
-							// 노출여부에 따라 결재/반려버튼 노출
+							
 							str += `
-								<div class="row btn-area">
+								<div class="row">
+									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
 									</div>
@@ -471,15 +478,24 @@ function showSignDocModal(clickTag){
 							if(isCanBeDeleted){
 								str += `
 								<div style="min-height:350px;"></div>
-								<div class="row btn-area">
+								<div class="row">
 									<div class="col-12 d-grid">
 										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
 									</div>
 								</div>
 								`;
 							}
-						str += `</div>
-					</div>
+							if(!isCanBeDeleted && !isNextApprover){
+								str+= `<div style="min-height:400px;"></div>`;
+							}
+						str += `
+								<div class="row mt-1">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="인쇄" onclick="printArea();">
+									</div>
+								</div>
+							</div>
+				
 				`;
 				
 			}
@@ -499,11 +515,12 @@ function showSignDocModal(clickTag){
 	
 	modal.hide();
 }
-//인쇄하기
+//인쇄
 function printArea(){
  var initBody = document.body.innerHTML;
+ 	console.log(initBody);
     window.onbeforeprint = function(){
-        document.body.innerHTML = document.getElementById("sgnDocArea").innerHTML;
+        document.body.innerHTML = document.querySelector("#sgnDocArea").innerHTML;
     }
     window.onafterprint = function(){
         document.body.innerHTML = initBody;
@@ -539,11 +556,10 @@ function deleteSgnDoc(docType, docNo){
 function updateSignResult(sgnResult, docNo){
 	
 	//결재자 아이디값 세팅(현재 로그인중인 사람)
-	//임시데이터(양동근 부장)
 	if(confirm(`${sgnResult == 0 ? '반려' : '결재'}하시겠습니까?`)){
 		const approverNo = document.querySelector('.login-id').value;
 		const sgnComent = document.querySelector('.sgnComent').value;
-		console.log(`approverNo = ${approverNo} / docNo = ${docNo} / sgnResult = ${sgnResult}`);
+		const docType = document.querySelector('.docType').value;
 		//ajax start
 		$.ajax({
 			url: '/sign/updateSignResultAjax', //요청경로
@@ -551,7 +567,7 @@ function updateSignResult(sgnResult, docNo){
 			async: true, //동기/비동기
 			//contentType: 'application/json; charset=UTF-8',
 			//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-			data: {'sgnResult':sgnResult, 'approverNo':approverNo, 'docNo':docNo, 'sgnComent':sgnComent}, //필요한 데이터
+			data: {'sgnResult':sgnResult, 'approverNo':approverNo, 'docNo':docNo, 'sgnComent':sgnComent, 'docType':docType}, //필요한 데이터
 			success: function(result) {
 					alert(`${sgnResult == 0 ? '반려' : '결재'}되었습니다.`);
 					//modal.hide();

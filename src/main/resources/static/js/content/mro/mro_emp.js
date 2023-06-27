@@ -124,7 +124,7 @@ function searchItemList(){
 							<td>${i+1}</td>
 							<td>${result[i].categoryVO.cateName}</td>
 							<td data-item-no="${result[i].itemNo}">${result[i].itemName}</td>
-							<td data-item-price="${result[i].itemPrice}>${itemPriceView}</td>
+							<td data-item-price="${result[i].itemPrice}">${itemPriceView}</td>
 							<td data-item-cnt="${result[i].itemCnt}">
 								<input type="number" class="form-select" value="1" min="1" th:max="${result[i].itemCnt}" 
 								onchange="updateItemCnt(this);" onkeyup="updateItemCnt(this);">

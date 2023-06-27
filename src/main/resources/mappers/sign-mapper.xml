@@ -402,17 +402,36 @@
 	</update>
 	<!-- signResult 조회 후 buy 결재가 모두 완료되었으면 buyApproval 1로 변경 -->
 	<update id="updateBuyApproval">
-		MERGE INTO BUY B
-		USING (SELECT DOC_NO
-		       FROM SGN
-		       WHERE SGN_RESULT IS NOT NULL
-		       GROUP BY DOC_NO
-		       HAVING COUNT(DOC_NO) = SUM(DECODE(SGN_RESULT, 0, 0, 1))
-		       AND DOC_NO = #{docNo}) S
-		ON (B.DOC_NO = S.DOC_NO)
-		WHEN MATCHED THEN 
-		  UPDATE SET B.BUY_APPROVAL = 1
+		UPDATE BUY
+		SET BUY_APPROVAL = 1
+		WHERE DOC_NO = ${docNo}
 	</update>
+	<!-- 변경할 itemno, cnt값 가져오기 -->
+	<select id="getBuyDetailListInDoc" resultMap="buyDetail">
+		SELECT ITEM_NO, BUY_CNT
+		FROM BUY_DETAIL
+		WHERE BUY_NO = (SELECT BUY_NO FROM BUY WHERE DOC_NO = ${docNo})
+	</select>
+	<!-- 구매한 상품의 수량 변경 -->
+	<update id="updateItemCnt-backup">
+		UPDATE ITEM
+		SET ITEM_CNT = (SELECT ITEM_CNT - ${buyCnt} FROM ITEM WHERE ITEM_NO = ${itemNo})
+		WHERE ITEM_NO = ${itemNo};
+	</update>
+	<update id="updateItemCnt">
+		BEGIN
+		
+		<foreach collection="buyDetailVOList" item="buyDetail">
+			UPDATE ITEM
+			SET ITEM_CNT = (SELECT ITEM_CNT - ${buyDetail.buyCnt} FROM ITEM WHERE ITEM_NO = ${buyDetail.itemNo})
+			WHERE ITEM_NO = ${buyDetail.itemNo};
+		</foreach>
+		  
+		END;
+	</update>
+	
+	
+	
 	<!-- 결재문서 결재상태(SGN_STATUS) 변경 (0:임시저장/1:결재중/2:결재완료/3:반려) -->
 	<update id="updateSignStatus">
 		UPDATE SGN_DOC

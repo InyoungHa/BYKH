@@ -349,6 +349,7 @@ function showSignDocModal(clickTag){
 				<div class="row">
 						<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
 							<input type="hidden" class="docNo" value="${signWriteInfo.docNo}">
+							<input type="hidden" class="docType" value="${docType}">
 							<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>연차신청서</h2>
@@ -514,13 +515,14 @@ function showSignDocModal(clickTag){
 								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
 								if(loginId == signWriteInfo.writerNo && isApproved == 0){
 									isCanBeDeleted = true;
-								}
+								}	
 								str += `</div>
 								`;
 							});
 							str += `
 							</div>
-								</div>`;
+								</div>
+								`;
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -538,7 +540,8 @@ function showSignDocModal(clickTag){
 							</div>`;
 							
 							str += `
-								<div class="row btn-area">
+								<div class="row">
+									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
 									</div>
@@ -550,14 +553,23 @@ function showSignDocModal(clickTag){
 							if(isCanBeDeleted){
 								str += `
 								<div style="min-height:350px;"></div>
-								<div class="row btn-area">
+								<div class="row">
 									<div class="col-12 d-grid">
 										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
 									</div>
 								</div>
 								`;
 							}
-						str += `</div>
+							if(!isCanBeDeleted && !isNextApprover){
+								str+= `<div style="min-height:400px;"></div>`;
+							}
+						str += `
+								<div class="row mt-1">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="인쇄" onclick="printArea();">
+									</div>
+								</div>
+							</div>
 				
 				`;
 				
@@ -570,7 +582,8 @@ function showSignDocModal(clickTag){
 				console.log(signWriteInfo);
 				str += `
 			<div class="row">
-			<div class="col-8 sign-doc-scroll" style="border: 1px solid #dee2e6;">
+			<div class="col-8 sign-doc-scroll" id="sgnDocArea" style="border: 1px solid #dee2e6;">
+			<input type="hidden" class="docType" value="${docType}">
 			<div class="row mt-3 mb-3">
 								<div class="col text-center">
 									<h2>구매신청서</h2>
@@ -683,8 +696,9 @@ function showSignDocModal(clickTag){
 							</tr>
 							<tr>
 								<td>구매사유</td>
-								<td colspan="3">
-									<textarea class="full-width-textarea dpo-comment" name="docPurchaseOrder.dpoComment">${signWriteInfo.docPurchaseOrderVO.dpoComment}</textarea>
+								<td colspan="3"
+								style="width: 100%; height: 200px; text-align: left;">
+									${signWriteInfo.docPurchaseOrderVO.dpoComment == null ? '' : signWriteInfo.docPurchaseOrderVO.dpoComment}
 								</td>
 							</tr>
 							
@@ -730,13 +744,14 @@ function showSignDocModal(clickTag){
 								// 삭제버튼 노출여부 지정 (작성자이고, 결재한 결재자가 없다면 노출)
 								if(loginId == signWriteInfo.writerNo && isApproved == 0){
 									isCanBeDeleted = true;
-								}
+								}	
 								str += `</div>
 								`;
 							});
 							str += `
 							</div>
-								</div>`;
+								</div>
+								`;
 							if(isNextApprover){	
 								str += `
 							<!-- 다음 결재자일 경우 코맨트 활성화 -->
@@ -754,7 +769,8 @@ function showSignDocModal(clickTag){
 							</div>`;
 							
 							str += `
-								<div class="row btn-area">
+								<div class="row">
+									
 									<div class="col-6 d-grid">
 										<input type="button" class="btn btn-primary" value="반려" onclick="updateSignResult(0, ${docNo});">
 									</div>
@@ -766,15 +782,24 @@ function showSignDocModal(clickTag){
 							if(isCanBeDeleted){
 								str += `
 								<div style="min-height:350px;"></div>
-								<div class="row btn-area">
+								<div class="row">
 									<div class="col-12 d-grid">
 										<input type="button" class="btn btn-primary" value="삭제" onclick="deleteSgnDoc(${docType}, ${docNo});">
 									</div>
 								</div>
 								`;
 							}
-						str += `</div>
-					</div>
+							if(!isCanBeDeleted && !isNextApprover){
+								str+= `<div style="min-height:400px;"></div>`;
+							}
+						str += `
+								<div class="row mt-1">
+									<div class="col-12 d-grid">
+										<input type="button" class="btn btn-primary" value="인쇄" onclick="printArea();">
+									</div>
+								</div>
+							</div>
+				
 				`;
 				
 			}
@@ -794,6 +819,19 @@ function showSignDocModal(clickTag){
 	
 	modal.hide();
 }
+//인쇄
+function printArea(){
+ var initBody = document.body.innerHTML;
+ 	console.log(initBody);
+    window.onbeforeprint = function(){
+        document.body.innerHTML = document.querySelector("#sgnDocArea").innerHTML;
+    }
+    window.onafterprint = function(){
+        document.body.innerHTML = initBody;
+    }
+    window.print();
+    location.reload();
+}
 //반려 또는 결재 버튼 클릭 시 실행
 function updateSignResult(sgnResult, docNo){
 	
@@ -802,6 +840,7 @@ function updateSignResult(sgnResult, docNo){
 	if(confirm(`${sgnResult == 0 ? '반려' : '결재'}하시겠습니까?`)){
 		const approverNo = document.querySelector('.login-id').value;
 		const sgnComent = document.querySelector('.sgnComent').value;
+		const docType = document.querySelector('.docType').value;
 		//ajax start
 		$.ajax({
 			url: '/sign/updateSignResultAjax', //요청경로
@@ -809,7 +848,9 @@ function updateSignResult(sgnResult, docNo){
 			async: true, //동기/비동기
 			//contentType: 'application/json; charset=UTF-8',
 			//contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-			data: {'sgnResult':sgnResult, 'approverNo':approverNo, 'docNo':docNo, 'sgnComent':sgnComent}, //필요한 데이터
+			data: {'sgnResult':sgnResult, 'approverNo':approverNo, 
+					'docNo':docNo, 'sgnComent':sgnComent,
+					'docType':docType}, //필요한 데이터
 			success: function(result) {
 					alert(`${sgnResult == 0 ? '반려' : '결재'}되었습니다.`);
 					location.href='/user/main'

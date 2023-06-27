@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.mro.vo.ItemVO;
+import com.bykh.groupware.sign.vo.BuyDetailVO;
+import com.bykh.groupware.sign.vo.BuyVO;
 import com.bykh.groupware.sign.vo.DocAnnualLeaveVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
@@ -43,7 +45,9 @@ public class SignServiceImpl implements SignService{
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertDocAnnualLeave", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
-		sqlsession.insert("signMapper.insertReferrerList", signDocVO);
+		if(signDocVO.getReferrerVOList() != null) {		
+			sqlsession.insert("signMapper.insertReferrerList", signDocVO);
+		}
 	}
 	@Override
 	public int getNextDocNo() {
@@ -71,7 +75,9 @@ public class SignServiceImpl implements SignService{
 	public void insertDocPurchaseOrder(SignDocVO signDocVO) {
 		sqlsession.insert("signMapper.insertSignDoc", signDocVO);
 		sqlsession.insert("signMapper.insertSignList", signDocVO);
-		sqlsession.insert("signMapper.insertReferrerList", signDocVO);
+		if(signDocVO.getReferrerVOList().size() > 0 ) {			
+			sqlsession.insert("signMapper.insertReferrerList", signDocVO);
+		}
 		sqlsession.insert("signMapper.insertBuy", signDocVO.getDocPurchaseOrderVO().getBuyVO());
 		sqlsession.insert("signMapper.insertBuyDetails", signDocVO.getDocPurchaseOrderVO().getBuyVO());
 		sqlsession.insert("signMapper.insertDocPurchaseOrder", signDocVO.getDocPurchaseOrderVO());
@@ -104,6 +110,14 @@ public class SignServiceImpl implements SignService{
 	@Override
 	public List<SignDocVO> getMainSignDocList(int empno) {
 		return sqlsession.selectList("signMapper.getMainSignDocList", empno);
+	}
+	@Override
+	public List<BuyDetailVO> getBuyDetailListInDoc(SignVO signVO) {
+		return sqlsession.selectList("signMapper.getBuyDetailListInDoc", signVO);
+	}
+	@Override
+	public void updateItemCnt(BuyVO buyVO) {
+		sqlsession.update("signMapper.updateItemCnt", buyVO);
 	}
 	
 	

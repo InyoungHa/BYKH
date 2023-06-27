@@ -47,7 +47,7 @@
 		<if test='searchItemVO != null and searchItemVO.searchItemName != null and !searchItemVO.searchItemName.equals("")'>
 		AND ITEM_NAME LIKE '%'||#{searchItemVO.searchItemName}||'%'
 		</if>
-		ORDER BY IS_USE DESC, REG_DATE
+		ORDER BY IS_USE DESC, ITEM_NO DESC
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 
