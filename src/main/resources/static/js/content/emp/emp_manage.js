@@ -26,8 +26,8 @@ function reg_emp_validate(){
 	
 
 	//사원 등록 form 태그의 자식 td 선택
-	const ename_td = document.querySelector('#ename').closest('td');
-	const epw_td = document.querySelector('#epw').closest('td');
+	const ename_td = document.querySelector('#regEmpForm #ename').closest('td');
+	const epw_td = document.querySelector('#regEmpForm #epw').closest('td');
 	
 	//validation 빈 값 처리
 	const reg_empExp = /\s/;
@@ -665,4 +665,3 @@ function change_account_fu(){
 
 	
 	
-

@@ -23,6 +23,8 @@ public interface EmpService {
 	//사원의 사원 상세 정보 조회
 	EmpVO selectEmpDetail(int empno);
 	
+	
+	
 	//사원 이미지 등록
 	//void insertEmpImg(EImgVO eImgVO);
 	
@@ -66,6 +68,8 @@ public interface EmpService {
 	//임시비밀번호로 비번 변경
 	void updateImsiEpw(EmpVO empVO);
 	
+	//header에서 사원 조회
+	List<EmpVO> selectForHeader(EmpVO empVO);
 
 
 }
