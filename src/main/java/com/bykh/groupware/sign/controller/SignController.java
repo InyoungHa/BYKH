@@ -303,6 +303,8 @@ public class SignController {
 		System.out.println("controller 실행~~~~~~~~~~~~~");
 		
 		signService.updateSignResult(signVO);
+		//모든 결재자가 결재했을 경우 구매결재여부 1(승인)으로 변경
+		signService.updateBuyApproval(signVO);
 			
 		SignDocVO signDocVO = new SignDocVO();
 		signDocVO.setDocNo(signVO.getDocNo());
