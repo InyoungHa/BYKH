@@ -47,10 +47,10 @@
 		
 			<div class="row mb-2">
 				<div class="col d-grid gap-1 d-md-flex justify-content-md-end">
-					<th:block th:if="${#authentication.name == #strings.toString(community.boardWriter) or #authorization.expression('hasRole(''ROLE_COMMUNITY'')')}">
-					<input type="button" class="btn me-md-1" th:onclick="|location.href='@{/community/update(boardNum=${community.boardNum})}'|"  value="수정">
-					<input type="button" class="btn me-md-1" th:onclick="deleteBoard([[${community.boardNum}]]);" value="삭제">
-					</th:block>
+					<input type="button" class="btn me-md-1" th:onclick="|location.href='@{/community/update(boardNum=${community.boardNum})}'|"  value="수정"
+						th:if="${#authentication.name == #strings.toString(community.boardWriter)}">
+					<input type="button" class="btn me-md-1" th:onclick="deleteBoard([[${community.boardNum}]]);" value="삭제"
+						th:if="${#authentication.name == #strings.toString(community.boardWriter) or #authorization.expression('hasRole(''ROLE_COMMUNITY'')')}">
 					<input type="button" class="btn" th:onclick="|location.href='@{/community/list}'|" value="목록">
 				</div>
 			</div>
@@ -229,10 +229,11 @@
 										<div class="text-secondary fs-6">[[${reply.replyDate}]]</div>
 									</div>
 									<div th:utext="${reply.replyContent}"></div>
-									<div class="d-grid gap-1 d-md-flex justify-content-md-end"
+									<div class="d-grid gap-1 d-md-flex justify-content-md-end">
+										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정"
+										th:if="${#authentication.name == #strings.toString(reply.replyWriter)}">
+										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제"
 										th:if="${#authentication.name == #strings.toString(reply.replyWriter) or #authorization.expression('hasRole(''ROLE_COMMUNITY'')')}">
-										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정">
-										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제">
 									</div>
 									</div>
 								</td>
