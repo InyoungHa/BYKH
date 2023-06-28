@@ -208,9 +208,6 @@ function delStampTableTd(this_tag) {
 			
 		}
 	}
-	
-	
-	
 }
 
 //'▼' 버튼 클릭 시 실행
@@ -366,8 +363,12 @@ function addItemTr(){
 				//중복일 경우
 				if(item_no_list[i] == content_item_no){
 					const cnt_td = content_tr_list[j].querySelector('td:nth-child(2)');
+					const price_td = content_tr_list[j].querySelector('td:nth-child(3)');
 					const item_cnt = parseInt(cnt_td.textContent);
+					const item_price = parseInt(price_td.textContent);
 					cnt_td.textContent = item_cnt + parseInt(item_cnt_list[i]);
+					content_tr_list[j].querySelector('td:nth-child(4)').textContent = parseInt(cnt_td.textContent) * item_price;
+					
 					
 					isDuplicated = true;
 					break;
@@ -415,6 +416,7 @@ function addItemTr(){
 	
 	// 4. 합계 계산
 	setFinalPrice();
+	
 	
 	// 5.모달 닫기
 	addItemModal.hide();
