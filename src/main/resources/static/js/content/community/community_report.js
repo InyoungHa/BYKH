@@ -49,7 +49,13 @@ function getReportBoard(boardNum) {
 			
 			boardTableBody.insertAdjacentHTML('afterbegin', str);
 			
-			$("#reportBoardLink").attr("href", `/community/detail?boardNum=${boardNum}`);
+			if(result.boardStatus == 3) {
+				$("#reportBoardLink").attr("onclick", `alert('해당 글이 블라인드 처리되었습니다.')`);			
+				$("#reportBoardLink").css('cursor', 'pointer');	
+			}
+			else {
+				$("#reportBoardLink").attr("href", `/community/detail?boardNum=${boardNum}`);	
+			}
 			
 			
 		},
