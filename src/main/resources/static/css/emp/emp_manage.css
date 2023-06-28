@@ -60,3 +60,10 @@
 	color: blue;
 }
 
+.page-link {
+	color: black;
+}
+.active>.page-link, .page-link.active {
+    background-color: #22415f;
+    border-color: #22415f;
+}
