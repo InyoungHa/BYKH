@@ -27,13 +27,17 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectOne("boardMapper.getBoardCnt", boardVO);
 	}
 	
-	
 	//공지 게시판 목록 조회
 	@Override
 	public List<BoardVO> getBoardList(BoardVO boardVO) {
 		return sqlSession.selectList("boardMapper.getBoardList", boardVO);
 	}
 	
+	//게시판 목록 BOARD_NUM 조회
+	@Override
+	public List<String> getBoardNumList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getBoardNumList", boardVO);
+	}
 	
 	//공지 게시판 중요글 목록 조회
 	@Override
@@ -41,13 +45,17 @@ public class NoticeServiceImpl implements NoticeService {
 		return sqlSession.selectList("boardMapper.getBoardImportantList", boardVO);
 	}
 	
+	//게시글에 따른 파일 목록 조회
+	@Override
+	public List<BoardFileVO> getFileList(BoardVO boardVO) {
+		return sqlSession.selectList("boardMapper.getFileList", boardVO);
+	}
 	
 	//다음으로 들어갈 글 번호 조회
 	@Override
 	public String getNextBoardNum() {
 		return sqlSession.selectOne("boardMapper.getNextBoardNum");
 	}
-	
 	
 	//다음으로 들어갈 첨부파일 번호 조회
 	@Override
@@ -78,7 +86,7 @@ public class NoticeServiceImpl implements NoticeService {
 		sqlSession.update("boardMapper.updateBoardView", boardVO);
 		
 		//글 상세 조회 정보 반환
-		return getSelectedBoardDetail(boardVO);
+		return getSelectedBoardDetail(boardVO, false);
 	}
 
 	
@@ -86,7 +94,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public BoardVO getBoardDetailForUpdate(BoardVO boardVO) {
 		//글 상세 조회 정보 반환
-		return getSelectedBoardDetail(boardVO);
+		return getSelectedBoardDetail(boardVO, true);
 	}
 	
 	//글 삭제
@@ -168,15 +176,22 @@ public class NoticeServiceImpl implements NoticeService {
 	
 	
 	//글 상세 조회 메소드
-	public BoardVO getSelectedBoardDetail(BoardVO boardVO) {
+	public BoardVO getSelectedBoardDetail(BoardVO boardVO, Boolean update) {
 		//첨부파일 조회
 		List<BoardFileVO> selectedFileList = sqlSession.selectList("boardMapper.getBoardFile", boardVO);
 		
 		//댓글 조회
 		List<ReplyVO> replyList = sqlSession.selectList("boardMapper.getReplyList", boardVO);
 		
+		BoardVO selectedBoard = new BoardVO();
+		
 		//상세 조회하는 글
-		BoardVO selectedBoard = sqlSession.selectOne("boardMapper.getBoardDetail", boardVO);
+		if(update == true) { //수정용 상세 조회일 경우
+			selectedBoard = sqlSession.selectOne("boardMapper.getBoardDetailForUpdate", boardVO);			
+		}
+		else {
+			selectedBoard = sqlSession.selectOne("boardMapper.getBoardDetail", boardVO);
+		}
 		
 		//첨부파일 변수에 담아줌
 		selectedBoard.setBoardFileList(selectedFileList);
@@ -187,6 +202,11 @@ public class NoticeServiceImpl implements NoticeService {
 		//글 상세 조회 정보 반환
 		return selectedBoard;
 	}
+	
+	
+
+
+
 
 
 

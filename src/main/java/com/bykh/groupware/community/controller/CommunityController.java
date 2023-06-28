@@ -58,9 +58,28 @@ public class CommunityController {
 		
 		//페이지 정보 세팅
 		boardVO.setPageInfo();
-		
+
 		//전체 글 목록 조회
-		model.addAttribute("communityList", noticeService.getBoardList(boardVO));
+		List<BoardVO> boardList = noticeService.getBoardList(boardVO);
+		
+		//글 boardNum 목록 조회
+		boardVO.setBoardNumList(noticeService.getBoardNumList(boardVO));
+		
+		//각 boardNum에 따른 파일 목록 조회
+		List<BoardFileVO> boardFileList = noticeService.getFileList(boardVO);
+		
+		//파일 세팅
+		for(BoardVO board : boardList) {
+			for(BoardFileVO file : boardFileList) {
+				if(file.getFileNum() != null && board.getBoardNum().equals(file.getBoardNum())) {
+					List<BoardFileVO> fileList = board.getBoardFileList();
+					fileList.add(file);
+				}
+			}
+		}
+		
+		//전체 글 목록
+		model.addAttribute("communityList", boardList);
 		
 		//인기글 목록 조회
 		model.addAttribute("hotList", communityService.getBoardHotList(boardVO));

@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.bykh.groupware.emp.vo.EmpVO;
 import com.bykh.groupware.mro.vo.ItemVO;
+import com.bykh.groupware.sign.vo.BuyDetailVO;
+import com.bykh.groupware.sign.vo.BuyVO;
 import com.bykh.groupware.sign.vo.SignDocVO;
 import com.bykh.groupware.sign.vo.SignVO;
 
@@ -32,8 +34,11 @@ public interface SignService {
 	
 	//결재/반려 버튼 클릭 시 실행
 	int updateSignResult(SignVO signVO);
-	int updateBuyApproval(SignVO signVO);
 	int updateSignStatus(SignDocVO signDocVO);
+	//결재/반려 버튼 클릭 시 실행 - 구매신청서일 경우 추가 실행
+	int updateBuyApproval(SignVO signVO);
+	List<BuyDetailVO> getBuyDetailListInDoc(SignVO signVO);
+	void updateItemCnt(BuyVO buyVO);
 	
 	//구매신청서 - 모든 아이템 리스트 조회
 	List<ItemVO> getItemList();

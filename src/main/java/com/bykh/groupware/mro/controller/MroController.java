@@ -59,5 +59,9 @@ public class MroController {
 		return mroService.getItemListForEmp(itemVO);
 	}
 	
-	
+	//차트
+	@GetMapping
+	public String buyStatus() {
+		return "content/mro/buy_status";
+	}
 }

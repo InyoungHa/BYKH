@@ -49,9 +49,29 @@ public class NoticeController {
 		
 		//페이지 정보 세팅
 		boardVO.setPageInfo();
-		
+
 		//전체 글 목록 조회
-		model.addAttribute("noticeList", noticeService.getBoardList(boardVO));
+		List<BoardVO> boardList = noticeService.getBoardList(boardVO);
+		
+		//글 boardNum 목록 조회
+		boardVO.setBoardNumList(noticeService.getBoardNumList(boardVO));
+		
+		//각 boardNum에 따른 파일 목록 조회
+		List<BoardFileVO> boardFileList = noticeService.getFileList(boardVO);
+		
+		//파일 세팅
+		for(BoardVO board : boardList) {
+			for(BoardFileVO file : boardFileList) {
+				if(file.getFileNum() != null && board.getBoardNum().equals(file.getBoardNum())) {
+					System.out.println("????!!!!!!!!!!!!!!!!!!");
+					List<BoardFileVO> fileList = board.getBoardFileList();
+					fileList.add(file);
+				}
+			}
+		}
+		
+		//전체 글 목록
+		model.addAttribute("noticeList", boardList);
 		
 		//중요글 목록 조회
 		model.addAttribute("noticeImportantList", noticeService.getBoardImportantList(boardVO));

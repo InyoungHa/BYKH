@@ -473,12 +473,14 @@ function insertPurchaseorder(sgnStatus){
 	//1-5 referrer
 	const referrer_arr = [];
 	const referrer_tag_list = document.querySelectorAll('.referrer-list-div span');
-	referrer_tag_list.forEach(function(referrer_tag, index){
-		const referrer = {
-			'referrerNo':referrer_tag.dataset.referrerNo
-		}
-		referrer_arr[index] = referrer;
-	});
+	if(referrer_tag_list.length > 0){		
+		referrer_tag_list.forEach(function(referrer_tag, index){
+			const referrer = {
+				'referrerNo':referrer_tag.dataset.referrerNo
+			}
+			referrer_arr[index] = referrer;
+		});
+	}
 	//1-6 sgnDoc
 	const sgn_doc = {
 		'docType': 2,
@@ -518,65 +520,7 @@ function insertPurchaseorder(sgnStatus){
 
 
 //========이벤트=========
-//모달이 열릴 때 emp 리스트 조회해오기
-const searchApproverModal = document.querySelector('#searchApproverModal');
-/*
-searchApproverModal.addEventListener('show.bs.modal', function() {
-	//모달이 열릴 때
-	const search_name_tag = document.querySelector('.search-name');
-	//ajax start
-	$.ajax({
-		url: '/sign/getEmpListAjax', //요청경로
-		type: 'post',
-		async: true, //동기/비동기
-		//contentType: 'application/json; charset=UTF-8',
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		data: {'ename':search_name_tag.value}, //필요한 데이터
-		success: function(result) {
-			
-			const modal_body_div = searchApproverModal.querySelector('.modal-body');
-			modal_body_div.replaceChildren('');
-			let str = ``;
-			str += `
-			<table class="table table-hover align-middle">
-						<colgroup>
-							<col width="20%">
-							<col width="*">
-							<col width="20%">
-						</colgroup>
-						`;
-			result['empList'].forEach(function(emp){
-				str += ` 	<tr>	
-								<td>
-									<div>
-										<img src="/img/content/emp/YangDongGun.jpg" width="70px;" class="rounded-image">
-									</div>
-								</td>
-								<td>
-									${emp.ename}  ${emp.e_job}
-								</td>
-								<td>
-									<div class="d-grid">
-										<button type="button" class="btn btn-primary add-approver-btn" onclick="addApproverHTML(${emp.empno}, '${emp.ename}', '${emp.e_job}');" >
-											추가
-										</button>
-									</div>
-								</td>
-							</tr>`;
-			});
-			str += `</table>`;
-			
-			modal_body_div.insertAdjacentHTML('afterbegin', str);
-			search_name_tag.value = '';
-		},
-		error: function() {
-			alert('실패');
-		}
-	});
-	//ajax end
 
-});
-*/
 //모달 태그 선택
 const addItemModalEvent = document.querySelector('#addItemModal');
 //모달이 열리면 itemList 테이블의 tr을 클릭할 때마다 색상 추가/삭제 이벤트 추가

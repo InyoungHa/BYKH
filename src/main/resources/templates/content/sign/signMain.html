@@ -116,7 +116,7 @@
 		
 		
 		.sign-doc-scroll {
-   			max-height: 800px;
+   			max-height: 900px;
    			overflow-y: auto;
    			overflow-x: hidden;
    			padding-right: 0px;
@@ -133,6 +133,14 @@
 		.sign-doc-scroll::-webkit-scrollbar-track {
 			background: #84848447; /*스크롤바 뒷 배경 색상*/
 		}
+		/* .btn-area {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  width: 100px;
+		  height: 100px;
+		  background-color: red;
+		} */
 		
 	</style>
 </th:block>
@@ -141,7 +149,9 @@
    <div class="row">
    		<input type="hidden" th:value="${#authentication.name}" class="login-id">
 		<div class="col">
-			<h2>결재현황</h2>
+			<div class="fs-1 fw-bolder d-grid d-flex justify-content-between">
+				<span>결재현황</span>
+			</div>
 			<div class="row mt-3 mb-3">
 				<div class="col-10">
 					진행중인 결재건

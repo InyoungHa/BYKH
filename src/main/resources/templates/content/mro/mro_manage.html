@@ -7,14 +7,23 @@
 <!-- 연결해야할 외부 css 파일 -->
 <th:block layout:fragment="content_css">
    	<!-- <link rel="stylesheet" href="/"> -->
+   	<style type="text/css">
+   		.active > .page-link, .page-link.active {
+   			background-color: #1e2b37;
+   			border-color: #1e2b37;
+   		}
+   		.page-link {
+   			color: #1e2b37;
+   		}
+   	</style>
 </th:block>
 
 <th:block layout:fragment="content">
 	<div class="row">
 		<div class="col">
 			<div class="row mb-3">
-				<div class="col">
-					<h2>상품관리</h2>
+				<div class="col fs-1 fw-bolder d-grid d-flex justify-content-between">
+					<span>상품관리</span>
 				</div>
 
 			</div>
@@ -42,7 +51,7 @@
 				</div>
 				<div class="offset-7 col-1">
 					<div class="d-grid">
-						<button class="btn" data-bs-toggle="modal" data-bs-target="#addItemModal">
+						<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#addItemModal">
 							추가
 						</button>
 					</div>
