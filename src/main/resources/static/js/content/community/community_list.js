@@ -1,3 +1,15 @@
+init();
+
+function init() {
+	//로그인 모달창
+	const privateModal = document.querySelector('#privateModal');
+	
+	//모달창을 닫으면 input태그 내용 지워짐
+	privateModal.addEventListener('hidden.bs.modal', function(e){
+		document.querySelector('#boardPw').value = '';
+	});
+}
+
 //페이지 이동 + 검색
 function movePage(pageNum) {
 	const communityForm = document.querySelector('#communityForm');

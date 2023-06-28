@@ -40,7 +40,7 @@ ClassicEditor
 				for(const img of images) {
 					img.src = img.src;					
 				}
-			}, 2000);
+			}, 2500);
 		} );
 	} )
   	.catch( error => {

@@ -1,3 +1,14 @@
+init();
+
+function init() {
+	//로그인 모달창
+	const privateModal = document.querySelector('#privateModal');
+	
+	//모달창을 닫으면 input태그 내용 지워짐
+	privateModal.addEventListener('hidden.bs.modal', function(e){
+		document.querySelector('#boardPw').value = '';
+	});
+}
 
 //글 삭제
 function deleteBoard(boardNum) {
@@ -292,31 +303,38 @@ function deleteBoardLike(boardNum) {
 
 //게시글 신고
 function reportBoard() {
-	//ajax start
-	$.ajax({
-		url: '/community/reportBoardAjax', //요청경로
-		type: 'post',
-		async: true,
-		contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-		data: $('#reportForm').serialize(), //필요한 데이터
-		success: function(result) {
-			
-			$('#reportModal').modal('hide');
-			alert('신고되었습니다.');
-			
-			//모달 열기 속성 삭제
-			const reportBtn = document.querySelector('#reportBtn');
-			reportBtn.removeAttribute('data-bs-toggle');
-			reportBtn.removeAttribute('data-bs-target');
-			
-			//알림 onclick 추가
-			reportBtn.setAttribute('onClick', 'reportAlert()');
-		},
-		error: function() {
-			alert('실패');
-		}
-	});
-	//ajax end
+	const checkedRadio = document.querySelector('input[name=reportReason]:checked');
+	if(checkedRadio == null) {
+		alert('신고사유를 체크해주세요.');
+		return;
+	}
+	else {
+		//ajax start
+		$.ajax({
+			url: '/community/reportBoardAjax', //요청경로
+			type: 'post',
+			async: true,
+			contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+			data: $('#reportForm').serialize(), //필요한 데이터
+			success: function(result) {
+				
+				$('#reportModal').modal('hide');
+				alert('신고되었습니다.');
+				
+				//모달 열기 속성 삭제
+				const reportBtn = document.querySelector('#reportBtn');
+				reportBtn.removeAttribute('data-bs-toggle');
+				reportBtn.removeAttribute('data-bs-target');
+				
+				//알림 onclick 추가
+				reportBtn.setAttribute('onClick', 'reportAlert()');
+			},
+			error: function() {
+				alert('실패');
+			}
+		});
+		//ajax end
+	}
 }
 
 

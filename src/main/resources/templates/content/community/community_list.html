@@ -143,13 +143,15 @@
 											<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
 											  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
 											</svg>
-											<a href="javascript:void(0)" th:onclick="isPrivateModal([[${community.boardNum}]])" class="link-dark" data-bs-toggle="modal" data-bs-target="#privateModal" id="privateModalBtn">
-												[[${community.boardTitle}]]
-											</a>
 										</th:block>
-										<th:block th:unless="${community.isPrivate == 'Y'}">
+										<th:block th:if="${#authorization.expression('hasRole(''ROLE_COMMUNITY'')')} or ${community.isPrivate == 'N'}">
 											<a th:href="@{/community/detail(boardNum=${community.boardNum})}" class="link-dark">
 											[[${community.boardTitle}]]
+											</a>
+										</th:block>
+										<th:block th:unless="${#authorization.expression('hasRole(''ROLE_COMMUNITY'')')} or ${community.isPrivate == 'N'}">
+											<a href="javascript:void(0)" th:onclick="isPrivateModal([[${community.boardNum}]])" class="link-dark" data-bs-toggle="modal" data-bs-target="#privateModal" id="privateModalBtn">
+												[[${community.boardTitle}]]
 											</a>
 										</th:block>
 										<th:block th:if="${community.replyCnt != 0}">
@@ -236,7 +238,7 @@
 				<div><input type="hidden" id="boardNum"></div>
 				<div class="text-start"><span class="text-danger">*</span> 비밀번호</div>
 				<div class="input-group mb-3">
-				  <input type="password" class="form-control" name="boardPw" id="boardPw">
+				  <input type="password" class="form-control" name="boardPw" id="boardPw" autocomplete="off">
 				  <button class="btn" type="button" onclick="checkBoardPw()">확인</button>
 				</div>
         	</div>

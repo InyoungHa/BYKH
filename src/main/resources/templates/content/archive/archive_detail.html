@@ -132,10 +132,11 @@
 										<div class="text-secondary fs-6">[[${reply.replyDate}]]</div>
 									</div>
 									<div th:utext="${reply.replyContent}"></div>
-									<div class="d-grid gap-1 d-md-flex justify-content-md-end"
-										th:if="${#authentication.name == #strings.toString(reply.replyWriter) or #authorization.expression('hasRole(''ROLE_ARCHIVE'')')}">
-										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정">
-										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제">
+									<div class="d-grid gap-1 d-md-flex justify-content-md-end">
+										<input type="button" class="btn" th:onclick="updateReplyForm([[${reply.replyNum}]], this)" value="수정"
+											th:if="${#authentication.name == #strings.toString(reply.replyWriter)}">
+										<input type="button" class="btn" th:onclick="deleteReply([[${reply.replyNum}]], this)" value="삭제"
+											th:if="${#authentication.name == #strings.toString(reply.replyWriter) or #authorization.expression('hasRole(''ROLE_ARCHIVE'')')}">
 									</div>
 									</div>
 								</td>
