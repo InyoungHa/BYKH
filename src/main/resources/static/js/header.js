@@ -36,8 +36,6 @@ function drawSearchEmp(empList){
 	
 	let str ='';
 	
-		
-		
 
 	str +='<div class="row">';
 	str +=	'<div class="col fs-6">';
@@ -76,7 +74,6 @@ function drawSearchEmp(empList){
 		str +=				`<td>${emp.deptVO.dename}(${emp.deptVO.loc})</td>`;
 		
 		if(emp.office_tel == null){
-			
 			str +=				'<td></td>';
 		}
 		else{
@@ -84,7 +81,6 @@ function drawSearchEmp(empList){
 		}
 		
 		if(emp.phone_tel == null){
-			
 			str +=				'<td></td>';
 		}
 		else{

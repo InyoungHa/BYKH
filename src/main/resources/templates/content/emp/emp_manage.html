@@ -186,20 +186,31 @@
 	<div class="row justify-content-center">
 		<div class="col-3">
 			<nav aria-label="Page navigation example">
-				<ul class="pagination">
-					<li class="page-item" th:classappend="${empVO.prev ? '':'disabled'}">
-						<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.beginPage -1}]])" aria-label="Previous"> 
-						<span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li class="page-item" th:each="pageNum : ${#numbers.sequence(empVO.beginPage, empVO.endPage)}">
-						<a th:classappend="${empVO.nowPage==pageNum ? 'active':''}" class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${pageNum}]])">[[${pageNum}]]</a>
-					</li>
-					
-					<li class="page-item" th:classappend="${empVO.next ? '':'disabled'}">
-						<a class="page-link" href="javascript:void(0);" th:onclick="getEmpListPaging([[${empVO.endPage +1}]])" aria-label="Next"> 
-						<span aria-hidden="true">&raquo;</span>
-					</a></li>
-				</ul>
+			  <ul class="pagination justify-content-center">
+			    <li class="page-item" th:classappend="${empVO.prev ? '':'disabled'}">
+			      <button class="page-link" th:onclick="getEmpListPaging([[${empVO.beginPage -1}]])" aria-label="Previous">
+			        <span aria-hidden="true">
+			        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+						  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+						</svg>
+			        </span>
+			      </button>
+			    </li>
+			    <th:block th:each="pageNum : ${#numbers.sequence(empVO.beginPage, empVO.endPage)}">
+				    <li class="page-item" th:classappend="${empVO.nowPage==pageNum ? 'active':''}">
+				    	<button class="page-link" th:onclick="getEmpListPaging([[${pageNum}]])">[[${pageNum}]]</button>
+				    </li>
+			    </th:block>
+			    <li class="page-item" th:classappend="${empVO.next ? '':'disabled'}">
+			      <button class="page-link" th:onclick="getEmpListPaging([[${empVO.endPage +1}]])" aria-label="Next">
+			        <span aria-hidden="true">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+						  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+						</svg>
+					</span>
+			      </button>
+			    </li>
+			  </ul>
 			</nav>
 		</div>
 	</div>
