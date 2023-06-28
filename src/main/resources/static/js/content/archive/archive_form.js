@@ -364,6 +364,8 @@ function updateTempBoard(boardNum) {
 			
 			//폼 태그
 			const formData = new FormData(document.querySelector('#archiveForm'));
+			//내용 추가
+			formData.set('boardContent', editor.getData());
 			
 			//ajax start
 			$.ajax({
