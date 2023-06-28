@@ -1,3 +1,6 @@
+const ItemModalTag = document.querySelector('#updateItemModal');
+const ItemModal = new bootstrap.Modal(ItemModalTag);
+
 //카테고리별 아이템 조회
 function getItemInCate(clickTag){
 	const cate_no = clickTag.value;
@@ -5,11 +8,11 @@ function getItemInCate(clickTag){
 	
 }
 
+
 //아이템 변경 모달
 function showUpdateItemModal(clickTag){
 	//모달 선택(여닫기 위한)
-	const ItemModalTag = document.querySelector('#updateItemModal');
-	const ItemModal = new bootstrap.Modal(ItemModalTag);
+	
 	
 	//body 세팅(변경전 값 세팅)
 	const rowData = clickTag.closest("tr");
