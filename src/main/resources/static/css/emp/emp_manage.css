@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+#searchForm{
+	margin-left: 150px;
+}
+
+.btn-secondary{
+	color:black;
+	background-color: gray;
+	border: 0.3px solid gray;
+	
+}
+
 
 .button {
    display: inline-block;
@@ -28,5 +39,24 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 2rem;
+}
+
+#order-info-label{
+	font-size: 1rem; 
+	color: red; 
+	align-self: flex-end;
+	
+}
+
+#eStatusStr_rest{
+	color: blue;	
+}
+
+#eStatusStr_retirement{
+	color: red;
+}
+
+#eAccountStr_rest{
+	color: blue;
 }
 

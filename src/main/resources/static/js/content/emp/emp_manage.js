@@ -1,4 +1,31 @@
 
+//화면 로딩 후 바로 실행
+init();
+
+
+function init(){
+	//화면 로딩 후 바로 실행
+	//날짜순, 상태순 버튼의 색상 변경
+	//버튼의 class를 추가, 제거 해서 바꿔주기
+	const order = document.querySelector('#orderBy').value;
+	
+	
+	//날짜순 정렬시, 처음 페이지로 이동시
+	if(order == 'EMPNO'){
+		//날짜순에 파란색 버튼
+		document.querySelector('#order_empno').classList.add('btn');
+		//상태순에 회색 버튼
+		document.querySelector('#order_joinDate').classList.add('btn-secondary');
+	}
+	//상태순 정렬시
+	else if(order == 'JOIN_DATE'){
+		//날짜순에 회색 버튼
+		document.querySelector('#order_empno').classList.add('btn-secondary');
+		//상태순에 파란색 버튼
+		document.querySelector('#order_joinDate').classList.add('btn-primary');
+	}
+}
+
 
 //오류 메세지 div 전체 제거
 function delete_error_div(){
@@ -119,6 +146,16 @@ function getEmpListPaging(pageNum) {
 }
 
 
+//정렬된 상태로 사원 조회 -사번, 등록순 조회
+function getEmpListDesc(order){
+	
+	document.querySelector('#orderBy').value = order;
+	
+	//검색 버튼 누르면 실행되는 함수
+	getSearchList();
+}
+
+
 //사원 상세정보
 function getEmpDetail(empno){
 	//자료형 int로 변경
@@ -159,6 +196,27 @@ function drawEmpDatail(data){
 	//직급
 	const options = ['사장', '과장', '대리', '주임', '사원'];
 	const selectedValue = data['empDetail'].e_job;	
+	
+	
+	//지역별로 부서 정렬
+	const locList =[
+		{loc:'서울', code:10},
+		{loc:'인천', code:20},
+		{loc:'부산', code:30},
+		{loc:'여수', code:40}		
+	];
+	
+	data['deptList'].sort(function compare(a,b){
+		let order ={};
+		locList.forEach(function (item) {
+		    order[item.loc] = item.code;
+		  });		
+		
+		return order[a.loc]-order[b.loc];
+	});
+		
+	
+
 
 	let str ='';
 	
@@ -246,8 +304,8 @@ function drawEmpDatail(data){
 	str += 					'<td>';
 	str += 						'<select id="selectedEStatus" class="form-select">';
 	str += 							`<option value="1" ${data['empDetail'].e_status == 1 ? 'selected' :''}>재직중</option>`;
-	str += 							`<option value="2" ${data['empDetail'].e_status == 2 ? 'selected' : ''}>휴직</option>`;
-	str += 							`<option value="3" ${data['empDetail'].e_status == 3 ? 'selected' :''}>퇴사</option>`;
+	str += 							`<option value="2" ${data['empDetail'].e_status == 2 ? 'selected' : ''} id="eStatusStr_rest">휴직</option>`;
+	str += 							`<option value="3" ${data['empDetail'].e_status == 3 ? 'selected' :''} id="eStatusStr_retirement">퇴사</option>`;
 	str += 						'</select>';
 	str += 					'<td>';
 	str += 				'</tr>';
@@ -597,8 +655,8 @@ function draw_change_account_modal(empno, eStatus, eAccount){
 	str += 					'<td>';
 	str += 						'<select id="selectedEStatus" class="form-select">';
 	str += 							`<option value="1" ${eStatus== 1 ? "selected":""}>재직중</option>`;
-	str += 							`<option value="2" ${eStatus== 2 ? "selected":""}>휴직</option>`;
-	str += 							`<option value="3" ${eStatus== 3 ? "selected":""}>퇴직</option>`;
+	str += 							`<option value="2" ${eStatus== 2 ? "selected":""} id="eStatusStr_rest">휴직</option>`;
+	str += 							`<option value="3" ${eStatus== 3 ? "selected":""} id="eStatusStr_retirement">퇴직</option>`;
 	str += 						'</select>';
 	str += 					'</td>';
 	str += 				'</tr>';
@@ -607,7 +665,7 @@ function draw_change_account_modal(empno, eStatus, eAccount){
 	str += 					'<td>';
 	str += 						'<select id="selectedEAccount" class="form-select">';
 	str += 							`<option value="1" ${eAccount== 1 ? 'selected':''}>정상</option>`;
-	str += 							`<option value="2" ${eAccount== 2 ? 'selected':''}>휴면</option>`;
+	str += 							`<option value="2" ${eAccount== 2 ? 'selected':''} id="eAccountStr_rest">휴면</option>`;
 	str += 						'</select>';
 	str += 					'</td>';
 	str += 				'</tr>';
@@ -662,6 +720,8 @@ function change_account_fu(){
 	});
 	
 }
+
+
 
 	
 	
