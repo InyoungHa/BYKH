@@ -51,3 +51,7 @@ a{
 	height: 50px;
 	}
 	
+
+textarea{
+	resize: none;
+}

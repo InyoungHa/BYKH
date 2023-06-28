@@ -69,7 +69,13 @@
 			, IS_USE
 		FROM DEPT	
 		WHERE IS_USE = 'Y'
-		ORDER BY DENAME DESC
+		ORDER BY CASE LOC
+		    WHEN '서울' THEN 4
+		    WHEN '인천' THEN 3
+		    WHEN '부산' THEN 2
+		    WHEN '여수' THEN 1
+		    ELSE 0 <!--  기타 경우 정렬 순서 -->
+		END DESC
 	</select>
 
 	
@@ -125,7 +131,14 @@
 		    , (SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
 		FROM EMP
 		WHERE DEPTNO = #{deptno}
-		ORDER BY ENAME
+		ORDER BY CASE E_JOB
+		    WHEN '사장' THEN 5
+		    WHEN '과장' THEN 4
+		    WHEN '대리' THEN 3
+		    WHEN '주임' THEN 2
+		    WHEN '사원' THEN 1
+		    ELSE 0  <!-- 기타 경우 정렬 순서 -->
+		END DESC, ENAME ASC
 	</select>
 
 

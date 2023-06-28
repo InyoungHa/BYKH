@@ -126,7 +126,7 @@ public class SignController {
 		
 		
 		
-		//구매신청서 작성 페이지 이동시와 같은 코드
+		//구매신청서 작성 페이지 이동시와 같은 코드 > intercepter?
 		User user = (User)authentication.getPrincipal();
 		model.addAttribute("signWriteInfo", signService.getSingWriteInfo(Integer.parseInt(user.getUsername())));
 		model.addAttribute("nowDate", DateUtil.getNowDateToString().substring(0, 10));
@@ -148,16 +148,18 @@ public class SignController {
 	
 	//쓰이는지 확인!!!!!!!!!!!!
 	//결제문서 작성 페이지 - 결재자 추가 시 전체 직원 조회
-	@ResponseBody
-	@PostMapping("/getEmpListAjax")
-	public Map<String, List<EmpVO>> getEmpListAjax(String ename){
-		List<EmpVO> empVOList = signService.getEmpList(ename);
-		
-		Map<String, List<EmpVO>> data = new HashMap<>();
-		data.put("empList", empVOList);
-		
-		return data;
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("/getEmpListAjax") public Map<String, List<EmpVO>>
+	 * getEmpListAjax(String ename){ List<EmpVO> empVOList =
+	 * signService.getEmpList(ename);
+	 * 
+	 * Map<String, List<EmpVO>> data = new HashMap<>(); data.put("empList",
+	 * empVOList);
+	 * 
+	 * return data; }
+	 */
 	
 	
 	//연차신청서 작성
@@ -276,6 +278,7 @@ public class SignController {
 		}else if(signDocVO.getDocType() == 2) {
 			signService.delPurchaseOrder(signDocVO.getDocNo());
 		}else if(signDocVO.getDocType() == 3) {
+			
 		}
 	}
 	

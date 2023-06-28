@@ -61,5 +61,8 @@ public class EmpVO extends PageVO {
 	//테스트용 추가-희수
 	private int level;
 	
+	
+	private String orderBy; //정렬기준
+	
 
 }

@@ -47,6 +47,13 @@ public class EmpController {
 	@RequestMapping("/empManage")
 	public String empManage(Model model, EmpVO empVO) {
 		
+		
+		//정렬기준 없다면 기본 값으로 사번순으로 세팅
+		if(empVO.getOrderBy()==null) {
+			empVO.setOrderBy("EMPNO");
+		}
+		
+		
 		//전체 데이터 수 세팅
 		int totalDataCnt = empService.getEmpListCnt(empVO);
 		empVO.setTotalDataCnt(totalDataCnt);

@@ -98,39 +98,11 @@
 		AND UPPER(${searchKeyword}) LIKE '%'||UPPER(#{searchValue})||'%'
 		</if>	
 		
-		ORDER BY EMPNO DESC
+		ORDER BY ${orderBy} DESC
 		OFFSET #{offsetCnt} ROWS FETCH FIRST #{displayCnt} ROWS ONLY
 	</select>
 	
-	<!--header 사원 조회  -->
-	<select id="selectForHeader" resultMap="emp">
-		SELECT DISTINCT
-			EMP.EMPNO,
-			REPLACE(TRIM(ENAME),' ', '') AS ENAME,
-			DENAME,
-			E_JOB,
-			LOC,
-			E_STATUS,
-			DECODE(E_STATUS, 1, '재직중', 2, '휴직', 3, '퇴직') AS E_STATUS_STR,
-			PHONE_TEL,
-			OFFICE_TEL,
-			(SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
-		FROM
-			EMP EMP, DEPT DEPT
-		WHERE
-			EMP.DEPTNO = DEPT.DEPTNO
-			<if test='searchValue != null and !searchValue.equals("")'>
-				AND (
-					UPPER(EMP.ENAME) LIKE '%' || UPPER(#{searchValue}) || '%'
-					OR UPPER(DEPT.DENAME) LIKE '%' || UPPER(#{searchValue}) || '%'
-					OR UPPER(EMP.EMPNO) LIKE '%' || UPPER(#{searchValue}) || '%'
-					OR UPPER(EMP.E_JOB) LIKE '%' || UPPER(#{searchValue}) || '%'
-					OR UPPER(DEPT.LOC) LIKE '%' || UPPER(#{searchValue}) || '%'
-					)
-			</if>
-		ORDER BY EMPNO DESC
-	</select>
-	
+
 	
     <!--검색 조회 쿼리 -->
 	<select id="getEmpListCnt" resultType="int">
@@ -362,6 +334,36 @@
 		WHERE EMPNO =#{empno}
 		
 	</update>
+	
+		<!--header 사원 조회  -->
+	<select id="selectForHeader" resultMap="emp">
+		SELECT DISTINCT
+			EMP.EMPNO,
+			REPLACE(TRIM(ENAME),' ', '') AS ENAME,
+			DENAME,
+			E_JOB,
+			LOC,
+			E_STATUS,
+			DECODE(E_STATUS, 1, '재직중', 2, '휴직', 3, '퇴직') AS E_STATUS_STR,
+			PHONE_TEL,
+			OFFICE_TEL,
+			(SELECT ATTACHED_FILE_NAME FROM E_IMG WHERE EMPNO=EMP.EMPNO) AS ATTACHED_FILE_NAME
+		FROM
+			EMP EMP, DEPT DEPT
+		WHERE
+			EMP.DEPTNO = DEPT.DEPTNO
+			<if test='searchValue != null and !searchValue.equals("")'>
+				AND (
+					UPPER(EMP.ENAME) LIKE '%' || UPPER(#{searchValue}) || '%'
+					OR UPPER(DEPT.DENAME) LIKE '%' || UPPER(#{searchValue}) || '%'
+					OR UPPER(EMP.EMPNO) LIKE '%' || UPPER(#{searchValue}) || '%'
+					OR UPPER(EMP.E_JOB) LIKE '%' || UPPER(#{searchValue}) || '%'
+					OR UPPER(DEPT.LOC) LIKE '%' || UPPER(#{searchValue}) || '%'
+					)
+			</if>
+		ORDER BY EMPNO DESC
+	</select>
+	
 	
 </mapper>
 
