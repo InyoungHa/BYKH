@@ -27,7 +27,8 @@ public class IntercepterConfig implements WebMvcConfigurer {
 				.excludePathPatterns("/user/log")
 				.excludePathPatterns("/user/findEPWForm")
 				.excludePathPatterns("/**/*Ajax")
-				.excludePathPatterns("/**/download");
+				.excludePathPatterns("/**/download")
+				.excludePathPatterns("/css/**", "/img/**", "/js/**", "/upload/**");
 				//.order()로 순번 지정 가능
 	}
 	
